@@ -8,6 +8,8 @@ This project follows Semantic Versioning.
 
 ### Added
 
+- Add A2 diagnostic script `scripts/Get-CurrentBootProfile.ps1` to detect the selected BootProfile Switcher mode from the current BCD entry description.
+- Add A2 documentation for validating current boot profile detection.
 - Add double-clickable `install.cmd` and `uninstall.cmd` wrappers that request administrator privileges and invoke the PowerShell boot menu scripts with a process-local execution policy bypass.
 - Add A1 Boot Menu proof of concept with reversible PowerShell scripts for creating, inspecting and removing two Windows Boot Manager entries: `BootProfile Switcher - Mode A` and `BootProfile Switcher - Mode B`.
 - Add A1 PoC documentation with test procedure and validation notes.
@@ -24,7 +26,7 @@ This project follows Semantic Versioning.
 
 ### Planned
 
-- A2: determine whether Windows can reliably identify which BootProfile Switcher boot entry was selected during startup.
+- A2: validate current boot profile detection after booting Mode A and Mode B.
 - Evaluate suitable pre-logon execution points.
 - Document resulting architectural decisions as ADRs.
 

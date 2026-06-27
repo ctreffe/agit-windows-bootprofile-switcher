@@ -37,7 +37,7 @@ A1 has established a reversible boot menu with two entries:
 
 A1 validation also showed that the installer should copy `{default}` rather than `{current}` because `{current}` can become invalid after booting from and removing a managed proof-of-concept entry. Usability has been improved with double-clickable `install.cmd` and `uninstall.cmd` wrappers that request elevation and call the PowerShell scripts.
 
-The next step is A2: determine whether Windows can reliably identify which of these boot entries was selected during startup.
+The next step is A2: validate `scripts/Get-CurrentBootProfile.ps1`, which detects the current BootProfile Switcher mode by reading the `{current}` BCD entry description and mapping it to the managed A1 state file.
 
 ---
 
@@ -82,7 +82,7 @@ Can a user select a boot profile in the Windows Boot Manager and can that select
 Planned steps:
 
 * A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated; command wrappers added for easier installation and removal.
-* A2 – Identify the selected boot entry from within Windows.
+* A2 – Identify the selected boot entry from within Windows. In progress: description-based detection script added for validation.
 * A3 – Determine the earliest suitable execution point before user logon.
 * A4 – Execute profile-specific startup logic based on the detected mode.
 * A5 – Document findings and resulting architectural decisions.
@@ -167,11 +167,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Begin A2 of **v0.3.0 – Boot Profile Detection Proof of Concept**.
+Validate the first A2 diagnostic implementation.
 
 Primary objective:
 
-Determine whether Windows can reliably identify which BootProfile Switcher boot menu entry, Mode A or Mode B, was selected during startup.
+Boot Mode A and Mode B, run `scripts/Get-CurrentBootProfile.ps1`, and confirm that the script detects the selected mode from `bcdedit /enum "{current}"` output.
 
 ---
 

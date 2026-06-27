@@ -5,11 +5,9 @@ pushd "%~dp0"
 net session >nul 2>&1
 if %errorlevel% neq 0 (
     echo Requesting administrator privileges...
-    set "elevateScript=%temp%\bootprofile-switcher-elevate-uninstall.vbs"
-    > "%elevateScript%" echo Set UAC = CreateObject^("Shell.Application"^)
-    >> "%elevateScript%" echo UAC.ShellExecute "%~f0", "", "%~dp0", "runas", 1
-    cscript //nologo "%elevateScript%"
-    del "%elevateScript%" >nul 2>&1
+    set "BPS_SCRIPT=%~f0"
+    set "BPS_ROOT=%~dp0"
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath $env:BPS_SCRIPT -WorkingDirectory $env:BPS_ROOT -Verb RunAs"
     exit /b
 )
 

@@ -113,3 +113,17 @@ Zentrale Projektdokumente:
 ## Lizenz
 
 Dieses Projekt steht unter der MIT-Lizenz.
+
+### A2-Erkennung des aktuellen Profils
+
+Nach der Installation des Bootmenüs und einem Start über Mode A oder Mode B:
+
+```powershell
+.\scripts\Get-CurrentBootProfile.ps1
+```
+
+Für maschinenlesbare Ausgabe:
+
+```powershell
+.\scripts\Get-CurrentBootProfile.ps1 -AsJson
+```

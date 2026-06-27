@@ -113,3 +113,17 @@ Core project documents:
 ## License
 
 This project is licensed under the MIT License.
+
+### A2 current profile detection
+
+After installing the boot menu and booting through Mode A or Mode B, run:
+
+```powershell
+.\scripts\Get-CurrentBootProfile.ps1
+```
+
+For machine-readable output:
+
+```powershell
+.\scripts\Get-CurrentBootProfile.ps1 -AsJson
+```
