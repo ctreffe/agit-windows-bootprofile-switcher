@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`) and the Boot Profile Detection Proof of Concept (`v0.3.0`).
 >
-> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution. A5 remains open to document the proof-of-concept findings and resulting architectural decisions.
+> The `v0.3.0 – Boot Profile Detection Proof of Concept` milestone has been completed. A1 validated reversible Windows Boot Manager entries for `Mode A` and `Mode B`. A2 detects the selected mode through GUID-based BCD identifier mapping. A3 validates automatic detection during system startup. A4 validates profile-specific startup script execution. A5 documents the findings and resulting architecture decision.
 
 ## Overview
 
@@ -130,7 +130,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.2.0 Architecture
+0.3.0 Boot Profile Detection Proof of Concept
 ```
 
 Version tags should use a leading `v`, for example:
@@ -157,7 +157,9 @@ Core project documents:
 - [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2 current boot profile detection
 - [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 startup hook proof of concept
 - [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4 profile startup script execution
+- [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 proof-of-concept findings
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – initial architecture decision record
+- [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – boot profile detection strategy
 - [LICENSE](LICENSE) – MIT License
 
 ## License

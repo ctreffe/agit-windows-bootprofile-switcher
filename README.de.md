@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) und den Boot Profile Detection Proof of Concept (`v0.3.0`) abgeschlossen.
 >
-> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert. A2 erkennt den gewählten Modus nach dem Start, A3 erkennt ihn automatisch beim Systemstart und A4 ergänzt profilspezifische Startup-Skripte. A5 ist noch offen und dokumentiert die Proof-of-Concept-Ergebnisse sowie die daraus folgenden Architekturentscheidungen.
+> Der Meilenstein `v0.3.0 – Boot Profile Detection Proof of Concept` ist abgeschlossen. A1 validierte reversible Windows-Boot-Manager-Einträge für `Mode A` und `Mode B`. A2 erkennt den gewählten Modus über GUID-basierte BCD-Identifier-Zuordnung. A3 validiert die automatische Erkennung beim Systemstart. A4 validiert profilspezifische Startup-Skripte. A5 dokumentiert die Ergebnisse und die daraus folgende Architekturentscheidung.
 
 ## Überblick
 
@@ -130,7 +130,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.2.0 Architecture
+0.3.0 Boot Profile Detection Proof of Concept
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
@@ -157,7 +157,9 @@ Zentrale Projektdokumente:
 - [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2-Erkennung des aktuellen Bootprofils
 - [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 Startup-Hook Proof of Concept
 - [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4-Ausführung profilspezifischer Startup-Skripte
+- [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 Proof-of-Concept-Ergebnisse
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
+- [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – Strategie zur Bootprofil-Erkennung
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ## Lizenz

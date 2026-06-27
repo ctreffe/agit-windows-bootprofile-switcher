@@ -20,15 +20,15 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.2.0 – Architecture**
+**v0.3.0 – Boot Profile Detection Proof of Concept**
 
-The Architecture milestone is complete.
+The Boot Profile Detection Proof of Concept milestone is complete.
 
 ## Current Focus
 
-Complete A5 for the active Boot Profile Detection Proof of Concept milestone.
+Prepare the next milestone after the validated proof of concept.
 
-The current milestone validates whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
+The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
 A1 has established a reversible boot menu with two entries:
 
@@ -75,21 +75,30 @@ Main results:
 
 ---
 
-# Current Development Roadmap
-
 ## v0.3.0 – Boot Profile Detection Proof of Concept
 
-Validate the core technical hypothesis:
+Completed.
 
-Can a user select a boot profile in the Windows Boot Manager and can that selection be detected before user logon so profile-specific initialization can run?
+Main results:
 
-Planned steps:
+* Reversible Windows Boot Manager entries for Mode A and Mode B validated.
+* Current boot profile detection validated using GUID-based BCD identifier mapping with description fallback.
+* Automatic startup detection validated using a Windows Scheduled Task with an `AtStartup` trigger.
+* Profile-specific startup script execution validated for Mode A and Mode B.
+* Proof-of-concept findings documented in `docs/poc/a5-findings.md`.
+* Boot profile detection strategy recorded in `docs/decisions/ADR-0002-boot-profile-detection.md`.
 
-* A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated; command wrappers added for easier installation and removal.
-* A2 – Identify the selected boot entry from within Windows. Completed and validated for Mode A and Mode B using GUID-based BCD identifier mapping with description fallback.
-* A3 – Run boot profile detection automatically at system startup. Completed and validated for Mode A and Mode B using a Windows Scheduled Task with an `AtStartup` trigger.
-* A4 – Execute profile-specific startup logic based on the detected mode. Completed and validated for Mode A and Mode B using harmless validation profile scripts.
-* A5 – Document findings and resulting architectural decisions. Pending.
+---
+
+# Current Development Roadmap
+
+## v0.4.x – Boot Profile Detection
+
+Planned focus:
+
+* Turn the proof-of-concept detection path into a cleaner boot profile resolver.
+* Decide which description-based fallback behavior should remain in the production design.
+* Refine startup execution requirements for the final profile engine.
 
 ---
 
@@ -97,7 +106,6 @@ Planned steps:
 
 Current planning:
 
-* v0.4.x – Boot Profile Detection
 * v0.5.x – Profile Engine
 * v0.6.x – Module System
 * v0.7.x – Configuration
@@ -113,9 +121,9 @@ The roadmap may evolve based on research findings.
 
 The conceptual architecture has been established.
 
-Implementation has started with a limited proof of concept for boot menu creation, detection and startup execution.
+Implementation has validated a limited proof of concept for boot menu creation, detection and startup execution.
 
-Current work has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. It has also validated that this detection can run automatically during system startup through a scheduled task and dispatch profile-specific startup scripts.
+The proof of concept validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. It also validated that this detection can run automatically during system startup through a scheduled task and dispatch profile-specific startup scripts.
 
 ---
 
@@ -123,13 +131,12 @@ Current work has validated that the selected Windows Boot Manager entry can be i
 
 The following questions remain intentionally unanswered:
 
-* Which mechanism should execute profile-specific startup logic after the startup hook has detected the selected mode?
 * Should description-based detection remain as a long-term fallback after GUID-based detection has been validated?
 * Which execution point is most suitable before user logon?
 * Which Windows components should be used instead of custom solutions whenever possible?
 * Which parts should remain extensible through modules?
 
-These decisions will be captured as ADRs during v0.3.0.
+These decisions will be evaluated during later milestones.
 
 ---
 
@@ -173,11 +180,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare A5: document proof-of-concept findings and resulting architectural decisions.
+Prepare the next small step for `v0.4.x – Boot Profile Detection`.
 
 Primary objective:
 
-Summarize the validated A1-A4 proof-of-concept chain and capture the resulting architecture decisions before finalizing v0.3.0.
+Turn the validated proof-of-concept detection behavior into a cleaner resolver design that can evolve toward the production profile engine.
 
 ---
 

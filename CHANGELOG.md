@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v0.3.0] - 2026-06-27
+
 ### Added
 
 - Add `CODEX.md` as the local Codex operating policy for this repository.
@@ -20,6 +22,8 @@ This project follows Semantic Versioning.
 - Add A3 documentation and validation notes for startup-time profile detection.
 - Add A2 diagnostic script `scripts/Get-CurrentBootProfile.ps1` to detect the selected BootProfile Switcher mode from the current BCD entry.
 - Add A2 inspection script `scripts/Inspect-CurrentBootEntry.ps1` for read-only BCD identifier diagnostics.
+- Add A5 proof-of-concept findings documentation.
+- Add ADR-0002 documenting the boot profile detection strategy.
 - Add double-clickable `detect-current-profile.cmd` wrapper for current profile detection.
 - Add A2 documentation and validation notes for current boot profile detection.
 - Add double-clickable `install.cmd` and `uninstall.cmd` wrappers that request administrator privileges and invoke the PowerShell boot menu scripts with a process-local execution policy bypass.
@@ -32,22 +36,19 @@ This project follows Semantic Versioning.
 - Update the project Collaboration Model to v1.6 from the AGIT Project Template v1.0.9.
 - Align project collaboration context with the current AGIT Project Template version.
 - Align project philosophy with current AGIT integrity, validated learning and roadmap discipline guidance.
-- Harmonize README and project context status so `v0.2.0` remains the latest completed milestone while `v0.3.0` remains in progress until A5 is complete.
+- Harmonize README and project context status during milestone preparation.
 - Mark A4 profile startup script execution as validated for Mode A and Mode B.
 - Extend the startup hook to execute the detected profile startup script.
 - Mark A3 startup hook detection as validated for Mode A and Mode B.
 - Mark A2 current boot profile detection as validated for Mode A and Mode B.
 - Use GUID-based current boot profile detection via `bcdedit /enum "{current}" /v`, with description-based detection retained as a fallback.
 - Refocus v0.3.0 from generic boot process research to a Boot Profile Detection Proof of Concept.
+- Mark v0.3.0 as completed.
 
 ### Fixed
 
 - Use `{default}` instead of `{current}` as the BCD copy source so the installer remains reliable after booting from and removing a managed boot entry.
 - Fix PowerShell string interpolation in the uninstall script by using `${id}` before a colon in warning output.
-
-### Planned
-
-- Document resulting architectural decisions as ADRs.
 
 ## [0.2.0] - 2026-06-27
 
