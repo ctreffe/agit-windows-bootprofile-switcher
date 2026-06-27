@@ -11,7 +11,7 @@
 >
 > BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
 >
-> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup.
+> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution.
 
 ## Overview
 
@@ -50,11 +50,24 @@ repository root:
 install-startup-hook.cmd
 ```
 
-The startup hook registers a Windows Scheduled Task that runs at system startup
-and writes the detected boot profile to:
+The startup hook registers a Windows Scheduled Task that runs at system startup,
+writes the detected boot profile to:
 
 ```text
 logs/startup-profile.log
+```
+
+and, starting with A4, executes the matching profile script:
+
+```text
+profiles/mode-a/startup.ps1
+profiles/mode-b/startup.ps1
+```
+
+The profile scripts are intentionally harmless and write validation entries to:
+
+```text
+logs/profile-startup-actions.log
 ```
 
 The hook can be removed with:
@@ -132,6 +145,8 @@ Core project documents:
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept
 - [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2 current boot profile detection
+- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 startup hook proof of concept
+- [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4 profile startup script execution
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – initial architecture decision record
 - [LICENSE](LICENSE) – MIT License
 
@@ -159,4 +174,3 @@ For machine-readable output:
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
 
-- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – startup hook proof of concept

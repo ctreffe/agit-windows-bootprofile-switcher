@@ -8,6 +8,9 @@ This project follows Semantic Versioning.
 
 ### Added
 
+- Add A4 profile-specific startup script execution for Mode A and Mode B.
+- Add harmless validation profile scripts in `profiles/mode-a/startup.ps1` and `profiles/mode-b/startup.ps1`.
+- Add A4 documentation for profile startup script validation.
 - Add A3 startup hook proof of concept using a Windows Scheduled Task with an `AtStartup` trigger.
 - Add `install-startup-hook.cmd` and `uninstall-startup-hook.cmd` wrappers for managing the A3 startup hook.
 - Add `scripts/Invoke-BootProfileStartupHook.ps1` to log automatic startup-time boot profile detection results.
@@ -22,6 +25,8 @@ This project follows Semantic Versioning.
 
 ### Changed
 
+- Mark A4 profile startup script execution as validated for Mode A and Mode B.
+- Extend the startup hook to execute the detected profile startup script.
 - Mark A3 startup hook detection as validated for Mode A and Mode B.
 - Mark A2 current boot profile detection as validated for Mode A and Mode B.
 - Refocus v0.3.0 from generic boot process research to a Boot Profile Detection Proof of Concept.
@@ -33,7 +38,6 @@ This project follows Semantic Versioning.
 
 ### Planned
 
-- Execute profile-specific startup logic based on the detected mode.
 - Document resulting architectural decisions as ADRs.
 
 ## [0.2.0] - 2026-06-27

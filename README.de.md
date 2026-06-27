@@ -11,7 +11,7 @@
 >
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) abgeschlossen.
 >
-> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert.
+> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert. A2 erkennt den gewählten Modus nach dem Start, A3 erkennt ihn automatisch beim Systemstart und A4 ergänzt profilspezifische Startup-Skripte.
 
 ## Überblick
 
@@ -50,11 +50,24 @@ Repository-Stammverzeichnis installiert werden:
 install-startup-hook.cmd
 ```
 
-Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft
-und das erkannte Bootprofil in folgende Datei schreibt:
+Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft,
+das erkannte Bootprofil in folgende Datei schreibt:
 
 ```text
 logs/startup-profile.log
+```
+
+und ab A4 das passende Profilskript ausführt:
+
+```text
+profiles/mode-a/startup.ps1
+profiles/mode-b/startup.ps1
+```
+
+Die Profilskripte sind absichtlich harmlos und schreiben Validierungseinträge nach:
+
+```text
+logs/profile-startup-actions.log
 ```
 
 Der Hook kann wieder entfernt werden mit:
@@ -132,6 +145,8 @@ Zentrale Projektdokumente:
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept
 - [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2-Erkennung des aktuellen Bootprofils
+- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 Startup-Hook Proof of Concept
+- [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4-Ausführung profilspezifischer Startup-Skripte
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [LICENSE](LICENSE) – MIT-Lizenz
 
@@ -159,4 +174,3 @@ Für maschinenlesbare Ausgabe:
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
 
-- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – Startup-Hook Proof of Concept

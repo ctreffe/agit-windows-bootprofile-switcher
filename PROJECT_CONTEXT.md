@@ -41,6 +41,8 @@ A2 has been validated for Mode A and Mode B. `scripts/Get-CurrentBootProfile.ps1
 
 A3 has been validated for Mode A and Mode B. A Windows Scheduled Task with an `AtStartup` trigger runs the BootProfile Switcher detection automatically during system startup and writes the selected mode to `logs/startup-profile.log`.
 
+A4 has been validated for Mode A and Mode B. The startup hook now executes profile-specific startup scripts from `profiles/mode-a/startup.ps1` and `profiles/mode-b/startup.ps1`. These scripts intentionally perform harmless validation logging to `logs/profile-startup-actions.log`.
+
 ---
 
 # Completed Milestones
@@ -86,7 +88,7 @@ Planned steps:
 * A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated; command wrappers added for easier installation and removal.
 * A2 – Identify the selected boot entry from within Windows. Completed and validated for Mode A and Mode B using managed BCD entry description mapping.
 * A3 – Run boot profile detection automatically at system startup. Completed and validated for Mode A and Mode B using a Windows Scheduled Task with an `AtStartup` trigger.
-* A4 – Execute profile-specific startup logic based on the detected mode.
+* A4 – Execute profile-specific startup logic based on the detected mode. Completed and validated for Mode A and Mode B using harmless validation profile scripts.
 * A5 – Document findings and resulting architectural decisions.
 
 ---
@@ -111,9 +113,9 @@ The roadmap may evolve based on research findings.
 
 The conceptual architecture has been established.
 
-Implementation has started with a limited proof of concept for boot menu creation.
+Implementation has started with a limited proof of concept for boot menu creation, detection and startup execution.
 
-Current work has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry description and managed BootProfile Switcher state. It has also validated that this detection can run automatically during system startup through a scheduled task.
+Current work has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry description and managed BootProfile Switcher state. It has also validated that this detection can run automatically during system startup through a scheduled task and dispatch profile-specific startup scripts.
 
 ---
 
@@ -169,11 +171,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare A4: execute profile-specific startup logic based on the detected mode.
+Prepare A5: document proof-of-concept findings and resulting architectural decisions.
 
 Primary objective:
 
-Use the validated startup hook to dispatch harmless profile-specific startup scripts for Mode A and Mode B.
+Summarize the validated A1-A4 proof-of-concept chain and capture the resulting architecture decisions before finalizing v0.3.0.
 
 ---
 

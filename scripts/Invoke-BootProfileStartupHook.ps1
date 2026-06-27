@@ -1,14 +1,16 @@
 <#
 .SYNOPSIS
-Runs BootProfile Switcher detection during system startup.
+Runs BootProfile Switcher startup initialization.
 
 .DESCRIPTION
-Invoked by the A3 startup scheduled task. The script calls
-Get-CurrentBootProfile.ps1, captures the structured result and writes a compact
-line to logs/startup-profile.log.
+Invoked by the startup scheduled task. The script calls
+Get-CurrentBootProfile.ps1, writes the detected profile to
+logs/startup-profile.log and executes the matching profile-specific
+startup.ps1 script from profiles/mode-*/.
 
-This script intentionally performs no profile-specific system changes yet. It
-only proves that automatic startup-time detection works.
+A4 intentionally keeps profile scripts harmless. They only write validation
+log entries so the proof of concept can verify the full boot-profile startup
+chain without changing system configuration.
 #>
 
 [CmdletBinding()]
@@ -34,19 +36,42 @@ try {
     $json = & $detectScript -AsJson
     $result = $json | ConvertFrom-Json
 
-    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5}' -f `
+    $profileScriptExecuted = $false
+    $profileScript = $null
+
+    if ($result.detected) {
+        $modeSlug = ('mode-{0}' -f ([string]$result.mode).ToLowerInvariant())
+        $profileScript = Join-Path $repoRoot (Join-Path 'profiles' (Join-Path $modeSlug 'startup.ps1'))
+
+        if (-not (Test-Path $profileScript)) {
+            throw "Profile startup script not found for mode $($result.mode): $profileScript"
+        }
+
+        & $profileScript `
+            -Mode $result.mode `
+            -Name $result.name `
+            -Identifier $result.identifier `
+            -RepoRoot $repoRoot `
+            -LogDir $logDir
+
+        $profileScriptExecuted = $true
+    }
+
+    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7}' -f `
         $timestamp, `
         $result.detected, `
         $result.mode, `
         $result.name, `
         $result.identifier, `
-        $result.source
+        $result.source, `
+        $profileScriptExecuted, `
+        $profileScript
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
 catch {
     $message = $_.Exception.Message -replace "(`r`n|`n|`r)", ' '
-    $line = '{0} | detected=false | error={1}' -f $timestamp, $message
+    $line = '{0} | detected=false | profileScriptExecuted=false | error={1}' -f $timestamp, $message
     Add-Content -Path $logFile -Value $line -Encoding UTF8
     throw
 }
