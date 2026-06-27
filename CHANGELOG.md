@@ -6,10 +6,11 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
-## [v0.3.0] - 2026-06-27
-
 ### Added
 
+- Add `CODEX.md` as the local Codex operating policy for this repository.
+- Add local tool, Codex workspace and generated artifact ignore rules from the current AGIT Project Template.
+- Restore the AI Collaboration Note in both README files with project-specific wording.
 - Add A4 profile-specific startup script execution for Mode A and Mode B.
 - Add harmless validation profile scripts in `profiles/mode-a/startup.ps1` and `profiles/mode-b/startup.ps1`.
 - Add A4 documentation for profile startup script validation.
@@ -27,6 +28,10 @@ This project follows Semantic Versioning.
 
 ### Changed
 
+- Update the project Collaboration Model to v1.6 from the AGIT Project Template v1.0.9.
+- Align project collaboration context with the current AGIT Project Template version.
+- Align project philosophy with current AGIT integrity, validated learning and roadmap discipline guidance.
+- Harmonize README and project context status so `v0.2.0` remains the latest completed milestone while `v0.3.0` remains in progress until A5 is complete.
 - Mark A4 profile startup script execution as validated for Mode A and Mode B.
 - Extend the startup hook to execute the detected profile startup script.
 - Mark A3 startup hook detection as validated for Mode A and Mode B.

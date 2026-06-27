@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.3.0 – Boot Profile Detection Proof of Concept**
+**v0.2.0 – Architecture**
 
-The Boot Profile Detection Proof of Concept milestone is complete.
+The Architecture milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the validated proof of concept.
+Complete A5 for the active Boot Profile Detection Proof of Concept milestone.
 
 The current milestone validates whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -89,7 +89,7 @@ Planned steps:
 * A2 – Identify the selected boot entry from within Windows. Completed and validated for Mode A and Mode B using managed BCD entry description mapping.
 * A3 – Run boot profile detection automatically at system startup. Completed and validated for Mode A and Mode B using a Windows Scheduled Task with an `AtStartup` trigger.
 * A4 – Execute profile-specific startup logic based on the detected mode. Completed and validated for Mode A and Mode B using harmless validation profile scripts.
-* A5 – Document findings and resulting architectural decisions.
+* A5 – Document findings and resulting architectural decisions. Pending.
 
 ---
 
@@ -139,7 +139,7 @@ These decisions will be captured as ADRs during v0.3.0.
 
 Current version:
 
-**v1.0.5**
+**v1.0.9**
 
 ---
 
@@ -147,7 +147,7 @@ Current version:
 
 Current version:
 
-**v1.3**
+**v1.6**
 
 ---
 
@@ -166,6 +166,8 @@ Key principles include:
 * GitHub Releases are created intentionally and not required for every tag.
 * Commit requests imply actual implementation and repository-ready deliverables.
 * Completion Integrity: work is only considered complete once the agreed deliverables actually exist.
+* Artifact integrity and capability transparency: generated artifacts, validation results and limitations must be reported accurately.
+* Local Codex work follows `CODEX.md`, including read-only Git usage by default.
 
 ---
 

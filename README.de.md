@@ -7,11 +7,20 @@
 [English documentation](README.md)
 
 > [!NOTE]
+> **KI-Zusammenarbeit**
+>
+> Dieses Projekt wird in Zusammenarbeit zwischen dem Repository-Maintainer und einem KI-Assistenten entwickelt.
+>
+> Das Collaboration Model dokumentiert Engineering-Praktiken, Kollaborations-Workflows und Repository-Konventionen, die in diesem Projekt verwendet werden.
+>
+> Es wird in [ChatGPT.md](ChatGPT.md) gepflegt.
+
+> [!NOTE]
 > **Projektstatus**
 >
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) abgeschlossen.
 >
-> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert. A2 erkennt den gewählten Modus nach dem Start, A3 erkennt ihn automatisch beim Systemstart und A4 ergänzt profilspezifische Startup-Skripte.
+> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert. A2 erkennt den gewählten Modus nach dem Start, A3 erkennt ihn automatisch beim Systemstart und A4 ergänzt profilspezifische Startup-Skripte. A5 ist noch offen und dokumentiert die Proof-of-Concept-Ergebnisse sowie die daraus folgenden Architekturentscheidungen.
 
 ## Überblick
 
@@ -141,6 +150,7 @@ Zentrale Projektdokumente:
 - [README.de.md](README.de.md) – deutsche Projektdokumentation
 - [CHANGELOG.md](CHANGELOG.md) – Versionshistorie
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
+- [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept
@@ -173,4 +183,3 @@ Für maschinenlesbare Ausgabe:
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
-

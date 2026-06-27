@@ -7,6 +7,29 @@ Desktop.ini
 .vscode/
 .idea/
 
+# Local tool environments
+.venv/
+venv/
+env/
+node_modules/
+
+# Local tool caches
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.npm/
+
+# Local Codex workspace artifacts
+.codex-input/
+.codex-cache/
+.codex-tmp/
+.codex-output/
+
+# Local generated artifacts
+artifacts/
+deliverables/
+
 # Temporary files
 *.tmp
 *.bak

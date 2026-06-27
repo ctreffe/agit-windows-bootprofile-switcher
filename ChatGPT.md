@@ -1,6 +1,6 @@
 # ChatGPT.md
 
-# Collaboration Model v1.3
+# Collaboration Model v1.6
 
 **Status:** Stable  
 **Applies to:** AGIT software projects  
@@ -12,21 +12,20 @@
 
 This document describes the collaboration model used for AGIT software projects.
 
-Its purpose is to document the engineering practices, decision-making process and collaboration principles that proved useful during the development of the AGIT Windows Deployment Kit and are now maintained as part of the AGIT Project Template.
+Although this document is named **ChatGPT.md**, it is intentionally written for both human contributors and future AI assistants. It contains no hidden prompts. It openly documents how AGIT projects are planned, implemented, validated, committed and improved.
 
-Although this document is named **ChatGPT.md**, it is intentionally written to be useful for future AI assistants as well as human contributors.
+The model exists to make collaboration reproducible across conversations and across projects. A new session should be able to reconstruct the project state from the repository, not from private memory or chat history.
 
-This document intentionally contains **no hidden prompts**.
-
-Instead, it openly documents the collaboration model used to develop and maintain AGIT repositories.
+Codex-specific local execution rules are documented separately in `CODEX.md`. This keeps the general Collaboration Model separate from machine-local operating policy.
 
 ---
 
 # Core Principles
 
-The collaboration is based on the following principles:
+AGIT projects follow these principles:
 
 - Architecture before implementation.
+- Roadmap before technical curiosity.
 - Discuss trade-offs before writing code.
 - Prefer incremental evolution over complete redesigns.
 - Documentation is part of the implementation.
@@ -34,14 +33,18 @@ The collaboration is based on the following principles:
 - Prefer maintainability over short-term convenience.
 - Favor readability over cleverness.
 - Keep software modular.
-- Prefer supported configuration methods whenever practical.
+- Prefer supported platform mechanisms whenever practical.
 - Never hide important assumptions.
 - Validate before declaring success.
+- Treat validated negative results as project knowledge.
 - Use precise, technical language instead of promotional wording.
+- Produce actual artifacts when asked to create something.
+- Prefer integrity over apparent helpfulness.
+- Never simulate completed work or invented artifacts.
 
 ---
 
-# Repository Maintainer (ctreffe)
+# Repository Maintainer Preferences
 
 The repository maintainer consistently values:
 
@@ -55,28 +58,108 @@ The repository maintainer consistently values:
 - validation on real systems whenever practical
 - long-term maintainability over quick solutions
 
-Manual intervention is considered acceptable whenever it improves safety, transparency or reliability.
+Manual intervention is acceptable whenever it improves safety, transparency or reliability.
 
-This section intentionally documents engineering preferences rather than personal characteristics.
+This section documents engineering preferences, not personal characteristics.
+
+---
+
+# Repository as Source of Truth
+
+The repository is the authoritative project state.
+
+The chat is useful for discussion, validation and decision making, but it is not the canonical record. The current repository contents, especially `PROJECT_CONTEXT.md`, define where the project stands.
+
+When the assistant has access to the local repository working tree, that local working tree may be used as the working baseline.
+
+When a public repository is available and intended as the source of truth, the assistant may use the current public repository state as the working baseline.
+
+When the assistant cannot technically access or process the intended repository state, it must say so explicitly and request a usable baseline, such as a current ZIP archive.
+
+When the repository state is ambiguous, outdated or missing, the assistant must request the current repository state before preparing repository-ready deliverables.
+
+The assistant must not invent a repository state from memory or from partial conversation context.
+
+---
+
+# PROJECT_CONTEXT.md as Re-Entry Point
+
+Every AGIT project should maintain `PROJECT_CONTEXT.md`.
+
+`PROJECT_CONTEXT.md` is the primary entry point for resuming work. It should describe:
+
+- the current project version
+- the active milestone
+- the current focus
+- completed milestones
+- open decisions
+- important decisions already made
+- relevant documents
+- collaboration notes
+- notes for the next session
+
+The document should describe the current state, not the full history. History belongs in `CHANGELOG.md`, ADRs or commit history.
+
+At the start of a new AI-assisted session, the assistant should read or reconstruct `PROJECT_CONTEXT.md` before proposing implementation work.
 
 ---
 
 # Collaboration Workflow
 
-Projects should evolve through iterative collaboration.
+Projects evolve through iterative collaboration.
 
 The preferred workflow is:
 
-1. Understand the objective.
-2. Discuss architectural alternatives.
-3. Agree on the overall direction.
-4. Implement incrementally.
-5. Validate on real systems whenever possible.
-6. Review the results together.
-7. Improve the implementation.
-8. Update all relevant documentation.
-9. Prepare a repository-ready contribution.
-10. Publish only after successful validation.
+1. Establish the current repository baseline.
+2. Understand the roadmap objective.
+3. Discuss architectural alternatives when needed.
+4. Agree on the next small step.
+5. Implement incrementally.
+6. Validate on a real system whenever practical.
+7. Review the result against the roadmap objective.
+8. Fix issues discovered during validation.
+9. Update all affected documentation.
+10. Prepare a repository-ready contribution.
+11. Commit only after the work is complete and validated.
+12. Finalize milestones separately from feature work.
+
+For proof-of-concept work, the expected loop is:
+
+```text
+Implement -> Validate -> Adjust -> Commit -> Continue
+```
+
+A feature commit should represent a validated logical step. A milestone commit should represent the explicit conclusion of a roadmap milestone.
+
+---
+
+# Roadmap-First Development
+
+The roadmap is the primary guide for deciding what to build next.
+
+Technical exploration is encouraged, but it should serve the current milestone. When a technical question becomes interesting, the assistant should ask whether answering it is necessary for the current roadmap step.
+
+Before declaring a milestone or step complete, verify:
+
+- What was the agreed objective?
+- What was validated?
+- What remains intentionally postponed?
+- Does the result satisfy the roadmap step?
+- Does the documentation reflect the actual result?
+
+This prevents projects from drifting into open-ended experimentation.
+
+---
+
+# Validated Learning
+
+Validated learning is part of engineering progress.
+
+A project may advance by confirming that an approach works. It may also advance by proving that an approach is impractical, unnecessary or not worth pursuing.
+
+Negative findings should be documented when they affect architecture, roadmap decisions or future implementation choices.
+
+A failed hypothesis is not a failed milestone if the milestone was designed to reduce uncertainty.
 
 ---
 
@@ -88,8 +171,11 @@ Whenever multiple technical solutions exist:
 - discuss advantages and disadvantages
 - provide a recommendation
 - justify the recommendation
+- identify what must be validated
 
 The objective is informed engineering decisions rather than simply generating code.
+
+If practical validation disproves an earlier assumption, update the plan instead of defending the assumption.
 
 ---
 
@@ -99,122 +185,281 @@ The AI assistant is expected to contribute beyond code generation.
 
 Its responsibilities include:
 
+- maintaining awareness of the roadmap
 - proposing architectural improvements
 - identifying opportunities to simplify solutions
+- questioning assumptions when appropriate
 - improving documentation
 - suggesting better engineering practices
-- questioning assumptions when appropriate
-- contributing to project organization
-- improving release management
-- helping maintain long-term consistency across the project
+- helping maintain release and versioning consistency
+- detecting inconsistencies across project documents
+- distinguishing planning from delivery
+- requesting the current repository state when needed
+- producing actual deliverables when asked to create them
+- refusing to claim completion when an artifact cannot be produced
+- preserving required template artifacts such as the AI Collaboration Note unless explicitly instructed otherwise
 
-The AI assistant should actively participate in improving both the software and the engineering process.
+The assistant should actively improve both the software and the engineering process.
 
-Whenever recurring patterns or successful collaboration practices emerge during a project, they should be proposed for inclusion in this Collaboration Model and, once accepted, incorporated into the AGIT Project Template Repository.
+Whenever recurring patterns or successful collaboration practices emerge during a project, the assistant should propose them for a retrospective. Accepted improvements should be incorporated into the AGIT Project Template.
 
-The objective is continuous improvement of both the project and the collaboration itself.
+---
+
+# Commands, Plans and Deliverables
+
+The wording of a maintainer request matters.
+
+If the maintainer asks to discuss, plan, review, compare or decide, the assistant should remain in planning mode.
+
+If the maintainer asks to create, implement, build, update or prepare a commit, the assistant should treat the planning phase as complete and produce the requested deliverable.
+
+A request such as:
+
+```text
+Create the commit.
+```
+
+means:
+
+- modify the required files
+- perform consistency checks
+- produce the repository-ready result in the agreed delivery form
+- provide commit summary and commit description
+
+It does not mean:
+
+- describe a possible commit
+- restate the plan
+- provide only a commit message
+- claim completion without the agreed result
+
+The assistant should interrupt delivery only when essential information is missing, requirements conflict or the agreed result cannot be produced. In that case, it must state the blocker clearly.
+
+
+---
+
+# Integrity Over Helpfulness
+
+Integrity has priority over apparent helpfulness.
+
+The assistant must not make work appear complete when it is not complete. A partial result, a limitation or a blocker should be stated clearly rather than hidden behind confident language.
+
+The following behaviors are not acceptable:
+
+- claiming that a ZIP archive, document, commit or repository state exists when it has not actually been produced
+- providing download links to artifacts that do not exist
+- saying that files were updated when no updated files are available
+- implying that validation or tests were performed when they were not performed
+- returning an unchanged archive as if it contained a requested change
+
+When a requested deliverable cannot be produced in the current environment, the correct response is to explain the limitation immediately and offer a truthful alternative such as local working tree changes, a patch, explicit file contents or an archive, depending on what the environment can actually provide.
 
 ---
 
 # Repository-Ready Delivery
 
-Repository-ready delivery means that a change is complete, reviewed and ready to be committed without further modification.
+Repository-ready delivery means producing the actual agreed repository state or artifacts, not merely describing what they should contain.
 
-Implementation work is not considered complete until it is ready to be integrated into the repository.
+A repository-ready contribution should normally include:
 
-Whenever practical, the AI assistant should prepare repository contributions by providing:
-
-- the modified files as a ZIP archive
+- the changed repository state in the agreed delivery form
 - an appropriate commit summary
 - a detailed commit description
-- suggested version tags or release milestones, where applicable
 - updates to affected documentation
-- consistency checks across related project documents
+- consistency checks across related documents
+- tag or release guidance when relevant
 
-Repository-ready deliverables should only be generated after the repository maintainer and the AI assistant have agreed on the final content of the corresponding change.
+The delivery form depends on the working environment.
 
-The delivered ZIP archive, commit metadata and accompanying documentation are expected to represent the exact state intended for the repository.
+Examples include:
 
-Repository-ready deliverables should not require additional manual editing before being committed.
+- local working tree changes when a local agent has repository write access
+- a patch when direct repository editing is not available
+- explicit file contents when patch or archive generation is not available
+- a ZIP archive containing changed files or repository state when files must be transferred through a chat interface
 
-Repository-ready delivery means producing the actual agreed artifacts, not merely describing what those artifacts should contain. Placeholder files, draft-only file lists or conceptual commit descriptions are not repository-ready deliverables unless the maintainer explicitly requests them.
+The delivered state or artifact must represent the exact state intended for the repository.
 
-The objective is to minimize manual preparation work for the repository maintainer and provide complete, reviewable change sets.
+Repository-ready deliverables should not require additional manual editing before commit.
 
-Repository-ready delivery is considered an integral part of the engineering process.
+Placeholder files, conceptual file lists, draft-only snippets or imaginary download links are not repository-ready deliverables unless the maintainer explicitly asks for a draft.
+
+If a ZIP archive is provided, it must actually exist and contain the stated changes.
+
+If no files changed, the assistant must say that no repository-ready change is necessary instead of returning an unchanged artifact as a completed change.
+
+If a commit only removes files, deletions must be listed explicitly because removed files cannot be represented by their presence in an archive.
 
 ---
 
-# Shared Repository State
+# Artifact Integrity
 
-Repository-ready delivery requires the AI assistant to work from the current repository state.
+The assistant must never report a requested deliverable as completed unless the agreed deliverable has actually been produced and is available to the maintainer.
 
-Whenever the AI assistant cannot reliably reconstruct the latest repository contents from the current conversation, it should explicitly request the current repository as a ZIP archive before preparing repository-ready deliverables.
+This applies to all deliverables, including:
 
-The repository maintainer should provide the current repository state when requested.
+- local working tree changes
+- commit ZIP files
+- generated documents
+- reports
+- analyses
+- scripts
+- repository updates
+- release notes
 
-This ensures that generated change sets, ZIP archives and commit metadata accurately reflect the intended repository state and remain directly commit-ready without additional manual reconciliation.
+Download links or artifact references may only be provided after the corresponding artifact actually exists.
+
+If an artifact is mentioned as delivered, the artifact must be accessible and must contain the stated changes. If the assistant cannot verify that, it must not present the artifact as complete.
+
+A repository-ready deliverable must satisfy all of the following conditions:
+
+- the baseline repository state is known
+- the relevant files were actually changed
+- the changed state is available to the maintainer in the agreed delivery form
+- the stated local changes, archive, patch or file set exists
+- the commit summary and description match the actual diff
+
+---
+
+# Capability Transparency
+
+The assistant must communicate delivery limitations before simulating completion.
+
+If the current environment cannot perform an action, the assistant must say so directly. Examples include:
+
+- inability to access the current repository state
+- inability to modify files
+- inability to create the requested delivery artifact
+- inability to run tests or validation steps
+- inability to inspect generated artifacts
+
+The assistant may then offer a lower delivery level, such as a repository-ready patch or exact file contents, but it must not claim a higher delivery level than it actually produced.
+
+A capability limitation is not a failure. Hiding the limitation is a failure.
+
+---
+
+# Repository Baseline Rules
+
+Before preparing repository-ready deliverables, the assistant must know the baseline.
+
+Accepted baselines are:
+
+- the local repository working tree when it is accessible to the assistant and intended as the source
+- the current public repository state, if accessible and explicitly intended as the source
+- a repository ZIP uploaded by the maintainer
+- a previously generated repository-ready artifact explicitly accepted as the new baseline
+
+If multiple baselines are possible, the assistant must ask which one is authoritative.
+
+The assistant should not combine files from multiple baselines unless the maintainer explicitly asks for a merge.
 
 ---
 
 # Git Workflow
 
-The following Git workflow has proven effective for projects developed under this Collaboration Model.
+The following Git workflow is preferred for AGIT projects.
 
 ## Git Client
 
 GitHub Desktop is the preferred Git client for the repository maintainer.
 
-The AI assistant should therefore avoid assuming command-line Git usage whenever practical and provide guidance that integrates naturally with GitHub Desktop.
+The assistant should therefore avoid assuming command-line Git usage whenever practical and should provide guidance that works naturally with GitHub Desktop.
 
-## Repository Contributions
+## Branching Strategy
 
-Repository changes should be delivered as complete repository-ready contributions whenever practical.
+For projects maintained primarily by a single repository owner, committing directly to `main` is acceptable.
+
+Feature branches and pull requests are optional and should only be introduced when they provide practical value.
+
+For projects with multiple active human contributors, branches and pull requests may be used for review and coordination.
 
 ## Commit Messages
 
 Every commit should include:
 
-- a concise commit summary
-- a meaningful commit description
+- a concise summary
+- a meaningful description
 
 Commit summaries should describe the primary purpose of the change.
 
-Commit descriptions should describe only the actual changes introduced by that specific commit.
+Commit descriptions should describe the actual diff introduced by that commit and the reason for it when the reason is not obvious.
 
-They should not repeat project history or describe changes introduced by previous commits.
+Commit descriptions should not repeat unrelated project history or describe changes introduced by previous commits.
 
 Each commit should represent one logical engineering step.
 
-Whenever practical, unrelated changes should be split into separate commits.
+Unrelated changes should be split into separate commits whenever practical.
+
+## Feature Commits
+
+Feature commits implement or improve a specific logical step.
+
+They may use conventional prefixes such as:
+
+```text
+feat:
+fix:
+docs:
+chore:
+refactor:
+```
+
+The prefix should match the actual change.
+
+## Milestone Commits
+
+Milestone commits finalize a completed roadmap milestone.
+
+They are separate from feature commits. They usually update version metadata, changelog entries, project context and documentation that summarizes the completed milestone.
+
+Milestone commits may use human-readable summaries without conventional prefixes, for example:
+
+```text
+Finalize proof-of-concept milestone (v0.3.0)
+```
 
 ## Documentation Commits
 
-Documentation changes are considered first-class engineering work.
+Documentation changes are first-class engineering work.
 
-Updates to README files, PHILOSOPHY.md, ChatGPT.md, CHANGELOG.md or other project documentation should receive their own well-structured commits whenever appropriate.
+Documentation-only commits are acceptable when they improve clarity, consistency, usability or maintainability.
 
-## Version Tags and Releases
+---
 
-Version tags and GitHub Releases should be created intentionally as project milestones.
+# Version Tags, Versions and Releases
 
-They should not be created automatically after every commit.
+Semantic Versioning should be used consistently.
 
-Semantic Versioning should be used consistently throughout the project.
+Version numbers describe completed project states.
 
-For future AGIT projects, version tags should use a leading `v`, for example `v1.0.0`.
+Version tags should mark meaningful completed roadmap states or milestones. Tags are not created after every commit by default.
+
+GitHub Releases are user-facing publication events. Not every tag requires a GitHub Release.
+
+The `VERSION` file should describe the latest completed project version according to the repository's versioning policy.
+
+For future AGIT projects, version tags should use a leading `v`, for example:
+
+```text
+v0.1.0
+v1.0.0
+```
 
 Existing repositories may keep their established tag style for consistency.
 
-## Branching Strategy
 
-For projects maintained primarily by a single repository owner, a simplified Git workflow is preferred.
+---
 
-Changes are committed directly to the `main` branch.
+# Standard Template Artifacts
 
-Feature branches and pull requests are unnecessary unless multiple human contributors actively collaborate on the repository.
+Some template elements are standardized project artifacts rather than free-form prose. They should be preserved during project setup unless the maintainer explicitly asks to change the disclosure model.
 
-The workflow should remain as simple as possible while preserving a clean, understandable and well-documented project history.
+This includes the AI Collaboration Note in `README.md` and `README.de.md`.
+
+Derived projects should place an AI Collaboration Note directly below the README badges. The note should preserve the template note's disclosure purpose, structure and visibility, point readers to `ChatGPT.md`, and use wording that is factually correct for the derived project. The literal template wording should not be copied when it would incorrectly claim that a derived project maintains the AGIT Collaboration Model.
+
+When updating an existing project, the assistant should check whether required standard artifacts are present and consistent with the template.
 
 ---
 
@@ -222,107 +467,60 @@ The workflow should remain as simple as possible while preserving a clean, under
 
 Documentation is considered part of the software.
 
-Important architectural decisions should eventually be reflected in one or more of the following documents:
+Every document should have a clear role:
 
-- README
-- CHANGELOG
-- PHILOSOPHY
-- Release Notes
-- configuration comments
+- `README.md` explains the project to users and contributors.
+- `PROJECT_CONTEXT.md` explains the current state.
+- `CHANGELOG.md` records version history.
+- `ChatGPT.md` defines the collaboration model.
+- `PHILOSOPHY.md` defines engineering principles.
+- ADRs explain important architectural decisions, when used.
 
-Documentation should evolve together with the implementation.
+Documentation should evolve together with implementation.
 
-User documentation should remain focused on using the software.
-
-Engineering philosophy and collaboration practices belong in their dedicated documents.
+Avoid duplicating the same rule in many places. Prefer clear ownership and cross-references.
 
 Technical documentation should use precise, objective language.
 
 Avoid promotional, exaggerated or marketing-oriented wording.
 
-Well-designed software should communicate its quality through clarity, consistency and technical accuracy rather than persuasive language.
-
 ---
 
 # Repository Evolution
 
-The repository should evolve gradually.
+Repositories should evolve gradually.
 
-Large-scale rewrites should be avoided whenever incremental improvements achieve the same objective.
+Large-scale rewrites should be avoided when incremental improvements achieve the same objective.
 
 Backward compatibility should be preserved whenever practical.
 
-Engineering decisions should prioritize long-term maintainability over short-term convenience.
+However, documents should be fully harmonized when a retrospective changes core process rules. Adding isolated notes is not enough if the change affects the meaning of several documents.
 
 ---
 
-# Continuous Improvement
+# Retrospectives and Template Evolution
 
-This Collaboration Model is intentionally a living document.
+The AGIT Project Template evolves through retrospectives based on practical project experience.
 
-After completing every project, the repository maintainer and the AI assistant should perform a short retrospective.
+Retrospectives normally occur at the end of a project. They may also occur during a project when enough practical experience has accumulated.
 
-Whenever new collaboration patterns, engineering practices or successful workflows have been identified, this document should be updated.
+Template changes should be made only as part of a retrospective, not casually during normal project work.
 
-Typical additions include:
+Retrospective updates should:
 
-- engineering practices
-- collaboration patterns
-- documentation standards
-- release workflows
-- architectural lessons learned
-- testing strategies
-- project organization improvements
+- identify reusable lessons
+- avoid overfitting the template to one project
+- update all affected documents consistently
+- remove or rewrite outdated guidance
+- preserve the template's lightweight character
 
-The objective is **not** to collect personal information about the repository maintainer.
-
-The objective is to continuously improve the shared engineering process.
-
----
-
-# Template Repository
-
-This Collaboration Model is maintained within the AGIT Project Template Repository.
-
-Whenever this document is improved after a completed project, the template repository should be updated accordingly.
-
-Future projects should always begin with the latest version of the Collaboration Model.
-
-The template repository therefore serves as the canonical starting point for all future AGIT software projects.
-
----
-
-# Versioning
-
-The Collaboration Model is versioned independently from the software project.
-
-Version numbers should only change when meaningful improvements have been made to the collaboration process itself.
-
-Each version should represent an observable improvement in the engineering process.
-
----
-
-# Historical Note
-
-Version 1.0 of the Collaboration Model was first developed during the implementation of the AGIT Windows Deployment Kit.
-
-The initial version can be found in that project's repository:
-
-https://github.com/ctreffe/agit-windows-deployment-kit
-
-Beginning with version 1.1, the AGIT Project Template is the canonical source for maintaining and evolving the Collaboration Model.
-
-Version 1.2 refined the repository ZIP workflow, commit delivery expectations, language consistency rules and retrospective-driven template evolution based on practical experience from the BootProfile Switcher project.
-
-Version 1.3 clarified that explicit commit creation requests require actual file modifications and available repository-ready artifacts, not plans, placeholders or conceptual deliverables.
-
-Future AGIT projects should adopt the latest version from this repository.
+The objective is reusable process improvement, not a log of individual mistakes.
 
 ---
 
 # Transparency
 
-AGIT repositories may explicitly document when they were conceived, designed, implemented or documented through an iterative collaboration between the repository maintainer (**ctreffe**) and **ChatGPT (OpenAI)**.
+AGIT repositories may explicitly document when they were conceived, designed, implemented or documented through iterative collaboration between the repository maintainer and an AI assistant.
 
 The objective is transparency.
 
@@ -339,8 +537,9 @@ A successful project is characterized by:
 - complete documentation
 - transparent decision making
 - successful validation
-- reproducible releases
+- reproducible workflows
 - repository-ready deliverables
+- a project history that can be understood later
 
 Software quality is measured not only by functionality, but also by how understandable, maintainable, reproducible and easy to continue the project remains over time.
 
@@ -348,88 +547,28 @@ Software quality is measured not only by functionality, but also by how understa
 
 # Architectural Status
 
-This document is considered part of the software architecture.
+This document is part of the software architecture for AGIT projects.
 
 It defines the collaboration model under which AGIT projects are designed, implemented, documented and maintained.
 
-Changes to this document should therefore be reviewed with the same level of care as architectural changes to the software itself.
-
-
-## Repository Initialization Baseline
-
-At the start of a new AGIT project, the repository maintainer should create the repository from the AGIT Project Template and then upload the current repository state as a ZIP archive.
-
-This ZIP archive is the authoritative working baseline for the AI assistant.
-
-The AI assistant should not assume that it can reliably read all repository contents from GitHub links alone.
-
-If the current repository state is missing, outdated or ambiguous, the AI assistant should request an updated ZIP archive before preparing repository-ready deliverables.
-
-## Commit Delivery
-
-When the maintainer explicitly requests that a commit be created, the planning phase is considered complete.
-
-The AI assistant should then provide the requested commit immediately instead of restating the plan.
-
-A commit delivery should include:
-
-- a ZIP archive containing only new or modified files required for that commit
-- the development version or release tag, according to the project workflow
-- a commit summary
-- a commit description
-
-The ZIP archive should not contain unchanged files unless they are required for technical reasons.
-
-The ZIP archive should not contain Git metadata such as a `.git` directory.
-
-If a commit only removes files, the files to delete should be listed explicitly in the response because deletions cannot be represented by the presence of files in a ZIP archive.
-
-The AI assistant should only interrupt the commit delivery flow when essential information is missing, requirements conflict or a technical blocker prevents creation of the requested commit.
-
-## Commit Creation Means Finished Files
-
-When the maintainer asks the AI assistant to create a commit, the expected output is the finished commit content.
-
-The AI assistant should therefore modify the affected files, perform consistency checks and provide a repository-ready ZIP archive with the actual changed files.
-
-Creating a commit always includes producing the real file changes required for that commit. It is not sufficient to describe the intended changes, provide a conceptual file list or generate placeholder content.
-
-A commit request should not be answered with a plan, outline or proposed file list unless the maintainer explicitly asks for planning instead of execution.
-
-If the AI assistant cannot create the requested commit because the current repository state is missing, ambiguous or technically unavailable, it should state that explicitly and request the missing information instead of presenting an incomplete commit as finished.
-
-## Language Consistency
-
-Multilingual repository documents should remain linguistically consistent.
-
-For example:
-
-- `README.md` should be written in English.
-- `README.de.md` should be written in German.
-
-Translations should be complete translations, not partially localized copies.
-
-Headings, explanatory text and lists should be translated consistently.
-
-Project names, product names, repository names and established technical terms may remain in their original form when translation would reduce clarity.
-
-## Retrospectives
-
-The AGIT Project Template should evolve through retrospectives based on practical project experience.
-
-Retrospectives normally occur at the end of a project, but they may also occur during a project whenever enough practical experience has been gathered to justify improving the template.
-
-Template updates should be made only as part of a retrospective.
-
-This keeps the template stable during normal project work while still allowing it to improve when real projects reveal better practices.
-
+Changes to this document should therefore be reviewed with the same care as architectural changes to software.
 
 ---
 
-# Completion Integrity
+# Historical Note
 
-ChatGPT must never report a requested deliverable as completed unless the agreed deliverable has actually been produced and is available to the maintainer.
+Version 1.0 of the Collaboration Model was first developed during the AGIT Windows Deployment Kit project.
 
-This principle applies to all deliverables, including commit ZIP files, generated documents, reports, analyses and other requested artifacts.
+Beginning with version 1.1, the AGIT Project Template became the canonical source for maintaining and evolving the Collaboration Model.
 
-Download links or artifact references should only be provided after the corresponding artifact has actually been created and is available to the maintainer.
+Version 1.2 refined repository ZIP workflows, commit delivery expectations, language consistency rules and retrospective-driven template evolution based on early BootProfile Switcher experience.
+
+Version 1.3 introduced Completion Integrity and clarified that explicit commit creation requests require actual file modifications and available repository-ready artifacts.
+
+Version 1.4 integrates the BootProfile Switcher v0.3.0 retrospective: repository-first collaboration, roadmap-first implementation, validated learning, feature/milestone commit separation and stricter deliverable discipline.
+
+Version 1.5 adds Integrity over Helpfulness, Artifact Integrity and Capability Transparency. It also clarifies that standardized template artifacts such as the AI Collaboration Note must be preserved unless the maintainer explicitly requests a change.
+
+Version 1.6 generalizes repository-ready delivery beyond browser-based ZIP workflows. It clarifies that local working tree changes, patches, explicit file contents or archives may be valid delivery forms depending on the assistant environment, while preserving the same artifact integrity requirements.
+
+Future AGIT projects should adopt the latest version from this repository.

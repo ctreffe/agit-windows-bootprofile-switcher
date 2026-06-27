@@ -7,11 +7,20 @@
 [Deutsche Dokumentation](README.de.md)
 
 > [!NOTE]
+> **AI Collaboration**
+>
+> This project is developed through collaboration between the repository maintainer and an AI assistant.
+>
+> The collaboration model documents engineering practices, collaboration workflows and repository conventions used in this project.
+>
+> It is maintained in [ChatGPT.md](ChatGPT.md).
+
+> [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`) and the Boot Profile Detection Proof of Concept (`v0.3.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
 >
-> The `v0.3.0 – Boot Profile Detection Proof of Concept` milestone has been completed. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution.
+> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution. A5 remains open to document the proof-of-concept findings and resulting architectural decisions.
 
 ## Overview
 
@@ -141,6 +150,7 @@ Core project documents:
 - [README.de.md](README.de.md) – German project documentation
 - [CHANGELOG.md](CHANGELOG.md) – version history
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
+- [CODEX.md](CODEX.md) – local Codex operating policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept
@@ -173,4 +183,3 @@ For machine-readable output:
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
-
