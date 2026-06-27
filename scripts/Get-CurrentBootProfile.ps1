@@ -81,7 +81,7 @@ if ($matchedEntry) {
     Write-Host "Mode:        $($matchedEntry.mode)"
     Write-Host "Name:        $($matchedEntry.name)"
     Write-Host "Identifier:  $($matchedEntry.identifier)"
-    Write-Host "Source:      bcdedit /enum \"{current}\" description"
+    Write-Host 'Source:      bcdedit /enum "{current}" description'
 } else {
     Write-Warning 'Current boot entry is not a managed BootProfile Switcher profile.'
     Write-Host "Description: $currentDescription"

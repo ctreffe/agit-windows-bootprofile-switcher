@@ -107,6 +107,7 @@ Zentrale Projektdokumente:
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept
+- [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2-Erkennung des aktuellen Bootprofils
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [LICENSE](LICENSE) – MIT-Lizenz
 
@@ -117,6 +118,12 @@ Dieses Projekt steht unter der MIT-Lizenz.
 ### A2-Erkennung des aktuellen Profils
 
 Nach der Installation des Bootmenüs und einem Start über Mode A oder Mode B:
+
+```cmd
+detect-current-profile.cmd
+```
+
+Alternativ in einer erhöhten PowerShell:
 
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1

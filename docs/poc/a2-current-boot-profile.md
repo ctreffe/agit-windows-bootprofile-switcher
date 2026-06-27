@@ -30,7 +30,13 @@ Install the A1 boot menu first:
 Restart Windows and choose either `BootProfile Switcher - Mode A` or
 `BootProfile Switcher - Mode B` in the Windows Boot Manager.
 
-After Windows has started, run:
+After Windows has started, run the command wrapper from the repository root:
+
+```cmd
+detect-current-profile.cmd
+```
+
+Alternatively, from an elevated PowerShell session, run:
 
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1
@@ -65,16 +71,14 @@ that the current boot entry is not a managed BootProfile Switcher profile.
 
 ## Validation notes
 
-A2 is considered validated when:
+A2 has been validated on Windows 11 for the core BootProfile Switcher proof of concept:
 
 - Mode A is detected after booting through Mode A
 - Mode B is detected after booting through Mode B
-- the normal Windows boot entry is not falsely identified as a managed profile
-- JSON output is suitable for later startup automation
+- the script resolves the detected mode to the managed BCD identifier stored in `state/boot-menu.json`
+
+The normal Windows boot entry and JSON output remain useful regression checks for later automation work.
 
 ## Known limitation
 
-The current implementation uses the BCD entry description as the detection key.
-This is acceptable for the first A2 diagnostic step, but it is not the final
-architecture. The preferred long-term identity is the real BCD object identifier
-if it can be resolved reliably.
+The current implementation uses the BCD entry description as the live detection bridge and maps it to the managed BCD identifier stored in `state/boot-menu.json`. This is sufficient for A2 because the managed identifier remains the internal profile identity. Direct resolution of the real BCD object identifier behind the `{current}` alias remains a future improvement.

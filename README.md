@@ -107,6 +107,7 @@ Core project documents:
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept
+- [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2 current boot profile detection
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – initial architecture decision record
 - [LICENSE](LICENSE) – MIT License
 
@@ -117,6 +118,12 @@ This project is licensed under the MIT License.
 ### A2 current profile detection
 
 After installing the boot menu and booting through Mode A or Mode B, run:
+
+```cmd
+detect-current-profile.cmd
+```
+
+Alternatively, from an elevated PowerShell session, run:
 
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1

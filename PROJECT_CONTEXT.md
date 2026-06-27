@@ -37,7 +37,7 @@ A1 has established a reversible boot menu with two entries:
 
 A1 validation also showed that the installer should copy `{default}` rather than `{current}` because `{current}` can become invalid after booting from and removing a managed proof-of-concept entry. Usability has been improved with double-clickable `install.cmd` and `uninstall.cmd` wrappers that request elevation and call the PowerShell scripts.
 
-The next step is A2: validate `scripts/Get-CurrentBootProfile.ps1`, which detects the current BootProfile Switcher mode by reading the `{current}` BCD entry description and mapping it to the managed A1 state file.
+A2 has been validated for Mode A and Mode B. `scripts/Get-CurrentBootProfile.ps1` detects the current BootProfile Switcher mode by reading the `{current}` BCD entry description and mapping it to the managed A1 state file. Direct resolution of the underlying `{current}` BCD object identifier remains a future improvement.
 
 ---
 
@@ -82,7 +82,7 @@ Can a user select a boot profile in the Windows Boot Manager and can that select
 Planned steps:
 
 * A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated; command wrappers added for easier installation and removal.
-* A2 – Identify the selected boot entry from within Windows. In progress: description-based detection script added for validation.
+* A2 – Identify the selected boot entry from within Windows. Completed and validated for Mode A and Mode B using managed BCD entry description mapping.
 * A3 – Determine the earliest suitable execution point before user logon.
 * A4 – Execute profile-specific startup logic based on the detected mode.
 * A5 – Document findings and resulting architectural decisions.
@@ -111,7 +111,7 @@ The conceptual architecture has been established.
 
 Implementation has started with a limited proof of concept for boot menu creation.
 
-Upcoming work should validate whether the selected Windows Boot Manager entry can be identified reliably before user logon.
+Current work has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry description and managed BootProfile Switcher state.
 
 ---
 
@@ -119,8 +119,8 @@ Upcoming work should validate whether the selected Windows Boot Manager entry ca
 
 The following questions remain intentionally unanswered:
 
-* Which Windows mechanism will identify the selected boot profile?
-* Can the selected BCD boot entry be detected reliably after startup?
+* Can the selected BCD boot entry be detected reliably before user logon using the same mechanism validated after startup?
+* Can the real BCD object identifier behind `{current}` be resolved directly in a future implementation?
 * Which execution point is most suitable before user logon?
 * Which Windows components should be used instead of custom solutions whenever possible?
 * Which parts should remain extensible through modules?
@@ -167,11 +167,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Validate the first A2 diagnostic implementation.
+Prepare A3: identify the earliest suitable pre-logon execution point.
 
 Primary objective:
 
-Boot Mode A and Mode B, run `scripts/Get-CurrentBootProfile.ps1`, and confirm that the script detects the selected mode from `bcdedit /enum "{current}"` output.
+Determine how BootProfile Switcher can run profile detection and later profile-specific startup logic before interactive user logon.
 
 ---
 
