@@ -8,6 +8,7 @@ This project follows Semantic Versioning.
 
 ### Added
 
+- Add double-clickable `install.cmd` and `uninstall.cmd` wrappers that request administrator privileges and invoke the PowerShell boot menu scripts with a process-local execution policy bypass.
 - Add A1 Boot Menu proof of concept with reversible PowerShell scripts for creating, inspecting and removing two Windows Boot Manager entries: `BootProfile Switcher - Mode A` and `BootProfile Switcher - Mode B`.
 - Add A1 PoC documentation with test procedure and validation notes.
 - Add runtime ignore rules for generated `state/` and `backups/` directories.

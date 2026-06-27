@@ -28,6 +28,15 @@ Not included:
 - changing system configuration based on a profile
 - creating a GUI
 
+## User-facing wrappers
+
+```text
+install.cmd
+uninstall.cmd
+```
+
+The command wrappers live in the repository root and are intended for double-click usage from Windows Explorer. They request administrator privileges through UAC when required and then call the underlying PowerShell scripts with `-ExecutionPolicy Bypass` for that process only.
+
 ## Scripts
 
 ```text
@@ -38,7 +47,9 @@ scripts/Uninstall-BootProfileMenu.ps1
 
 ## Test procedure
 
-Open Windows PowerShell as Administrator from the repository root.
+For normal interactive testing, double-click `install.cmd` from the repository root and approve the UAC prompt. After validation, double-click `uninstall.cmd` to remove the entries again.
+
+For manual testing, open Windows PowerShell as Administrator from the repository root.
 
 If local script execution is blocked for the current shell, temporarily allow it for this PowerShell process only:
 
@@ -71,7 +82,7 @@ BootProfile Switcher - Mode A
 BootProfile Switcher - Mode B
 ```
 
-After validation, remove the entries again:
+After validation, remove the entries again. Either double-click `uninstall.cmd`, or run manually:
 
 ```powershell
 .\scripts\Uninstall-BootProfileMenu.ps1
@@ -86,6 +97,7 @@ Validated on Windows 11 during A1 development:
 - the state file contained the expected identifiers
 - the uninstall script removed the entries successfully after fixing a PowerShell string interpolation issue
 - reinstall testing showed that `{default}` is a more robust copy source than `{current}` after booting through a managed entry
+- command wrappers were added to simplify installation and removal for normal Windows users
 
 ## Known limitations
 

@@ -21,6 +21,24 @@ Das Projekt soll Windows-Systeme unterstützen, die mehrere Betriebsprofile mit 
 
 Der erste Anwendungsfall ist ein Windows-Rechner, der entweder im Normalbetrieb oder in einem Experimentalprofil mit eingeschränkter beziehungsweise deaktivierter Netzwerkkonnektivität starten kann. Die Architektur ist bewusst generisch angelegt, damit später weitere Profile und Komponenten ergänzt werden können.
 
+## Schnellstart: A1 Boot Menu PoC
+
+Für den aktuellen Proof of Concept ist der einfachste Weg zum Installieren oder Entfernen der temporären Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
+
+```text
+install.cmd
+uninstall.cmd
+```
+
+Beide Wrapper können per Doppelklick im Windows Explorer gestartet werden. Sie fordern bei Bedarf Administratorrechte über UAC an und rufen anschließend die zugrunde liegenden PowerShell-Skripte mit einer nur für diesen Prozess geltenden Execution-Policy-Umgehung auf.
+
+Die Wrapper verwalten aktuell nur die A1-Proof-of-Concept-Bootmenü-Einträge:
+
+- `BootProfile Switcher - Mode A`
+- `BootProfile Switcher - Mode B`
+
+Die eigentliche Implementierung bleibt in `scripts/` sichtbar, damit sie weiterhin explizit geprüft und manuell getestet werden kann.
+
 ## Projektziele
 
 BootProfile Switcher soll Folgendes ermöglichen:

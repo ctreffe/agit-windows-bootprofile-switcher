@@ -35,7 +35,7 @@ A1 has established a reversible boot menu with two entries:
 * BootProfile Switcher - Mode A
 * BootProfile Switcher - Mode B
 
-A1 validation also showed that the installer should copy `{default}` rather than `{current}` because `{current}` can become invalid after booting from and removing a managed proof-of-concept entry.
+A1 validation also showed that the installer should copy `{default}` rather than `{current}` because `{current}` can become invalid after booting from and removing a managed proof-of-concept entry. Usability has been improved with double-clickable `install.cmd` and `uninstall.cmd` wrappers that request elevation and call the PowerShell scripts.
 
 The next step is A2: determine whether Windows can reliably identify which of these boot entries was selected during startup.
 
@@ -81,7 +81,7 @@ Can a user select a boot profile in the Windows Boot Manager and can that select
 
 Planned steps:
 
-* A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated.
+* A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated; command wrappers added for easier installation and removal.
 * A2 – Identify the selected boot entry from within Windows.
 * A3 – Determine the earliest suitable execution point before user logon.
 * A4 – Execute profile-specific startup logic based on the detected mode.

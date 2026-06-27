@@ -21,6 +21,24 @@ The project is intended to support Windows systems that need multiple operating 
 
 The initial use case is a Windows computer that can start either in normal operation or in an experimental profile with restricted or disabled network connectivity. The architecture is intentionally generic so that additional profiles and components can be added later.
 
+## Quick Start: A1 Boot Menu PoC
+
+For the current proof of concept, the easiest way to install or remove the temporary boot menu entries is to use the command wrappers from the repository root:
+
+```text
+install.cmd
+uninstall.cmd
+```
+
+Both wrappers can be started by double-clicking them in Windows Explorer. They request administrator privileges through UAC when required and then invoke the underlying PowerShell scripts with a process-local execution policy bypass.
+
+The wrappers currently manage only the A1 proof-of-concept boot menu entries:
+
+- `BootProfile Switcher - Mode A`
+- `BootProfile Switcher - Mode B`
+
+The underlying implementation remains in `scripts/` for explicit inspection and advanced manual testing.
+
 ## Project Goals
 
 BootProfile Switcher aims to provide:
