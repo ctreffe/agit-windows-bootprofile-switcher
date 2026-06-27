@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v0.3.0] - 2026-06-27
+
 ### Added
 
 - Add A4 profile-specific startup script execution for Mode A and Mode B.

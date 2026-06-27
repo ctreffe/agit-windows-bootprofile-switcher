@@ -9,9 +9,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`) and the Boot Profile Detection Proof of Concept (`v0.3.0`).
 >
-> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution.
+> The `v0.3.0 – Boot Profile Detection Proof of Concept` milestone has been completed. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup. A4 extends the startup hook with profile-specific startup script execution.
 
 ## Overview
 

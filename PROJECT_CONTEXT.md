@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.2.0 – Architecture**
+**v0.3.0 – Boot Profile Detection Proof of Concept**
 
-The Architecture milestone is complete.
+The Boot Profile Detection Proof of Concept milestone is complete.
 
 ## Current Focus
 
-Continue **v0.3.0 – Boot Profile Detection Proof of Concept**.
+Prepare the next milestone after the validated proof of concept.
 
 The current milestone validates whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
