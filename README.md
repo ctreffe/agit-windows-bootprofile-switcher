@@ -11,7 +11,7 @@
 >
 > BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
 >
-> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`.
+> The current development focus is `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 has validated creation and removal of two Windows Boot Manager entries, `Mode A` and `Mode B`. A2 detects the selected mode after startup. A3 validates automatic detection during system startup.
 
 ## Overview
 
@@ -38,6 +38,30 @@ The wrappers currently manage only the A1 proof-of-concept boot menu entries:
 - `BootProfile Switcher - Mode B`
 
 The underlying implementation remains in `scripts/` for explicit inspection and advanced manual testing.
+
+
+
+## Quick Start: A3 Startup Hook PoC
+
+After installing the A1 boot menu, the A3 startup hook can be installed from the
+repository root:
+
+```text
+install-startup-hook.cmd
+```
+
+The startup hook registers a Windows Scheduled Task that runs at system startup
+and writes the detected boot profile to:
+
+```text
+logs/startup-profile.log
+```
+
+The hook can be removed with:
+
+```text
+uninstall-startup-hook.cmd
+```
 
 ## Project Goals
 
@@ -134,3 +158,5 @@ For machine-readable output:
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
+
+- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – startup hook proof of concept

@@ -39,6 +39,30 @@ Die Wrapper verwalten aktuell nur die A1-Proof-of-Concept-Bootmenü-Einträge:
 
 Die eigentliche Implementierung bleibt in `scripts/` sichtbar, damit sie weiterhin explizit geprüft und manuell getestet werden kann.
 
+
+
+## Schnellstart: A3 Startup-Hook-PoC
+
+Nach der Installation des A1-Bootmenüs kann der A3-Startup-Hook aus dem
+Repository-Stammverzeichnis installiert werden:
+
+```text
+install-startup-hook.cmd
+```
+
+Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft
+und das erkannte Bootprofil in folgende Datei schreibt:
+
+```text
+logs/startup-profile.log
+```
+
+Der Hook kann wieder entfernt werden mit:
+
+```text
+uninstall-startup-hook.cmd
+```
+
 ## Projektziele
 
 BootProfile Switcher soll Folgendes ermöglichen:
@@ -134,3 +158,5 @@ Für maschinenlesbare Ausgabe:
 ```powershell
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
+
+- [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – Startup-Hook Proof of Concept
