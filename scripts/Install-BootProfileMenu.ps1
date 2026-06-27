@@ -3,7 +3,7 @@
 Creates the BootProfile Switcher proof-of-concept boot menu entries.
 
 .DESCRIPTION
-Creates two Windows Boot Manager entries by copying the current Windows boot
+Creates two Windows Boot Manager entries by copying the default Windows boot
 loader entry. The entries are named "BootProfile Switcher - Mode A" and
 "BootProfile Switcher - Mode B" and are added to the Boot Manager display
 order. The script stores the created identifiers in state/boot-menu.json so the
@@ -66,10 +66,10 @@ if ($PSCmdlet.ShouldProcess('Windows Boot Configuration Data store', 'Create Boo
 
     & bcdedit /export $backupFile | Out-Null
 
-    $modeAOutput = & bcdedit /copy '{current}' /d 'BootProfile Switcher - Mode A'
+    $modeAOutput = & bcdedit /copy '{default}' /d 'BootProfile Switcher - Mode A'
     $modeAId = Get-GuidFromBcdeditOutput -Output $modeAOutput
 
-    $modeBOutput = & bcdedit /copy '{current}' /d 'BootProfile Switcher - Mode B'
+    $modeBOutput = & bcdedit /copy '{default}' /d 'BootProfile Switcher - Mode B'
     $modeBId = Get-GuidFromBcdeditOutput -Output $modeBOutput
 
     & bcdedit /displayorder $modeAId /addlast | Out-Null
@@ -78,7 +78,7 @@ if ($PSCmdlet.ShouldProcess('Windows Boot Configuration Data store', 'Create Boo
 
     $state = [ordered]@{
         createdAt = (Get-Date).ToString('o')
-        sourceEntry = '{current}'
+        sourceEntry = '{default}'
         entries = @(
             [ordered]@{
                 mode = 'A'

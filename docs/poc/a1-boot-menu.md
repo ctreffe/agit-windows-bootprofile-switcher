@@ -13,7 +13,7 @@ This step does not detect the selected boot entry yet and does not execute profi
 
 Included:
 
-- create two Windows Boot Manager entries by copying the current Windows entry
+- create two Windows Boot Manager entries by copying the default Windows entry
 - add both entries to the Boot Manager display order
 - set a temporary Boot Manager timeout
 - store created entry identifiers in `state/boot-menu.json`
@@ -85,8 +85,11 @@ Validated on Windows 11 during A1 development:
 - both entries appeared in the Boot Manager display order
 - the state file contained the expected identifiers
 - the uninstall script removed the entries successfully after fixing a PowerShell string interpolation issue
+- reinstall testing showed that `{default}` is a more robust copy source than `{current}` after booting through a managed entry
 
 ## Known limitations
+
+The installer copies `{default}` instead of `{current}` so reinstalling remains reliable even if the current Windows session was started from a proof-of-concept entry that has since been removed.
 
 The current implementation stores only the created entry identifiers. It does not yet persist or restore the previous timeout value. The uninstall script currently sets the timeout to `0` after removing the proof-of-concept entries.
 

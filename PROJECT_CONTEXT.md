@@ -35,6 +35,8 @@ A1 has established a reversible boot menu with two entries:
 * BootProfile Switcher - Mode A
 * BootProfile Switcher - Mode B
 
+A1 validation also showed that the installer should copy `{default}` rather than `{current}` because `{current}` can become invalid after booting from and removing a managed proof-of-concept entry.
+
 The next step is A2: determine whether Windows can reliably identify which of these boot entries was selected during startup.
 
 ---

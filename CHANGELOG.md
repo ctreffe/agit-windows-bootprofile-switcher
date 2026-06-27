@@ -18,6 +18,7 @@ This project follows Semantic Versioning.
 
 ### Fixed
 
+- Use `{default}` instead of `{current}` as the BCD copy source so the installer remains reliable after booting from and removing a managed boot entry.
 - Fix PowerShell string interpolation in the uninstall script by using `${id}` before a colon in warning output.
 
 ### Planned
