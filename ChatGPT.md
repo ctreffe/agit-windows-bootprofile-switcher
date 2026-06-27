@@ -1,6 +1,6 @@
 # ChatGPT.md
 
-# Collaboration Model v1.1
+# Collaboration Model v1.3
 
 **Status:** Stable  
 **Applies to:** AGIT software projects  
@@ -136,6 +136,8 @@ Repository-ready deliverables should only be generated after the repository main
 The delivered ZIP archive, commit metadata and accompanying documentation are expected to represent the exact state intended for the repository.
 
 Repository-ready deliverables should not require additional manual editing before being committed.
+
+Repository-ready delivery means producing the actual agreed artifacts, not merely describing what those artifacts should contain. Placeholder files, draft-only file lists or conceptual commit descriptions are not repository-ready deliverables unless the maintainer explicitly requests them.
 
 The objective is to minimize manual preparation work for the repository maintainer and provide complete, reviewable change sets.
 
@@ -310,6 +312,10 @@ https://github.com/ctreffe/agit-windows-deployment-kit
 
 Beginning with version 1.1, the AGIT Project Template is the canonical source for maintaining and evolving the Collaboration Model.
 
+Version 1.2 refined the repository ZIP workflow, commit delivery expectations, language consistency rules and retrospective-driven template evolution based on practical experience from the BootProfile Switcher project.
+
+Version 1.3 clarified that explicit commit creation requests require actual file modifications and available repository-ready artifacts, not plans, placeholders or conceptual deliverables.
+
 Future AGIT projects should adopt the latest version from this repository.
 
 ---
@@ -347,3 +353,83 @@ This document is considered part of the software architecture.
 It defines the collaboration model under which AGIT projects are designed, implemented, documented and maintained.
 
 Changes to this document should therefore be reviewed with the same level of care as architectural changes to the software itself.
+
+
+## Repository Initialization Baseline
+
+At the start of a new AGIT project, the repository maintainer should create the repository from the AGIT Project Template and then upload the current repository state as a ZIP archive.
+
+This ZIP archive is the authoritative working baseline for the AI assistant.
+
+The AI assistant should not assume that it can reliably read all repository contents from GitHub links alone.
+
+If the current repository state is missing, outdated or ambiguous, the AI assistant should request an updated ZIP archive before preparing repository-ready deliverables.
+
+## Commit Delivery
+
+When the maintainer explicitly requests that a commit be created, the planning phase is considered complete.
+
+The AI assistant should then provide the requested commit immediately instead of restating the plan.
+
+A commit delivery should include:
+
+- a ZIP archive containing only new or modified files required for that commit
+- the development version or release tag, according to the project workflow
+- a commit summary
+- a commit description
+
+The ZIP archive should not contain unchanged files unless they are required for technical reasons.
+
+The ZIP archive should not contain Git metadata such as a `.git` directory.
+
+If a commit only removes files, the files to delete should be listed explicitly in the response because deletions cannot be represented by the presence of files in a ZIP archive.
+
+The AI assistant should only interrupt the commit delivery flow when essential information is missing, requirements conflict or a technical blocker prevents creation of the requested commit.
+
+## Commit Creation Means Finished Files
+
+When the maintainer asks the AI assistant to create a commit, the expected output is the finished commit content.
+
+The AI assistant should therefore modify the affected files, perform consistency checks and provide a repository-ready ZIP archive with the actual changed files.
+
+Creating a commit always includes producing the real file changes required for that commit. It is not sufficient to describe the intended changes, provide a conceptual file list or generate placeholder content.
+
+A commit request should not be answered with a plan, outline or proposed file list unless the maintainer explicitly asks for planning instead of execution.
+
+If the AI assistant cannot create the requested commit because the current repository state is missing, ambiguous or technically unavailable, it should state that explicitly and request the missing information instead of presenting an incomplete commit as finished.
+
+## Language Consistency
+
+Multilingual repository documents should remain linguistically consistent.
+
+For example:
+
+- `README.md` should be written in English.
+- `README.de.md` should be written in German.
+
+Translations should be complete translations, not partially localized copies.
+
+Headings, explanatory text and lists should be translated consistently.
+
+Project names, product names, repository names and established technical terms may remain in their original form when translation would reduce clarity.
+
+## Retrospectives
+
+The AGIT Project Template should evolve through retrospectives based on practical project experience.
+
+Retrospectives normally occur at the end of a project, but they may also occur during a project whenever enough practical experience has been gathered to justify improving the template.
+
+Template updates should be made only as part of a retrospective.
+
+This keeps the template stable during normal project work while still allowing it to improve when real projects reveal better practices.
+
+
+---
+
+# Completion Integrity
+
+ChatGPT must never report a requested deliverable as completed unless the agreed deliverable has actually been produced and is available to the maintainer.
+
+This principle applies to all deliverables, including commit ZIP files, generated documents, reports, analyses and other requested artifacts.
+
+Download links or artifact references should only be provided after the corresponding artifact has actually been created and is available to the maintainer.

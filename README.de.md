@@ -9,9 +9,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher befindet sich in der Architekturphase.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) abgeschlossen.
 >
-> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die konzeptionelle Systemarchitektur. Die Implementierung hat noch nicht begonnen.
+> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die konzeptionelle Systemarchitektur. Die Implementierung hat noch nicht begonnen. Der nächste Schwerpunkt ist die Recherche zum Windows-Bootprozess.
 
 ## Überblick
 
@@ -63,7 +63,7 @@ Das Projekt wird nach folgenden Prinzipien entwickelt:
 
 BootProfile Switcher verwendet Semantic Versioning.
 
-Der aktuelle Projektmeilenstein ist:
+Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
 0.2.0 Architecture
@@ -75,10 +75,13 @@ Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
 v0.2.0
 ```
 
+Versionstags und GitHub Releases werden bewusst erstellt. Nicht jeder Versionstag benötigt einen GitHub Release.
+
 ## Dokumentation
 
 Zentrale Projektdokumente:
 
+- [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) – aktueller Projektstand und nächster Entwicklungsschwerpunkt
 - [README.md](README.md) – primäre englische Projektdokumentation
 - [README.de.md](README.de.md) – deutsche Projektdokumentation
 - [CHANGELOG.md](CHANGELOG.md) – Versionshistorie

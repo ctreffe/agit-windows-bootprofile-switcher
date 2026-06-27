@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 
 This project follows Semantic Versioning.
 
-## [0.2.0] - In Development
+## [Unreleased]
+
+### Planned
+
+- Research the Windows boot process for the next milestone.
+- Evaluate supported mechanisms for boot profile identification.
+- Evaluate suitable pre-logon execution points.
+- Document resulting architectural decisions as ADRs.
+
+## [0.2.0] - 2026-06-27
 
 ### Added
 
@@ -12,6 +21,10 @@ This project follows Semantic Versioning.
 - Add ADR-0001 documenting the overall architecture and documentation model.
 - Update README files to reflect the Architecture milestone.
 
+### Changed
+
+- Update the project Collaboration Model to v1.3 from the AGIT Project Template v1.0.5.
+- Align project context with the completed Architecture milestone and the next Boot Process research focus.
 
 ## [0.1.0] - 2026-06-27
 

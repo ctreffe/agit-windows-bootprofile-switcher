@@ -9,9 +9,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher is in the architecture stage.
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`).
 >
-> The repository currently defines the project scope, engineering principles and conceptual system architecture. Implementation work has not started yet.
+> The repository currently defines the project scope, engineering principles and conceptual system architecture. Implementation work has not started yet. The next focus is research into the Windows boot process.
 
 ## Overview
 
@@ -63,7 +63,7 @@ The project is developed with the following principles:
 
 BootProfile Switcher follows Semantic Versioning.
 
-The current project milestone is:
+The latest completed project milestone is:
 
 ```text
 0.2.0 Architecture
@@ -75,10 +75,13 @@ Version tags should use a leading `v`, for example:
 v0.2.0
 ```
 
+Version tags and GitHub Releases are created intentionally. Not every version tag requires a GitHub Release.
+
 ## Documentation
 
 Core project documents:
 
+- [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) – current project state and next development focus
 - [README.md](README.md) – primary English project documentation
 - [README.de.md](README.de.md) – German project documentation
 - [CHANGELOG.md](CHANGELOG.md) – version history
