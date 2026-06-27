@@ -18,7 +18,8 @@ This project follows Semantic Versioning.
 - Add `install-startup-hook.cmd` and `uninstall-startup-hook.cmd` wrappers for managing the A3 startup hook.
 - Add `scripts/Invoke-BootProfileStartupHook.ps1` to log automatic startup-time boot profile detection results.
 - Add A3 documentation and validation notes for startup-time profile detection.
-- Add A2 diagnostic script `scripts/Get-CurrentBootProfile.ps1` to detect the selected BootProfile Switcher mode from the current BCD entry description.
+- Add A2 diagnostic script `scripts/Get-CurrentBootProfile.ps1` to detect the selected BootProfile Switcher mode from the current BCD entry.
+- Add A2 inspection script `scripts/Inspect-CurrentBootEntry.ps1` for read-only BCD identifier diagnostics.
 - Add double-clickable `detect-current-profile.cmd` wrapper for current profile detection.
 - Add A2 documentation and validation notes for current boot profile detection.
 - Add double-clickable `install.cmd` and `uninstall.cmd` wrappers that request administrator privileges and invoke the PowerShell boot menu scripts with a process-local execution policy bypass.
@@ -36,6 +37,7 @@ This project follows Semantic Versioning.
 - Extend the startup hook to execute the detected profile startup script.
 - Mark A3 startup hook detection as validated for Mode A and Mode B.
 - Mark A2 current boot profile detection as validated for Mode A and Mode B.
+- Use GUID-based current boot profile detection via `bcdedit /enum "{current}" /v`, with description-based detection retained as a fallback.
 - Refocus v0.3.0 from generic boot process research to a Boot Profile Detection Proof of Concept.
 
 ### Fixed

@@ -7,17 +7,22 @@ A1 already showed during manual validation that `bcdedit /enum "{current}"`
 returns the selected proof-of-concept boot entry description after booting via
 Mode A or Mode B.
 
+Follow-up validation during A2 also showed that `bcdedit /enum "{current}" /v`
+returns the real BCD object identifier for the selected entry. Without `/v`,
+`bcdedit` exposes the identifier as the `{current}` alias. With `/v`, it exposes
+the underlying GUID.
+
 ## Scope
 
-A2 intentionally starts with the smallest useful detection mechanism:
+A2 uses GUID-based detection as the primary mechanism:
 
-- read the current BCD entry with `bcdedit /enum "{current}"`
-- parse the `description` field
-- compare it with the managed entries stored in `state/boot-menu.json`
+- read the current BCD entry with `bcdedit /enum "{current}" /v`
+- parse the real BCD object identifier
+- compare it with the managed identifiers stored in `state/boot-menu.json`
 - report the detected mode
 
-This step does not yet resolve the real BCD object identifier behind the
-`{current}` alias. GUID-based detection remains a follow-up investigation.
+The implementation keeps description-based detection as a fallback for
+diagnostics and compatibility.
 
 ## Usage
 
@@ -48,6 +53,15 @@ Machine-readable output is available with:
 .\scripts\Get-CurrentBootProfile.ps1 -AsJson
 ```
 
+For troubleshooting or future regression checks, the read-only inspection script
+can compare the current BCD entry, verbose current BCD output, all BCD entries
+and the managed A1 state file:
+
+```powershell
+.\scripts\Inspect-CurrentBootEntry.ps1
+.\scripts\Inspect-CurrentBootEntry.ps1 -AsJson
+```
+
 ## Expected results
 
 After booting Mode A:
@@ -75,10 +89,19 @@ A2 has been validated on Windows 11 for the core BootProfile Switcher proof of c
 
 - Mode A is detected after booting through Mode A
 - Mode B is detected after booting through Mode B
-- the script resolves the detected mode to the managed BCD identifier stored in `state/boot-menu.json`
+- `bcdedit /enum "{current}" /v` exposes the real BCD identifier for Mode A
+- `bcdedit /enum "{current}" /v` exposes the real BCD identifier for Mode B
+- the script resolves the detected mode by matching the current BCD identifier to the managed identifier stored in `state/boot-menu.json`
+- `scripts/Inspect-CurrentBootEntry.ps1` confirmed that verbose current BCD output exposes the managed Mode A and Mode B GUIDs
 
 The normal Windows boot entry and JSON output remain useful regression checks for later automation work.
 
-## Known limitation
+## Detection behavior
 
-The current implementation uses the BCD entry description as the live detection bridge and maps it to the managed BCD identifier stored in `state/boot-menu.json`. This is sufficient for A2 because the managed identifier remains the internal profile identity. Direct resolution of the real BCD object identifier behind the `{current}` alias remains a future improvement.
+The current implementation uses GUID-based detection first. It reads the current
+BCD entry with verbose output, extracts the real BCD object identifier and maps
+that identifier to the managed entries created by A1.
+
+If GUID-based detection cannot identify a managed entry, the script falls back
+to matching the BCD entry description against the managed entry names. This keeps
+the original A2 detection bridge available as a diagnostic fallback.

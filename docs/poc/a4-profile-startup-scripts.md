@@ -28,7 +28,6 @@ Not included:
 - Real system configuration changes.
 - Network, service, driver or hardware configuration.
 - User-facing profile management.
-- Direct resolution of the real BCD object identifier behind `{current}`.
 
 ## Execution Flow
 

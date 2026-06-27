@@ -79,7 +79,5 @@ initialization logic.
 
 - The hook currently writes only a diagnostic log entry.
 - No profile-specific configuration changes are applied yet.
-- Detection is based on the managed BCD entry description mapping established
-  in A2.
-- Direct resolution of the underlying current BCD object identifier remains a
-  future improvement.
+- Detection uses the GUID-based BCD identifier mapping established in A2, with
+  description-based detection retained as a fallback.
