@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 This project follows Semantic Versioning.
 
+## [0.2.0] - In Development
+
+### Added
+
+- Add conceptual system architecture documentation.
+- Add ADR-0001 documenting the overall architecture and documentation model.
+- Update README files to reflect the Architecture milestone.
+
+
 ## [0.1.0] - 2026-06-27
 
 ### Added
@@ -14,10 +23,3 @@ This project follows Semantic Versioning.
 - Define the first project milestone as `0.1.0 Foundation`.
 - Adapt the project philosophy for a configurable Windows boot profile engine.
 - Set initial project version metadata.
-
-
-## [0.2.0] - In Development
-
-### Added
-
-- Add initial conceptual system architecture document.

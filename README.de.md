@@ -9,9 +9,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher befindet sich in der frühen Projektgrundlage.
+> BootProfile Switcher befindet sich in der Architekturphase.
 >
-> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die Dokumentationsbasis. Die Implementierung hat noch nicht begonnen.
+> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die konzeptionelle Systemarchitektur. Die Implementierung hat noch nicht begonnen.
 
 ## Überblick
 
@@ -63,16 +63,16 @@ Das Projekt wird nach folgenden Prinzipien entwickelt:
 
 BootProfile Switcher verwendet Semantic Versioning.
 
-Der erste Projektmeilenstein ist:
+Der aktuelle Projektmeilenstein ist:
 
 ```text
-0.1.0 Foundation
+0.2.0 Architecture
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
 
 ```text
-v0.1.0
+v0.2.0
 ```
 
 ## Dokumentation
@@ -84,6 +84,8 @@ Zentrale Projektdokumente:
 - [CHANGELOG.md](CHANGELOG.md) – Versionshistorie
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
+- [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ## Lizenz
