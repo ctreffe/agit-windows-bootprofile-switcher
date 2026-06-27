@@ -1,66 +1,89 @@
-# AGIT Project Template
+# BootProfile Switcher
 
-![Lizenz](https://img.shields.io/github/license/ctreffe/agit-project-template)
-![Release](https://img.shields.io/github/v/tag/ctreffe/agit-project-template)
-![Letzter Commit](https://img.shields.io/github/last-commit/ctreffe/agit-project-template)
+![Lizenz](https://img.shields.io/github/license/ctreffe/agit-windows-bootprofile-switcher)
+![Release](https://img.shields.io/github/v/tag/ctreffe/agit-windows-bootprofile-switcher)
+![Letzter Commit](https://img.shields.io/github/last-commit/ctreffe/agit-windows-bootprofile-switcher)
 
 [English documentation](README.md)
 
 > [!NOTE]
-> **KI-Zusammenarbeit**
+> **Projektstatus**
 >
-> Dieses Repository pflegt das aktuelle AGIT Collaboration Model.
+> BootProfile Switcher befindet sich in der frühen Projektgrundlage.
 >
-> Das Collaboration Model dokumentiert Engineering-Praktiken, Kollaborations-Workflows und Repository-Konventionen, die in AGIT-Projekten verwendet werden.
->
-> Es wird in [ChatGPT.md](ChatGPT.md) gepflegt.
+> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die Dokumentationsbasis. Die Implementierung hat noch nicht begonnen.
 
 ## Überblick
 
-Das AGIT Project Template ist der Startpunkt für neue AGIT-Softwareprojekte.
+BootProfile Switcher ist eine konfigurierbare Windows-Bootprofil-Engine, die modulare Systemprofile vor der Benutzeranmeldung anwendet.
 
-Es stellt eine wiederverwendbare Repository-Grundlage mit Dokumentations-, Kollaborations- und Repository-Standards bereit.
+Das Projekt soll Windows-Systeme unterstützen, die mehrere Betriebsprofile mit einer einzigen Windows-Installation benötigen. Ein Benutzer wählt beim Systemstart ein Bootprofil aus. BootProfile Switcher wendet anschließend die zugehörige Systemkonfiguration an, bevor die interaktive Anmeldung beginnt.
 
-Dieses Repository ist kein Code-Framework. Es ist ein Engineering-Template.
+Der erste Anwendungsfall ist ein Windows-Rechner, der entweder im Normalbetrieb oder in einem Experimentalprofil mit eingeschränkter beziehungsweise deaktivierter Netzwerkkonnektivität starten kann. Die Architektur ist bewusst generisch angelegt, damit später weitere Profile und Komponenten ergänzt werden können.
 
-## Verwendung des Templates
+## Projektziele
 
-1. Neues Repository aus diesem Template erstellen.
-2. `PROJECT_SETUP.md` lesen.
-3. README-Dateien und Repository-Metadaten an das neue Projekt anpassen.
-4. Kerndokumente prüfen.
-5. Template-spezifische Setup-Dokumente entfernen, sobald die Projekteinrichtung abgeschlossen ist.
+BootProfile Switcher soll Folgendes ermöglichen:
 
-## Dokumente, die normalerweise bleiben
+- Profilauswahl während des Systemstarts
+- eine gemeinsame Windows-Installation
+- Systemkonfiguration vor der Benutzeranmeldung
+- modulare Profilverwaltung
+- skriptfähige Installation und Entfernung
+- Kompatibilität mit Gruppenrichtlinien-basierten Deployment-Umgebungen
+- nachvollziehbares Logging und Diagnosefähigkeit
+- reversible Infrastrukturänderungen
 
-Die folgenden Dokumente bleiben normalerweise Teil eines abgeleiteten Projekts:
+## Nicht-Ziele
 
-- `README.md`
-- `README.de.md`, sofern sinnvoll
-- `CHANGELOG.md`
-- `ChatGPT.md`
-- `PHILOSOPHY.md`
-- `LICENSE`
+BootProfile Switcher soll ausdrücklich nicht Folgendes bereitstellen:
 
-## Template-spezifische Dokumente
+- mehrere Windows-Installationen
+- eine Desktop-Anwendung für Endbenutzer
+- einen Ersatz für Windows-Deployment-Werkzeuge
+- versteckte oder undokumentierte Systemänderungen
+- irreversible Konfigurationsänderungen
 
-Die folgenden Dokumente unterstützen vor allem die Projekteinrichtung:
+## Engineering-Ansatz
 
-- `PROJECT_SETUP.md`
-- `DOCUMENTATION.md`
-- `REPOSITORY.md`
+Dieses Projekt folgt dem AGIT Collaboration Model in [ChatGPT.md](ChatGPT.md).
 
-Nach Abschluss der Ersteinrichtung können diese Dokumente aus dem abgeleiteten Projekt entfernt werden, sofern sie dort nicht weiterhin nützlich sind.
+Das Projekt wird nach folgenden Prinzipien entwickelt:
 
-## Kerndokumente des Templates
+- Architektur vor Implementierung
+- von Windows unterstützte Mechanismen vor eigenen Umgehungslösungen
+- Konfiguration statt Hardcoding
+- modularer Aufbau
+- Wartbarkeit vor kurzfristiger Bequemlichkeit
+- Semantic Versioning
+- aussagekräftige Changelog-Einträge
+- repository-ready Änderungssätze
 
-- [PROJECT_SETUP.md](PROJECT_SETUP.md) – Anleitung zur Ersteinrichtung neuer Projekte
-- [ChatGPT.md](ChatGPT.md) – Collaboration Model
-- [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
-- [DOCUMENTATION.md](DOCUMENTATION.md) – Dokumentationsstandards
-- [REPOSITORY.md](REPOSITORY.md) – Repository-Standards
+## Versionierung
+
+BootProfile Switcher verwendet Semantic Versioning.
+
+Der erste Projektmeilenstein ist:
+
+```text
+0.1.0 Foundation
+```
+
+Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
+
+```text
+v0.1.0
+```
+
+## Dokumentation
+
+Zentrale Projektdokumente:
+
+- [README.md](README.md) – primäre englische Projektdokumentation
+- [README.de.md](README.de.md) – deutsche Projektdokumentation
 - [CHANGELOG.md](CHANGELOG.md) – Versionshistorie
-- [README.md](README.md) – englische Dokumentation
+- [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
+- [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ## Lizenz
