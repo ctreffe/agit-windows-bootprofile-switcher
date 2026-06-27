@@ -11,7 +11,7 @@
 >
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) abgeschlossen.
 >
-> Das Repository definiert derzeit Projektumfang, Engineering-Prinzipien und die konzeptionelle Systemarchitektur. Die Implementierung hat noch nicht begonnen. Der nächste Schwerpunkt ist die Recherche zum Windows-Bootprozess.
+> Der aktuelle Entwicklungsschwerpunkt ist `v0.3.0 – Boot Profile Detection Proof of Concept`. A1 hat das Erstellen und Entfernen zweier Windows-Boot-Manager-Einträge, `Mode A` und `Mode B`, validiert.
 
 ## Überblick
 
@@ -88,6 +88,7 @@ Zentrale Projektdokumente:
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [LICENSE](LICENSE) – MIT-Lizenz
 

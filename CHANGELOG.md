@@ -6,10 +6,23 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add A1 Boot Menu proof of concept with reversible PowerShell scripts for creating, inspecting and removing two Windows Boot Manager entries: `BootProfile Switcher - Mode A` and `BootProfile Switcher - Mode B`.
+- Add A1 PoC documentation with test procedure and validation notes.
+- Add runtime ignore rules for generated `state/` and `backups/` directories.
+
+### Changed
+
+- Refocus v0.3.0 from generic boot process research to a Boot Profile Detection Proof of Concept.
+
+### Fixed
+
+- Fix PowerShell string interpolation in the uninstall script by using `${id}` before a colon in warning output.
+
 ### Planned
 
-- Research the Windows boot process for the next milestone.
-- Evaluate supported mechanisms for boot profile identification.
+- A2: determine whether Windows can reliably identify which BootProfile Switcher boot entry was selected during startup.
 - Evaluate suitable pre-logon execution points.
 - Document resulting architectural decisions as ADRs.
 

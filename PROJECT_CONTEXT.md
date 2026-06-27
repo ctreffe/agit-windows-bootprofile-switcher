@@ -26,23 +26,16 @@ The Architecture milestone is complete.
 
 ## Current Focus
 
-Prepare and begin **v0.3.0 – Boot Process**.
+Continue **v0.3.0 – Boot Profile Detection Proof of Concept**.
 
-The next milestone is to understand the Windows boot process in sufficient detail before implementing any solution.
+The current milestone validates whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
-The project intentionally follows a **research-first** approach.
+A1 has established a reversible boot menu with two entries:
 
-The objective is to understand:
+* BootProfile Switcher - Mode A
+* BootProfile Switcher - Mode B
 
-* Windows Boot Manager
-* Boot profile selection
-* Available identification mechanisms
-* Boot configuration persistence
-* Pre-logon execution environment
-* Official Windows mechanisms
-* Long-term maintainability
-
-Only after this research phase will architectural decisions be documented as ADRs.
+The next step is A2: determine whether Windows can reliably identify which of these boot entries was selected during startup.
 
 ---
 
@@ -78,17 +71,19 @@ Main results:
 
 # Current Development Roadmap
 
-## v0.3.0 – Boot Process
+## v0.3.0 – Boot Profile Detection Proof of Concept
 
-Research the Windows boot sequence.
+Validate the core technical hypothesis:
 
-Goals:
+Can a user select a boot profile in the Windows Boot Manager and can that selection be detected before user logon so profile-specific initialization can run?
 
-* Understand the complete boot process.
-* Identify reliable profile detection mechanisms.
-* Evaluate available Windows APIs and configuration stores.
-* Compare supported and unsupported approaches.
-* Produce ADRs where architectural decisions are required.
+Planned steps:
+
+* A1 – Create a reversible boot menu with Mode A and Mode B. Completed and validated.
+* A2 – Identify the selected boot entry from within Windows.
+* A3 – Determine the earliest suitable execution point before user logon.
+* A4 – Execute profile-specific startup logic based on the detected mode.
+* A5 – Document findings and resulting architectural decisions.
 
 ---
 
@@ -112,9 +107,9 @@ The roadmap may evolve based on research findings.
 
 The conceptual architecture has been established.
 
-No implementation has started yet.
+Implementation has started with a limited proof of concept for boot menu creation.
 
-Upcoming work should validate the architecture against actual Windows behavior before implementation begins.
+Upcoming work should validate whether the selected Windows Boot Manager entry can be identified reliably before user logon.
 
 ---
 
@@ -123,6 +118,7 @@ Upcoming work should validate the architecture against actual Windows behavior b
 The following questions remain intentionally unanswered:
 
 * Which Windows mechanism will identify the selected boot profile?
+* Can the selected BCD boot entry be detected reliably after startup?
 * Which execution point is most suitable before user logon?
 * Which Windows components should be used instead of custom solutions whenever possible?
 * Which parts should remain extensible through modules?
@@ -169,11 +165,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Begin the research phase for **v0.3.0 – Boot Process**.
+Begin A2 of **v0.3.0 – Boot Profile Detection Proof of Concept**.
 
 Primary objective:
 
-Understand the Windows boot process well enough to make informed architectural decisions before writing implementation code.
+Determine whether Windows can reliably identify which BootProfile Switcher boot menu entry, Mode A or Mode B, was selected during startup.
 
 ---
 
