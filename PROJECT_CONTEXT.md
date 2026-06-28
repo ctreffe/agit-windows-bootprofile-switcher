@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.5.0 – Profile Engine**
+**v0.6.0 – Module System**
 
-The Profile Engine milestone is complete.
+The Module System milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the initial profile engine split.
+Prepare the next milestone after the initial module system boundary.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -46,6 +46,8 @@ A4 has been validated for Mode A and Mode B. The startup hook now executes profi
 v0.4.0 introduced `scripts/Resolve-BootProfile.ps1` as the dedicated resolver, validated it for Mode A and Mode B, kept normal unmanaged Windows startup as a successful `detected = false` case, improved boot menu installation against duplicate managed entries and moved the startup hook onto the resolver path.
 
 v0.5.0 introduced `scripts/Invoke-ProfileEngine.ps1` as the dedicated profile engine entry point. The startup hook now orchestrates resolver output through the engine. The engine keeps existing harmless profile script dispatching and intentionally postpones configuration files, built-in system-changing flags and custom script configuration.
+
+v0.6.0 introduced `modules/validation-log/Invoke-ValidationLogModule.ps1` as the first harmless module. `scripts/Invoke-ProfileEngine.ps1` invokes modules through an internal module registry, and the startup hook logs executed modules. Configuration files, real system-changing modules and Group Policy distribution remain intentionally postponed.
 
 ---
 
@@ -139,19 +141,14 @@ Validation note:
 
 ---
 
-# Current Development Roadmap
+## v0.6.0 – Module System
 
-## v0.6.x – Module System
+Completed.
 
-Planned focus:
+Main results:
 
-* Define how built-in system-changing capabilities will be separated into modules.
 * Keep module behavior explicit, reversible and independently testable.
-* Decide how the future profile engine should call modules without introducing the final configuration file format yet.
 * Preserve the current harmless profile-script validation flow while module boundaries are designed.
-
-Initial decisions for v0.6.x:
-
 * The first module should be harmless and validate the module boundary without changing system configuration.
 * `modules/validation-log/Invoke-ValidationLogModule.ps1` is the initial module.
 * `scripts/Invoke-ProfileEngine.ps1` invokes modules through an internal module registry after the existing harmless profile startup script.
@@ -163,6 +160,19 @@ Validation note:
 * The validation module has been validated directly through `scripts/Invoke-ProfileEngine.ps1` for managed Mode A.
 * The startup hook module path has been validated manually in an elevated PowerShell session for managed Mode A. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode A, invoked the profile engine, executed `profiles/mode-a/startup.ps1`, invoked `modules/validation-log/Invoke-ValidationLogModule.ps1` and logged `modulesExecuted=validation-log`.
 * The internal module registry path has been validated directly through `scripts/Invoke-ProfileEngine.ps1` and through the startup hook for managed Mode A.
+
+---
+
+# Current Development Roadmap
+
+## v0.7.x – Configuration
+
+Planned focus:
+
+* Define the first configuration model for profiles, modules and script references.
+* Keep configuration suitable for future enterprise deployment and Group Policy distribution.
+* Decide the machine-wide configuration location and validation rules.
+* Preserve deterministic behavior when configuration is missing, invalid or incomplete.
 
 ---
 
@@ -259,15 +269,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.6.x – Module System`.
+Prepare the next small step for `v0.7.x – Configuration`.
 
 Primary objective:
 
-Design the first module boundary without introducing broad system-changing behavior too early.
+Design the first configuration model without applying real system-changing behavior too early.
 
 Immediate next validation target:
 
-Validate the harmless validation module directly through `scripts/Invoke-ProfileEngine.ps1` and through the startup hook.
+Decide where machine-wide configuration should live and which minimal schema should be validated first.
 
 ---
 

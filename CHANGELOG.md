@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v0.6.0] - 2026-06-28
+
 ### Added
 
 - Add the initial harmless `validation-log` module.
@@ -14,6 +18,7 @@ This project follows Semantic Versioning.
 
 - Update the profile engine to invoke the validation module while preserving existing profile script validation.
 - Refactor module invocation through an internal module registry.
+- Mark the Module System milestone as completed after successful validation module and internal registry validation.
 
 ## [v0.5.0] - 2026-06-28
 
