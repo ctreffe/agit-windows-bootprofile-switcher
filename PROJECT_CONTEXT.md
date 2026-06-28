@@ -53,6 +53,8 @@ v0.7.0 introduced the first profile configuration schema in `config/profiles.exa
 
 The first v0.8.x integration step makes configuration the runtime dispatch gate. `scripts/Invoke-ProfileEngine.ps1` now dispatches only modules listed on the matching configured profile. If configuration is missing, invalid or does not contain the resolved mode, the boot profile performs no action and reports the skip reason. The startup hook must still log configuration status, validation errors and dispatch skip reasons so no-op behavior remains auditable. Custom script paths remain schema-only and are not executed yet.
 
+`scripts/Install-BootProfileConfiguration.ps1` and `install-configuration.cmd` provide a controlled installation path for copying a validated profile configuration to `%ProgramData%\BootProfileSwitcher\config\profiles.json`. Existing configuration is preserved unless replacement is confirmed or forced.
+
 ---
 
 # Completed Milestones
@@ -223,6 +225,7 @@ Active focus:
 * Use validated configuration as the dispatch source for harmless modules.
 * Treat missing, invalid or incomplete configuration as a successful no-op with explicit reporting and startup logging.
 * Avoid implicit fallback execution when the machine-wide profile configuration is not usable.
+* Provide a controlled installer for the default machine-wide `profiles.json`.
 * Keep custom script execution postponed until its safety and logging model is explicit.
 
 ---

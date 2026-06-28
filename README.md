@@ -89,6 +89,7 @@ uninstall-startup-hook.cmd
 Current command wrappers:
 
 - `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
+- `install-configuration.cmd` installs a validated profile configuration to the default machine-wide configuration path and requests elevation when needed.
 - `uninstall.cmd` removes the managed boot menu entries and requests elevation when needed.
 - `install-startup-hook.cmd` installs the startup Scheduled Task.
 - `uninstall-startup-hook.cmd` removes the startup Scheduled Task.
@@ -99,6 +100,7 @@ Current PowerShell entry points:
 - `scripts/Get-BootProfileMenuStatus.ps1` reports managed boot menu state and detected BootProfile Switcher BCD entries.
 - `scripts/Resolve-BootProfile.ps1` resolves the selected boot profile and writes structured resolver state.
 - `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes only the harmless modules selected by the matching configured profile.
+- `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
 

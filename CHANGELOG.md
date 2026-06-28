@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add `scripts/Install-BootProfileConfiguration.ps1` and `install-configuration.cmd` for controlled installation of validated machine-wide profile configuration.
+
 ### Changed
 
 - Make `scripts/Invoke-ProfileEngine.ps1` use valid profile configuration for module dispatch.
