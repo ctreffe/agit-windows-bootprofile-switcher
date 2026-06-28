@@ -44,7 +44,9 @@ try {
 
     $resolverError = if ($result.error) { ([string]$result.error) -replace "(`r`n|`n|`r)", ' ' } else { $null }
 
-    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8} | engineStatePath={9}' -f `
+    $moduleNames = @($engineResult.modulesExecuted | ForEach-Object { $_.name }) -join ','
+
+    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8} | engineStatePath={9} | modulesExecuted={10}' -f `
         $timestamp, `
         $result.detected, `
         $result.mode, `
@@ -54,7 +56,8 @@ try {
         $engineResult.profileScriptExecuted, `
         $engineResult.profileScript, `
         $resolverError, `
-        $result.outputPath
+        $result.outputPath, `
+        $moduleNames
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
