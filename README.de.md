@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`) und den Validation-Meilenstein (`v0.9.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`) und den Initial-Stable-Release-Meilenstein (`v1.0.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.9.0 – Validation` ist abgeschlossen. Der konfigurationsgetriebene Runtime-Pfad wurde für Mode A, Mode B, fehlende oder ungültige Konfiguration, normalen Windows-Start und Reinstall-Sicherheit validiert.
+> Der Meilenstein `v1.0.0 – Initial Stable Release` ist abgeschlossen. Dieser Release stellt eine validierte Grundlage für Bootprofil-Auflösung, konfigurationsgetriebenen Modul-Dispatch, nachvollziehbares Logging, reversible Setup-Wrapper und das temporäre Demo-Marker-Modul bereit.
 
 ## Überblick
 
@@ -162,7 +162,7 @@ config/profiles.example.json
 
 Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
 
-Bekannte Module in der aktuellen Entwicklungsversion:
+Bekannte Module im aktuellen Release:
 
 - `validation-log`
 - `demo-system-marker` temporäres v1.0.0-Release-Demomodul
@@ -213,7 +213,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.9.0 Validation
+1.0.0 Initial Stable Release
 ```
 
 ## Validierung

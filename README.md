@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`) and the Validation milestone (`v0.9.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`) and the Initial Stable Release milestone (`v1.0.0`).
 >
-> The `v0.9.0 – Validation` milestone is complete. The configuration-driven runtime path has been validated for Mode A, Mode B, missing or invalid configuration, normal Windows startup and reinstall safety.
+> The `v1.0.0 – Initial Stable Release` milestone is complete. This release provides a validated foundation for boot profile resolution, configuration-driven module dispatch, predictable logging, reversible setup wrappers and the temporary demo marker module.
 
 ## Overview
 
@@ -160,7 +160,7 @@ config/profiles.example.json
 
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the schema but are not executed yet.
 
-Known modules in the current development version:
+Known modules in the current release:
 
 - `validation-log`
 - `demo-system-marker` temporary v1.0.0 release demo module
@@ -211,7 +211,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.9.0 Validation
+1.0.0 Initial Stable Release
 ```
 
 ## Validation

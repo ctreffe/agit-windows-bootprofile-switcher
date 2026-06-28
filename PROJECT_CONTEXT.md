@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.9.0 – Validation**
+**v1.0.0 – Initial Stable Release**
 
-The Validation milestone is complete.
+The Initial Stable Release milestone is complete.
 
 ## Current Focus
 
-Prepare the initial stable release milestone after completing validation of the configuration-driven runtime path.
+Prepare post-v1.0 planning after completing the initial stable foundation release.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -250,9 +250,27 @@ Validation note:
 
 Current planning:
 
-* v1.0.0 – Initial stable release
+* post-v1.0 planning – production modules, configuration evolution and enterprise deployment
 
 The roadmap may evolve based on research findings.
+
+## v1.0.0 – Initial Stable Release
+
+Completed.
+
+Main results:
+
+* Define the initial stable release as a validated foundation release, not as a production system-changing module release.
+* Include reversible boot menu setup, startup hook integration, machine-wide configuration, configuration-driven module dispatch and predictable action/no-op logging.
+* Include `validation-log` and the temporary `demo-system-marker` module for the release demonstration.
+* Add combined `install-demo.cmd` and `uninstall-demo.cmd` wrappers while preserving individual setup and teardown wrappers.
+* Document included behavior, explicit exclusions, safety expectations and release readiness in `docs/release/v1.0.0-release-scope.md`.
+
+Validation note:
+
+* The configuration-driven runtime path was validated in v0.9.0.
+* The temporary `demo-system-marker` module was validated through the real managed Mode A startup-hook path before v1.0.0.
+* The release keeps production modules that change Windows behavior intentionally out of scope.
 
 ## v0.9.0 – Validation
 
@@ -356,15 +374,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v1.0.0 – Initial stable release`.
+Prepare post-v1.0 planning.
 
 Primary objective:
 
-Define what must be included in the initial stable release and identify any final documentation or safety gaps before tagging `v1.0.0`.
+Decide which post-v1.0 direction should come first: production module design, configuration model evolution, enterprise deployment packaging or removal/replacement of the temporary demo module.
 
 Immediate next validation target:
 
-Review README and README.de against `docs/release/v1.0.0-release-scope.md` after adding the combined demo setup wrappers, then close any remaining setup, validation, logging or cleanup documentation gaps before `v1.0.0`.
+Use the long-term configuration goals and open decisions to plan the next milestone after the initial stable release.
 
 ---
 

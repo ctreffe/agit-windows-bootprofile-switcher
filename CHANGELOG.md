@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v1.0.0] - 2026-06-28
+
 ### Added
 
 - Add the temporary `demo-system-marker` module for the v1.0.0 release demonstration.
