@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "name": "BootProfile Switcher - Mode A",
+      "mode": "A",
+      "modules": [
+        "validation-log"
+      ]
+    }
+  ]
+}

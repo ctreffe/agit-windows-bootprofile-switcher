@@ -10,6 +10,7 @@ This project follows Semantic Versioning.
 
 - Add the first example profile configuration schema at `config/profiles.example.json`.
 - Add `scripts/Test-BootProfileConfiguration.ps1` to validate the initial configuration schema without applying changes.
+- Add configuration validation fixtures and a lightweight fixture runner for valid and invalid schema cases.
 
 ## [v0.6.0] - 2026-06-28
 

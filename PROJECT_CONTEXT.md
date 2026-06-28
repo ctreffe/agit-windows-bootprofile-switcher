@@ -194,6 +194,14 @@ Validation note:
 * `config/profiles.example.json` has been validated successfully with `scripts/Test-BootProfileConfiguration.ps1 -ConfigPath .\config\profiles.example.json -AsJson`.
 * The default `%ProgramData%\BootProfileSwitcher\config\profiles.json` path has been checked when missing. The validator returns `valid = false`, reports the missing file and exits with code 1.
 
+Next validation target:
+
+* Validate known-good and known-bad configuration fixtures with `scripts/Test-BootProfileConfigurationFixtures.ps1`.
+
+Validation note:
+
+* `scripts/Test-BootProfileConfigurationFixtures.ps1 -AsJson` has been validated with five fixtures: one valid example and four invalid cases for duplicate profile name, duplicate mode, missing `scripts` array and unknown module. The runner reported `passed = true`, `total = 5` and `failed = 0`.
+
 ---
 
 ## Planned Future Milestones
