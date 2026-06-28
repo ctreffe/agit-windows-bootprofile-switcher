@@ -5,7 +5,8 @@
       "name": "BootProfile Switcher - Mode A",
       "mode": "A",
       "modules": [
-        "validation-log"
+        "validation-log",
+        "demo-system-marker"
       ],
       "scripts": []
     },
@@ -13,7 +14,8 @@
       "name": "BootProfile Switcher - Mode B",
       "mode": "B",
       "modules": [
-        "validation-log"
+        "validation-log",
+        "demo-system-marker"
       ],
       "scripts": []
     }

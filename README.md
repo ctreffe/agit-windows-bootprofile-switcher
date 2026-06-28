@@ -73,12 +73,24 @@ matching configured profile and writes the startup result to:
 logs/startup-profile.log
 ```
 
-The current validation module is intentionally harmless and writes validation
+The current modules are intentionally small. `validation-log` writes validation
 entries to:
 
 ```text
 logs/module-actions.log
 ```
+
+`demo-system-marker` is a temporary v1.0.0 demonstration module. It writes the
+resolved profile to a harmless machine-wide marker at:
+
+```text
+C:\ProgramData\BootProfileSwitcher\runtime\demo-current-profile.json
+```
+
+The demo marker proves that profile-specific modules can apply a real
+system-level change without changing Windows behavior. It is expected to be
+removed after v1.0.0 once production modules exist, and the marker file can be
+deleted safely.
 
 The hook can be removed with:
 
@@ -119,6 +131,11 @@ config/profiles.example.json
 ```
 
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the schema but are not executed yet.
+
+Known modules in the current development version:
+
+- `validation-log`
+- `demo-system-marker` temporary v1.0.0 release demo module
 
 ## Project Goals
 

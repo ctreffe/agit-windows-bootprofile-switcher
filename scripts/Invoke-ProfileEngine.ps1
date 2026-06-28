@@ -7,11 +7,14 @@ Consumes the structured resolver output from state/current-boot-profile.json,
 validates the profile configuration and dispatches modules selected by the
 matching configured profile.
 
-This initial engine intentionally keeps execution narrow. It does not read a
-configuration file for system-changing decisions, apply built-in system changes
-or modify machine settings. A valid machine-wide profile configuration is now
-required before any profile action is executed. Missing, invalid or incomplete
-configuration produces a successful no-op with explicit validation output.
+This engine intentionally keeps execution narrow. A valid machine-wide profile
+configuration is required before any profile action is executed. Missing,
+invalid or incomplete configuration produces a successful no-op with explicit
+validation output.
+
+For the v1.0.0 release demonstration, the engine also knows a temporary
+demo-system-marker module that writes the resolved profile to ProgramData
+without changing Windows behavior.
 #>
 
 [CmdletBinding()]
@@ -73,6 +76,10 @@ $moduleRegistry = @(
     [ordered]@{
         name = 'validation-log'
         path = Join-Path $repoRoot 'modules\validation-log\Invoke-ValidationLogModule.ps1'
+    },
+    [ordered]@{
+        name = 'demo-system-marker'
+        path = Join-Path $repoRoot 'modules\demo-system-marker\Invoke-DemoSystemMarkerModule.ps1'
     }
 )
 

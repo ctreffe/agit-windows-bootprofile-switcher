@@ -7,6 +7,9 @@ Reads a profile configuration JSON file and validates the first v0.7.x schema.
 The validator does not apply system changes, execute modules or run custom
 scripts. It only checks that the configuration is structurally valid and
 references known modules.
+
+The temporary `demo-system-marker` module is accepted for the v1.0.0 release
+demonstration and should be removed once production modules exist.
 #>
 
 [CmdletBinding()]
@@ -75,7 +78,7 @@ if (-not $ConfigPath) {
     $ConfigPath = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 }
 
-$knownModules = @('validation-log')
+$knownModules = @('validation-log', 'demo-system-marker')
 $errors = [System.Collections.Generic.List[string]]::new()
 $configuration = $null
 

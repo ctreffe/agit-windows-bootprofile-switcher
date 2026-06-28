@@ -74,12 +74,24 @@ Profil dispatcht und das Startup-Ergebnis in folgende Datei schreibt:
 logs/startup-profile.log
 ```
 
-Das aktuelle Validierungsmodul ist absichtlich harmlos und schreibt
+Die aktuellen Module sind bewusst klein gehalten. `validation-log` schreibt
 Validierungseinträge nach:
 
 ```text
 logs/module-actions.log
 ```
+
+`demo-system-marker` ist ein temporäres Demonstrationsmodul für v1.0.0. Es
+schreibt das aufgelöste Profil in einen harmlosen maschinenweiten Marker:
+
+```text
+C:\ProgramData\BootProfileSwitcher\runtime\demo-current-profile.json
+```
+
+Der Demo-Marker zeigt, dass profilspezifische Module eine echte Änderung auf
+Systemebene anwenden können, ohne das Windows-Verhalten zu verändern. Er soll
+nach v1.0.0 wieder entfernt werden, sobald produktive Module existieren; die
+Marker-Datei kann gefahrlos gelöscht werden.
 
 Der Hook kann wieder entfernt werden mit:
 
@@ -120,6 +132,11 @@ config/profiles.example.json
 ```
 
 Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
+
+Bekannte Module in der aktuellen Entwicklungsversion:
+
+- `validation-log`
+- `demo-system-marker` temporäres v1.0.0-Release-Demomodul
 
 ## Projektziele
 
