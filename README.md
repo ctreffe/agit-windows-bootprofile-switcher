@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`) and the Boot Profile Detection milestone (`v0.4.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`) and the Profile Engine milestone (`v0.5.0`).
 >
-> The `v0.4.0 – Boot Profile Detection` milestone has been completed. The project now has a dedicated resolver that identifies the selected managed boot profile, writes structured JSON state, handles normal unmanaged Windows startup without failure and is used by the startup hook.
+> The `v0.5.0 – Profile Engine` milestone has been completed. The startup hook now orchestrates resolver output through a dedicated profile engine entry point, while configuration files and real system-changing actions remain intentionally postponed.
 
 ## Overview
 
@@ -61,7 +61,7 @@ install-startup-hook.cmd
 
 The startup hook registers a Windows Scheduled Task that runs at system startup,
 resolves the selected boot profile through `scripts/Resolve-BootProfile.ps1`,
-writes the detected boot profile to:
+invokes `scripts/Invoke-ProfileEngine.ps1` and writes the startup result to:
 
 ```text
 logs/startup-profile.log
@@ -131,7 +131,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.4.0 Boot Profile Detection
+0.5.0 Profile Engine
 ```
 
 Version tags should use a leading `v`, for example:

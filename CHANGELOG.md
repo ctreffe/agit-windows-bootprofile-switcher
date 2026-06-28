@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v0.5.0] - 2026-06-28
+
 ### Added
 
 - Add `scripts/Invoke-ProfileEngine.ps1` as the initial profile engine entry point.
@@ -13,6 +17,7 @@ This project follows Semantic Versioning.
 ### Changed
 
 - Update the startup hook to invoke the profile engine after resolving the selected boot profile.
+- Mark the Profile Engine milestone as completed after successful Mode A and Mode B engine validation.
 
 ## [v0.4.0] - 2026-06-28
 

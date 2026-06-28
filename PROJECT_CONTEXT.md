@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.4.0 – Boot Profile Detection**
+**v0.5.0 – Profile Engine**
 
-The Boot Profile Detection milestone is complete.
+The Profile Engine milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the validated boot profile resolver.
+Prepare the next milestone after the initial profile engine split.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -44,6 +44,8 @@ A3 has been validated for Mode A and Mode B. A Windows Scheduled Task with an `A
 A4 has been validated for Mode A and Mode B. The startup hook now executes profile-specific startup scripts from `profiles/mode-a/startup.ps1` and `profiles/mode-b/startup.ps1`. These scripts intentionally perform harmless validation logging to `logs/profile-startup-actions.log`.
 
 v0.4.0 introduced `scripts/Resolve-BootProfile.ps1` as the dedicated resolver, validated it for Mode A and Mode B, kept normal unmanaged Windows startup as a successful `detected = false` case, improved boot menu installation against duplicate managed entries and moved the startup hook onto the resolver path.
+
+v0.5.0 introduced `scripts/Invoke-ProfileEngine.ps1` as the dedicated profile engine entry point. The startup hook now orchestrates resolver output through the engine. The engine keeps existing harmless profile script dispatching and intentionally postpones configuration files, built-in system-changing flags and custom script configuration.
 
 ---
 
@@ -116,19 +118,13 @@ Validation note:
 
 ---
 
-# Current Development Roadmap
+## v0.5.0 – Profile Engine
 
-## v0.5.x – Profile Engine
+Completed.
 
-Planned focus:
+Main results:
 
-* Define the first production-oriented profile execution model.
 * Decide how resolver output should be consumed by the engine.
-* Keep built-in system changes explicit, reversible and separately testable.
-* Preserve the ability to run harmless validation profile scripts while the engine model evolves.
-
-Initial decisions for v0.5.x:
-
 * The first profile engine step should introduce a dedicated engine entry point without adding configuration files yet.
 * `scripts/Invoke-ProfileEngine.ps1` consumes `state/current-boot-profile.json`.
 * The startup hook should orchestrate `Resolve-BootProfile.ps1` followed by `Invoke-ProfileEngine.ps1`.
@@ -139,6 +135,20 @@ Validation note:
 
 * `scripts/Invoke-ProfileEngine.ps1` has been validated directly with managed Mode B resolver state and with a `detected = false` resolver state.
 * The startup hook has been validated manually in an elevated PowerShell session for managed Mode B after the engine split. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode B, invoked `scripts/Invoke-ProfileEngine.ps1`, executed `profiles/mode-b/startup.ps1` and logged the engine state path.
+* The startup hook has been validated manually in an elevated PowerShell session for managed Mode A after the engine split. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode A, invoked `scripts/Invoke-ProfileEngine.ps1`, executed `profiles/mode-a/startup.ps1` and logged the engine state path.
+
+---
+
+# Current Development Roadmap
+
+## v0.6.x – Module System
+
+Planned focus:
+
+* Define how built-in system-changing capabilities will be separated into modules.
+* Keep module behavior explicit, reversible and independently testable.
+* Decide how the future profile engine should call modules without introducing the final configuration file format yet.
+* Preserve the current harmless profile-script validation flow while module boundaries are designed.
 
 ---
 
@@ -235,15 +245,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.5.x – Profile Engine`.
+Prepare the next small step for `v0.6.x – Module System`.
 
 Primary objective:
 
-Design the first small profile engine step that consumes resolver output without introducing broad system-changing behavior too early.
+Design the first module boundary without introducing broad system-changing behavior too early.
 
 Immediate next validation target:
 
-Validate `scripts/Invoke-ProfileEngine.ps1` directly and through `scripts/Invoke-BootProfileStartupHook.ps1` using the existing harmless Mode A and Mode B profile scripts.
+Decide what the first harmless module should look like and how it should be invoked by the profile engine.
 
 ---
 

@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`) und den Boot-Profile-Detection-Meilenstein (`v0.4.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`) und den Profile-Engine-Meilenstein (`v0.5.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.4.0 – Boot Profile Detection` ist abgeschlossen. Das Projekt hat jetzt einen dedizierten Resolver, der das gewählte verwaltete Bootprofil identifiziert, strukturierten JSON-State schreibt, normalen nicht verwalteten Windows-Start ohne Fehler behandelt und vom Startup-Hook verwendet wird.
+> Der Meilenstein `v0.5.0 – Profile Engine` ist abgeschlossen. Der Startup-Hook orchestriert Resolver-Output jetzt über einen dedizierten Profile-Engine-Einstiegspunkt, während Konfigurationsdateien und echte Systemänderungen bewusst auf spätere Meilensteine verschoben bleiben.
 
 ## Überblick
 
@@ -61,7 +61,7 @@ install-startup-hook.cmd
 
 Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft,
 das gewählte Bootprofil über `scripts/Resolve-BootProfile.ps1` auflöst,
-das erkannte Bootprofil in folgende Datei schreibt:
+`scripts/Invoke-ProfileEngine.ps1` aufruft und das Startup-Ergebnis in folgende Datei schreibt:
 
 ```text
 logs/startup-profile.log
@@ -131,7 +131,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.4.0 Boot Profile Detection
+0.5.0 Profile Engine
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
