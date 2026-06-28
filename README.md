@@ -160,6 +160,7 @@ Core project documents:
 - [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 proof-of-concept findings
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – initial architecture decision record
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – boot profile detection strategy
+- [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – boot profile resolver boundary
 - [LICENSE](LICENSE) – MIT License
 
 ## License

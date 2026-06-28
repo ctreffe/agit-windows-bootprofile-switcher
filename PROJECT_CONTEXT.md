@@ -100,6 +100,16 @@ Planned focus:
 * Decide which description-based fallback behavior should remain in the production design.
 * Refine startup execution requirements for the final profile engine.
 
+Initial decisions for v0.4.x:
+
+* The resolver identifies the selected boot profile and writes structured state only.
+* The resolver must not apply configuration, execute profile scripts or modify system state.
+* Resolver output is written as JSON to `state/current-boot-profile.json`.
+* GUID-based detection remains primary; description-based detection remains as fallback.
+* Normal unmanaged Windows startup should produce `detected = false` and exit successfully.
+* `scripts/Resolve-BootProfile.ps1` is the new resolver entry point.
+* `scripts/Get-CurrentBootProfile.ps1` remains as the validated proof-of-concept path until the resolver has been tested and adopted.
+
 ---
 
 ## Planned Future Milestones
@@ -185,6 +195,10 @@ Prepare the next small step for `v0.4.x – Boot Profile Detection`.
 Primary objective:
 
 Turn the validated proof-of-concept detection behavior into a cleaner resolver design that can evolve toward the production profile engine.
+
+Immediate next validation target:
+
+Validate `scripts/Resolve-BootProfile.ps1` for Mode A, Mode B and normal unmanaged Windows startup.
 
 ---
 

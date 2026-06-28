@@ -6,6 +6,11 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add `scripts/Resolve-BootProfile.ps1` as a dedicated boot profile resolver that writes structured state to `state/current-boot-profile.json`.
+- Add ADR-0003 documenting the boot profile resolver boundary and resolver output contract.
+
 ## [v0.3.0] - 2026-06-27
 
 ### Added

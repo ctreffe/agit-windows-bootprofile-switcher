@@ -160,6 +160,7 @@ Zentrale Projektdokumente:
 - [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 Proof-of-Concept-Ergebnisse
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – Strategie zur Bootprofil-Erkennung
+- [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – Grenze des Bootprofil-Resolvers
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ## Lizenz
