@@ -13,6 +13,7 @@ This project follows Semantic Versioning.
 ### Changed
 
 - Update the profile engine to invoke the validation module while preserving existing profile script validation.
+- Refactor module invocation through an internal module registry.
 
 ## [v0.5.0] - 2026-06-28
 

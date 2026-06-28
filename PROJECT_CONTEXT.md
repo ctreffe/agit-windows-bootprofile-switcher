@@ -154,7 +154,7 @@ Initial decisions for v0.6.x:
 
 * The first module should be harmless and validate the module boundary without changing system configuration.
 * `modules/validation-log/Invoke-ValidationLogModule.ps1` is the initial module.
-* `scripts/Invoke-ProfileEngine.ps1` invokes the validation module after the existing harmless profile startup script.
+* `scripts/Invoke-ProfileEngine.ps1` invokes modules through an internal module registry after the existing harmless profile startup script.
 * The startup hook logs which modules were executed.
 * Module configuration, real system-changing modules and Group Policy distribution remain postponed.
 
@@ -162,6 +162,7 @@ Validation note:
 
 * The validation module has been validated directly through `scripts/Invoke-ProfileEngine.ps1` for managed Mode A.
 * The startup hook module path has been validated manually in an elevated PowerShell session for managed Mode A. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode A, invoked the profile engine, executed `profiles/mode-a/startup.ps1`, invoked `modules/validation-log/Invoke-ValidationLogModule.ps1` and logged `modulesExecuted=validation-log`.
+* The internal module registry path has been validated directly through `scripts/Invoke-ProfileEngine.ps1` and through the startup hook for managed Mode A.
 
 ---
 
