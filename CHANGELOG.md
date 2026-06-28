@@ -9,6 +9,7 @@ This project follows Semantic Versioning.
 ### Added
 
 - Add the temporary `demo-system-marker` module for the v1.0.0 release demonstration.
+- Add a v1.0.0 release scope document defining included behavior, exclusions, safety expectations and readiness checks.
 
 ### Changed
 

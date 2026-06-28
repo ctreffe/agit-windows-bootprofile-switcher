@@ -195,6 +195,12 @@ Der wiederholbare Validierungsumfang für den aktuellen Runtime-Pfad ist hier do
 docs/validation/v0.9-validation-checklist.md
 ```
 
+Der geplante Umfang des initialen stabilen Releases ist hier dokumentiert:
+
+```text
+docs/release/v1.0.0-release-scope.md
+```
+
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
 
 ```text
@@ -220,6 +226,7 @@ Zentrale Projektdokumente:
 - [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 Startup-Hook Proof of Concept
 - [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4-Ausführung profilspezifischer Startup-Skripte
 - [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 Proof-of-Concept-Ergebnisse
+- [docs/release/v1.0.0-release-scope.md](docs/release/v1.0.0-release-scope.md) – Umfang des initialen stabilen Releases
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – erste Architekturentscheidung
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – Strategie zur Bootprofil-Erkennung
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – Grenze des Bootprofil-Resolvers

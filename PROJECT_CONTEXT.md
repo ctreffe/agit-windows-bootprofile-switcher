@@ -59,6 +59,8 @@ For the v1.0.0 release demonstration, `modules/demo-system-marker/Invoke-DemoSys
 
 The temporary `demo-system-marker` module has been validated through the real Mode A startup-hook path after reinstalling the updated ProgramData configuration. The startup log reported `modulesExecuted=validation-log,demo-system-marker`, and the marker file contained the real managed Mode A identifier `{5f94af99-48f1-11ee-92e5-ceb38253b459}`.
 
+`docs/release/v1.0.0-release-scope.md` defines the intended initial stable release scope: a validated foundation release with reversible boot infrastructure, configuration-driven module dispatch, predictable logging and the temporary demo marker module, but without production system-changing modules.
+
 ---
 
 # Completed Milestones
@@ -360,7 +362,7 @@ Define what must be included in the initial stable release and identify any fina
 
 Immediate next validation target:
 
-Review the current repository state against the project goals, non-goals, validation results and user-facing setup flow to decide what remains before `v1.0.0`.
+Review README and README.de against `docs/release/v1.0.0-release-scope.md` to close any final setup, validation, logging or cleanup documentation gaps before `v1.0.0`.
 
 ---
 

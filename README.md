@@ -194,6 +194,12 @@ The repeatable validation scope for the current runtime path is documented in:
 docs/validation/v0.9-validation-checklist.md
 ```
 
+The intended scope for the initial stable release is documented in:
+
+```text
+docs/release/v1.0.0-release-scope.md
+```
+
 Version tags should use a leading `v`, for example:
 
 ```text
@@ -219,6 +225,7 @@ Core project documents:
 - [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 startup hook proof of concept
 - [docs/poc/a4-profile-startup-scripts.md](docs/poc/a4-profile-startup-scripts.md) – A4 profile startup script execution
 - [docs/poc/a5-findings.md](docs/poc/a5-findings.md) – A5 proof-of-concept findings
+- [docs/release/v1.0.0-release-scope.md](docs/release/v1.0.0-release-scope.md) – initial stable release scope
 - [docs/decisions/ADR-0001-overall-architecture.md](docs/decisions/ADR-0001-overall-architecture.md) – initial architecture decision record
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – boot profile detection strategy
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – boot profile resolver boundary
