@@ -3,21 +3,25 @@
 Runs the BootProfile Switcher profile engine.
 
 .DESCRIPTION
-Consumes the structured resolver output from state/current-boot-profile.json
-and dispatches the matching profile startup script from profiles/mode-*/.
-It also invokes registered modules to validate the module boundary.
+Consumes the structured resolver output from state/current-boot-profile.json,
+validates the profile configuration and dispatches the matching profile startup
+script from profiles/mode-*/. It also invokes registered modules to validate
+the module boundary.
 
 This initial engine intentionally keeps execution narrow. It does not read a
-configuration file, apply built-in system changes or modify machine settings.
-It preserves the existing harmless profile-script validation behavior and adds
-only a harmless module validation log through an internal module registry.
+configuration file for execution decisions, apply built-in system changes or
+modify machine settings. It validates configuration readiness, preserves the
+existing harmless profile-script validation behavior and adds only a harmless
+module validation log through an internal module registry.
 #>
 
 [CmdletBinding()]
 param(
     [string]$ResolverStatePath,
 
-    [string]$LogDir
+    [string]$LogDir,
+
+    [string]$ConfigPath
 )
 
 Set-StrictMode -Version Latest
@@ -33,11 +37,31 @@ if (-not $LogDir) {
     $LogDir = Join-Path $repoRoot 'logs'
 }
 
+if (-not $ConfigPath) {
+    $ConfigPath = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
+}
+
 if (-not (Test-Path $ResolverStatePath)) {
     throw "Resolver state file not found at $ResolverStatePath"
 }
 
 New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
+
+$configurationValidatorScript = Join-Path $repoRoot 'scripts\Test-BootProfileConfiguration.ps1'
+
+if (-not (Test-Path $configurationValidatorScript)) {
+    throw "Configuration validator not found at $configurationValidatorScript"
+}
+
+$configurationValidationOutput = & powershell.exe `
+    -NoProfile `
+    -ExecutionPolicy Bypass `
+    -File $configurationValidatorScript `
+    -ConfigPath $ConfigPath `
+    -AsJson 2>&1
+$configurationValidationExitCode = $LASTEXITCODE
+$configurationValidationJson = ($configurationValidationOutput | Out-String).Trim()
+$configurationValidation = $configurationValidationJson | ConvertFrom-Json
 
 $resolverResult = Get-Content -Path $ResolverStatePath -Raw | ConvertFrom-Json
 $profileScriptExecuted = $false
@@ -96,6 +120,10 @@ $result = [ordered]@{
     resolverSource = $resolverResult.source
     resolverError = $resolverResult.error
     resolverStatePath = $ResolverStatePath
+    configurationPath = $ConfigPath
+    configurationValid = [bool]$configurationValidation.valid
+    configurationValidationExitCode = $configurationValidationExitCode
+    configurationErrors = @($configurationValidation.errors)
     profileScriptExecuted = $profileScriptExecuted
     profileScript = $profileScript
     modulesExecuted = @($modulesExecuted)

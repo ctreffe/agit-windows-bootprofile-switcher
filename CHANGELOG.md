@@ -12,6 +12,10 @@ This project follows Semantic Versioning.
 - Add `scripts/Test-BootProfileConfiguration.ps1` to validate the initial configuration schema without applying changes.
 - Add configuration validation fixtures and a lightweight fixture runner for valid and invalid schema cases.
 
+### Changed
+
+- Update the profile engine to validate configuration during execution without using it for dispatch decisions yet.
+
 ## [v0.6.0] - 2026-06-28
 
 ### Added

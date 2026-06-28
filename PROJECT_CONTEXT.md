@@ -184,6 +184,7 @@ Initial decisions for v0.7.x:
 * Modules must reference known modules; currently only `validation-log` is known.
 * Custom script paths are structurally accepted as a list but are not executed in v0.7.x.
 * The engine continues to use its internal module registry until configuration adoption is intentionally implemented.
+* `scripts/Invoke-ProfileEngine.ps1` validates configuration during execution but does not use configuration for dispatch decisions yet.
 
 Immediate validation target:
 
@@ -201,6 +202,16 @@ Next validation target:
 Validation note:
 
 * `scripts/Test-BootProfileConfigurationFixtures.ps1 -AsJson` has been validated with five fixtures: one valid example and four invalid cases for duplicate profile name, duplicate mode, missing `scripts` array and unknown module. The runner reported `passed = true`, `total = 5` and `failed = 0`.
+
+Next validation target:
+
+* Validate that `scripts/Invoke-ProfileEngine.ps1` reports configuration validation results without changing profile script or module dispatch behavior.
+
+Validation note:
+
+* `scripts/Invoke-ProfileEngine.ps1 -ConfigPath .\config\profiles.example.json` has been validated with `configurationValid = true`, `configurationValidationExitCode = 0`, unchanged profile script execution and unchanged `validation-log` module execution.
+* `scripts/Invoke-ProfileEngine.ps1` has been validated with the missing default `%ProgramData%\BootProfileSwitcher\config\profiles.json` path. It reports `configurationValid = false` and `configurationValidationExitCode = 1` while preserving existing internal-registry execution behavior.
+* The startup hook runtime path has been validated manually in an elevated PowerShell session for managed Mode A. It logs `configurationValid=False` for the missing ProgramData config while still resolving Mode A and executing the existing profile script plus `validation-log` module.
 
 ---
 
