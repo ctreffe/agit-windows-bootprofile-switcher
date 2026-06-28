@@ -13,6 +13,7 @@ This project follows Semantic Versioning.
 ### Changed
 
 - Register `demo-system-marker` as a known module and include it in the example profile configuration.
+- Record successful Mode A runtime validation for the temporary `demo-system-marker` module.
 
 ## [v0.9.0] - 2026-06-28
 

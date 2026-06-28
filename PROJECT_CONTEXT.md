@@ -57,6 +57,8 @@ v0.8.0 makes configuration the runtime dispatch gate. `scripts/Invoke-ProfileEng
 
 For the v1.0.0 release demonstration, `modules/demo-system-marker/Invoke-DemoSystemMarkerModule.ps1` adds a temporary harmless system-level marker module. It writes the resolved profile to `%ProgramData%\BootProfileSwitcher\runtime\demo-current-profile.json`, does not change Windows behavior and should be removed after v1.0.0 once production modules exist.
 
+The temporary `demo-system-marker` module has been validated through the real Mode A startup-hook path after reinstalling the updated ProgramData configuration. The startup log reported `modulesExecuted=validation-log,demo-system-marker`, and the marker file contained the real managed Mode A identifier `{5f94af99-48f1-11ee-92e5-ceb38253b459}`.
+
 ---
 
 # Completed Milestones
@@ -358,7 +360,7 @@ Define what must be included in the initial stable release and identify any fina
 
 Immediate next validation target:
 
-Validate the temporary `demo-system-marker` module with a safe resolver-state fixture and then with the startup hook after reinstalling the updated ProgramData configuration.
+Review the current repository state against the project goals, non-goals, validation results and user-facing setup flow to decide what remains before `v1.0.0`.
 
 ---
 
