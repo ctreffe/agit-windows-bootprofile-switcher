@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`) und den Initial-Stable-Release-Meilenstein (`v1.0.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`) und den Network-Isolation-Meilenstein (`v1.1.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.0.0 – Initial Stable Release` ist abgeschlossen. Dieser Release stellt eine validierte Grundlage für Bootprofil-Auflösung, konfigurationsgetriebenen Modul-Dispatch, nachvollziehbares Logging, reversible Setup-Wrapper und das temporäre Demo-Marker-Modul bereit.
+> Der Meilenstein `v1.1.0 – Network Isolation` ist abgeschlossen. Dieser Release ergänzt das erste produktionsorientierte Lifecycle-Modul mit Adapter-Level-Network-Isolation, Baseline-Learning und Restore, eigener Moduldokumentation und installierbarer Network-Isolation-Demo.
 
 ## Überblick
 
@@ -30,17 +30,17 @@ Das Projekt soll Windows-Systeme unterstützen, die mehrere Betriebsprofile mit 
 
 Der erste Anwendungsfall ist ein Windows-Rechner, der entweder im Normalbetrieb oder in einem Experimentalprofil mit eingeschränkter beziehungsweise deaktivierter Netzwerkkonnektivität starten kann. Die Architektur ist bewusst generisch angelegt, damit später weitere Profile und Komponenten ergänzt werden können.
 
-## Schnellstart: Demo-Setup
+## Schnellstart: Foundation-Demo
 
-Für das v1.0.0-Demo-Setup kann der kombinierte Wrapper aus dem
+Für das v1.0.0-Foundation-Demo-Setup kann der kombinierte Wrapper aus dem
 Repository-Stammverzeichnis verwendet werden:
 
 ```text
 install-demo.cmd
 ```
 
-Er fordert bei Bedarf Administratorrechte an und führt die aktuelle
-Demo-Installationsreihenfolge aus:
+Er fordert bei Bedarf Administratorrechte an und führt die
+Foundation-Demo-Installationsreihenfolge aus:
 
 1. verwaltete Bootmenü-Einträge installieren
 2. validierte Profilkonfiguration installieren
@@ -57,7 +57,7 @@ und den temporären Demo-Marker, falls er vorhanden ist. Die
 ProgramData-Profilkonfiguration bleibt unverändert, damit eine angepasste
 Konfiguration nicht unerwartet gelöscht wird.
 
-## Modul-Demo: Network Isolation
+## Schnellstart: Network-Isolation-Demo
 
 Das Network-Isolation-Modul hat eine eigene Dokumentation:
 
@@ -98,7 +98,7 @@ ohne manuelle Konfigurationsänderungen vorauszusetzen.
 
 ## Einzelne Setup-Schritte
 
-Für den aktuellen Validierungsstand ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
+Für das ursprüngliche Zwei-Profil-Validierungssetup ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
 
 ```text
 install.cmd
@@ -154,16 +154,17 @@ und Moduldemo sind in der
 [Dokumentation zum Network-Isolation-Modul](docs/modules/network-isolation.de.md)
 beschrieben.
 
-`demo-system-marker` ist ein temporäres Demonstrationsmodul für v1.0.0. Es
+`demo-system-marker` ist ein temporäres Foundation-Demonstrationsmodul. Es
 schreibt das aufgelöste Profil in einen harmlosen maschinenweiten Marker:
 
 ```text
 C:\ProgramData\BootProfileSwitcher\runtime\demo-current-profile.json
 ```
 
-Der Demo-Marker zeigt, dass profilspezifische Module eine echte Änderung auf
-Systemebene anwenden können, ohne das Windows-Verhalten zu verändern. Er soll
-nach v1.0.0 wieder entfernt werden, sobald produktive Module existieren; die
+Der Demo-Marker zeigt, dass profilspezifische Module eine harmlose Änderung auf
+Systemebene anwenden können, ohne das Windows-Verhalten zu verändern. Er bleibt
+für die Foundation-Demo verfügbar und kann in einem späteren Cleanup entfernt
+werden, wenn die produktiven Moduldemos ihn vollständig ersetzen. Die
 Marker-Datei kann gefahrlos gelöscht werden.
 
 Der Hook kann wieder entfernt werden mit:
@@ -176,7 +177,7 @@ uninstall-startup-hook.cmd
 
 Aktuelle Command-Wrapper:
 
-- `install-demo.cmd` installiert das aktuelle v1.0.0-Demo-Setup in der erwarteten Reihenfolge und fordert bei Bedarf erhöhte Rechte an.
+- `install-demo.cmd` installiert das v1.0.0-Foundation-Demo-Setup in der erwarteten Reihenfolge und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall-demo.cmd` entfernt Startup-Hook, verwaltete Bootmenü-Einträge und temporären Demo-Marker, lässt die ProgramData-Konfiguration aber unverändert.
 - `install-network-isolation-demo.cmd` installiert die Network-Isolation-Moduldemo mit einem verwalteten Bootprofil `Network Isolation`.
 - `uninstall-network-isolation-demo.cmd` entfernt die Network-Isolation-Moduldemo und stellt die vorherige ProgramData-Profilkonfiguration wieder her, wenn ein Backup vorhanden ist.
@@ -204,7 +205,7 @@ Der standardmäßige maschinenweite Konfigurationspfad ist:
 %ProgramData%\BootProfileSwitcher\config\profiles.json
 ```
 
-Das Repository enthält das aktuelle Beispiel-Schema in:
+Das Repository enthält das aktuelle Beispiel-Konfigurationsformat in:
 
 ```text
 config/profiles.example.json
@@ -216,7 +217,7 @@ Die Demo-Konfiguration des Network-Isolation-Moduls liegt in:
 config/demos/network-isolation.json
 ```
 
-Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
+Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Konfigurationsformat akzeptiert, aber noch nicht ausgeführt.
 
 Network Isolation ist ausführlich in
 [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)
@@ -226,7 +227,7 @@ Bekannte Module im aktuellen Release:
 
 - `validation-log`
 - `network-isolation`
-- `demo-system-marker` temporäres v1.0.0-Release-Demomodul
+- `demo-system-marker` temporäres Foundation-Demomodul
 
 ## Projektziele
 
@@ -274,7 +275,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.0.0 Initial Stable Release
+1.1.0 Network Isolation
 ```
 
 ## Validierung
@@ -311,6 +312,8 @@ Zentrale Projektdokumente:
 - [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls
+- [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – deutsche Dokumentation des Network-Isolation-Moduls
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept
 - [docs/poc/a2-current-boot-profile.md](docs/poc/a2-current-boot-profile.md) – A2-Erkennung des aktuellen Bootprofils
 - [docs/poc/a3-startup-hook.md](docs/poc/a3-startup-hook.md) – A3 Startup-Hook Proof of Concept
@@ -324,7 +327,7 @@ Zentrale Projektdokumente:
 
 ### Resolver des aktuellen Profils
 
-Nach der Installation des Bootmenüs und einem Start über Mode A oder Mode B:
+Nach der Installation des Bootmenüs und einem Start über ein verwaltetes Profil wie Mode A, Mode B oder Network Isolation:
 
 ```cmd
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Resolve-BootProfile.ps1
