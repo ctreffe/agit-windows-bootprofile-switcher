@@ -132,6 +132,21 @@ The roadmap may evolve based on research findings.
 
 ---
 
+## Future Configuration Goals
+
+Long-term configuration and deployment goals:
+
+* Support a variable number of managed boot profiles in addition to the normal Windows/default profile.
+* Allow freely chosen profile names, while validating that profile names are unique.
+* Evaluate whether the normal Windows/default profile can be hidden from the boot menu. If hiding is not supported or not desirable, evaluate whether renaming the default profile is a better supported option.
+* Support profile-specific boolean feature flags. Each flag represents a known, explicitly implemented system change, such as disabling selected network connections or applying supported system settings.
+* Support profile-specific custom PowerShell scripts in addition to built-in feature flags. Profiles should be able to reference an arbitrary number of script files by path.
+* Keep configuration suitable for enterprise deployment, especially distribution through Group Policy.
+
+These goals are realistic, but they imply a production configuration model, validation layer, deployment location and policy story that should be designed before system-changing modules are implemented.
+
+---
+
 # Architecture Status
 
 The conceptual architecture has been established.
