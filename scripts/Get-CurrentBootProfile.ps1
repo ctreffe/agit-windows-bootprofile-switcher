@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-Detects the currently selected BootProfile Switcher proof-of-concept boot profile.
+Detects the currently selected managed BootProfile Switcher boot profile.
 
 .DESCRIPTION
 Reads the current Windows Boot Configuration Data entry by calling
 `bcdedit /enum "{current}" /v`, extracts the real BCD entry identifier, and maps
-it to the managed A1 boot menu entries stored in state/boot-menu.json.
+it to the managed boot menu entries stored in state/boot-menu.json.
 
 If GUID-based detection is unavailable, the script falls back to the BCD entry
 description exposed by `bcdedit /enum "{current}"`.

@@ -7,10 +7,10 @@ This read-only diagnostic script compares the current BCD entry exposed through
 `bcdedit /enum "{current}"` with the complete BCD store exposed through
 `bcdedit /enum all`.
 
-The current A2 implementation detects the selected BootProfile Switcher mode by
-reading the current BCD entry description. This script investigates whether a
-more direct GUID-based mapping is available by comparing normal and verbose
-bcdedit output with the managed A1 state file.
+This read-only diagnostic script investigates whether the selected
+BootProfile Switcher mode can be mapped through BCD entry identifiers by
+comparing normal and verbose bcdedit output with the managed boot menu state
+file.
 
 The script does not modify Windows Boot Configuration Data.
 #>
@@ -287,7 +287,7 @@ Write-Host ''
 
 Write-Host 'Managed entries:'
 if ($managedMatches.Count -eq 0) {
-    Write-Host '  No managed entries found. Install the A1 boot menu first.'
+    Write-Host '  No managed entries found. Install the BootProfile Switcher boot menu first.'
 } else {
     foreach ($entry in $managedMatches) {
         Write-Host ("  Mode {0}: {1}" -f $entry.mode, $entry.name)

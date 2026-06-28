@@ -26,7 +26,7 @@ The Configuration milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the initial configuration model.
+Prepare the next milestone after the initial configuration model and keep the repository aligned with the current AGIT Collaboration Model.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -229,9 +229,6 @@ Planned focus:
 
 Current planning:
 
-* v0.5.x – Profile Engine
-* v0.6.x – Module System
-* v0.7.x – Configuration
 * v0.8.x – Integration
 * v0.9.x – Validation
 * v1.0.0 – Initial stable release
@@ -284,7 +281,7 @@ These decisions will be evaluated during later milestones.
 
 Current version:
 
-**v1.0.9**
+**v1.1.0**
 
 ---
 
@@ -292,7 +289,7 @@ Current version:
 
 Current version:
 
-**v1.6**
+**v1.12**
 
 ---
 
@@ -312,6 +309,11 @@ Key principles include:
 * Commit requests imply actual implementation and repository-ready deliverables.
 * Completion Integrity: work is only considered complete once the agreed deliverables actually exist.
 * Artifact integrity and capability transparency: generated artifacts, validation results and limitations must be reported accurately.
+* Long-running sessions should preserve enough context for a useful `PROJECT_CONTEXT.md` handoff.
+* Commit-ready handoffs should use concise numbered maintainer next steps when useful.
+* Active milestones should progress through small implement-validate-adjust-commit loops.
+* Assistant-written code must be documented and structured so maintainers and future contributors can understand it without private chat history.
+* User-facing documentation should explain setup, configuration, productive usage, reference surfaces and troubleshooting where relevant.
 * Local Codex work follows `CODEX.md`, including read-only Git usage by default.
 
 ---

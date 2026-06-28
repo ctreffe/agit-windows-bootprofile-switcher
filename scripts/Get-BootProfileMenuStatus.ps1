@@ -1,6 +1,11 @@
 <#
 .SYNOPSIS
-Shows the current BootProfile Switcher proof-of-concept boot menu state.
+Shows the current managed BootProfile Switcher boot menu state.
+
+.DESCRIPTION
+Reads the managed BootProfile Switcher state file, detects matching BCD
+entries and prints the current Windows Boot Manager display order. The script is
+read-only and is intended for installation validation and troubleshooting.
 #>
 
 [CmdletBinding()]

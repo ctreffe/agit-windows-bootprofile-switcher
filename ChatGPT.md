@@ -1,6 +1,6 @@
 # ChatGPT.md
 
-# Collaboration Model v1.6
+# Collaboration Model v1.12
 
 **Status:** Stable  
 **Applies to:** AGIT software projects  
@@ -104,6 +104,28 @@ At the start of a new AI-assisted session, the assistant should read or reconstr
 
 ---
 
+# Context Handoff Discipline
+
+Long AI-assisted work can exceed a model's available context window.
+
+The assistant should not rely on private chat history remaining available. When a session becomes long, a substantial change is in progress, or context exhaustion appears possible, the assistant should update `PROJECT_CONTEXT.md` before continuing with lower-priority implementation work.
+
+If the assistant environment exposes remaining context or token budget, the assistant should reserve enough capacity for a useful handoff update before the context becomes full. Exact token counts are environment-specific, so the rule is to preserve practical handoff capacity rather than depend on a fixed number.
+
+A useful handoff update should capture:
+
+- the active objective
+- completed changes since the last context update
+- open tasks
+- affected files
+- validation results
+- known limitations or blockers
+- the recommended next step
+
+The assistant should prefer an early, slightly imperfect handoff update over losing important state to context exhaustion.
+
+---
+
 # Collaboration Workflow
 
 Projects evolve through iterative collaboration.
@@ -133,9 +155,54 @@ A feature commit should represent a validated logical step. A milestone commit s
 
 ---
 
+# Code Documentation and Maintainability
+
+Assistant-written code must be understandable without private chat history.
+
+The assistant should document non-obvious behavior, assumptions, constraints and architectural decisions close to the code or in the appropriate project documentation. Comments should explain why something exists or why an approach was chosen, not repeat what the code already says.
+
+Public functions, scripts, modules, configuration formats and integration points should be named and structured so a maintainer or future contributor can understand their purpose from the repository itself.
+
+A change is not repository-ready if the maintainer or a future contributor would need the original AI conversation to understand the implementation.
+
+---
+
+# Milestone Work Rhythm
+
+AGIT project work is most efficient when roadmap milestones are handled as small, validated loops.
+
+For an active milestone, the assistant should normally help maintain a rhythm like:
+
+1. Confirm the current baseline and active milestone.
+2. Identify the next smallest useful step.
+3. Implement only that step.
+4. Validate the step with the maintainer, especially when real-system or privileged checks are needed.
+5. Interpret validation output before declaring success.
+6. Prepare a feature commit with summary and description.
+7. Repeat until the milestone objective is satisfied.
+8. Prepare a separate milestone commit.
+9. Tag the completed milestone when appropriate.
+
+The assistant should avoid expanding the milestone opportunistically once the agreed objective is satisfied. If additional ideas emerge, they should be recorded as future roadmap candidates unless they are necessary to complete the current milestone.
+
+---
+
 # Roadmap-First Development
 
 The roadmap is the primary guide for deciding what to build next.
+
+At the beginning of a project, or when a project enters a substantially new phase, the maintainer and assistant should explicitly establish a roadmap before implementation work accelerates.
+
+An initial roadmap should normally define:
+
+- the first meaningful milestone
+- the next few planned milestones
+- the purpose of each milestone
+- which uncertainties each milestone should reduce
+- what should intentionally remain out of scope
+- what kind of validation is expected before completion
+
+The roadmap does not need to predict the whole project perfectly. It should provide enough structure to make the next steps understandable, comparable and easy to resume. As learning accumulates, the roadmap may be updated deliberately.
 
 Technical exploration is encouraged, but it should serve the current milestone. When a technical question becomes interesting, the assistant should ask whether answering it is necessary for the current roadmap step.
 
@@ -160,6 +227,25 @@ A project may advance by confirming that an approach works. It may also advance 
 Negative findings should be documented when they affect architecture, roadmap decisions or future implementation choices.
 
 A failed hypothesis is not a failed milestone if the milestone was designed to reduce uncertainty.
+
+---
+
+# Validation Partnership
+
+Some BootProfile Switcher work must be validated by the repository maintainer because it requires local system access, elevated permissions, boot state, Windows Scheduled Tasks or other environment-specific conditions.
+
+In these cases, the assistant should:
+
+- prepare exact commands or manual steps
+- explain the expected outcome
+- ask the maintainer to run only the smallest necessary validation
+- interpret the maintainer's pasted output
+- distinguish successful validation from partial or ambiguous validation
+- update the repository context or documentation when the result affects future work
+
+The maintainer's real-system validation output is part of the engineering process. The assistant should not treat a command as validated merely because it is syntactically correct or plausible.
+
+When validation reveals an issue, the assistant should fix the issue and re-enter the validation loop before recommending a commit.
 
 ---
 
@@ -268,6 +354,17 @@ A repository-ready contribution should normally include:
 - updates to affected documentation
 - consistency checks across related documents
 - tag or release guidance when relevant
+
+When a change is approaching commit readiness, the assistant should provide concise numbered next steps for the repository maintainer whenever practical. This is especially useful when the maintainer must perform actions outside the assistant environment, such as running validation commands, reviewing generated files, making decisions, committing through GitHub Desktop or creating tags.
+
+Numbered next steps should be operational rather than decorative. They should distinguish:
+
+- decisions the maintainer must make
+- commands or checks the maintainer should run
+- information the maintainer should review
+- commit or tag actions the maintainer should perform
+
+The assistant should keep these lists short, ordered and directly actionable. For very small changes, a one-step or two-step list is sufficient. For larger work, numbered steps help preserve efficient communication and reduce back-and-forth.
 
 The delivery form depends on the working environment.
 
@@ -486,6 +583,28 @@ Avoid promotional, exaggerated or marketing-oriented wording.
 
 ---
 
+# User-Facing Documentation
+
+BootProfile Switcher should be documented so users can set it up, configure it and use it productively without relying on private chat history or maintainer explanations.
+
+User-facing documentation should normally explain:
+
+- what the project does and who it is for
+- prerequisites, installation and setup
+- configuration and important defaults
+- common usage workflows and examples
+- available commands, scripts, flags, settings or profiles
+- expected outputs, logs, files or system effects
+- permissions, safety notes, platform constraints and rollback or uninstall guidance
+- troubleshooting steps for common failures
+- current maturity, limitations and intentionally unsupported scenarios
+
+Reference documentation is encouraged when the project exposes a meaningful command surface, configuration schema, module interface or operational workflow. Keep it concise, accurate and easy to verify when practical.
+
+Documentation should make the first successful use of the project easy, and it should make repeated productive use predictable.
+
+---
+
 # Repository Evolution
 
 Repositories should evolve gradually.
@@ -570,5 +689,17 @@ Version 1.4 integrates the BootProfile Switcher v0.3.0 retrospective: repository
 Version 1.5 adds Integrity over Helpfulness, Artifact Integrity and Capability Transparency. It also clarifies that standardized template artifacts such as the AI Collaboration Note must be preserved unless the maintainer explicitly requests a change.
 
 Version 1.6 generalizes repository-ready delivery beyond browser-based ZIP workflows. It clarifies that local working tree changes, patches, explicit file contents or archives may be valid delivery forms depending on the assistant environment, while preserving the same artifact integrity requirements.
+
+Version 1.7 adds Context Handoff Discipline. It clarifies that assistants should update `PROJECT_CONTEXT.md` before context exhaustion becomes likely and reserve practical handoff capacity when context or token budget information is available.
+
+Version 1.8 adds numbered maintainer next steps before commit-ready handoff. It clarifies that assistants should use concise ordered lists for decisions, validation actions, review points and commit or tag actions when this improves efficiency.
+
+Version 1.9 adds milestone work rhythm and validation partnership guidance derived from BootProfile Switcher milestone work. It also clarifies that commit recommendations should include both a summary and a description.
+
+Version 1.10 adds explicit initial roadmap agreement guidance. It clarifies that new projects or substantially new phases should establish early milestones, milestone purpose, intended validation and intentional non-goals before implementation accelerates.
+
+Version 1.11 adds explicit code documentation and maintainability guidance for assistant-written implementation work. It clarifies that code must be understandable from the repository itself without relying on private AI conversation history.
+
+Version 1.12 adds explicit user-facing documentation guidance. It clarifies that projects should document setup, configuration, productive usage, command or settings references, troubleshooting, permissions, safety notes and maturity where relevant.
 
 Future AGIT projects should adopt the latest version from this repository.

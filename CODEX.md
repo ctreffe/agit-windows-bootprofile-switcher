@@ -239,15 +239,17 @@ Codex should not hide limitations behind confident wording.
 
 ---
 
-# Relationship to Other Template Documents
+# Relationship to Other Project Documents
 
-Use the template documents as follows:
+Use the project documents as follows:
 
 - `ChatGPT.md` defines the general collaboration model.
 - `CODEX.md` defines local Codex operating rules.
-- `PROJECT_SETUP.md` explains how to prepare a local project environment.
-- `PROJECT_CONTEXT.md` describes the current state of a derived project after setup.
-- `REPOSITORY.md` defines repository-level conventions.
-- `DOCUMENTATION.md` defines documentation standards.
+- `PROJECT_CONTEXT.md` describes the current project state and next development focus.
+- `README.md` and `README.de.md` define the user-facing project entry points.
+- `CHANGELOG.md` records version history.
+- `PHILOSOPHY.md` defines project-specific engineering principles.
 
 These documents should remain aligned when the collaboration process changes.
+
+`PROJECT_SETUP.md`, `REPOSITORY.md` and `DOCUMENTATION.md` were template-only setup documents and are not part of this derived repository anymore.

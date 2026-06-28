@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Creates the BootProfile Switcher proof-of-concept boot menu entries.
+Creates the managed BootProfile Switcher boot menu entries.
 
 .DESCRIPTION
 Creates two Windows Boot Manager entries by copying the default Windows boot

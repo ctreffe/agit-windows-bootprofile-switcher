@@ -1,11 +1,11 @@
 <#
 .SYNOPSIS
-Mode B proof-of-concept startup script.
+Mode B validation startup script.
 
 .DESCRIPTION
 This script is intentionally harmless. It only writes a validation entry to the
-BootProfile Switcher log directory so A4 can prove that profile-specific
-startup logic was executed automatically.
+BootProfile Switcher log directory so profile-specific startup execution can
+be validated without changing system configuration.
 #>
 
 [CmdletBinding()]

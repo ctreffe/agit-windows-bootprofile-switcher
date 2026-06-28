@@ -30,6 +30,8 @@ Projects should evolve gradually rather than through unnecessary rewrites.
 
 A change is not complete when it merely works once. It should also be understandable, reviewable and possible to continue later.
 
+Code should be written for maintainers and future contributors, not only for the assistant that produced it. If the implementation would require private chat history to understand, it is not maintainable enough.
+
 ---
 
 # Transparency
@@ -70,6 +72,10 @@ Avoid duplicating the same rule across many documents. Prefer one authoritative 
 
 Documentation should describe the actual state of the project, not an aspirational state that has not been implemented or validated.
 
+User-facing documentation should help people use the project successfully. Setup, configuration, usage, references, troubleshooting and safety notes should be documented when they affect practical adoption or reliable operation.
+
+Code comments should be purposeful and close to the relevant implementation. They should explain intent, constraints and trade-offs where those are not obvious from names and structure alone.
+
 Important architectural decisions should be documented before they become hard to change.
 
 ---
@@ -103,6 +109,8 @@ The goal is not to pursue every technically interesting path. The goal is to ans
 # Roadmap Discipline
 
 The roadmap should guide implementation.
+
+Projects should establish an explicit initial roadmap before implementation accelerates.
 
 Technical exploration should support the active milestone rather than replace it.
 

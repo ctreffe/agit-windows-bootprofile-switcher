@@ -30,9 +30,9 @@ The project is intended to support Windows systems that need multiple operating 
 
 The initial use case is a Windows computer that can start either in normal operation or in an experimental profile with restricted or disabled network connectivity. The architecture is intentionally generic so that additional profiles and components can be added later.
 
-## Quick Start: A1 Boot Menu PoC
+## Quick Start: Boot Menu and Startup Hook
 
-For the current proof of concept, the easiest way to install or remove the temporary boot menu entries is to use the command wrappers from the repository root:
+For the current validation state, the easiest way to install or remove the managed boot menu entries is to use the command wrappers from the repository root:
 
 ```text
 install.cmd
@@ -41,18 +41,16 @@ uninstall.cmd
 
 Both wrappers can be started by double-clicking them in Windows Explorer. They request administrator privileges through UAC when required and then invoke the underlying PowerShell scripts with a process-local execution policy bypass.
 
-The wrappers currently manage only the A1 proof-of-concept boot menu entries:
+The wrappers currently manage the BootProfile Switcher boot menu entries:
 
 - `BootProfile Switcher - Mode A`
 - `BootProfile Switcher - Mode B`
 
 The underlying implementation remains in `scripts/` for explicit inspection and advanced manual testing.
 
+## Quick Start: Startup Hook
 
-
-## Quick Start: A3 Startup Hook PoC
-
-After installing the A1 boot menu, the A3 startup hook can be installed from the
+After installing the boot menu, the startup hook can be installed from the
 repository root:
 
 ```text
@@ -85,6 +83,38 @@ The hook can be removed with:
 ```text
 uninstall-startup-hook.cmd
 ```
+
+## Current Command and Configuration Reference
+
+Current command wrappers:
+
+- `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
+- `uninstall.cmd` removes the managed boot menu entries and requests elevation when needed.
+- `install-startup-hook.cmd` installs the startup Scheduled Task.
+- `uninstall-startup-hook.cmd` removes the startup Scheduled Task.
+- `detect-current-profile.cmd` runs the current profile detection helper.
+
+Current PowerShell entry points:
+
+- `scripts/Get-BootProfileMenuStatus.ps1` reports managed boot menu state and detected BootProfile Switcher BCD entries.
+- `scripts/Resolve-BootProfile.ps1` resolves the selected boot profile and writes structured resolver state.
+- `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes the current harmless validation module path.
+- `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
+- `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
+
+The default machine-wide configuration path is:
+
+```text
+%ProgramData%\BootProfileSwitcher\config\profiles.json
+```
+
+The repository contains the current example schema in:
+
+```text
+config/profiles.example.json
+```
+
+Configuration is validated in `v0.7.0`, but it does not yet drive module or script dispatch decisions. Custom script paths are structurally accepted by the schema but are not executed yet.
 
 ## Project Goals
 
@@ -123,6 +153,7 @@ The project is developed with the following principles:
 - Semantic Versioning
 - meaningful changelog entries
 - repository-ready change sets
+- code and user-facing documentation that can be understood without private chat history
 
 ## Versioning
 
@@ -164,10 +195,6 @@ Core project documents:
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – boot profile resolver boundary
 - [LICENSE](LICENSE) – MIT License
 
-## License
-
-This project is licensed under the MIT License.
-
 ### Current profile resolver
 
 After installing the boot menu and booting through Mode A or Mode B, run:
@@ -187,3 +214,7 @@ For machine-readable output:
 ```powershell
 .\scripts\Resolve-BootProfile.ps1 -AsJson
 ```
+
+## License
+
+This project is licensed under the MIT License.

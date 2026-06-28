@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Removes the BootProfile Switcher A3 startup hook.
+Removes the BootProfile Switcher startup hook.
 
 .DESCRIPTION
 Unregisters the Windows Scheduled Task installed by Install-StartupHook.ps1.

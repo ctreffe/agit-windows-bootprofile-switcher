@@ -1,13 +1,14 @@
 <#
 .SYNOPSIS
-Installs the BootProfile Switcher A3 startup hook.
+Installs the BootProfile Switcher startup hook.
 
 .DESCRIPTION
 Registers a Windows Scheduled Task that runs at system startup as the local
 SYSTEM account. The task executes Invoke-BootProfileStartupHook.ps1, which
 detects the active BootProfile Switcher mode and writes a startup log entry.
 
-This script is part of the A3 proof-of-concept step.
+This script installs the validated startup hook used by the current
+BootProfile Switcher runtime path.
 #>
 
 [CmdletBinding(SupportsShouldProcess)]
@@ -53,7 +54,7 @@ if ($PSCmdlet.ShouldProcess($TaskName, 'register startup hook scheduled task')) 
         -Trigger $trigger `
         -Principal $principal `
         -Settings $settings `
-        -Description 'BootProfile Switcher A3 proof-of-concept startup hook.' `
+        -Description 'BootProfile Switcher startup hook.' `
         -Force | Out-Null
 
     Write-Host "BootProfile Switcher startup hook installed."

@@ -30,9 +30,9 @@ Das Projekt soll Windows-Systeme unterstützen, die mehrere Betriebsprofile mit 
 
 Der erste Anwendungsfall ist ein Windows-Rechner, der entweder im Normalbetrieb oder in einem Experimentalprofil mit eingeschränkter beziehungsweise deaktivierter Netzwerkkonnektivität starten kann. Die Architektur ist bewusst generisch angelegt, damit später weitere Profile und Komponenten ergänzt werden können.
 
-## Schnellstart: A1 Boot Menu PoC
+## Schnellstart: Bootmenü und Startup-Hook
 
-Für den aktuellen Proof of Concept ist der einfachste Weg zum Installieren oder Entfernen der temporären Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
+Für den aktuellen Validierungsstand ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
 
 ```text
 install.cmd
@@ -41,18 +41,16 @@ uninstall.cmd
 
 Beide Wrapper können per Doppelklick im Windows Explorer gestartet werden. Sie fordern bei Bedarf Administratorrechte über UAC an und rufen anschließend die zugrunde liegenden PowerShell-Skripte mit einer nur für diesen Prozess geltenden Execution-Policy-Umgehung auf.
 
-Die Wrapper verwalten aktuell nur die A1-Proof-of-Concept-Bootmenü-Einträge:
+Die Wrapper verwalten aktuell die BootProfile-Switcher-Bootmenü-Einträge:
 
 - `BootProfile Switcher - Mode A`
 - `BootProfile Switcher - Mode B`
 
 Die eigentliche Implementierung bleibt in `scripts/` sichtbar, damit sie weiterhin explizit geprüft und manuell getestet werden kann.
 
+## Schnellstart: Startup-Hook
 
-
-## Schnellstart: A3 Startup-Hook-PoC
-
-Nach der Installation des A1-Bootmenüs kann der A3-Startup-Hook aus dem
+Nach der Installation des Bootmenüs kann der Startup-Hook aus dem
 Repository-Stammverzeichnis installiert werden:
 
 ```text
@@ -85,6 +83,38 @@ Der Hook kann wieder entfernt werden mit:
 ```text
 uninstall-startup-hook.cmd
 ```
+
+## Aktuelle Befehls- und Konfigurationsreferenz
+
+Aktuelle Command-Wrapper:
+
+- `install.cmd` installiert die verwalteten BootProfile-Switcher-Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
+- `uninstall.cmd` entfernt die verwalteten Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
+- `install-startup-hook.cmd` installiert die Startup Scheduled Task.
+- `uninstall-startup-hook.cmd` entfernt die Startup Scheduled Task.
+- `detect-current-profile.cmd` startet den Helper zur Erkennung des aktuellen Profils.
+
+Aktuelle PowerShell-Einstiegspunkte:
+
+- `scripts/Get-BootProfileMenuStatus.ps1` zeigt den verwalteten Bootmenü-Status und erkannte BootProfile-Switcher-BCD-Einträge an.
+- `scripts/Resolve-BootProfile.ps1` löst das gewählte Bootprofil auf und schreibt strukturierten Resolver-State.
+- `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft den aktuellen harmlosen Validierungsmodul-Pfad auf.
+- `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
+- `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
+
+Der standardmäßige maschinenweite Konfigurationspfad ist:
+
+```text
+%ProgramData%\BootProfileSwitcher\config\profiles.json
+```
+
+Das Repository enthält das aktuelle Beispiel-Schema in:
+
+```text
+config/profiles.example.json
+```
+
+Konfiguration wird in `v0.7.0` validiert, steuert aber noch keine Modul- oder Skript-Dispatch-Entscheidungen. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
 
 ## Projektziele
 
@@ -123,6 +153,7 @@ Das Projekt wird nach folgenden Prinzipien entwickelt:
 - Semantic Versioning
 - aussagekräftige Changelog-Einträge
 - repository-ready Änderungssätze
+- Code- und Anwender:innen-Dokumentation, die ohne private Chat-Historie verständlich ist
 
 ## Versionierung
 
@@ -164,10 +195,6 @@ Zentrale Projektdokumente:
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – Grenze des Bootprofil-Resolvers
 - [LICENSE](LICENSE) – MIT-Lizenz
 
-## Lizenz
-
-Dieses Projekt steht unter der MIT-Lizenz.
-
 ### Resolver des aktuellen Profils
 
 Nach der Installation des Bootmenüs und einem Start über Mode A oder Mode B:
@@ -187,3 +214,7 @@ Für maschinenlesbare Ausgabe:
 ```powershell
 .\scripts\Resolve-BootProfile.ps1 -AsJson
 ```
+
+## Lizenz
+
+Dieses Projekt steht unter der MIT-Lizenz.

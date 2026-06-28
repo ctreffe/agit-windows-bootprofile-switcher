@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Removes the BootProfile Switcher proof-of-concept boot menu entries.
+Removes the managed BootProfile Switcher boot menu entries.
 
 .DESCRIPTION
 Reads state/boot-menu.json and removes the boot entries created by
