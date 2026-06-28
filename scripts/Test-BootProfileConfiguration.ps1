@@ -10,6 +10,10 @@ references known modules.
 
 The temporary `demo-system-marker` module is accepted for the v1.0.0 release
 demonstration and should be removed once production modules exist.
+
+The `network-isolation` module is the first production-oriented module. The
+validator checks its global or profile-local settings so unsafe or misspelled
+policies are rejected before startup execution.
 #>
 
 [CmdletBinding()]
@@ -72,13 +76,115 @@ function Get-JsonProperty {
     Write-Output -NoEnumerate $property.Value
 }
 
+function Test-ObjectProperty {
+    param(
+        [object]$Value
+    )
+
+    if ($null -eq $Value) {
+        return $false
+    }
+
+    return ($Value -is [System.Collections.IDictionary] -or $Value -is [pscustomobject])
+}
+
+function Test-BooleanProperty {
+    param(
+        [object]$Value
+    )
+
+    return $Value -is [bool]
+}
+
+function Test-StringArrayProperty {
+    param(
+        [object]$Value
+    )
+
+    if (-not (Test-ArrayProperty -Value $Value)) {
+        return $false
+    }
+
+    foreach ($item in @($Value)) {
+        if ($null -eq $item -or -not ($item -is [string])) {
+            return $false
+        }
+    }
+
+    return $true
+}
+
+function Test-NetworkIsolationSettings {
+    param(
+        [object]$Settings,
+        [string]$Prefix,
+        [System.Collections.Generic.List[string]]$Errors,
+        [bool]$RequireComplete
+    )
+
+    if ($null -eq $Settings) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix must be present when network-isolation is enabled."
+        }
+
+        return
+    }
+
+    if (-not (Test-ObjectProperty -Value $Settings)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix must be an object."
+        return
+    }
+
+    $dryRun = Get-JsonProperty -Object $Settings -Name 'dryRun'
+    $disable = Get-JsonProperty -Object $Settings -Name 'disable'
+    $exclude = Get-JsonProperty -Object $Settings -Name 'exclude'
+
+    if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
+    }
+
+    if ($null -eq $disable) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix.disable must be an object."
+        }
+    } elseif (-not (Test-ObjectProperty -Value $disable)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.disable must be an object."
+    } else {
+        foreach ($propertyName in @('ethernet', 'wifi', 'cellular', 'bluetoothNetwork')) {
+            $propertyValue = Get-JsonProperty -Object $disable -Name $propertyName
+            if ($null -ne $propertyValue -and -not (Test-BooleanProperty -Value $propertyValue)) {
+                Add-ValidationError -Errors $Errors -Message "$Prefix.disable.$propertyName must be a boolean."
+            }
+        }
+    }
+
+    if ($null -eq $exclude) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix.exclude must be an object."
+        }
+    } elseif (-not (Test-ObjectProperty -Value $exclude)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.exclude must be an object."
+    } else {
+        foreach ($propertyName in @('macAddresses', 'interfaceDescriptions', 'interfaceAliases')) {
+            $propertyValue = Get-JsonProperty -Object $exclude -Name $propertyName
+            if ($null -eq $propertyValue) {
+                if ($RequireComplete) {
+                    Add-ValidationError -Errors $Errors -Message "$Prefix.exclude.$propertyName must be an array."
+                }
+            } elseif (-not (Test-StringArrayProperty -Value $propertyValue)) {
+                Add-ValidationError -Errors $Errors -Message "$Prefix.exclude.$propertyName must be an array of strings."
+            }
+        }
+    }
+}
+
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
 if (-not $ConfigPath) {
     $ConfigPath = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 }
 
-$knownModules = @('validation-log', 'demo-system-marker')
+$knownModules = @('validation-log', 'demo-system-marker', 'network-isolation')
 $errors = [System.Collections.Generic.List[string]]::new()
 $configuration = $null
 
@@ -97,10 +203,22 @@ if (-not (Test-Path $ConfigPath)) {
 if ($configuration) {
     $schemaVersion = Get-JsonProperty -Object $configuration -Name 'schemaVersion'
     $profiles = Get-JsonProperty -Object $configuration -Name 'profiles'
+    $rootModuleSettings = Get-JsonProperty -Object $configuration -Name 'moduleSettings'
+    $rootNetworkIsolationSettings = if ($null -ne $rootModuleSettings) { Get-JsonProperty -Object $rootModuleSettings -Name 'network-isolation' } else { $null }
 
     if ($schemaVersion -ne 1) {
         Add-ValidationError -Errors $errors -Message "schemaVersion must be 1."
     }
+
+    if ($null -ne $rootModuleSettings -and -not (Test-ObjectProperty -Value $rootModuleSettings)) {
+        Add-ValidationError -Errors $errors -Message "moduleSettings must be an object when present."
+    }
+
+    Test-NetworkIsolationSettings `
+        -Settings $rootNetworkIsolationSettings `
+        -Prefix 'moduleSettings.network-isolation' `
+        -Errors $errors `
+        -RequireComplete $false
 
     if (-not (Test-ArrayProperty -Value $profiles)) {
         Add-ValidationError -Errors $errors -Message "profiles must be an array."
@@ -115,6 +233,7 @@ if ($configuration) {
             $mode = [string](Get-JsonProperty -Object $profile -Name 'mode')
             $modules = Get-JsonProperty -Object $profile -Name 'modules'
             $scripts = Get-JsonProperty -Object $profile -Name 'scripts'
+            $moduleSettings = Get-JsonProperty -Object $profile -Name 'moduleSettings'
 
             if ([string]::IsNullOrWhiteSpace($name)) {
                 Add-ValidationError -Errors $errors -Message "$prefix.name must not be empty."
@@ -147,6 +266,26 @@ if ($configuration) {
             if (-not (Test-ArrayProperty -Value $scripts)) {
                 Add-ValidationError -Errors $errors -Message "$prefix.scripts must be an array."
             }
+
+            if ($null -ne $moduleSettings -and -not (Test-ObjectProperty -Value $moduleSettings)) {
+                Add-ValidationError -Errors $errors -Message "$prefix.moduleSettings must be an object when present."
+            }
+
+            $profileNetworkIsolationSettings = if ($null -ne $moduleSettings) { Get-JsonProperty -Object $moduleSettings -Name 'network-isolation' } else { $null }
+
+            if (@($modules) -contains 'network-isolation') {
+                Test-NetworkIsolationSettings `
+                    -Settings $rootNetworkIsolationSettings `
+                    -Prefix 'moduleSettings.network-isolation' `
+                    -Errors $errors `
+                    -RequireComplete $true
+            }
+
+            Test-NetworkIsolationSettings `
+                -Settings $profileNetworkIsolationSettings `
+                -Prefix "$prefix.moduleSettings.network-isolation" `
+                -Errors $errors `
+                -RequireComplete $false
         }
     }
 }

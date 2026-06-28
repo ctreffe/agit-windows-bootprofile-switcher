@@ -250,9 +250,42 @@ Validation note:
 
 Current planning:
 
-* post-v1.0 planning – production modules, configuration evolution and enterprise deployment
+* v1.1.0 – Network Isolation lifecycle module as the first production-oriented module
 
 The roadmap may evolve based on research findings.
+
+## v1.1.0 – Network Isolation
+
+In progress.
+
+Main target:
+
+* Introduce `network-isolation` as the first production-oriented lifecycle module.
+* Keep the module configuration-driven and suitable for enterprise deployment.
+* Allow Ethernet, Wi-Fi, cellular and Bluetooth network isolation to be controlled separately.
+* Default the example configuration to `dryRun = true` so adapter decisions can be validated before real disable operations.
+* Support exclusions by MAC address, interface description and interface alias.
+* Allow profile-specific Network Isolation overrides; `disable` and `dryRun` override global defaults, while `exclude` entries are additive.
+* Target hardware interfaces by default; Bluetooth network adapters are an explicit opt-in exception, while VPN, tunnel, loopback and virtual adapters are logged and skipped.
+* Treat Bluetooth radio or USB Bluetooth adapter device isolation as out of scope for `network-isolation`; that belongs in a later Bluetooth/device isolation module.
+* Treat `network-isolation` as a lifecycle module with a persistent normal adapter baseline at `%ProgramData%\BootProfileSwitcher\state\network-isolation-state.json`.
+* Learn the current hardware adapter snapshot as the normal baseline only when the previous run was not isolating, even if the current run will isolate afterward.
+* Restore the saved baseline when the previous run was isolating and the current run is not isolating.
+* Document that v1.1.0 is adapter-level isolation and not a complete security boundary against local administrators or privileged tooling.
+* Provide an installable module demo with one managed boot profile named `Network Isolation`.
+* Establish the project convention that production modules should include a small installable demo when practical.
+* Keep the main READMEs concise and document substantial module behavior in dedicated module docs under `docs/modules/`.
+
+Validation note:
+
+* The module has been dry-run tested locally. It logged baseline learning as `would-update-baseline`, WLAN and the active Intel Ethernet adapter as `would-disable`, skipped VPN and virtual adapters as `not-hardware-interface`, and skipped a not-present Realtek Ethernet adapter as `not-present`.
+* A real Mode A test disabled WLAN, the active Intel Ethernet adapter and the Bluetooth PAN adapter. It also showed that restore must use adapter administrative state because disabled adapters can be reported as `Not Present`; the implementation has been updated accordingly.
+* The full lifecycle has been validated manually: normal startup learned the baseline, Mode A disabled WLAN, Bluetooth PAN and the active Intel Ethernet adapter, and the following normal startup restored those adapters.
+
+Follow-up roadmap note:
+
+* A later Network Isolation hardening milestone should evaluate Group Policy restrictions, network UI restrictions, device-management controls, service controls and firewall enforcement so isolated profiles can be made harder to bypass in enterprise deployments.
+* A later Bluetooth/device isolation milestone should evaluate how to disable Bluetooth radios or USB Bluetooth adapters when that is required in addition to Bluetooth network adapter isolation.
 
 ## v1.0.0 – Initial Stable Release
 

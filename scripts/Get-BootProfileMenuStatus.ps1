@@ -21,6 +21,10 @@ function Test-Administrator {
 }
 
 function Get-BootProfileEntriesFromBcd {
+    param(
+        [object[]]$ManagedEntries
+    )
+
     $output = & bcdedit /enum all
 
     if ($LASTEXITCODE -ne 0) {
@@ -50,23 +54,40 @@ function Get-BootProfileEntriesFromBcd {
 
     foreach ($block in $blocks) {
         $joined = $block -join "`n"
-        $descriptionMatch = [regex]::Match($joined, 'BootProfile Switcher - Mode (?<mode>[AB])')
-
-        if (-not $descriptionMatch.Success) {
-            continue
-        }
 
         $idMatch = [regex]::Match($joined, '\{[0-9a-fA-F-]{36}\}')
-
         if (-not $idMatch.Success) {
             continue
         }
 
-        $mode = $descriptionMatch.Groups['mode'].Value
+        $description = $null
+        foreach ($line in $block) {
+            if ($line -match '^(description|Beschreibung)\s+(.+)$') {
+                $description = $Matches[2].Trim()
+                break
+            }
+        }
+
+        if (-not $description) {
+            continue
+        }
+
+        $managedEntry = $ManagedEntries | Where-Object {
+            [string]$_.identifier -eq $idMatch.Value -or [string]$_.name -eq $description
+        } | Select-Object -First 1
+
+        if ($null -eq $managedEntry -and $description -notmatch '^BootProfile Switcher - Mode [AB]$' -and $description -ne 'Network Isolation') {
+            continue
+        }
+
+        $mode = $null
+        if ($null -ne $managedEntry) {
+            $mode = [string]$managedEntry.mode
+        }
 
         $entries += [pscustomobject]@{
             Mode = $mode
-            Name = "BootProfile Switcher - Mode $mode"
+            Name = $description
             Identifier = $idMatch.Value
         }
     }
@@ -82,11 +103,13 @@ if (-not (Test-Administrator)) {
 }
 
 $managedIdentifiers = @()
+$managedEntries = @()
 
 if (Test-Path $stateFile) {
     Write-Host 'Managed BootProfile Switcher state:'
     $state = Get-Content -Path $stateFile -Raw | ConvertFrom-Json
     $state | ConvertTo-Json -Depth 5
+    $managedEntries = @($state.entries)
     $managedIdentifiers = @($state.entries | ForEach-Object { [string]$_.identifier })
 } else {
     Write-Warning "No managed BootProfile Switcher state file found at $stateFile"
@@ -94,7 +117,7 @@ if (Test-Path $stateFile) {
 
 Write-Host ''
 Write-Host 'Detected BootProfile Switcher BCD entries:'
-$bootProfileEntries = @(Get-BootProfileEntriesFromBcd)
+$bootProfileEntries = @(Get-BootProfileEntriesFromBcd -ManagedEntries $managedEntries)
 
 if ($bootProfileEntries.Count -eq 0) {
     Write-Host '  None'

@@ -27,7 +27,9 @@ param(
     [string]$RepoRoot,
 
     [Parameter(Mandatory = $true)]
-    [string]$LogDir
+    [string]$LogDir,
+
+    [object]$ModuleSettings
 )
 
 Set-StrictMode -Version Latest

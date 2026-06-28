@@ -22,19 +22,20 @@
       "mode": "A",
       "modules": [
         "validation-log",
-        "network-isolation",
-        "demo-system-marker"
+        "network-isolation"
       ],
-      "scripts": []
-    },
-    {
-      "name": "BootProfile Switcher - Mode B",
-      "mode": "B",
-      "modules": [
-        "validation-log",
-        "network-isolation",
-        "demo-system-marker"
-      ],
+      "moduleSettings": {
+        "network-isolation": {
+          "disable": {
+            "wifi": false
+          },
+          "exclude": {
+            "interfaceAliases": [
+              "Management LAN"
+            ]
+          }
+        }
+      },
       "scripts": []
     }
   ]

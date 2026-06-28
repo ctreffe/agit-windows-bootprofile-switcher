@@ -56,6 +56,44 @@ entries and deletes the temporary demo marker if present. It leaves the
 ProgramData profile configuration unchanged so a customized configuration is
 not removed unexpectedly.
 
+## Module Demo: Network Isolation
+
+The Network Isolation module has its own documentation:
+
+- [Network Isolation module documentation](docs/modules/network-isolation.md)
+
+It also has its own demonstration setup:
+
+```text
+install-network-isolation-demo.cmd
+```
+
+This installs one managed boot menu entry named `Network Isolation`, installs a
+matching machine-wide profile configuration and installs the startup hook. The
+boot menu then lets the user choose between normal Windows startup and the
+Network Isolation profile.
+
+The demo profile disables Ethernet, Wi-Fi, cellular and Bluetooth PAN network
+adapters and demonstrates the full lifecycle:
+
+1. normal startup learns the current adapter baseline
+2. `Network Isolation` startup disables the configured network paths
+3. normal startup restores the learned baseline
+
+The Network Isolation demo can be removed with:
+
+```text
+uninstall-network-isolation-demo.cmd
+```
+
+The uninstall wrapper removes the startup hook and the managed demo boot entry.
+If an earlier ProgramData profile configuration was backed up during
+installation, it is restored.
+
+Each production module should provide a small installable demo when practical.
+The demo should show the module's intended behavior without requiring manual
+configuration edits.
+
 ## Individual Setup Steps
 
 For the current validation state, the easiest way to install or remove the managed boot menu entries is to use the command wrappers from the repository root:
@@ -99,12 +137,17 @@ matching configured profile and writes the startup result to:
 logs/startup-profile.log
 ```
 
-The current modules are intentionally small. `validation-log` writes validation
-entries to:
+`validation-log` writes validation entries to:
 
 ```text
 logs/module-actions.log
 ```
+
+`network-isolation` is the first production-oriented lifecycle module. It can
+disable configured hardware network adapter categories for isolating boot
+profiles and restore the last learned normal adapter baseline after isolation.
+For setup, warnings, configuration details and the module demo, see
+[Network Isolation module documentation](docs/modules/network-isolation.md).
 
 `demo-system-marker` is a temporary v1.0.0 demonstration module. It writes the
 resolved profile to a harmless machine-wide marker at:
@@ -130,6 +173,8 @@ Current command wrappers:
 
 - `install-demo.cmd` installs the current v1.0.0 demo setup in the expected order and requests elevation when needed.
 - `uninstall-demo.cmd` removes the startup hook, managed boot menu entries and temporary demo marker while leaving ProgramData configuration unchanged.
+- `install-network-isolation-demo.cmd` installs the Network Isolation module demo with one managed `Network Isolation` boot profile.
+- `uninstall-network-isolation-demo.cmd` removes the Network Isolation module demo and restores the previous ProgramData profile configuration when a backup exists.
 - `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
 - `install-configuration.cmd` installs a validated profile configuration to the default machine-wide configuration path and requests elevation when needed.
 - `uninstall.cmd` removes the managed boot menu entries and requests elevation when needed.
@@ -141,7 +186,9 @@ Current PowerShell entry points:
 
 - `scripts/Get-BootProfileMenuStatus.ps1` reports managed boot menu state and detected BootProfile Switcher BCD entries.
 - `scripts/Resolve-BootProfile.ps1` resolves the selected boot profile and writes structured resolver state.
-- `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes only the harmless modules selected by the matching configured profile.
+- `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes only the modules selected by the matching configured profile.
+- `scripts/Install-NetworkIsolationDemo.ps1` installs the Network Isolation module demo boot entry, configuration and startup hook.
+- `scripts/Uninstall-NetworkIsolationDemo.ps1` removes the Network Isolation module demo and restores the previous profile configuration backup when available.
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
@@ -158,11 +205,21 @@ The repository contains the current example schema in:
 config/profiles.example.json
 ```
 
+The Network Isolation module demo configuration is stored in:
+
+```text
+config/demos/network-isolation.json
+```
+
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the schema but are not executed yet.
+
+Network Isolation is documented in detail in
+[docs/modules/network-isolation.md](docs/modules/network-isolation.md).
 
 Known modules in the current release:
 
 - `validation-log`
+- `network-isolation`
 - `demo-system-marker` temporary v1.0.0 release demo module
 
 ## Project Goals

@@ -70,6 +70,16 @@ $fixtures = @(
         expectedValid = $true
     },
     [ordered]@{
+        name = 'network-isolation-valid'
+        path = Join-Path $repoRoot 'config\test\network-isolation-valid.json'
+        expectedValid = $true
+    },
+    [ordered]@{
+        name = 'network-isolation-demo'
+        path = Join-Path $repoRoot 'config\demos\network-isolation.json'
+        expectedValid = $true
+    },
+    [ordered]@{
         name = 'duplicate-profile-name'
         path = Join-Path $repoRoot 'config\test\duplicate-profile-name.json'
         expectedValid = $false
@@ -87,6 +97,11 @@ $fixtures = @(
     [ordered]@{
         name = 'unknown-module'
         path = Join-Path $repoRoot 'config\test\unknown-module.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'network-isolation-missing-settings'
+        path = Join-Path $repoRoot 'config\test\network-isolation-missing-settings.json'
         expectedValid = $false
     }
 )

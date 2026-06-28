@@ -91,7 +91,6 @@ Modules apply specific parts of the desired system state.
 
 Examples of future modules include:
 
-- network adapters
 - firewall configuration
 - services
 - Bluetooth
@@ -99,6 +98,25 @@ Examples of future modules include:
 - power settings
 
 Each module should have a clearly defined responsibility.
+
+`network-isolation` is the first production-oriented lifecycle module. It owns
+hardware network adapter isolation decisions, baseline learning and baseline
+restoration. Adapter selection policy stays in configuration, while profiles
+only declare whether a given start is isolating by including the module. The
+profile engine triggers the lifecycle without containing network-specific
+business rules.
+
+In v1.1.0, Network Isolation is adapter-level isolation. It targets hardware
+network interfaces by default, with an explicit opt-in for Bluetooth network
+adapters because Windows may expose them as non-hardware interfaces. It should not be
+treated as a complete security boundary against local administrators or other
+privileged tooling. Stronger prevention belongs in a future hardening milestone
+that evaluates Group Policy, network UI restrictions, device-management
+controls, service controls or firewall enforcement.
+
+Bluetooth network adapter handling does not imply Bluetooth radio or USB
+Bluetooth adapter device isolation. Those device-level controls belong in a
+separate future module.
 
 ### Windows Configuration
 
@@ -160,6 +178,7 @@ The documentation model follows these responsibilities:
 
 - `README.md` describes what the project is.
 - `docs/architecture.md` describes how the system is conceptually structured.
+- `docs/modules/` contains user-facing documentation for modules that need more space than the README should provide.
 - ADRs document why significant architectural decisions were made.
 
 ADRs document decisions, not general project state.

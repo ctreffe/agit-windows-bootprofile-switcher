@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "moduleSettings": {
+    "network-isolation": {
+      "dryRun": false,
+      "disable": {
+        "ethernet": true,
+        "wifi": true,
+        "cellular": true,
+        "bluetoothNetwork": true
+      },
+      "exclude": {
+        "macAddresses": [],
+        "interfaceDescriptions": [],
+        "interfaceAliases": []
+      }
+    }
+  },
+  "profiles": [
+    {
+      "name": "Network Isolation",
+      "mode": "network-isolation",
+      "modules": [
+        "network-isolation",
+        "validation-log"
+      ],
+      "scripts": []
+    }
+  ]
+}

@@ -6,6 +6,26 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add the `network-isolation` module as the first production-oriented lifecycle module.
+- Add global `moduleSettings.network-isolation` configuration for `dryRun`, adapter category flags and exclusions.
+- Add profile-specific Network Isolation overrides with additive exclusions.
+- Add persistent Network Isolation baseline state design for learning normal adapter state and restoring it after isolation.
+- Add validation coverage for required `network-isolation` settings.
+- Document the v1.1.0 Network Isolation security boundary and future hardening direction.
+- Document that Bluetooth PAN isolation does not disable Bluetooth radio or USB Bluetooth adapter devices.
+- Add an installable Network Isolation module demo with one managed `Network Isolation` boot profile.
+- Add the convention that production modules should include a small installable demo when practical.
+- Add dedicated English and German Network Isolation module documentation.
+
+### Changed
+
+- Register `network-isolation` as a known module and include it in the example profile configuration with `dryRun` enabled.
+- Pass optional module settings and lifecycle context from the profile engine to module entry points.
+- Restore Network Isolation baseline state using adapter administrative state instead of treating `Not Present` as always unavailable.
+- Record successful real lifecycle validation for Network Isolation baseline learning, isolation and restore.
+
 ## [v1.0.0] - 2026-06-28
 
 ### Added

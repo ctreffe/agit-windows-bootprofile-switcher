@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "profiles": [
+    {
+      "name": "BootProfile Switcher - Mode A",
+      "mode": "A",
+      "modules": [
+        "network-isolation"
+      ],
+      "scripts": []
+    }
+  ]
+}

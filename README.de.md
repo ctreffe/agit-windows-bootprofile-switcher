@@ -57,6 +57,45 @@ und den temporären Demo-Marker, falls er vorhanden ist. Die
 ProgramData-Profilkonfiguration bleibt unverändert, damit eine angepasste
 Konfiguration nicht unerwartet gelöscht wird.
 
+## Modul-Demo: Network Isolation
+
+Das Network-Isolation-Modul hat eine eigene Dokumentation:
+
+- [Dokumentation zum Network-Isolation-Modul](docs/modules/network-isolation.de.md)
+
+Es hat außerdem ein eigenes Demo-Setup:
+
+```text
+install-network-isolation-demo.cmd
+```
+
+Dieses Setup installiert einen verwalteten Bootmenü-Eintrag mit dem Namen
+`Network Isolation`, installiert eine passende maschinenweite
+Profilkonfiguration und installiert den Startup-Hook. Im Bootmenü kann dann
+zwischen normalem Windows-Start und dem Network-Isolation-Profil gewählt
+werden.
+
+Das Demo-Profil deaktiviert Ethernet-, WLAN-, Cellular- und Bluetooth-PAN-
+Netzwerkadapter und demonstriert den vollständigen Lifecycle:
+
+1. normaler Start lernt die aktuelle Adapter-Baseline
+2. `Network Isolation`-Start deaktiviert die konfigurierten Netzwerkpfade
+3. normaler Start stellt die gelernte Baseline wieder her
+
+Die Network-Isolation-Demo kann entfernt werden mit:
+
+```text
+uninstall-network-isolation-demo.cmd
+```
+
+Der Uninstall-Wrapper entfernt den Startup-Hook und den verwalteten
+Demo-Boot-Eintrag. Wenn bei der Installation eine vorherige
+ProgramData-Profilkonfiguration gesichert wurde, wird sie wiederhergestellt.
+
+Jedes produktive Modul sollte, soweit praktikabel, eine kleine installierbare
+Demo bereitstellen. Die Demo sollte das beabsichtigte Modulverhalten zeigen,
+ohne manuelle Konfigurationsänderungen vorauszusetzen.
+
 ## Einzelne Setup-Schritte
 
 Für den aktuellen Validierungsstand ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
@@ -101,12 +140,19 @@ Profil dispatcht und das Startup-Ergebnis in folgende Datei schreibt:
 logs/startup-profile.log
 ```
 
-Die aktuellen Module sind bewusst klein gehalten. `validation-log` schreibt
-Validierungseinträge nach:
+`validation-log` schreibt Validierungseinträge nach:
 
 ```text
 logs/module-actions.log
 ```
+
+`network-isolation` ist das erste produktionsorientierte Lifecycle-Modul. Es
+kann konfigurierte Hardware-Netzwerkadapter-Kategorien für isolierende
+Bootprofile deaktivieren und nach einer Isolation die zuletzt gelernte normale
+Adapter-Baseline wiederherstellen. Einrichtung, Warnungen, Konfigurationsdetails
+und Moduldemo sind in der
+[Dokumentation zum Network-Isolation-Modul](docs/modules/network-isolation.de.md)
+beschrieben.
 
 `demo-system-marker` ist ein temporäres Demonstrationsmodul für v1.0.0. Es
 schreibt das aufgelöste Profil in einen harmlosen maschinenweiten Marker:
@@ -132,6 +178,8 @@ Aktuelle Command-Wrapper:
 
 - `install-demo.cmd` installiert das aktuelle v1.0.0-Demo-Setup in der erwarteten Reihenfolge und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall-demo.cmd` entfernt Startup-Hook, verwaltete Bootmenü-Einträge und temporären Demo-Marker, lässt die ProgramData-Konfiguration aber unverändert.
+- `install-network-isolation-demo.cmd` installiert die Network-Isolation-Moduldemo mit einem verwalteten Bootprofil `Network Isolation`.
+- `uninstall-network-isolation-demo.cmd` entfernt die Network-Isolation-Moduldemo und stellt die vorherige ProgramData-Profilkonfiguration wieder her, wenn ein Backup vorhanden ist.
 - `install.cmd` installiert die verwalteten BootProfile-Switcher-Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
 - `install-configuration.cmd` installiert eine validierte Profilkonfiguration an den standardmäßigen maschinenweiten Konfigurationspfad und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall.cmd` entfernt die verwalteten Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
@@ -143,7 +191,9 @@ Aktuelle PowerShell-Einstiegspunkte:
 
 - `scripts/Get-BootProfileMenuStatus.ps1` zeigt den verwalteten Bootmenü-Status und erkannte BootProfile-Switcher-BCD-Einträge an.
 - `scripts/Resolve-BootProfile.ps1` löst das gewählte Bootprofil auf und schreibt strukturierten Resolver-State.
-- `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft nur die harmlosen Module auf, die im passenden konfigurierten Profil ausgewählt sind.
+- `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft nur die Module auf, die im passenden konfigurierten Profil ausgewählt sind.
+- `scripts/Install-NetworkIsolationDemo.ps1` installiert Boot-Eintrag, Konfiguration und Startup-Hook für die Network-Isolation-Moduldemo.
+- `scripts/Uninstall-NetworkIsolationDemo.ps1` entfernt die Network-Isolation-Moduldemo und stellt bei Bedarf das vorherige Profilkonfigurations-Backup wieder her.
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
@@ -160,11 +210,22 @@ Das Repository enthält das aktuelle Beispiel-Schema in:
 config/profiles.example.json
 ```
 
+Die Demo-Konfiguration des Network-Isolation-Moduls liegt in:
+
+```text
+config/demos/network-isolation.json
+```
+
 Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
+
+Network Isolation ist ausführlich in
+[docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)
+dokumentiert.
 
 Bekannte Module im aktuellen Release:
 
 - `validation-log`
+- `network-isolation`
 - `demo-system-marker` temporäres v1.0.0-Release-Demomodul
 
 ## Projektziele
