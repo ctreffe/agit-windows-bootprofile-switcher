@@ -109,6 +109,11 @@ Initial decisions for v0.4.x:
 * Normal unmanaged Windows startup should produce `detected = false` and exit successfully.
 * `scripts/Resolve-BootProfile.ps1` is the new resolver entry point.
 * `scripts/Get-CurrentBootProfile.ps1` remains as the validated proof-of-concept path until the resolver has been tested and adopted.
+* Boot menu installation must detect existing BootProfile Switcher BCD entries and interactively offer cleanup before creating fresh entries, so repeated installation does not create duplicate Mode A/Mode B entries.
+
+Validation note:
+
+* The interactive cleanup path has been validated with an existing managed boot menu. The installer removed the previous Mode A and Mode B BCD entries, archived the old `state/boot-menu.json`, created fresh entries and `scripts/Get-BootProfileMenuStatus.ps1` reported exactly one managed Mode A entry and one managed Mode B entry afterward.
 
 ---
 
@@ -198,7 +203,7 @@ Turn the validated proof-of-concept detection behavior into a cleaner resolver d
 
 Immediate next validation target:
 
-Validate `scripts/Resolve-BootProfile.ps1` for Mode A, Mode B and normal unmanaged Windows startup.
+Validate `scripts/Resolve-BootProfile.ps1` for Mode A and Mode B using the freshly recreated managed boot menu entries.
 
 ---
 

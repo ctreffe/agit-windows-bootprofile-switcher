@@ -10,6 +10,7 @@ This project follows Semantic Versioning.
 
 - Add `scripts/Resolve-BootProfile.ps1` as a dedicated boot profile resolver that writes structured state to `state/current-boot-profile.json`.
 - Add ADR-0003 documenting the boot profile resolver boundary and resolver output contract.
+- Add interactive install-time detection and cleanup for existing BootProfile Switcher BCD entries to avoid duplicate Mode A/Mode B entries.
 
 ## [v0.3.0] - 2026-06-27
 
