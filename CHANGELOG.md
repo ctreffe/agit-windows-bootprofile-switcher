@@ -6,7 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
-No unreleased changes.
+### Added
+
+- Add the first example profile configuration schema at `config/profiles.example.json`.
+- Add `scripts/Test-BootProfileConfiguration.ps1` to validate the initial configuration schema without applying changes.
 
 ## [v0.6.0] - 2026-06-28
 

@@ -174,6 +174,26 @@ Planned focus:
 * Decide the machine-wide configuration location and validation rules.
 * Preserve deterministic behavior when configuration is missing, invalid or incomplete.
 
+Initial decisions for v0.7.x:
+
+* The default machine-wide configuration path is `%ProgramData%\BootProfileSwitcher\config\profiles.json`.
+* Development and validation can use an explicit `-ConfigPath` override.
+* The first schema is JSON with `schemaVersion = 1` and a `profiles` array.
+* Each profile has `name`, `mode`, `modules` and `scripts`.
+* Profile names and modes must be unique.
+* Modules must reference known modules; currently only `validation-log` is known.
+* Custom script paths are structurally accepted as a list but are not executed in v0.7.x.
+* The engine continues to use its internal module registry until configuration adoption is intentionally implemented.
+
+Immediate validation target:
+
+* Validate `config/profiles.example.json` with `scripts/Test-BootProfileConfiguration.ps1`.
+
+Validation note:
+
+* `config/profiles.example.json` has been validated successfully with `scripts/Test-BootProfileConfiguration.ps1 -ConfigPath .\config\profiles.example.json -AsJson`.
+* The default `%ProgramData%\BootProfileSwitcher\config\profiles.json` path has been checked when missing. The validator returns `valid = false`, reports the missing file and exits with code 1.
+
 ---
 
 ## Planned Future Milestones
