@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v0.7.0] - 2026-06-28
+
 ### Added
 
 - Add the first example profile configuration schema at `config/profiles.example.json`.
@@ -15,6 +19,7 @@ This project follows Semantic Versioning.
 ### Changed
 
 - Update the profile engine to validate configuration during execution without using it for dispatch decisions yet.
+- Mark the Configuration milestone as completed after validating schema, fixtures and runtime configuration checks.
 
 ## [v0.6.0] - 2026-06-28
 

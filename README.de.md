@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`) und den Module-System-Meilenstein (`v0.6.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`) und den Configuration-Meilenstein (`v0.7.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.6.0 – Module System` ist abgeschlossen. Die Profile Engine ruft jetzt ein harmloses Validierungsmodul über eine interne Modulregistry auf, während Konfigurationsdateien und echte Systemänderungen bewusst auf spätere Meilensteine verschoben bleiben.
+> Der Meilenstein `v0.7.0 – Configuration` ist abgeschlossen. Das Projekt hat jetzt ein initiales maschinenweites Profil-Konfigurationsschema, einen Validator, Validierungs-Fixtures und Runtime-Konfigurationsvalidierung in der Profile Engine, während Konfiguration noch keine Dispatch-Entscheidungen steuert.
 
 ## Überblick
 
@@ -131,7 +131,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.6.0 Module System
+0.7.0 Configuration
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:

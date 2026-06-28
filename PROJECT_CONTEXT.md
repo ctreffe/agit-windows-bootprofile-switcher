@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.6.0 – Module System**
+**v0.7.0 – Configuration**
 
-The Module System milestone is complete.
+The Configuration milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the initial module system boundary.
+Prepare the next milestone after the initial configuration model.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -48,6 +48,8 @@ v0.4.0 introduced `scripts/Resolve-BootProfile.ps1` as the dedicated resolver, v
 v0.5.0 introduced `scripts/Invoke-ProfileEngine.ps1` as the dedicated profile engine entry point. The startup hook now orchestrates resolver output through the engine. The engine keeps existing harmless profile script dispatching and intentionally postpones configuration files, built-in system-changing flags and custom script configuration.
 
 v0.6.0 introduced `modules/validation-log/Invoke-ValidationLogModule.ps1` as the first harmless module. `scripts/Invoke-ProfileEngine.ps1` invokes modules through an internal module registry, and the startup hook logs executed modules. Configuration files, real system-changing modules and Group Policy distribution remain intentionally postponed.
+
+v0.7.0 introduced the first profile configuration schema in `config/profiles.example.json`, a validator in `scripts/Test-BootProfileConfiguration.ps1`, validation fixtures and runtime configuration validation in `scripts/Invoke-ProfileEngine.ps1`. Configuration is validated but does not yet drive module or script dispatch decisions.
 
 ---
 
@@ -163,19 +165,14 @@ Validation note:
 
 ---
 
-# Current Development Roadmap
+## v0.7.0 – Configuration
 
-## v0.7.x – Configuration
+Completed.
 
-Planned focus:
+Main results:
 
-* Define the first configuration model for profiles, modules and script references.
 * Keep configuration suitable for future enterprise deployment and Group Policy distribution.
-* Decide the machine-wide configuration location and validation rules.
 * Preserve deterministic behavior when configuration is missing, invalid or incomplete.
-
-Initial decisions for v0.7.x:
-
 * The default machine-wide configuration path is `%ProgramData%\BootProfileSwitcher\config\profiles.json`.
 * Development and validation can use an explicit `-ConfigPath` override.
 * The first schema is JSON with `schemaVersion = 1` and a `profiles` array.
@@ -212,6 +209,19 @@ Validation note:
 * `scripts/Invoke-ProfileEngine.ps1 -ConfigPath .\config\profiles.example.json` has been validated with `configurationValid = true`, `configurationValidationExitCode = 0`, unchanged profile script execution and unchanged `validation-log` module execution.
 * `scripts/Invoke-ProfileEngine.ps1` has been validated with the missing default `%ProgramData%\BootProfileSwitcher\config\profiles.json` path. It reports `configurationValid = false` and `configurationValidationExitCode = 1` while preserving existing internal-registry execution behavior.
 * The startup hook runtime path has been validated manually in an elevated PowerShell session for managed Mode A. It logs `configurationValid=False` for the missing ProgramData config while still resolving Mode A and executing the existing profile script plus `validation-log` module.
+
+---
+
+# Current Development Roadmap
+
+## v0.8.x – Integration
+
+Planned focus:
+
+* Decide how validated configuration should be consumed by the profile engine.
+* Integrate configuration into module selection without introducing real system-changing behavior yet.
+* Preserve deterministic fallback behavior when configuration is missing or invalid.
+* Keep custom script execution postponed until its safety and logging model is explicit.
 
 ---
 
@@ -308,15 +318,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.7.x – Configuration`.
+Prepare the next small step for `v0.8.x – Integration`.
 
 Primary objective:
 
-Design the first configuration model without applying real system-changing behavior too early.
+Integrate validated configuration into the runtime path without applying real system-changing behavior too early.
 
 Immediate next validation target:
 
-Decide where machine-wide configuration should live and which minimal schema should be validated first.
+Decide whether the engine should use configuration only when valid, and what deterministic fallback should apply when configuration is missing or invalid.
 
 ---
 

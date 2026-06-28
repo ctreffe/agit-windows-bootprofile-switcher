@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`) and the Module System milestone (`v0.6.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`) and the Configuration milestone (`v0.7.0`).
 >
-> The `v0.6.0 – Module System` milestone has been completed. The profile engine now invokes a harmless validation module through an internal module registry, while configuration files and real system-changing actions remain intentionally postponed.
+> The `v0.7.0 – Configuration` milestone has been completed. The project now has an initial machine-wide profile configuration schema, validator, validation fixtures and runtime configuration validation in the profile engine, while configuration does not yet drive dispatch decisions.
 
 ## Overview
 
@@ -131,7 +131,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.6.0 Module System
+0.7.0 Configuration
 ```
 
 Version tags should use a leading `v`, for example:
