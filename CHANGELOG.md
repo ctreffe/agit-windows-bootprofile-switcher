@@ -10,6 +10,10 @@ This project follows Semantic Versioning.
 
 - Add a repeatable v0.9 validation checklist with expected runtime log assertions.
 
+### Changed
+
+- Record successful V1 through V8 validation for the configuration-driven runtime path.
+
 ## [v0.8.0] - 2026-06-28
 
 ### Added

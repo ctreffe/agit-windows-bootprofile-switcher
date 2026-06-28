@@ -247,6 +247,21 @@ Current planning:
 
 The roadmap may evolve based on research findings.
 
+## v0.9.x – Validation
+
+Active focus:
+
+* Validate the configuration-driven runtime path through repeatable manual checks.
+* Keep validation harmless; no real system-changing module is introduced in this milestone.
+* Use `docs/validation/v0.9-validation-checklist.md` as the primary validation reference.
+
+Validation note:
+
+* V1 through V8 in `docs/validation/v0.9-validation-checklist.md` have been validated on 2026-06-28.
+* Validated cases include configuration fixtures, installed ProgramData configuration, Mode A runtime, Mode B runtime, missing configuration no-op, invalid configuration no-op, normal Windows startup no-op and reinstall safety.
+* Runtime validation confirmed `profileScriptExecuted=False` and configuration-driven `modulesExecuted=validation-log` for managed Mode A and Mode B.
+* No-op validation confirmed empty `modulesExecuted`, `profileScriptExecuted=False` and explicit `dispatchSkippedReason` values for missing/invalid configuration and unmanaged Windows startup.
+
 ---
 
 ## Future Configuration Goals
@@ -340,7 +355,7 @@ Broaden validation around the configuration-driven runtime path before introduci
 
 Immediate next validation target:
 
-Work through `docs/validation/v0.9-validation-checklist.md`, starting with configuration fixtures and installed configuration validation, then validate Mode A and Mode B runtime behavior from elevated PowerShell sessions.
+Decide whether `v0.9.0 – Validation` is complete with the current repeatable manual validation coverage, or whether an additional helper script should parse and assert the latest log entries before the milestone is finalized.
 
 ---
 
