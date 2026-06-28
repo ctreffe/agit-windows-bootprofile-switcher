@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`) and the Integration milestone (`v0.8.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`) and the Validation milestone (`v0.9.0`).
 >
-> The `v0.8.0 – Integration` milestone is complete. The profile engine requires a valid machine-wide `profiles.json` before it dispatches any profile action; missing or invalid configuration is treated as an explicitly logged no-op.
+> The `v0.9.0 – Validation` milestone is complete. The configuration-driven runtime path has been validated for Mode A, Mode B, missing or invalid configuration, normal Windows startup and reinstall safety.
 
 ## Overview
 
@@ -166,12 +166,12 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.8.0 Integration
+0.9.0 Validation
 ```
 
 ## Validation
 
-The repeatable validation scope for the next milestone is documented in:
+The repeatable validation scope for the current runtime path is documented in:
 
 ```text
 docs/validation/v0.9-validation-checklist.md

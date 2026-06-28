@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v0.9.0] - 2026-06-28
+
 ### Added
 
 - Add a repeatable v0.9 validation checklist with expected runtime log assertions.

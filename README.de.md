@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`) und den Integration-Meilenstein (`v0.8.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`) und den Validation-Meilenstein (`v0.9.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.8.0 – Integration` ist abgeschlossen. Die Profile Engine benötigt eine gültige maschinenweite `profiles.json`, bevor sie Profil-Aktionen dispatcht; fehlende oder ungültige Konfiguration ist ein explizit geloggter No-op.
+> Der Meilenstein `v0.9.0 – Validation` ist abgeschlossen. Der konfigurationsgetriebene Runtime-Pfad wurde für Mode A, Mode B, fehlende oder ungültige Konfiguration, normalen Windows-Start und Reinstall-Sicherheit validiert.
 
 ## Überblick
 
@@ -167,12 +167,12 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.8.0 Integration
+0.9.0 Validation
 ```
 
 ## Validierung
 
-Der wiederholbare Validierungsumfang für den nächsten Meilenstein ist hier dokumentiert:
+Der wiederholbare Validierungsumfang für den aktuellen Runtime-Pfad ist hier dokumentiert:
 
 ```text
 docs/validation/v0.9-validation-checklist.md

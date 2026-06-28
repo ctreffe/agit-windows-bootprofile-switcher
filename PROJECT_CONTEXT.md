@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.8.0 – Integration**
+**v0.9.0 – Validation**
 
-The Integration milestone is complete.
+The Validation milestone is complete.
 
 ## Current Focus
 
-Prepare `v0.9.x – Validation` by turning the current runtime expectations into repeatable validation steps and log assertions.
+Prepare the initial stable release milestone after completing validation of the configuration-driven runtime path.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -242,14 +242,15 @@ Validation note:
 
 Current planning:
 
-* v0.9.x – Validation
 * v1.0.0 – Initial stable release
 
 The roadmap may evolve based on research findings.
 
-## v0.9.x – Validation
+## v0.9.0 – Validation
 
-Active focus:
+Completed.
+
+Main results:
 
 * Validate the configuration-driven runtime path through repeatable manual checks.
 * Keep validation harmless; no real system-changing module is introduced in this milestone.
@@ -347,15 +348,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.9.x – Validation`.
+Prepare the next small step for `v1.0.0 – Initial stable release`.
 
 Primary objective:
 
-Broaden validation around the configuration-driven runtime path before introducing real system-changing modules.
+Define what must be included in the initial stable release and identify any final documentation or safety gaps before tagging `v1.0.0`.
 
 Immediate next validation target:
 
-Decide whether `v0.9.0 – Validation` is complete with the current repeatable manual validation coverage, or whether an additional helper script should parse and assert the latest log entries before the milestone is finalized.
+Review the current repository state against the project goals, non-goals, validation results and user-facing setup flow to decide what remains before `v1.0.0`.
 
 ---
 
