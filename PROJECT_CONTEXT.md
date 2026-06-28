@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.7.0 – Configuration**
+**v0.8.0 – Integration**
 
-The Configuration milestone is complete.
+The Integration milestone is complete.
 
 ## Current Focus
 
-Implement the first `v0.8.x – Integration` step: validated configuration now controls whether profile modules are dispatched.
+Prepare the next milestone after configuration-driven dispatch and keep the repository aligned with the current AGIT Collaboration Model.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -51,7 +51,7 @@ v0.6.0 introduced `modules/validation-log/Invoke-ValidationLogModule.ps1` as the
 
 v0.7.0 introduced the first profile configuration schema in `config/profiles.example.json`, a validator in `scripts/Test-BootProfileConfiguration.ps1`, validation fixtures and runtime configuration validation in `scripts/Invoke-ProfileEngine.ps1`.
 
-The first v0.8.x integration step makes configuration the runtime dispatch gate. `scripts/Invoke-ProfileEngine.ps1` now dispatches only modules listed on the matching configured profile. If configuration is missing, invalid or does not contain the resolved mode, the boot profile performs no action and reports the skip reason. The startup hook must still log configuration status, validation errors and dispatch skip reasons so no-op behavior remains auditable. Custom script paths remain schema-only and are not executed yet.
+v0.8.0 makes configuration the runtime dispatch gate. `scripts/Invoke-ProfileEngine.ps1` now dispatches only modules listed on the matching configured profile. If configuration is missing, invalid or does not contain the resolved mode, the boot profile performs no action and reports the skip reason. The startup hook must still log configuration status, validation errors and dispatch skip reasons so no-op behavior remains auditable. Custom script paths remain schema-only and are not executed yet.
 
 `scripts/Install-BootProfileConfiguration.ps1` and `install-configuration.cmd` provide a controlled installation path for copying a validated profile configuration to `%ProgramData%\BootProfileSwitcher\config\profiles.json`. Existing configuration is preserved unless replacement is confirmed or forced.
 
@@ -218,9 +218,11 @@ Validation note:
 
 # Current Development Roadmap
 
-## v0.8.x – Integration
+## v0.8.0 – Integration
 
-Active focus:
+Completed.
+
+Main results:
 
 * Use validated configuration as the dispatch source for harmless modules.
 * Treat missing, invalid or incomplete configuration as a successful no-op with explicit reporting and startup logging.
@@ -228,13 +230,18 @@ Active focus:
 * Provide a controlled installer for the default machine-wide `profiles.json`.
 * Keep custom script execution postponed until its safety and logging model is explicit.
 
+Validation note:
+
+* `scripts/Invoke-ProfileEngine.ps1` has been validated with a valid example configuration, a missing configuration file and an invalid configuration fixture. Valid configuration dispatches `validation-log`; missing or invalid configuration executes no modules and no profile scripts while reporting `dispatchSkippedReason = configuration-invalid`.
+* `scripts/Install-BootProfileConfiguration.ps1 -WhatIf` has been validated with the example configuration and with an invalid fixture. Valid configuration reaches the planned install operation; invalid configuration is rejected before installation.
+* The elevated startup-hook runtime path has been validated for managed Mode A with the installed ProgramData configuration. The startup log reported `configurationValid=True`, `profileConfigured=True`, `modulesExecuted=validation-log`, `profileScriptExecuted=False` and no dispatch skip reason.
+
 ---
 
 ## Planned Future Milestones
 
 Current planning:
 
-* v0.8.x – Integration
 * v0.9.x – Validation
 * v1.0.0 – Initial stable release
 
@@ -263,7 +270,7 @@ The conceptual architecture has been established.
 
 Implementation has validated boot menu creation, detection and startup execution.
 
-The project has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. The startup hook now uses the dedicated resolver and can dispatch profile-specific startup scripts based on the resolved profile.
+The project has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. The startup hook now uses the dedicated resolver and dispatches configuration-selected modules through the profile engine when the machine-wide profile configuration is valid.
 
 ---
 
@@ -325,15 +332,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.8.x – Integration`.
+Prepare the next small step for `v0.9.x – Validation`.
 
 Primary objective:
 
-Integrate validated configuration into the runtime path without applying real system-changing behavior too early.
+Broaden validation around the configuration-driven runtime path before introducing real system-changing modules.
 
 Immediate next validation target:
 
-Validate the config-driven profile engine path with a known-good `profiles.example.json` and with missing or invalid configuration. The expected missing/invalid behavior is `configurationValid = false`, no modules executed and no profile script execution.
+Define the v0.9.x validation scope, including repeatable manual validation steps, expected log assertions and any additional fixture coverage needed before the initial stable release.
 
 ---
 

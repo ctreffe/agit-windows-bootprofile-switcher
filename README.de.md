@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`) und den Configuration-Meilenstein (`v0.7.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`) und den Integration-Meilenstein (`v0.8.0`) abgeschlossen.
 >
-> Das Projekt ist jetzt in `v0.8.x – Integration`. Die Profile Engine benötigt eine gültige maschinenweite `profiles.json`, bevor sie Profil-Aktionen dispatcht; fehlende oder ungültige Konfiguration ist ein expliziter No-op.
+> Der Meilenstein `v0.8.0 – Integration` ist abgeschlossen. Die Profile Engine benötigt eine gültige maschinenweite `profiles.json`, bevor sie Profil-Aktionen dispatcht; fehlende oder ungültige Konfiguration ist ein explizit geloggter No-op.
 
 ## Überblick
 
@@ -48,7 +48,15 @@ Die Wrapper verwalten aktuell die BootProfile-Switcher-Bootmenü-Einträge:
 
 Die eigentliche Implementierung bleibt in `scripts/` sichtbar, damit sie weiterhin explizit geprüft und manuell getestet werden kann.
 
-## Schnellstart: Startup-Hook
+## Schnellstart: Konfiguration und Startup-Hook
+
+Bevor der Startup-Hook konfigurierte Profilaktionen dispatchen kann, muss die
+Beispiel-Profilkonfiguration an den maschinenweiten Standardpfad installiert
+werden:
+
+```text
+install-configuration.cmd
+```
 
 Nach der Installation des Bootmenüs kann der Startup-Hook aus dem
 Repository-Stammverzeichnis installiert werden:
@@ -59,23 +67,18 @@ install-startup-hook.cmd
 
 Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft,
 das gewählte Bootprofil über `scripts/Resolve-BootProfile.ps1` auflöst,
-`scripts/Invoke-ProfileEngine.ps1` aufruft und das Startup-Ergebnis in folgende Datei schreibt:
+`scripts/Invoke-ProfileEngine.ps1` aufruft, Module aus dem passenden konfigurierten
+Profil dispatcht und das Startup-Ergebnis in folgende Datei schreibt:
 
 ```text
 logs/startup-profile.log
 ```
 
-und ab A4 das passende Profilskript ausführt:
+Das aktuelle Validierungsmodul ist absichtlich harmlos und schreibt
+Validierungseinträge nach:
 
 ```text
-profiles/mode-a/startup.ps1
-profiles/mode-b/startup.ps1
-```
-
-Die Profilskripte sind absichtlich harmlos und schreiben Validierungseinträge nach:
-
-```text
-logs/profile-startup-actions.log
+logs/module-actions.log
 ```
 
 Der Hook kann wieder entfernt werden mit:

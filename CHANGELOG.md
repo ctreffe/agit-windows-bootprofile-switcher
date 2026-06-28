@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v0.8.0] - 2026-06-28
+
 ### Added
 
 - Add `scripts/Install-BootProfileConfiguration.ps1` and `install-configuration.cmd` for controlled installation of validated machine-wide profile configuration.
@@ -17,7 +19,7 @@ This project follows Semantic Versioning.
 - Harmonize the project collaboration model with AGIT Project Template v1.1.0 and Collaboration Model v1.12.
 - Update project context and philosophy guidance for context handoff discipline, milestone work rhythm, code documentation and user-facing documentation.
 - Align local Codex policy references with the documents that remain in this derived repository.
-- Expand README command and configuration reference material for the current v0.7.0 validation state.
+- Expand README command and configuration reference material for the current validation state.
 - Refresh script help text to describe current managed boot menu, startup hook and validation-script roles.
 
 ## [v0.7.0] - 2026-06-28

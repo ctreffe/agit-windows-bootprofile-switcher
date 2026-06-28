@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`) and the Configuration milestone (`v0.7.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`) and the Integration milestone (`v0.8.0`).
 >
-> The project is now in `v0.8.x – Integration`. The profile engine requires a valid machine-wide `profiles.json` before it dispatches any profile action; missing or invalid configuration is treated as an explicit no-op.
+> The `v0.8.0 – Integration` milestone is complete. The profile engine requires a valid machine-wide `profiles.json` before it dispatches any profile action; missing or invalid configuration is treated as an explicitly logged no-op.
 
 ## Overview
 
@@ -48,7 +48,14 @@ The wrappers currently manage the BootProfile Switcher boot menu entries:
 
 The underlying implementation remains in `scripts/` for explicit inspection and advanced manual testing.
 
-## Quick Start: Startup Hook
+## Quick Start: Configuration and Startup Hook
+
+Before the startup hook can dispatch configured profile actions, install the
+example profile configuration to the machine-wide default location:
+
+```text
+install-configuration.cmd
+```
 
 After installing the boot menu, the startup hook can be installed from the
 repository root:
@@ -59,23 +66,18 @@ install-startup-hook.cmd
 
 The startup hook registers a Windows Scheduled Task that runs at system startup,
 resolves the selected boot profile through `scripts/Resolve-BootProfile.ps1`,
-invokes `scripts/Invoke-ProfileEngine.ps1` and writes the startup result to:
+invokes `scripts/Invoke-ProfileEngine.ps1`, dispatches modules from the
+matching configured profile and writes the startup result to:
 
 ```text
 logs/startup-profile.log
 ```
 
-and, starting with A4, executes the matching profile script:
+The current validation module is intentionally harmless and writes validation
+entries to:
 
 ```text
-profiles/mode-a/startup.ps1
-profiles/mode-b/startup.ps1
-```
-
-The profile scripts are intentionally harmless and write validation entries to:
-
-```text
-logs/profile-startup-actions.log
+logs/module-actions.log
 ```
 
 The hook can be removed with:
