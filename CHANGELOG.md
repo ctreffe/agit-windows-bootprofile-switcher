@@ -8,6 +8,7 @@ This project follows Semantic Versioning.
 
 ### Added
 
+- Add ADR-0004 documenting Network Isolation as a lifecycle module with persistent baseline state.
 - Add the `network-isolation` module as the first production-oriented lifecycle module.
 - Add global `moduleSettings.network-isolation` configuration for `dryRun`, adapter category flags and exclusions.
 - Add profile-specific Network Isolation overrides with additive exclusions.
