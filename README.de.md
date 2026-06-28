@@ -30,7 +30,34 @@ Das Projekt soll Windows-Systeme unterstützen, die mehrere Betriebsprofile mit 
 
 Der erste Anwendungsfall ist ein Windows-Rechner, der entweder im Normalbetrieb oder in einem Experimentalprofil mit eingeschränkter beziehungsweise deaktivierter Netzwerkkonnektivität starten kann. Die Architektur ist bewusst generisch angelegt, damit später weitere Profile und Komponenten ergänzt werden können.
 
-## Schnellstart: Bootmenü und Startup-Hook
+## Schnellstart: Demo-Setup
+
+Für das v1.0.0-Demo-Setup kann der kombinierte Wrapper aus dem
+Repository-Stammverzeichnis verwendet werden:
+
+```text
+install-demo.cmd
+```
+
+Er fordert bei Bedarf Administratorrechte an und führt die aktuelle
+Demo-Installationsreihenfolge aus:
+
+1. verwaltete Bootmenü-Einträge installieren
+2. validierte Profilkonfiguration installieren
+3. Startup-Hook installieren
+
+Das Demo-Setup kann wieder entfernt werden mit:
+
+```text
+uninstall-demo.cmd
+```
+
+Der Demo-Uninstall entfernt den Startup-Hook, die verwalteten Bootmenü-Einträge
+und den temporären Demo-Marker, falls er vorhanden ist. Die
+ProgramData-Profilkonfiguration bleibt unverändert, damit eine angepasste
+Konfiguration nicht unerwartet gelöscht wird.
+
+## Einzelne Setup-Schritte
 
 Für den aktuellen Validierungsstand ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
 
@@ -103,6 +130,8 @@ uninstall-startup-hook.cmd
 
 Aktuelle Command-Wrapper:
 
+- `install-demo.cmd` installiert das aktuelle v1.0.0-Demo-Setup in der erwarteten Reihenfolge und fordert bei Bedarf erhöhte Rechte an.
+- `uninstall-demo.cmd` entfernt Startup-Hook, verwaltete Bootmenü-Einträge und temporären Demo-Marker, lässt die ProgramData-Konfiguration aber unverändert.
 - `install.cmd` installiert die verwalteten BootProfile-Switcher-Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
 - `install-configuration.cmd` installiert eine validierte Profilkonfiguration an den standardmäßigen maschinenweiten Konfigurationspfad und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall.cmd` entfernt die verwalteten Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.

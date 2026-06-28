@@ -30,7 +30,33 @@ The project is intended to support Windows systems that need multiple operating 
 
 The initial use case is a Windows computer that can start either in normal operation or in an experimental profile with restricted or disabled network connectivity. The architecture is intentionally generic so that additional profiles and components can be added later.
 
-## Quick Start: Boot Menu and Startup Hook
+## Quick Start: Demo Setup
+
+For the v1.0.0 demo setup, use the combined wrapper from the repository root:
+
+```text
+install-demo.cmd
+```
+
+It requests administrator privileges when needed and runs the current demo setup
+sequence:
+
+1. install managed boot menu entries
+2. install the validated profile configuration
+3. install the startup hook
+
+The demo setup can be removed with:
+
+```text
+uninstall-demo.cmd
+```
+
+The demo uninstall removes the startup hook, removes the managed boot menu
+entries and deletes the temporary demo marker if present. It leaves the
+ProgramData profile configuration unchanged so a customized configuration is
+not removed unexpectedly.
+
+## Individual Setup Steps
 
 For the current validation state, the easiest way to install or remove the managed boot menu entries is to use the command wrappers from the repository root:
 
@@ -102,6 +128,8 @@ uninstall-startup-hook.cmd
 
 Current command wrappers:
 
+- `install-demo.cmd` installs the current v1.0.0 demo setup in the expected order and requests elevation when needed.
+- `uninstall-demo.cmd` removes the startup hook, managed boot menu entries and temporary demo marker while leaving ProgramData configuration unchanged.
 - `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
 - `install-configuration.cmd` installs a validated profile configuration to the default machine-wide configuration path and requests elevation when needed.
 - `uninstall.cmd` removes the managed boot menu entries and requests elevation when needed.

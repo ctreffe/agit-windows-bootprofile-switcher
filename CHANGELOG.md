@@ -10,6 +10,7 @@ This project follows Semantic Versioning.
 
 - Add the temporary `demo-system-marker` module for the v1.0.0 release demonstration.
 - Add a v1.0.0 release scope document defining included behavior, exclusions, safety expectations and readiness checks.
+- Add `install-demo.cmd` and `uninstall-demo.cmd` wrappers for the current v1.0.0 demo setup flow.
 
 ### Changed
 

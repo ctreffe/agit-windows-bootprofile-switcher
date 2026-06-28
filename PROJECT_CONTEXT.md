@@ -61,6 +61,8 @@ The temporary `demo-system-marker` module has been validated through the real Mo
 
 `docs/release/v1.0.0-release-scope.md` defines the intended initial stable release scope: a validated foundation release with reversible boot infrastructure, configuration-driven module dispatch, predictable logging and the temporary demo marker module, but without production system-changing modules.
 
+`install-demo.cmd` and `uninstall-demo.cmd` provide combined v1.0.0 demo setup and teardown wrappers. They keep the individual install/uninstall wrappers available for diagnostics and maintenance.
+
 ---
 
 # Completed Milestones
@@ -362,7 +364,7 @@ Define what must be included in the initial stable release and identify any fina
 
 Immediate next validation target:
 
-Review README and README.de against `docs/release/v1.0.0-release-scope.md` to close any final setup, validation, logging or cleanup documentation gaps before `v1.0.0`.
+Review README and README.de against `docs/release/v1.0.0-release-scope.md` after adding the combined demo setup wrappers, then close any remaining setup, validation, logging or cleanup documentation gaps before `v1.0.0`.
 
 ---
 
