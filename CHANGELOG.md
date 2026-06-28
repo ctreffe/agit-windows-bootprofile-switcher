@@ -8,6 +8,8 @@ This project follows Semantic Versioning.
 
 ### Changed
 
+- Make `scripts/Invoke-ProfileEngine.ps1` use valid profile configuration for module dispatch.
+- Treat missing, invalid or incomplete profile configuration as an explicitly logged no-op instead of falling back to implicit profile actions.
 - Harmonize the project collaboration model with AGIT Project Template v1.1.0 and Collaboration Model v1.12.
 - Update project context and philosophy guidance for context handoff discipline, milestone work rhythm, code documentation and user-facing documentation.
 - Align local Codex policy references with the documents that remain in this derived repository.

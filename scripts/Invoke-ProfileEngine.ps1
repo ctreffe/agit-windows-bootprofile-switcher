@@ -4,15 +4,14 @@ Runs the BootProfile Switcher profile engine.
 
 .DESCRIPTION
 Consumes the structured resolver output from state/current-boot-profile.json,
-validates the profile configuration and dispatches the matching profile startup
-script from profiles/mode-*/. It also invokes registered modules to validate
-the module boundary.
+validates the profile configuration and dispatches modules selected by the
+matching configured profile.
 
 This initial engine intentionally keeps execution narrow. It does not read a
-configuration file for execution decisions, apply built-in system changes or
-modify machine settings. It validates configuration readiness, preserves the
-existing harmless profile-script validation behavior and adds only a harmless
-module validation log through an internal module registry.
+configuration file for system-changing decisions, apply built-in system changes
+or modify machine settings. A valid machine-wide profile configuration is now
+required before any profile action is executed. Missing, invalid or incomplete
+configuration produces a successful no-op with explicit validation output.
 #>
 
 [CmdletBinding()]
@@ -67,6 +66,9 @@ $resolverResult = Get-Content -Path $ResolverStatePath -Raw | ConvertFrom-Json
 $profileScriptExecuted = $false
 $profileScript = $null
 $modulesExecuted = @()
+$profileConfigured = $false
+$dispatchSkippedReason = $null
+$customScriptsSkipped = 0
 $moduleRegistry = @(
     [ordered]@{
         name = 'validation-log'
@@ -75,39 +77,46 @@ $moduleRegistry = @(
 )
 
 if ($resolverResult.detected) {
-    $modeSlug = ('mode-{0}' -f ([string]$resolverResult.mode).ToLowerInvariant())
-    $profileScript = Join-Path $repoRoot (Join-Path 'profiles' (Join-Path $modeSlug 'startup.ps1'))
+    if (-not $configurationValidation.valid) {
+        $dispatchSkippedReason = 'configuration-invalid'
+    } else {
+        $configuration = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+        $configuredProfiles = @($configuration.profiles)
+        $configuredProfile = $configuredProfiles | Where-Object { [string]$_.mode -eq [string]$resolverResult.mode } | Select-Object -First 1
 
-    if (-not (Test-Path $profileScript)) {
-        throw "Profile startup script not found for mode $($resolverResult.mode): $profileScript"
-    }
+        if ($null -eq $configuredProfile) {
+            $dispatchSkippedReason = "profile-not-configured:$($resolverResult.mode)"
+        } else {
+            $profileConfigured = $true
+            $customScriptsSkipped = @($configuredProfile.scripts).Count
 
-    & $profileScript `
-        -Mode $resolverResult.mode `
-        -Name $resolverResult.name `
-        -Identifier $resolverResult.identifier `
-        -RepoRoot $repoRoot `
-        -LogDir $LogDir
+            foreach ($moduleName in @($configuredProfile.modules)) {
+                $module = $moduleRegistry | Where-Object { $_.name -eq [string]$moduleName } | Select-Object -First 1
 
-    $profileScriptExecuted = $true
+                if ($null -eq $module) {
+                    throw "Configured module is not registered: $moduleName"
+                }
 
-    foreach ($module in $moduleRegistry) {
-        if (-not (Test-Path $module.path)) {
-            throw "Module not found for $($module.name): $($module.path)"
+                if (-not (Test-Path $module.path)) {
+                    throw "Module not found for $($module.name): $($module.path)"
+                }
+
+                & $module.path `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier `
+                    -RepoRoot $repoRoot `
+                    -LogDir $LogDir
+
+                $modulesExecuted += [ordered]@{
+                    name = $module.name
+                    path = $module.path
+                }
+            }
         }
-
-        & $module.path `
-            -Mode $resolverResult.mode `
-            -Name $resolverResult.name `
-            -Identifier $resolverResult.identifier `
-            -RepoRoot $repoRoot `
-            -LogDir $LogDir
-
-        $modulesExecuted += [ordered]@{
-            name = $module.name
-            path = $module.path
-        }
     }
+} else {
+    $dispatchSkippedReason = 'profile-not-detected'
 }
 
 $result = [ordered]@{
@@ -124,8 +133,11 @@ $result = [ordered]@{
     configurationValid = [bool]$configurationValidation.valid
     configurationValidationExitCode = $configurationValidationExitCode
     configurationErrors = @($configurationValidation.errors)
+    profileConfigured = $profileConfigured
+    dispatchSkippedReason = $dispatchSkippedReason
     profileScriptExecuted = $profileScriptExecuted
     profileScript = $profileScript
+    customScriptsSkipped = $customScriptsSkipped
     modulesExecuted = @($modulesExecuted)
 }
 

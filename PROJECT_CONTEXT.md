@@ -26,7 +26,7 @@ The Configuration milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the initial configuration model and keep the repository aligned with the current AGIT Collaboration Model.
+Implement the first `v0.8.x – Integration` step: validated configuration now controls whether profile modules are dispatched.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -49,7 +49,9 @@ v0.5.0 introduced `scripts/Invoke-ProfileEngine.ps1` as the dedicated profile en
 
 v0.6.0 introduced `modules/validation-log/Invoke-ValidationLogModule.ps1` as the first harmless module. `scripts/Invoke-ProfileEngine.ps1` invokes modules through an internal module registry, and the startup hook logs executed modules. Configuration files, real system-changing modules and Group Policy distribution remain intentionally postponed.
 
-v0.7.0 introduced the first profile configuration schema in `config/profiles.example.json`, a validator in `scripts/Test-BootProfileConfiguration.ps1`, validation fixtures and runtime configuration validation in `scripts/Invoke-ProfileEngine.ps1`. Configuration is validated but does not yet drive module or script dispatch decisions.
+v0.7.0 introduced the first profile configuration schema in `config/profiles.example.json`, a validator in `scripts/Test-BootProfileConfiguration.ps1`, validation fixtures and runtime configuration validation in `scripts/Invoke-ProfileEngine.ps1`.
+
+The first v0.8.x integration step makes configuration the runtime dispatch gate. `scripts/Invoke-ProfileEngine.ps1` now dispatches only modules listed on the matching configured profile. If configuration is missing, invalid or does not contain the resolved mode, the boot profile performs no action and reports the skip reason. The startup hook must still log configuration status, validation errors and dispatch skip reasons so no-op behavior remains auditable. Custom script paths remain schema-only and are not executed yet.
 
 ---
 
@@ -216,11 +218,11 @@ Validation note:
 
 ## v0.8.x – Integration
 
-Planned focus:
+Active focus:
 
-* Decide how validated configuration should be consumed by the profile engine.
-* Integrate configuration into module selection without introducing real system-changing behavior yet.
-* Preserve deterministic fallback behavior when configuration is missing or invalid.
+* Use validated configuration as the dispatch source for harmless modules.
+* Treat missing, invalid or incomplete configuration as a successful no-op with explicit reporting and startup logging.
+* Avoid implicit fallback execution when the machine-wide profile configuration is not usable.
 * Keep custom script execution postponed until its safety and logging model is explicit.
 
 ---
@@ -328,7 +330,7 @@ Integrate validated configuration into the runtime path without applying real sy
 
 Immediate next validation target:
 
-Decide whether the engine should use configuration only when valid, and what deterministic fallback should apply when configuration is missing or invalid.
+Validate the config-driven profile engine path with a known-good `profiles.example.json` and with missing or invalid configuration. The expected missing/invalid behavior is `configurationValid = false`, no modules executed and no profile script execution.
 
 ---
 

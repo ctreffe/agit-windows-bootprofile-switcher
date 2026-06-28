@@ -7,9 +7,9 @@ Invoked by the startup scheduled task. The script calls
 Resolve-BootProfile.ps1, invokes the profile engine and writes the startup
 result to logs/startup-profile.log.
 
-The profile engine currently keeps profile scripts harmless. They only write
-validation log entries so the boot-profile startup chain can be verified
-without changing system configuration.
+The profile engine currently invokes only configuration-driven harmless
+validation modules so the boot-profile startup chain can be verified without
+changing system configuration.
 #>
 
 [CmdletBinding()]
@@ -47,7 +47,7 @@ try {
     $moduleNames = @($engineResult.modulesExecuted | ForEach-Object { $_.name }) -join ','
     $configurationErrors = @($engineResult.configurationErrors) -join '; '
 
-    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8} | engineStatePath={9} | modulesExecuted={10} | configurationValid={11} | configurationPath={12} | configurationErrors={13}' -f `
+    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8} | engineStatePath={9} | modulesExecuted={10} | configurationValid={11} | configurationPath={12} | configurationErrors={13} | profileConfigured={14} | dispatchSkippedReason={15} | customScriptsSkipped={16}' -f `
         $timestamp, `
         $result.detected, `
         $result.mode, `
@@ -61,7 +61,10 @@ try {
         $moduleNames, `
         $engineResult.configurationValid, `
         $engineResult.configurationPath, `
-        $configurationErrors
+        $configurationErrors, `
+        $engineResult.profileConfigured, `
+        $engineResult.dispatchSkippedReason, `
+        $engineResult.customScriptsSkipped
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }

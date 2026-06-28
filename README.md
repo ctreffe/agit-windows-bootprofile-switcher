@@ -20,7 +20,7 @@
 >
 > BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`) and the Configuration milestone (`v0.7.0`).
 >
-> The `v0.7.0 – Configuration` milestone has been completed. The project now has an initial machine-wide profile configuration schema, validator, validation fixtures and runtime configuration validation in the profile engine, while configuration does not yet drive dispatch decisions.
+> The project is now in `v0.8.x – Integration`. The profile engine requires a valid machine-wide `profiles.json` before it dispatches any profile action; missing or invalid configuration is treated as an explicit no-op.
 
 ## Overview
 
@@ -98,7 +98,7 @@ Current PowerShell entry points:
 
 - `scripts/Get-BootProfileMenuStatus.ps1` reports managed boot menu state and detected BootProfile Switcher BCD entries.
 - `scripts/Resolve-BootProfile.ps1` resolves the selected boot profile and writes structured resolver state.
-- `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes the current harmless validation module path.
+- `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes only the harmless modules selected by the matching configured profile.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
 
@@ -114,7 +114,7 @@ The repository contains the current example schema in:
 config/profiles.example.json
 ```
 
-Configuration is validated in `v0.7.0`, but it does not yet drive module or script dispatch decisions. Custom script paths are structurally accepted by the schema but are not executed yet.
+Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the schema but are not executed yet.
 
 ## Project Goals
 

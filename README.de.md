@@ -20,7 +20,7 @@
 >
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`) und den Configuration-Meilenstein (`v0.7.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.7.0 – Configuration` ist abgeschlossen. Das Projekt hat jetzt ein initiales maschinenweites Profil-Konfigurationsschema, einen Validator, Validierungs-Fixtures und Runtime-Konfigurationsvalidierung in der Profile Engine, während Konfiguration noch keine Dispatch-Entscheidungen steuert.
+> Das Projekt ist jetzt in `v0.8.x – Integration`. Die Profile Engine benötigt eine gültige maschinenweite `profiles.json`, bevor sie Profil-Aktionen dispatcht; fehlende oder ungültige Konfiguration ist ein expliziter No-op.
 
 ## Überblick
 
@@ -98,7 +98,7 @@ Aktuelle PowerShell-Einstiegspunkte:
 
 - `scripts/Get-BootProfileMenuStatus.ps1` zeigt den verwalteten Bootmenü-Status und erkannte BootProfile-Switcher-BCD-Einträge an.
 - `scripts/Resolve-BootProfile.ps1` löst das gewählte Bootprofil auf und schreibt strukturierten Resolver-State.
-- `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft den aktuellen harmlosen Validierungsmodul-Pfad auf.
+- `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft nur die harmlosen Module auf, die im passenden konfigurierten Profil ausgewählt sind.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
 
@@ -114,7 +114,7 @@ Das Repository enthält das aktuelle Beispiel-Schema in:
 config/profiles.example.json
 ```
 
-Konfiguration wird in `v0.7.0` validiert, steuert aber noch keine Modul- oder Skript-Dispatch-Entscheidungen. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
+Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Schema akzeptiert, aber noch nicht ausgeführt.
 
 ## Projektziele
 
