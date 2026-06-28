@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v0.3.0 – Boot Profile Detection Proof of Concept**
+**v0.4.0 – Boot Profile Detection**
 
-The Boot Profile Detection Proof of Concept milestone is complete.
+The Boot Profile Detection milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after the validated proof of concept.
+Prepare the next milestone after the validated boot profile resolver.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -42,6 +42,8 @@ A2 has been validated for Mode A and Mode B. `scripts/Get-CurrentBootProfile.ps1
 A3 has been validated for Mode A and Mode B. A Windows Scheduled Task with an `AtStartup` trigger runs the BootProfile Switcher detection automatically during system startup and writes the selected mode to `logs/startup-profile.log`.
 
 A4 has been validated for Mode A and Mode B. The startup hook now executes profile-specific startup scripts from `profiles/mode-a/startup.ps1` and `profiles/mode-b/startup.ps1`. These scripts intentionally perform harmless validation logging to `logs/profile-startup-actions.log`.
+
+v0.4.0 introduced `scripts/Resolve-BootProfile.ps1` as the dedicated resolver, validated it for Mode A and Mode B, kept normal unmanaged Windows startup as a successful `detected = false` case, improved boot menu installation against duplicate managed entries and moved the startup hook onto the resolver path.
 
 ---
 
@@ -90,17 +92,11 @@ Main results:
 
 ---
 
-# Current Development Roadmap
+## v0.4.0 – Boot Profile Detection
 
-## v0.4.x – Boot Profile Detection
+Completed.
 
-Planned focus:
-
-* Turn the proof-of-concept detection path into a cleaner boot profile resolver.
-* Decide which description-based fallback behavior should remain in the production design.
-* Refine startup execution requirements for the final profile engine.
-
-Initial decisions for v0.4.x:
+Main results:
 
 * The resolver identifies the selected boot profile and writes structured state only.
 * The resolver must not apply configuration, execute profile scripts or modify system state.
@@ -108,12 +104,28 @@ Initial decisions for v0.4.x:
 * GUID-based detection remains primary; description-based detection remains as fallback.
 * Normal unmanaged Windows startup should produce `detected = false` and exit successfully.
 * `scripts/Resolve-BootProfile.ps1` is the new resolver entry point.
-* `scripts/Get-CurrentBootProfile.ps1` remains as the validated proof-of-concept path until the resolver has been tested and adopted.
+* `scripts/Invoke-BootProfileStartupHook.ps1` uses `scripts/Resolve-BootProfile.ps1`.
+* `scripts/Get-CurrentBootProfile.ps1` remains as the validated proof-of-concept path for now, but is no longer the startup hook detection path.
 * Boot menu installation must detect existing BootProfile Switcher BCD entries and interactively offer cleanup before creating fresh entries, so repeated installation does not create duplicate Mode A/Mode B entries.
 
 Validation note:
 
 * The interactive cleanup path has been validated with an existing managed boot menu. The installer removed the previous Mode A and Mode B BCD entries, archived the old `state/boot-menu.json`, created fresh entries and `scripts/Get-BootProfileMenuStatus.ps1` reported exactly one managed Mode A entry and one managed Mode B entry afterward.
+* `scripts/Resolve-BootProfile.ps1` has been validated for managed Mode A and managed Mode B using GUID-based current BCD entry mapping.
+* The startup hook resolver path has been validated manually in an elevated PowerShell session for managed Mode B. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode B through `scripts/Resolve-BootProfile.ps1`, executed `profiles/mode-b/startup.ps1` and logged no resolver error.
+
+---
+
+# Current Development Roadmap
+
+## v0.5.x – Profile Engine
+
+Planned focus:
+
+* Define the first production-oriented profile execution model.
+* Decide how resolver output should be consumed by the engine.
+* Keep built-in system changes explicit, reversible and separately testable.
+* Preserve the ability to run harmless validation profile scripts while the engine model evolves.
 
 ---
 
@@ -151,9 +163,9 @@ These goals are realistic, but they imply a production configuration model, vali
 
 The conceptual architecture has been established.
 
-Implementation has validated a limited proof of concept for boot menu creation, detection and startup execution.
+Implementation has validated boot menu creation, detection and startup execution.
 
-The proof of concept validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. It also validated that this detection can run automatically during system startup through a scheduled task and dispatch profile-specific startup scripts.
+The project has validated that the selected Windows Boot Manager entry can be identified after startup using the current BCD entry identifier and managed BootProfile Switcher state. The startup hook now uses the dedicated resolver and can dispatch profile-specific startup scripts based on the resolved profile.
 
 ---
 
@@ -161,10 +173,10 @@ The proof of concept validated that the selected Windows Boot Manager entry can 
 
 The following questions remain intentionally unanswered:
 
-* Should description-based detection remain as a long-term fallback after GUID-based detection has been validated?
 * Which execution point is most suitable before user logon?
 * Which Windows components should be used instead of custom solutions whenever possible?
 * Which parts should remain extensible through modules?
+* What should the first production-oriented profile engine configuration schema look like?
 
 These decisions will be evaluated during later milestones.
 
@@ -210,15 +222,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare the next small step for `v0.4.x – Boot Profile Detection`.
+Prepare the next small step for `v0.5.x – Profile Engine`.
 
 Primary objective:
 
-Turn the validated proof-of-concept detection behavior into a cleaner resolver design that can evolve toward the production profile engine.
+Design the first small profile engine step that consumes resolver output without introducing broad system-changing behavior too early.
 
 Immediate next validation target:
 
-Validate `scripts/Resolve-BootProfile.ps1` for Mode A and Mode B using the freshly recreated managed boot menu entries.
+Validate the startup hook after the resolver migration by booting managed Mode A and Mode B and confirming that the expected harmless profile startup scripts still run.
 
 ---
 

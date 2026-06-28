@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`) und den Boot Profile Detection Proof of Concept (`v0.3.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`) und den Boot-Profile-Detection-Meilenstein (`v0.4.0`) abgeschlossen.
 >
-> Der Meilenstein `v0.3.0 – Boot Profile Detection Proof of Concept` ist abgeschlossen. A1 validierte reversible Windows-Boot-Manager-Einträge für `Mode A` und `Mode B`. A2 erkennt den gewählten Modus über GUID-basierte BCD-Identifier-Zuordnung. A3 validiert die automatische Erkennung beim Systemstart. A4 validiert profilspezifische Startup-Skripte. A5 dokumentiert die Ergebnisse und die daraus folgende Architekturentscheidung.
+> Der Meilenstein `v0.4.0 – Boot Profile Detection` ist abgeschlossen. Das Projekt hat jetzt einen dedizierten Resolver, der das gewählte verwaltete Bootprofil identifiziert, strukturierten JSON-State schreibt, normalen nicht verwalteten Windows-Start ohne Fehler behandelt und vom Startup-Hook verwendet wird.
 
 ## Überblick
 
@@ -60,6 +60,7 @@ install-startup-hook.cmd
 ```
 
 Der Startup-Hook registriert eine Windows-Aufgabe, die beim Systemstart läuft,
+das gewählte Bootprofil über `scripts/Resolve-BootProfile.ps1` auflöst,
 das erkannte Bootprofil in folgende Datei schreibt:
 
 ```text
@@ -130,7 +131,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.3.0 Boot Profile Detection Proof of Concept
+0.4.0 Boot Profile Detection
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
@@ -167,22 +168,22 @@ Zentrale Projektdokumente:
 
 Dieses Projekt steht unter der MIT-Lizenz.
 
-### A2-Erkennung des aktuellen Profils
+### Resolver des aktuellen Profils
 
 Nach der Installation des Bootmenüs und einem Start über Mode A oder Mode B:
 
 ```cmd
-detect-current-profile.cmd
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Resolve-BootProfile.ps1
 ```
 
 Alternativ in einer erhöhten PowerShell:
 
 ```powershell
-.\scripts\Get-CurrentBootProfile.ps1
+.\scripts\Resolve-BootProfile.ps1
 ```
 
 Für maschinenlesbare Ausgabe:
 
 ```powershell
-.\scripts\Get-CurrentBootProfile.ps1 -AsJson
+.\scripts\Resolve-BootProfile.ps1 -AsJson
 ```

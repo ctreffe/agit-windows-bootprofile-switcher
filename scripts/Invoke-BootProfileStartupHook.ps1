@@ -4,13 +4,13 @@ Runs BootProfile Switcher startup initialization.
 
 .DESCRIPTION
 Invoked by the startup scheduled task. The script calls
-Get-CurrentBootProfile.ps1, writes the detected profile to
+Resolve-BootProfile.ps1, writes the detected profile to
 logs/startup-profile.log and executes the matching profile-specific
 startup.ps1 script from profiles/mode-*/.
 
-A4 intentionally keeps profile scripts harmless. They only write validation
-log entries so the proof of concept can verify the full boot-profile startup
-chain without changing system configuration.
+The current profile scripts remain harmless. They only write validation log
+entries so the boot-profile startup chain can be verified without changing
+system configuration.
 #>
 
 [CmdletBinding()]
@@ -20,12 +20,12 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
-$detectScript = Join-Path $repoRoot 'scripts\Get-CurrentBootProfile.ps1'
+$resolveScript = Join-Path $repoRoot 'scripts\Resolve-BootProfile.ps1'
 $logDir = Join-Path $repoRoot 'logs'
 $logFile = Join-Path $logDir 'startup-profile.log'
 
-if (-not (Test-Path $detectScript)) {
-    throw "Detection script not found at $detectScript"
+if (-not (Test-Path $resolveScript)) {
+    throw "Resolver script not found at $resolveScript"
 }
 
 New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -33,7 +33,7 @@ New-Item -ItemType Directory -Path $logDir -Force | Out-Null
 $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss zzz'
 
 try {
-    $json = & $detectScript -AsJson
+    $json = & $resolveScript -AsJson
     $result = $json | ConvertFrom-Json
 
     $profileScriptExecuted = $false
@@ -57,7 +57,9 @@ try {
         $profileScriptExecuted = $true
     }
 
-    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7}' -f `
+    $resolverError = if ($result.error) { ([string]$result.error) -replace "(`r`n|`n|`r)", ' ' } else { $null }
+
+    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8}' -f `
         $timestamp, `
         $result.detected, `
         $result.mode, `
@@ -65,7 +67,8 @@ try {
         $result.identifier, `
         $result.source, `
         $profileScriptExecuted, `
-        $profileScript
+        $profileScript, `
+        $resolverError
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
