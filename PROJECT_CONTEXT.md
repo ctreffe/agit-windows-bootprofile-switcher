@@ -26,7 +26,7 @@ The Integration milestone is complete.
 
 ## Current Focus
 
-Prepare the next milestone after configuration-driven dispatch and keep the repository aligned with the current AGIT Collaboration Model.
+Prepare `v0.9.x – Validation` by turning the current runtime expectations into repeatable validation steps and log assertions.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -340,7 +340,7 @@ Broaden validation around the configuration-driven runtime path before introduci
 
 Immediate next validation target:
 
-Define the v0.9.x validation scope, including repeatable manual validation steps, expected log assertions and any additional fixture coverage needed before the initial stable release.
+Work through `docs/validation/v0.9-validation-checklist.md`, starting with configuration fixtures and installed configuration validation, then validate Mode A and Mode B runtime behavior from elevated PowerShell sessions.
 
 ---
 

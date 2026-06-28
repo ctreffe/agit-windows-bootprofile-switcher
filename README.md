@@ -166,7 +166,15 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-0.7.0 Configuration
+0.8.0 Integration
+```
+
+## Validation
+
+The repeatable validation scope for the next milestone is documented in:
+
+```text
+docs/validation/v0.9-validation-checklist.md
 ```
 
 Version tags should use a leading `v`, for example:

@@ -167,7 +167,15 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-0.7.0 Configuration
+0.8.0 Integration
+```
+
+## Validierung
+
+Der wiederholbare Validierungsumfang für den nächsten Meilenstein ist hier dokumentiert:
+
+```text
+docs/validation/v0.9-validation-checklist.md
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
