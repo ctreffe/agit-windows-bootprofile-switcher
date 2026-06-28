@@ -127,6 +127,19 @@ Planned focus:
 * Keep built-in system changes explicit, reversible and separately testable.
 * Preserve the ability to run harmless validation profile scripts while the engine model evolves.
 
+Initial decisions for v0.5.x:
+
+* The first profile engine step should introduce a dedicated engine entry point without adding configuration files yet.
+* `scripts/Invoke-ProfileEngine.ps1` consumes `state/current-boot-profile.json`.
+* The startup hook should orchestrate `Resolve-BootProfile.ps1` followed by `Invoke-ProfileEngine.ps1`.
+* Existing harmless `profiles/mode-*/startup.ps1` scripts remain the execution target for now.
+* Built-in system-changing flags, custom script configuration and Group Policy distribution are intentionally postponed to later milestones.
+
+Validation note:
+
+* `scripts/Invoke-ProfileEngine.ps1` has been validated directly with managed Mode B resolver state and with a `detected = false` resolver state.
+* The startup hook has been validated manually in an elevated PowerShell session for managed Mode B after the engine split. `scripts/Invoke-BootProfileStartupHook.ps1` resolved Mode B, invoked `scripts/Invoke-ProfileEngine.ps1`, executed `profiles/mode-b/startup.ps1` and logged the engine state path.
+
 ---
 
 ## Planned Future Milestones
@@ -230,7 +243,7 @@ Design the first small profile engine step that consumes resolver output without
 
 Immediate next validation target:
 
-Validate the startup hook after the resolver migration by booting managed Mode A and Mode B and confirming that the expected harmless profile startup scripts still run.
+Validate `scripts/Invoke-ProfileEngine.ps1` directly and through `scripts/Invoke-BootProfileStartupHook.ps1` using the existing harmless Mode A and Mode B profile scripts.
 
 ---
 

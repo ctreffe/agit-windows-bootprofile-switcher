@@ -4,13 +4,12 @@ Runs BootProfile Switcher startup initialization.
 
 .DESCRIPTION
 Invoked by the startup scheduled task. The script calls
-Resolve-BootProfile.ps1, writes the detected profile to
-logs/startup-profile.log and executes the matching profile-specific
-startup.ps1 script from profiles/mode-*/.
+Resolve-BootProfile.ps1, invokes the profile engine and writes the startup
+result to logs/startup-profile.log.
 
-The current profile scripts remain harmless. They only write validation log
-entries so the boot-profile startup chain can be verified without changing
-system configuration.
+The profile engine currently keeps profile scripts harmless. They only write
+validation log entries so the boot-profile startup chain can be verified
+without changing system configuration.
 #>
 
 [CmdletBinding()]
@@ -21,11 +20,16 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $resolveScript = Join-Path $repoRoot 'scripts\Resolve-BootProfile.ps1'
+$profileEngineScript = Join-Path $repoRoot 'scripts\Invoke-ProfileEngine.ps1'
 $logDir = Join-Path $repoRoot 'logs'
 $logFile = Join-Path $logDir 'startup-profile.log'
 
 if (-not (Test-Path $resolveScript)) {
     throw "Resolver script not found at $resolveScript"
+}
+
+if (-not (Test-Path $profileEngineScript)) {
+    throw "Profile engine script not found at $profileEngineScript"
 }
 
 New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -35,40 +39,22 @@ $timestamp = Get-Date -Format 'yyyy-MM-dd HH:mm:ss zzz'
 try {
     $json = & $resolveScript -AsJson
     $result = $json | ConvertFrom-Json
-
-    $profileScriptExecuted = $false
-    $profileScript = $null
-
-    if ($result.detected) {
-        $modeSlug = ('mode-{0}' -f ([string]$result.mode).ToLowerInvariant())
-        $profileScript = Join-Path $repoRoot (Join-Path 'profiles' (Join-Path $modeSlug 'startup.ps1'))
-
-        if (-not (Test-Path $profileScript)) {
-            throw "Profile startup script not found for mode $($result.mode): $profileScript"
-        }
-
-        & $profileScript `
-            -Mode $result.mode `
-            -Name $result.name `
-            -Identifier $result.identifier `
-            -RepoRoot $repoRoot `
-            -LogDir $logDir
-
-        $profileScriptExecuted = $true
-    }
+    $engineJson = & $profileEngineScript -ResolverStatePath $result.outputPath -LogDir $logDir
+    $engineResult = $engineJson | ConvertFrom-Json
 
     $resolverError = if ($result.error) { ([string]$result.error) -replace "(`r`n|`n|`r)", ' ' } else { $null }
 
-    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8}' -f `
+    $line = '{0} | detected={1} | mode={2} | name={3} | identifier={4} | source={5} | profileScriptExecuted={6} | profileScript={7} | resolverError={8} | engineStatePath={9}' -f `
         $timestamp, `
         $result.detected, `
         $result.mode, `
         $result.name, `
         $result.identifier, `
         $result.source, `
-        $profileScriptExecuted, `
-        $profileScript, `
-        $resolverError
+        $engineResult.profileScriptExecuted, `
+        $engineResult.profileScript, `
+        $resolverError, `
+        $result.outputPath
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
