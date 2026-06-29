@@ -211,6 +211,12 @@ Das Repository enthält das aktuelle Beispiel-Konfigurationsformat in:
 config/profiles.example.json
 ```
 
+Der Entwurf für Konfigurationsformat v2 liegt hier:
+
+```text
+config/profiles.v2.example.json
+```
+
 Die Demo-Konfiguration des Network-Isolation-Moduls liegt in:
 
 ```text
@@ -218,6 +224,12 @@ config/demos/network-isolation.json
 ```
 
 Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Konfigurationsformat akzeptiert, aber noch nicht ausgeführt.
+
+Konfigurationsformat v2 ist in
+[docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md)
+dokumentiert. Der aktuelle Runtime-Pfad nutzt weiterhin die installierte
+Konfiguration und den bestehenden Startup-Ablauf; v2 wird validiert, bevor die
+Bootmenü-Erzeugung konfigurationsgetrieben wird.
 
 Network Isolation ist ausführlich in
 [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)
@@ -312,6 +324,8 @@ Zentrale Projektdokumente:
 - [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2
+- [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – deutsche Dokumentation des Network-Isolation-Moduls
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept

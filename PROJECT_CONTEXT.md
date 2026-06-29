@@ -281,16 +281,16 @@ Configuration topics to settle:
 
 * Whether managed profiles use `id`, `mode` or both.
 * How display names, boot menu titles and internal identifiers are represented.
-* How global module defaults and profile-specific module settings are merged.
+* How profile-local module settings are represented without requiring global module defaults.
 * How boot menu order, timeout and source entry are represented.
 * How custom scripts remain represented while execution stays postponed.
 * How future modules such as Service Control can express profile-specific policy without redesigning the format again.
 
 Acceptance criteria:
 
-* `config/profiles.example.json` documents the v2 shape.
-* `scripts/Test-BootProfileConfiguration.ps1` validates the v2 shape.
-* Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid modules, invalid default-profile settings and invalid module settings.
+* `config/profiles.v2.example.json` documents the v2 shape.
+* `scripts/Test-BootProfileConfiguration.ps1` validates the v2 shape while preserving v1 validation.
+* Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid default-profile settings and invalid module settings.
 * Documentation explains the distinction between the Windows default boot entry and managed BootProfile Switcher profiles.
 * v1.3.0 can use the v2 format as the source for configuration-driven boot menu installation.
 
@@ -463,7 +463,7 @@ Plan **v1.2.0 – Configuration Format v2**.
 
 Primary objective:
 
-Design the next configuration format so managed boot profiles, module settings, profile overrides and later module types can be represented cleanly.
+Design the next configuration format so managed boot profiles, profile-local module settings and later module types can be represented cleanly.
 
 Immediate next validation target:
 

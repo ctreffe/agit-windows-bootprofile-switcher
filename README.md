@@ -205,6 +205,12 @@ The repository contains the current example configuration format in:
 config/profiles.example.json
 ```
 
+The draft Configuration Format v2 example is stored in:
+
+```text
+config/profiles.v2.example.json
+```
+
 The Network Isolation module demo configuration is stored in:
 
 ```text
@@ -212,6 +218,9 @@ config/demos/network-isolation.json
 ```
 
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the configuration format but are not executed yet.
+
+Configuration Format v2 is documented in
+[docs/configuration-format-v2.md](docs/configuration-format-v2.md). The current runtime path still uses the installed configuration and existing startup flow; v2 is being validated before configuration-driven boot menu creation is introduced.
 
 Network Isolation is documented in detail in
 [docs/modules/network-isolation.md](docs/modules/network-isolation.md).
@@ -305,6 +314,8 @@ Core project documents:
 - [CODEX.md](CODEX.md) – local Codex operating policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
+- [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – Configuration Format v2 documentation
+- [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – German Configuration Format v2 documentation
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – German Network Isolation module documentation
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept

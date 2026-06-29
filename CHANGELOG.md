@@ -19,10 +19,13 @@ This project follows Semantic Versioning.
 - Add an installable Network Isolation module demo with one managed `Network Isolation` boot profile.
 - Add the convention that production modules should include a small installable demo when practical.
 - Add dedicated English and German Network Isolation module documentation.
+- Add draft Configuration Format v2 example and documentation.
+- Add v2 configuration validation coverage for managed profile identity, display names, default-entry settings and module settings.
 
 ### Changed
 
 - Register `network-isolation` as a known module and include it in the example profile configuration with `dryRun` enabled.
+- Extend the configuration validator and fixture runner to support `schemaVersion = 2` while preserving v1 validation.
 - Pass optional module settings and lifecycle context from the profile engine to module entry points.
 - Restore Network Isolation baseline state using adapter administrative state instead of treating `Not Present` as always unavailable.
 - Record successful real lifecycle validation for Network Isolation baseline learning, isolation and restore.

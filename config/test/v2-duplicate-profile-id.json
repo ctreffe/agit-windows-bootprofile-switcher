@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "duplicate-id",
+      "displayName": "Profile A",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {}
+      },
+      "scripts": []
+    },
+    {
+      "id": "duplicate-id",
+      "displayName": "Profile B",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {}
+      },
+      "scripts": []
+    }
+  ]
+}

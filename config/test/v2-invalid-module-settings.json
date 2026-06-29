@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "profile-a",
+      "displayName": "Profile A",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {},
+        "unknown-module": {}
+      },
+      "scripts": []
+    }
+  ]
+}
