@@ -96,6 +96,27 @@ Jedes produktive Modul sollte, soweit praktikabel, eine kleine installierbare
 Demo bereitstellen. Die Demo sollte das beabsichtigte Modulverhalten zeigen,
 ohne manuelle Konfigurationsänderungen vorauszusetzen.
 
+## Schnellstart: Config-Driven-Boot-Menu-Demo
+
+Die Bootmenü-Demo für Konfigurationsformat v2 installiert eine v2-Konfiguration,
+erzeugt verwaltete Bootmenü-Einträge aus dieser Konfiguration und installiert
+den Startup Hook:
+
+```text
+install-config-driven-boot-menu-demo.cmd
+```
+
+Die Demo erzeugt drei verwaltete Einträge mit den Namen `Network Isolation`,
+`Experiment Local` und `Maintenance`. Zusätzlich blendet sie den
+standardmäßigen Windows-Boot-Eintrag aus der Bootmenü-Anzeige aus, um das
+begrenzte Verhalten von `bootMenu.defaultEntry.hide` zu demonstrieren. Der
+Default-Eintrag wird nicht gelöscht, und der Demo-Uninstall stellt ihn über den
+gespeicherten Bootmenü-State wieder her:
+
+```text
+uninstall-config-driven-boot-menu-demo.cmd
+```
+
 ## Einzelne Setup-Schritte
 
 Für das ursprüngliche Zwei-Profil-Validierungssetup ist der einfachste Weg zum Installieren oder Entfernen der verwalteten Bootmenü-Einträge die Verwendung der Command-Wrapper im Repository-Stammverzeichnis:
@@ -181,6 +202,8 @@ Aktuelle Command-Wrapper:
 - `uninstall-demo.cmd` entfernt Startup-Hook, verwaltete Bootmenü-Einträge und temporären Demo-Marker, lässt die ProgramData-Konfiguration aber unverändert.
 - `install-network-isolation-demo.cmd` installiert die Network-Isolation-Moduldemo mit einem verwalteten Bootprofil `Network Isolation`.
 - `uninstall-network-isolation-demo.cmd` entfernt die Network-Isolation-Moduldemo und stellt die vorherige ProgramData-Profilkonfiguration wieder her, wenn ein Backup vorhanden ist.
+- `install-config-driven-boot-menu-demo.cmd` installiert die Bootmenü-Demo für Konfigurationsformat v2 mit mehreren benannten verwalteten Profilen.
+- `uninstall-config-driven-boot-menu-demo.cmd` entfernt die config-driven Bootmenü-Demo und stellt die vorherige ProgramData-Profilkonfiguration wieder her, wenn ein Backup vorhanden ist.
 - `install.cmd` installiert die verwalteten BootProfile-Switcher-Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
 - `install-configuration.cmd` installiert eine validierte Profilkonfiguration an den standardmäßigen maschinenweiten Konfigurationspfad und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall.cmd` entfernt die verwalteten Bootmenü-Einträge und fordert bei Bedarf erhöhte Rechte an.
@@ -195,6 +218,8 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Invoke-ProfileEngine.ps1` konsumiert Resolver-State, validiert Konfiguration und ruft nur die Module auf, die im passenden konfigurierten Profil ausgewählt sind.
 - `scripts/Install-NetworkIsolationDemo.ps1` installiert Boot-Eintrag, Konfiguration und Startup-Hook für die Network-Isolation-Moduldemo.
 - `scripts/Uninstall-NetworkIsolationDemo.ps1` entfernt die Network-Isolation-Moduldemo und stellt bei Bedarf das vorherige Profilkonfigurations-Backup wieder her.
+- `scripts/Install-ConfigDrivenBootMenuDemo.ps1` installiert die config-driven Bootmenü-Demo.
+- `scripts/Uninstall-ConfigDrivenBootMenuDemo.ps1` entfernt die config-driven Bootmenü-Demo.
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
@@ -223,14 +248,20 @@ Die Demo-Konfiguration des Network-Isolation-Moduls liegt in:
 config/demos/network-isolation.json
 ```
 
+Die Demo-Konfiguration für das config-driven Bootmenü liegt in:
+
+```text
+config/demos/config-driven-boot-menu.json
+```
+
 Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Konfigurationsformat akzeptiert, aber noch nicht ausgeführt.
 
 Konfigurationsformat v2 ist in
 [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md)
 dokumentiert. Der aktuelle Runtime-Pfad nutzt weiterhin die installierte
-Konfiguration und den bestehenden Startup-Ablauf; v2 ist bereit, im nächsten
-Meilenstein als Quelle für die konfigurationsgetriebene Bootmenü-Erzeugung zu
-dienen.
+Konfiguration und den bestehenden Startup-Ablauf. Die Bootmenü-Installation kann
+v2 jetzt direkt aus der maschinenweiten Konfiguration oder über einen
+ausdrücklichen `-ConfigPath`-Override lesen.
 
 Network Isolation ist ausführlich in
 [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)

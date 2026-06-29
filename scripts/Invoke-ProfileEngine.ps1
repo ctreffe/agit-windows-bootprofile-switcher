@@ -102,11 +102,30 @@ function Get-ProfileModuleSettings {
         [string]$ModuleName
     )
 
-    if ($null -eq $ModuleSettings -or $null -eq $ModuleSettings.Value.PSObject.Properties[$ModuleName]) {
+    if ($null -eq $ModuleSettings) {
         return $null
     }
 
-    return $ModuleSettings.Value.PSObject.Properties[$ModuleName].Value
+    $settingsObject = if ($ModuleSettings.PSObject.Properties['Value']) { $ModuleSettings.Value } else { $ModuleSettings }
+
+    if ($null -eq $settingsObject) {
+        return $null
+    }
+
+    if ($settingsObject -is [System.Collections.IDictionary]) {
+        if ($settingsObject.Contains($ModuleName)) {
+            return $settingsObject[$ModuleName]
+        }
+
+        return $null
+    }
+
+    $property = $settingsObject.PSObject.Properties[$ModuleName]
+    if ($null -eq $property) {
+        return $null
+    }
+
+    return $property.Value
 }
 
 function Get-SettingValue {
@@ -182,64 +201,222 @@ function Merge-NetworkIsolationSettings {
     return [pscustomobject]$merged
 }
 
+function Get-ConfigurationSchemaVersion {
+    param([object]$Configuration)
+
+    $schemaVersion = Get-SettingValue -Object $Configuration -Name 'schemaVersion' -Default 1
+    return [int]$schemaVersion
+}
+
+function Get-ProfileIdentity {
+    param([object]$Profile)
+
+    $id = Get-SettingValue -Object $Profile -Name 'id' -Default $null
+    if ($null -ne $id) {
+        return [string]$id
+    }
+
+    return [string](Get-SettingValue -Object $Profile -Name 'mode' -Default $null)
+}
+
+function Get-ProfileDisplayName {
+    param([object]$Profile)
+
+    $displayName = Get-SettingValue -Object $Profile -Name 'displayName' -Default $null
+    if ($null -ne $displayName) {
+        return [string]$displayName
+    }
+
+    return [string](Get-SettingValue -Object $Profile -Name 'name' -Default $null)
+}
+
+function Get-ProfileModuleContainer {
+    param([object]$Profile)
+
+    $modules = Get-SettingValue -Object $Profile -Name 'modules' -Default $null
+    if ($null -eq $modules) {
+        return $null
+    }
+
+    if ($modules -is [System.Collections.IDictionary]) {
+        return $modules
+    }
+
+    if ($modules -is [array]) {
+        return $modules
+    }
+
+    return $modules
+}
+
+function Get-ProfileModuleNames {
+    param([object]$Profile)
+
+    $modules = Get-ProfileModuleContainer -Profile $Profile
+
+    if ($null -eq $modules) {
+        return @()
+    }
+
+    if ($modules -is [System.Collections.IDictionary]) {
+        return @($modules.Keys | ForEach-Object { [string]$_ })
+    }
+
+    if (@($modules.PSObject.Properties).Count -gt 0 -and -not ($modules -is [array])) {
+        return @($modules.PSObject.Properties.Name | ForEach-Object { [string]$_ })
+    }
+
+    return @($modules | ForEach-Object { [string]$_ })
+}
+
+function Get-ProfileModuleSettingsContainer {
+    param(
+        [object]$Configuration,
+        [object]$Profile,
+        [int]$SchemaVersion
+    )
+
+    if ($SchemaVersion -eq 2) {
+        return Get-SettingValue -Object $Profile -Name 'modules' -Default $null
+    }
+
+    return $Profile.PSObject.Properties['moduleSettings']
+}
+
+function Find-ConfiguredProfile {
+    param(
+        [object[]]$Profiles,
+        [object]$ResolverResult,
+        [int]$SchemaVersion
+    )
+
+    $profileId = if ($ResolverResult.PSObject.Properties['profileId']) { [string]$ResolverResult.profileId } else { $null }
+    $mode = [string]$ResolverResult.mode
+
+    foreach ($profile in $Profiles) {
+        if ($SchemaVersion -eq 2) {
+            if ([string](Get-SettingValue -Object $profile -Name 'id' -Default $null) -eq $profileId -or
+                [string](Get-SettingValue -Object $profile -Name 'id' -Default $null) -eq $mode) {
+                return $profile
+            }
+        } elseif ([string](Get-SettingValue -Object $profile -Name 'mode' -Default $null) -eq $mode) {
+            return $profile
+        }
+    }
+
+    return $null
+}
+
+function Get-NetworkIsolationSettingsForRestore {
+    param(
+        [object]$Configuration,
+        [int]$SchemaVersion
+    )
+
+    if ($SchemaVersion -eq 1) {
+        $globalModuleSettings = $Configuration.PSObject.Properties['moduleSettings']
+        return Get-ProfileModuleSettings -ModuleSettings $globalModuleSettings -ModuleName 'network-isolation'
+    }
+
+    foreach ($profile in @($Configuration.profiles)) {
+        $modules = Get-ProfileModuleContainer -Profile $profile
+        $settings = Get-ProfileModuleSettings -ModuleSettings $modules -ModuleName 'network-isolation'
+        if ($null -ne $settings) {
+            return $settings
+        }
+    }
+
+    return $null
+}
+
+function Invoke-NetworkIsolationLifecycle {
+    param(
+        [object]$ModuleSettings,
+        [bool]$Isolating,
+        [bool]$Detected,
+        [string]$Mode,
+        [string]$Name,
+        [string]$Identifier
+    )
+
+    if ($null -eq $ModuleSettings) {
+        return $false
+    }
+
+    $networkIsolationModule = $moduleRegistry | Where-Object { $_.name -eq 'network-isolation' } | Select-Object -First 1
+    & $networkIsolationModule.path `
+        -Mode $Mode `
+        -Name $Name `
+        -Identifier $Identifier `
+        -RepoRoot $repoRoot `
+        -LogDir $LogDir `
+        -ModuleSettings $ModuleSettings `
+        -Isolating $Isolating `
+        -Detected $Detected
+
+    $script:modulesExecuted += [ordered]@{
+        name = $networkIsolationModule.name
+        path = $networkIsolationModule.path
+    }
+
+    return $true
+}
+
 if ($resolverResult.detected) {
     if (-not $configurationValidation.valid) {
         $dispatchSkippedReason = 'configuration-invalid'
     } else {
         $configuration = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
+        $schemaVersion = Get-ConfigurationSchemaVersion -Configuration $configuration
         $configuredProfiles = @($configuration.profiles)
-        $configuredProfile = $configuredProfiles | Where-Object { [string]$_.mode -eq [string]$resolverResult.mode } | Select-Object -First 1
-        $globalModuleSettings = $configuration.PSObject.Properties['moduleSettings']
+        $configuredProfile = Find-ConfiguredProfile -Profiles $configuredProfiles -ResolverResult $resolverResult -SchemaVersion $schemaVersion
 
         if ($null -eq $configuredProfile) {
-            if ($null -ne $globalModuleSettings -and $null -ne $globalModuleSettings.Value.PSObject.Properties['network-isolation']) {
-                $networkIsolationModule = $moduleRegistry | Where-Object { $_.name -eq 'network-isolation' } | Select-Object -First 1
-                & $networkIsolationModule.path `
-                    -Mode $resolverResult.mode `
-                    -Name $resolverResult.name `
-                    -Identifier $resolverResult.identifier `
-                    -RepoRoot $repoRoot `
-                    -LogDir $LogDir `
-                    -ModuleSettings $globalModuleSettings.Value.PSObject.Properties['network-isolation'].Value `
-                    -Isolating $false `
-                    -Detected ([bool]$resolverResult.detected)
-
-                $modulesExecuted += [ordered]@{
-                    name = $networkIsolationModule.name
-                    path = $networkIsolationModule.path
-                }
-            }
+            Invoke-NetworkIsolationLifecycle `
+                -ModuleSettings (Get-NetworkIsolationSettingsForRestore -Configuration $configuration -SchemaVersion $schemaVersion) `
+                -Isolating $false `
+                -Detected ([bool]$resolverResult.detected) `
+                -Mode $resolverResult.mode `
+                -Name $resolverResult.name `
+                -Identifier $resolverResult.identifier | Out-Null
 
             $dispatchSkippedReason = "profile-not-configured:$($resolverResult.mode)"
         } else {
             $profileConfigured = $true
             $customScriptsSkipped = @($configuredProfile.scripts).Count
-            $moduleSettings = $configuredProfile.PSObject.Properties['moduleSettings']
-            $currentRunIsolating = @($configuredProfile.modules) -contains 'network-isolation'
+            $moduleSettings = Get-ProfileModuleSettingsContainer -Configuration $configuration -Profile $configuredProfile -SchemaVersion $schemaVersion
+            $moduleNames = Get-ProfileModuleNames -Profile $configuredProfile
+            $currentRunIsolating = @($moduleNames) -contains 'network-isolation'
+            $networkIsolationSettings = $null
 
-            if ($null -ne $globalModuleSettings -and $null -ne $globalModuleSettings.Value.PSObject.Properties['network-isolation']) {
-                $networkIsolationModule = $moduleRegistry | Where-Object { $_.name -eq 'network-isolation' } | Select-Object -First 1
+            if ($schemaVersion -eq 1) {
+                $globalModuleSettings = $configuration.PSObject.Properties['moduleSettings']
                 $networkIsolationSettings = Merge-NetworkIsolationSettings `
                     -GlobalSettings (Get-ProfileModuleSettings -ModuleSettings $globalModuleSettings -ModuleName 'network-isolation') `
                     -ProfileSettings (Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'network-isolation')
-
-                & $networkIsolationModule.path `
-                    -Mode $resolverResult.mode `
-                    -Name $resolverResult.name `
-                    -Identifier $resolverResult.identifier `
-                    -RepoRoot $repoRoot `
-                    -LogDir $LogDir `
-                    -ModuleSettings $networkIsolationSettings `
-                    -Isolating $currentRunIsolating `
-                    -Detected ([bool]$resolverResult.detected)
-
-                $modulesExecuted += [ordered]@{
-                    name = $networkIsolationModule.name
-                    path = $networkIsolationModule.path
-                }
+            } else {
+                $networkIsolationSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'network-isolation'
             }
 
-            foreach ($moduleName in @($configuredProfile.modules)) {
+            if ($currentRunIsolating) {
+                Invoke-NetworkIsolationLifecycle `
+                    -ModuleSettings $networkIsolationSettings `
+                    -Isolating $true `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            } else {
+                Invoke-NetworkIsolationLifecycle `
+                    -ModuleSettings (Get-NetworkIsolationSettingsForRestore -Configuration $configuration -SchemaVersion $schemaVersion) `
+                    -Isolating $false `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            }
+
+            foreach ($moduleName in @($moduleNames)) {
                 if ([string]$moduleName -eq 'network-isolation') {
                     continue
                 }
@@ -277,25 +454,14 @@ if ($resolverResult.detected) {
         $dispatchSkippedReason = 'configuration-invalid'
     } else {
         $configuration = Get-Content -Path $ConfigPath -Raw | ConvertFrom-Json
-        $globalModuleSettings = $configuration.PSObject.Properties['moduleSettings']
-
-        if ($null -ne $globalModuleSettings -and $null -ne $globalModuleSettings.Value.PSObject.Properties['network-isolation']) {
-            $networkIsolationModule = $moduleRegistry | Where-Object { $_.name -eq 'network-isolation' } | Select-Object -First 1
-            & $networkIsolationModule.path `
-                -Mode 'unmanaged' `
-                -Name 'Unmanaged Windows startup' `
-                -Identifier 'unmanaged' `
-                -RepoRoot $repoRoot `
-                -LogDir $LogDir `
-                -ModuleSettings $globalModuleSettings.Value.PSObject.Properties['network-isolation'].Value `
-                -Isolating $false `
-                -Detected ([bool]$resolverResult.detected)
-
-            $modulesExecuted += [ordered]@{
-                name = $networkIsolationModule.name
-                path = $networkIsolationModule.path
-            }
-        }
+        $schemaVersion = Get-ConfigurationSchemaVersion -Configuration $configuration
+        Invoke-NetworkIsolationLifecycle `
+            -ModuleSettings (Get-NetworkIsolationSettingsForRestore -Configuration $configuration -SchemaVersion $schemaVersion) `
+            -Isolating $false `
+            -Detected ([bool]$resolverResult.detected) `
+            -Mode 'unmanaged' `
+            -Name 'Unmanaged Windows startup' `
+            -Identifier 'unmanaged' | Out-Null
 
         $dispatchSkippedReason = 'profile-not-detected'
     }

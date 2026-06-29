@@ -257,6 +257,31 @@ Current planning:
 
 The roadmap may evolve based on research findings.
 
+## v1.3.0 – Boot Menu From Configuration
+
+Planned.
+
+Main target:
+
+* Make `scripts/Install-BootProfileMenu.ps1` read Configuration Format v2 directly.
+* Use `%ProgramData%\BootProfileSwitcher\config\profiles.json` as the default configuration source and allow `-ConfigPath` overrides for demos, tests and migration workflows.
+* Install managed boot entries for v2 profiles where `bootMenu.enabled = true`.
+* Apply constrained default-entry behavior from `bootMenu.defaultEntry` where technically safe: rename and hide.
+* Store enough boot menu baseline state for uninstall to restore the default entry description and display order.
+* Support enterprise automation through explicit cleanup and force switches.
+* Keep local interactive cleanup available when existing managed entries are detected.
+* Provide a config-driven boot menu demo with hidden or renamed default entry behavior and multiple named managed profiles.
+
+Acceptance criteria:
+
+* Boot menu installation no longer hardcodes Mode A and Mode B.
+* Existing managed entries can be cleaned up interactively or automatically with explicit switches.
+* `state/boot-menu.json` records v2 profile identities, display names, BCD identifiers, source entry, timeout, configuration path and default-entry baseline.
+* Resolver and runtime matching remain compatible with v2-generated state.
+* Uninstall removes managed entries and restores the default entry to the intended normal boot menu state.
+* Documentation and demo files explain the config-driven installation workflow.
+* ADR-0006 documents the configuration-driven boot menu installation decision.
+
 ## v1.2.0 – Configuration Format v2
 
 Completed.
@@ -467,7 +492,7 @@ Make boot menu installation use Configuration Format v2 as the source of truth f
 
 Immediate next validation target:
 
-Define the concrete questions and acceptance criteria for v1.3.0 before implementation starts.
+Implement configuration-driven boot menu installation and validate the script behavior before real boot menu testing.
 
 ---
 

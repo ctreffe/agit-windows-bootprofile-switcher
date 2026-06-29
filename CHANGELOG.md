@@ -6,7 +6,16 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
-No unreleased changes.
+### Added
+
+- Add ADR-0006 documenting configuration-driven boot menu installation.
+- Add a config-driven boot menu demo with multiple managed profiles and hidden default-entry behavior.
+
+### Changed
+
+- Make boot menu installation read Configuration Format v2 directly.
+- Add non-interactive cleanup support for managed boot menu replacement.
+- Extend resolver and profile engine compatibility for v2-generated boot menu state.
 
 ## [v1.2.0] - 2026-06-30
 

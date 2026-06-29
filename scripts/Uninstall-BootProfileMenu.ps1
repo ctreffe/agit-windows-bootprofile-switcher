@@ -6,7 +6,9 @@ Removes the managed BootProfile Switcher boot menu entries.
 Reads state/boot-menu.json and removes the boot entries created by
 Install-BootProfileMenu.ps1. The original BCD backup file is kept for manual
 recovery. The state file is renamed instead of deleted so the operation remains
-auditable.
+auditable. When the installer changed the default Windows boot entry
+description or removed it from the Boot Manager display order, uninstall
+restores that default-entry state from the recorded baseline.
 #>
 
 [CmdletBinding(SupportsShouldProcess = $true)]
@@ -39,7 +41,7 @@ $state = Get-Content -Path $stateFile -Raw | ConvertFrom-Json
 
 foreach ($entry in $state.entries) {
     $id = [string]$entry.identifier
-    $name = [string]$entry.name
+    $name = if ($entry.PSObject.Properties['displayName']) { [string]$entry.displayName } else { [string]$entry.name }
 
     if ($PSCmdlet.ShouldProcess($id, "Delete boot entry $name")) {
         try {
@@ -51,8 +53,60 @@ foreach ($entry in $state.entries) {
     }
 }
 
-if ($PSCmdlet.ShouldProcess('Windows Boot Manager', 'Restore current Windows entry as first display order entry')) {
-    & bcdedit /displayorder '{current}' /addfirst | Out-Null
+if ($state.PSObject.Properties['defaultEntry'] -and $null -ne $state.defaultEntry) {
+    $defaultEntry = $state.defaultEntry
+    $sourceEntry = if ($defaultEntry.PSObject.Properties['sourceEntry']) { [string]$defaultEntry.sourceEntry } else { [string]$state.sourceEntry }
+    $sourceIdentifier = if ($defaultEntry.PSObject.Properties['sourceIdentifier']) { [string]$defaultEntry.sourceIdentifier } else { $sourceEntry }
+
+    if ([string]::IsNullOrWhiteSpace($sourceEntry)) {
+        $sourceEntry = '{default}'
+    }
+
+    if ([string]::IsNullOrWhiteSpace($sourceIdentifier)) {
+        $sourceIdentifier = $sourceEntry
+    }
+
+    if ($defaultEntry.PSObject.Properties['renameApplied'] -and [bool]$defaultEntry.renameApplied) {
+        $originalDescription = [string]$defaultEntry.originalDescription
+
+        if (-not [string]::IsNullOrWhiteSpace($originalDescription)) {
+            if ($PSCmdlet.ShouldProcess($sourceEntry, "Restore default entry description to $originalDescription")) {
+                & bcdedit /set $sourceEntry description $originalDescription | Out-Null
+            }
+        }
+    }
+
+    if ($defaultEntry.PSObject.Properties['restoreDisplayOrder'] -and [bool]$defaultEntry.restoreDisplayOrder) {
+        if ($PSCmdlet.ShouldProcess('Windows Boot Manager', "Restore $sourceIdentifier as first display order entry")) {
+            & bcdedit /displayorder $sourceIdentifier /addfirst | Out-Null
+        }
+    }
+
+    if ($defaultEntry.PSObject.Properties['originalBootManagerDefault'] -or $defaultEntry.PSObject.Properties['originalBootManagerDefaultIdentifier']) {
+        $originalDefault = if ($defaultEntry.PSObject.Properties['originalBootManagerDefaultIdentifier']) {
+            [string]$defaultEntry.originalBootManagerDefaultIdentifier
+        } else {
+            [string]$defaultEntry.originalBootManagerDefault
+        }
+
+        if ($originalDefault -in @('{default}', '{current}')) {
+            $originalDefault = $sourceIdentifier
+        }
+
+        if (-not [string]::IsNullOrWhiteSpace($originalDefault)) {
+            if ($PSCmdlet.ShouldProcess('Windows Boot Manager', "Restore boot manager default to $originalDefault")) {
+                & bcdedit /default $originalDefault | Out-Null
+            }
+        }
+    } elseif ($defaultEntry.PSObject.Properties['restoreDisplayOrder'] -and [bool]$defaultEntry.restoreDisplayOrder) {
+        if ($PSCmdlet.ShouldProcess('Windows Boot Manager', "Restore boot manager default to $sourceIdentifier")) {
+            & bcdedit /default $sourceIdentifier | Out-Null
+        }
+    }
+} else {
+    if ($PSCmdlet.ShouldProcess('Windows Boot Manager', 'Restore current Windows entry as first display order entry')) {
+        & bcdedit /displayorder '{current}' /addfirst | Out-Null
+    }
 }
 
 if ($PSCmdlet.ShouldProcess('Windows Boot Manager', 'Set timeout to 0 seconds')) {

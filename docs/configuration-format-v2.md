@@ -1,8 +1,8 @@
 # Configuration Format v2
 
-Configuration Format v2 is the planned configuration shape for the next structural BootProfile Switcher milestones.
+Configuration Format v2 is the configuration shape for current structural BootProfile Switcher milestones.
 
-It is introduced in v1.2.0 as a design and validation target. Runtime boot menu creation from this format is planned for a later milestone.
+It was introduced in v1.2.0 as a design and validation target. Starting with v1.3.0, boot menu installation can read this format directly.
 
 ## Goals
 
@@ -37,7 +37,7 @@ Each managed profile has:
 
 - `id` for stable internal identity
 - `displayName` for user-facing labels
-- `bootMenu.enabled` for future boot menu creation
+- `bootMenu.enabled` for boot menu creation
 - `modules` as an object containing selected modules and their settings
 - `scripts` for future custom script support
 
@@ -91,8 +91,8 @@ The v2 validator intentionally rejects ambiguous or legacy shapes:
 - non-string script entries
 - default-entry display names when `rename` is `false`
 
-These rules keep the format explicit before it becomes the source for
-configuration-driven boot menu installation.
+These rules keep the format explicit as the source for configuration-driven
+boot menu installation.
 
 ## Example
 
@@ -102,4 +102,4 @@ The v2 example configuration is:
 config/profiles.v2.example.json
 ```
 
-The current production runtime still uses the installed `profiles.json` path and existing startup flow. v2 exists so the configuration model can be validated before boot menu creation is made configuration-driven.
+The current runtime uses the installed `profiles.json` path and existing startup flow. Boot menu installation reads v2 from that machine-wide path by default, or from an explicit `-ConfigPath` override for demos, tests and migration work.

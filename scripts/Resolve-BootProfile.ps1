@@ -180,6 +180,7 @@ $result = [ordered]@{
     schemaVersion = 1
     generatedAt = (Get-Date).ToString('o')
     detected = $null -ne $match
+    profileId = $null
     mode = $null
     name = $null
     identifier = $null
@@ -192,8 +193,13 @@ $result = [ordered]@{
 }
 
 if ($match) {
-    $result.mode = $match.entry.mode
-    $result.name = $match.entry.name
+    $profileId = if ($match.entry.PSObject.Properties['profileId']) { [string]$match.entry.profileId } elseif ($match.entry.PSObject.Properties['id']) { [string]$match.entry.id } else { $null }
+    $mode = if ($match.entry.PSObject.Properties['mode']) { [string]$match.entry.mode } else { $profileId }
+    $name = if ($match.entry.PSObject.Properties['name']) { [string]$match.entry.name } elseif ($match.entry.PSObject.Properties['displayName']) { [string]$match.entry.displayName } else { $null }
+
+    $result.profileId = $profileId
+    $result.mode = $mode
+    $result.name = $name
     $result.identifier = $match.entry.identifier
     $result.source = $match.source
 } elseif (-not $result.error) {

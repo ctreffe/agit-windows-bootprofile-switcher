@@ -42,7 +42,7 @@ function Read-YesNo {
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 
 if (-not $SourcePath) {
-    $SourcePath = Join-Path $repoRoot 'config\profiles.example.json'
+    $SourcePath = Join-Path $repoRoot 'config\profiles.v2.example.json'
 }
 
 if (-not $DestinationPath) {

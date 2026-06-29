@@ -85,6 +85,11 @@ $fixtures = @(
         expectedValid = $true
     },
     [ordered]@{
+        name = 'config-driven-boot-menu-demo'
+        path = Join-Path $repoRoot 'config\demos\config-driven-boot-menu.json'
+        expectedValid = $true
+    },
+    [ordered]@{
         name = 'duplicate-profile-name'
         path = Join-Path $repoRoot 'config\test\duplicate-profile-name.json'
         expectedValid = $false

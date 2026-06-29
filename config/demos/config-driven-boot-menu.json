@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": true
+    }
+  },
+  "profiles": [
+    {
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "network-isolation": {
+          "dryRun": true,
+          "disable": {
+            "ethernet": true,
+            "wifi": true,
+            "cellular": true,
+            "bluetoothNetwork": true
+          },
+          "exclude": {
+            "macAddresses": [],
+            "interfaceDescriptions": [],
+            "interfaceAliases": []
+          }
+        },
+        "validation-log": {}
+      },
+      "scripts": []
+    },
+    {
+      "id": "experiment-local",
+      "displayName": "Experiment Local",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {}
+      },
+      "scripts": []
+    },
+    {
+      "id": "maintenance",
+      "displayName": "Maintenance",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {}
+      },
+      "scripts": []
+    }
+  ]
+}

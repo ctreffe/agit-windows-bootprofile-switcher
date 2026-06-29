@@ -1,33 +1,33 @@
 # Konfigurationsformat v2
 
-Konfigurationsformat v2 ist die geplante Konfigurationsform für die nächsten strukturellen Meilensteine des BootProfile Switchers.
+Konfigurationsformat v2 ist die Konfigurationsform fuer die aktuellen strukturellen Meilensteine des BootProfile Switchers.
 
-Es wird in v1.2.0 als Design- und Validierungsziel eingeführt. Die Runtime-Erzeugung des Bootmenüs aus diesem Format ist für einen späteren Meilenstein geplant.
+Es wurde in v1.2.0 als Design- und Validierungsziel eingefuehrt. Ab v1.3.0 kann die Bootmenue-Installation dieses Format direkt lesen.
 
 ## Ziele
 
-Konfigurationsformat v2 soll Folgendes unterstützen:
+Konfigurationsformat v2 soll Folgendes unterstuetzen:
 
 - eine variable Anzahl verwalteter Bootprofile
-- frei wählbare Profil-Anzeigenamen
-- konfigurationsgetriebene Bootmenü-Erzeugung
-- eingeschränkte Behandlung des Windows-Default-Boot-Eintrags
+- frei waehlbare Profil-Anzeigenamen
+- konfigurationsgetriebene Bootmenue-Erzeugung
+- eingeschraenkte Behandlung des Windows-Default-Boot-Eintrags
 - profilnahe Moduleinstellungen
-- spätere Produktionsmodule wie Service Control
+- spaetere Produktionsmodule wie Service Control
 
 ## Default Entry
 
 Der Windows-Default-Boot-Eintrag ist kein normales BootProfile-Switcher-Profil.
 
-Er ist der Recovery- und Rückkehrpfad des Systems. Konfigurationsformat v2 modelliert ihn deshalb separat unter `bootMenu.defaultEntry`.
+Er ist der Recovery- und Rueckkehrpfad des Systems. Konfigurationsformat v2 modelliert ihn deshalb separat unter `bootMenu.defaultEntry`.
 
-Der Default Entry soll nur eng begrenzte Optionen unterstützen:
+Der Default Entry soll nur eng begrenzte Optionen unterstuetzen:
 
 - `rename`
 - `displayName`
 - `hide`
 
-Jede spätere Implementierung, die den Default Entry umbenennt oder versteckt, muss genug Baseline-State speichern, um bei der Deinstallation den gewünschten normalen Systemzustand wiederherzustellen.
+Jede Implementierung, die den Default Entry umbenennt oder versteckt, muss genug Baseline-State speichern, um bei der Deinstallation den gewuenschten normalen Systemzustand wiederherzustellen.
 
 ## Verwaltete Profile
 
@@ -35,13 +35,13 @@ Verwaltete BootProfile-Switcher-Profile stehen unter `profiles`.
 
 Jedes verwaltete Profil hat:
 
-- `id` als stabile interne Identität
-- `displayName` für nutzerseitige Anzeigenamen
-- `bootMenu.enabled` für spätere Bootmenü-Erzeugung
-- `modules` als Objekt mit ausgewählten Modulen und deren Einstellungen
-- `scripts` für spätere Custom-Script-Unterstützung
+- `id` als stabile interne Identitaet
+- `displayName` fuer nutzerseitige Anzeigenamen
+- `bootMenu.enabled` fuer Bootmenue-Erzeugung
+- `modules` als Objekt mit ausgewaehlten Modulen und deren Einstellungen
+- `scripts` fuer spaetere Custom-Script-Unterstuetzung
 
-Profil-IDs müssen Kleinbuchstaben, Zahlen und einzelne Bindestrich-Trenner
+Profil-IDs muessen Kleinbuchstaben, Zahlen und einzelne Bindestrich-Trenner
 verwenden, zum Beispiel `network-isolation` oder `experiment-local`. Das alte
 v1-Feld `mode` ist nicht Teil von v2.
 
@@ -50,9 +50,9 @@ v1-Feld `mode` ist nicht Teil von v2.
 Moduleinstellungen stehen direkt am jeweiligen Profil unter `modules`.
 
 Dadurch bleibt jedes Profil lesbar, ohne Einstellungen aus mehreren Stellen
-zusammenführen zu müssen. Für die erwarteten zwei bis drei verwalteten Profile
+zusammenfuehren zu muessen. Fuer die erwarteten zwei bis drei verwalteten Profile
 auf einem Rechner sind explizite profilnahe Moduleinstellungen leichter zu
-prüfen als vererbte globale Defaults.
+pruefen als vererbte globale Defaults.
 
 ```json
 "modules": {
@@ -74,25 +74,25 @@ prüfen als vererbte globale Defaults.
 }
 ```
 
-Globale Modul-Defaults können später erneut geprüft werden, wenn ein echter
+Globale Modul-Defaults koennen spaeter erneut geprueft werden, wenn ein echter
 Deployment-Bedarf entsteht. Sie sind bewusst nicht Teil von v2.
 
 ## Validierungsregeln
 
 Der v2-Validator lehnt absichtlich uneindeutige oder alte Formen ab:
 
-- nicht unterstützte Top-Level-Felder
+- nicht unterstuetzte Top-Level-Felder
 - reine v1-Profilfelder wie `mode` oder `moduleSettings`
-- ungültige Profil-IDs
+- ungueltige Profil-IDs
 - doppelte Profil-IDs
 - doppelte Anzeigenamen
 - leere `modules`-Objekte
 - unbekannte Modulnamen
-- Script-Einträge, die keine Strings sind
+- Script-Eintraege, die keine Strings sind
 - Default-Entry-Anzeigenamen, wenn `rename` auf `false` steht
 
-Diese Regeln halten das Format explizit, bevor es zur Quelle für
-konfigurationsgetriebene Bootmenü-Erzeugung wird.
+Diese Regeln halten das Format explizit, weil es als Quelle fuer
+konfigurationsgetriebene Bootmenue-Erzeugung dient.
 
 ## Beispiel
 
@@ -102,4 +102,4 @@ Die v2-Beispielkonfiguration liegt hier:
 config/profiles.v2.example.json
 ```
 
-Der aktuelle produktive Runtime-Pfad verwendet weiterhin den installierten `profiles.json`-Pfad und den bestehenden Startup-Ablauf. v2 existiert, damit das Konfigurationsmodell validiert werden kann, bevor die Bootmenü-Erzeugung konfigurationsgetrieben wird.
+Der aktuelle Runtime-Pfad verwendet den installierten `profiles.json`-Pfad und den bestehenden Startup-Ablauf. Die Bootmenue-Installation liest v2 standardmaessig von diesem maschinenweiten Pfad oder ueber einen ausdruecklichen `-ConfigPath`-Override fuer Demos, Tests und Migrationen.

@@ -20,6 +20,23 @@ function Test-Administrator {
     return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+function Get-BcdProperty {
+    param(
+        [string[]]$Output,
+        [string[]]$Names
+    )
+
+    foreach ($line in $Output) {
+        foreach ($name in $Names) {
+            if ($line -match ('^{0}\s+(.+)$' -f [regex]::Escape($name))) {
+                return $Matches[1].Trim()
+            }
+        }
+    }
+
+    return $null
+}
+
 function Get-BootProfileEntriesFromBcd {
     param(
         [object[]]$ManagedEntries
@@ -55,9 +72,29 @@ function Get-BootProfileEntriesFromBcd {
     foreach ($block in $blocks) {
         $joined = $block -join "`n"
 
-        $idMatch = [regex]::Match($joined, '\{[0-9a-fA-F-]{36}\}')
-        if (-not $idMatch.Success) {
-            continue
+        $identifierText = Get-BcdProperty -Output $block -Names @('identifier', 'Bezeichner')
+        $identifier = $null
+
+        if ($identifierText -match '^\{[0-9a-fA-F-]{36}\}$') {
+            $identifier = $identifierText
+        } elseif ($identifierText -in @('{default}', '{current}')) {
+            $descriptionForAlias = Get-BcdProperty -Output $block -Names @('description', 'Beschreibung')
+            $aliasMatch = $ManagedEntries | Where-Object {
+                [string]$_.name -eq $descriptionForAlias -or [string]$_.displayName -eq $descriptionForAlias
+            } | Select-Object -First 1
+
+            if ($null -ne $aliasMatch) {
+                $identifier = [string]$aliasMatch.identifier
+            } else {
+                $identifier = $identifierText
+            }
+        } else {
+            $idMatch = [regex]::Match($joined, '\{[0-9a-fA-F-]{36}\}')
+            if (-not $idMatch.Success) {
+                continue
+            }
+
+            $identifier = $idMatch.Value
         }
 
         $description = $null
@@ -73,7 +110,7 @@ function Get-BootProfileEntriesFromBcd {
         }
 
         $managedEntry = $ManagedEntries | Where-Object {
-            [string]$_.identifier -eq $idMatch.Value -or [string]$_.name -eq $description
+            [string]$_.identifier -eq $identifier -or [string]$_.name -eq $description -or [string]$_.displayName -eq $description
         } | Select-Object -First 1
 
         if ($null -eq $managedEntry -and $description -notmatch '^BootProfile Switcher - Mode [AB]$' -and $description -ne 'Network Isolation') {
@@ -82,13 +119,14 @@ function Get-BootProfileEntriesFromBcd {
 
         $mode = $null
         if ($null -ne $managedEntry) {
-            $mode = [string]$managedEntry.mode
+            $mode = if ($managedEntry.PSObject.Properties['mode']) { [string]$managedEntry.mode } elseif ($managedEntry.PSObject.Properties['profileId']) { [string]$managedEntry.profileId } else { $null }
         }
 
         $entries += [pscustomobject]@{
             Mode = $mode
+            ProfileId = if ($null -ne $managedEntry -and $managedEntry.PSObject.Properties['profileId']) { [string]$managedEntry.profileId } else { $mode }
             Name = $description
-            Identifier = $idMatch.Value
+            Identifier = $identifier
         }
     }
 
@@ -129,7 +167,8 @@ if ($bootProfileEntries.Count -eq 0) {
             $classification = 'managed'
         }
 
-        Write-Host "  $($entry.Name): $($entry.Identifier) [$classification]"
+        $profileLabel = if ($entry.ProfileId) { " profile=$($entry.ProfileId)" } else { '' }
+        Write-Host "  $($entry.Name): $($entry.Identifier) [$classification$profileLabel]"
     }
 }
 

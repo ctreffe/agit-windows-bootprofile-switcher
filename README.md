@@ -94,6 +94,25 @@ Each production module should provide a small installable demo when practical.
 The demo should show the module's intended behavior without requiring manual
 configuration edits.
 
+## Quick Start: Config-Driven Boot Menu Demo
+
+The Configuration Format v2 boot menu demo installs a v2 configuration, creates
+managed boot entries from that configuration and installs the startup hook:
+
+```text
+install-config-driven-boot-menu-demo.cmd
+```
+
+The demo creates three managed entries named `Network Isolation`,
+`Experiment Local` and `Maintenance`. It also hides the default Windows boot
+entry from the boot menu display order to demonstrate constrained
+`bootMenu.defaultEntry.hide` behavior. The default entry is not deleted, and the
+demo uninstall restores it through the recorded boot menu state:
+
+```text
+uninstall-config-driven-boot-menu-demo.cmd
+```
+
 ## Individual Setup Steps
 
 For the original two-profile validation setup, the easiest way to install or remove the managed boot menu entries is to use the command wrappers from the repository root:
@@ -175,6 +194,8 @@ Current command wrappers:
 - `uninstall-demo.cmd` removes the startup hook, managed boot menu entries and temporary demo marker while leaving ProgramData configuration unchanged.
 - `install-network-isolation-demo.cmd` installs the Network Isolation module demo with one managed `Network Isolation` boot profile.
 - `uninstall-network-isolation-demo.cmd` removes the Network Isolation module demo and restores the previous ProgramData profile configuration when a backup exists.
+- `install-config-driven-boot-menu-demo.cmd` installs the Configuration Format v2 boot menu demo with multiple named managed profiles.
+- `uninstall-config-driven-boot-menu-demo.cmd` removes the config-driven boot menu demo and restores the previous ProgramData profile configuration when a backup exists.
 - `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
 - `install-configuration.cmd` installs a validated profile configuration to the default machine-wide configuration path and requests elevation when needed.
 - `uninstall.cmd` removes the managed boot menu entries and requests elevation when needed.
@@ -189,6 +210,8 @@ Current PowerShell entry points:
 - `scripts/Invoke-ProfileEngine.ps1` consumes resolver state, validates configuration and invokes only the modules selected by the matching configured profile.
 - `scripts/Install-NetworkIsolationDemo.ps1` installs the Network Isolation module demo boot entry, configuration and startup hook.
 - `scripts/Uninstall-NetworkIsolationDemo.ps1` removes the Network Isolation module demo and restores the previous profile configuration backup when available.
+- `scripts/Install-ConfigDrivenBootMenuDemo.ps1` installs the config-driven boot menu demo.
+- `scripts/Uninstall-ConfigDrivenBootMenuDemo.ps1` removes the config-driven boot menu demo.
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
@@ -217,10 +240,16 @@ The Network Isolation module demo configuration is stored in:
 config/demos/network-isolation.json
 ```
 
+The config-driven boot menu demo configuration is stored in:
+
+```text
+config/demos/config-driven-boot-menu.json
+```
+
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the configuration format but are not executed yet.
 
 Configuration Format v2 is documented in
-[docs/configuration-format-v2.md](docs/configuration-format-v2.md). The current runtime path still uses the installed configuration and existing startup flow; v2 is ready to become the source for configuration-driven boot menu creation in the next milestone.
+[docs/configuration-format-v2.md](docs/configuration-format-v2.md). Boot menu installation can now read v2 directly from the machine-wide configuration or from an explicit `-ConfigPath` override.
 
 Network Isolation is documented in detail in
 [docs/modules/network-isolation.md](docs/modules/network-isolation.md).
