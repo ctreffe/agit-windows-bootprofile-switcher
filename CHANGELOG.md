@@ -6,6 +6,24 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+No unreleased changes.
+
+## [v1.2.0] - 2026-06-30
+
+### Added
+
+- Add validated Configuration Format v2 example and documentation.
+- Add v2 configuration validation coverage for managed profile identity, display names, default-entry settings and module settings.
+- Add v2 hardening fixtures for legacy fields, unknown properties, invalid profile IDs, empty modules and invalid script entries.
+- Add ADR-0005 documenting the Configuration Format v2 decision.
+
+### Changed
+
+- Extend the configuration validator and fixture runner to support `schemaVersion = 2` while preserving v1 validation.
+- Tighten v2 validation by rejecting legacy profile fields, unsupported top-level properties, invalid profile identifiers, empty module sets and non-string script entries.
+
+## [v1.1.0] - 2026-06-28
+
 ### Added
 
 - Add ADR-0004 documenting Network Isolation as a lifecycle module with persistent baseline state.
@@ -19,15 +37,10 @@ This project follows Semantic Versioning.
 - Add an installable Network Isolation module demo with one managed `Network Isolation` boot profile.
 - Add the convention that production modules should include a small installable demo when practical.
 - Add dedicated English and German Network Isolation module documentation.
-- Add draft Configuration Format v2 example and documentation.
-- Add v2 configuration validation coverage for managed profile identity, display names, default-entry settings and module settings.
-- Add v2 hardening fixtures for legacy fields, unknown properties, invalid profile IDs, empty modules and invalid script entries.
 
 ### Changed
 
 - Register `network-isolation` as a known module and include it in the example profile configuration with `dryRun` enabled.
-- Extend the configuration validator and fixture runner to support `schemaVersion = 2` while preserving v1 validation.
-- Tighten v2 validation by rejecting legacy profile fields, unsupported top-level properties, invalid profile identifiers, empty module sets and non-string script entries.
 - Pass optional module settings and lifecycle context from the profile engine to module entry points.
 - Restore Network Isolation baseline state using adapter administrative state instead of treating `Not Present` as always unavailable.
 - Record successful real lifecycle validation for Network Isolation baseline learning, isolation and restore.

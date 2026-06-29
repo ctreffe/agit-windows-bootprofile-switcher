@@ -20,15 +20,15 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.1.0 – Network Isolation**
+**v1.2.0 – Configuration Format v2**
 
-The Network Isolation milestone is complete.
+The Configuration Format v2 milestone is complete.
 
 ## Current Focus
 
-Prepare the next structural milestone: **v1.2.0 – Configuration Format v2**.
+Prepare the next structural milestone: **v1.3.0 – Boot Menu From Configuration**.
 
-The next planned work should improve the project configuration model before adding more production modules. The following milestone should then make boot menu creation configuration-driven.
+The next planned work should make managed boot menu creation use the validated v2 configuration format as its source of truth before adding more production modules.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -252,7 +252,6 @@ Validation note:
 
 Current planning:
 
-* v1.2.0 – Configuration Format v2
 * v1.3.0 – Boot Menu From Configuration
 * Later module milestone – Service Control module for configurable Windows service enable/disable behavior
 
@@ -260,7 +259,7 @@ The roadmap may evolve based on research findings.
 
 ## v1.2.0 – Configuration Format v2
 
-Planned.
+Completed.
 
 Main target:
 
@@ -272,19 +271,19 @@ Default profile design:
 
 * The Windows default boot entry is not a normal BootProfile Switcher profile.
 * The default profile is the system's recovery and return path and must be treated more conservatively than managed profiles.
-* Configuration Format v2 should model default boot behavior through constrained global boot menu settings, not through normal profile modules or scripts.
+* Configuration Format v2 models default boot behavior through constrained global boot menu settings, not through normal profile modules or scripts.
 * The default profile may later support only carefully scoped options such as display name changes or hiding from the boot menu if those operations prove technically safe and reversible.
 * Any future modification of the default boot entry must store enough baseline state to restore the desired normal system state during uninstall.
 * The Network Isolation baseline/restore model is the reference lesson: before changing system state, store the previous normal state; do not accidentally learn a manipulated state as normal; make removal traceable and reversible.
 
-Configuration topics to settle:
+Resolved configuration decisions:
 
-* Whether managed profiles use `id`, `mode` or both.
-* How display names, boot menu titles and internal identifiers are represented.
-* How profile-local module settings are represented without requiring global module defaults.
-* How boot menu order, timeout and source entry are represented.
-* How custom scripts remain represented while execution stays postponed.
-* How future modules such as Service Control can express profile-specific policy without redesigning the format again.
+* Managed profiles use stable lowercase `id` values and explicit `displayName` values.
+* The Windows default boot entry is represented only through constrained `bootMenu.defaultEntry` settings, not as a managed profile.
+* Module settings are profile-local under each profile's `modules` object.
+* Global module defaults are intentionally not part of v2.
+* Custom scripts remain represented as paths while execution stays postponed.
+* Boot menu order, timeout and source entry are represented in the v2 shape for later v1.3.0 implementation.
 
 Acceptance criteria:
 
@@ -292,6 +291,7 @@ Acceptance criteria:
 * `scripts/Test-BootProfileConfiguration.ps1` validates the v2 shape while preserving v1 validation.
 * Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid default-profile settings, invalid module settings, legacy v1 fields, unknown properties, invalid profile IDs, empty module sets and invalid script entries.
 * Documentation explains the distinction between the Windows default boot entry and managed BootProfile Switcher profiles.
+* ADR-0005 documents the Configuration Format v2 decision.
 * v1.3.0 can use the v2 format as the source for configuration-driven boot menu installation.
 
 ## v1.1.0 – Network Isolation
@@ -459,15 +459,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan **v1.2.0 – Configuration Format v2**.
+Plan **v1.3.0 – Boot Menu From Configuration**.
 
 Primary objective:
 
-Design the next configuration format so managed boot profiles, profile-local module settings and later module types can be represented cleanly.
+Make boot menu installation use Configuration Format v2 as the source of truth for managed profile entries, boot menu behavior and constrained default-entry handling.
 
 Immediate next validation target:
 
-Define the concrete questions and acceptance criteria for v1.2.0 before implementation starts.
+Define the concrete questions and acceptance criteria for v1.3.0 before implementation starts.
 
 ---
 

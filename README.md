@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`) and the Network Isolation milestone (`v1.1.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`) and the Configuration Format v2 milestone (`v1.2.0`).
 >
-> The `v1.1.0 – Network Isolation` milestone is complete. This release adds the first production-oriented lifecycle module, including adapter-level Network Isolation, baseline learning and restore, dedicated module documentation and an installable Network Isolation demo.
+> The `v1.2.0 – Configuration Format v2` milestone is complete. This release adds the validated v2 configuration shape, profile-local module settings, constrained default-entry handling, validator coverage, documentation and an ADR for the format decision.
 
 ## Overview
 
@@ -205,7 +205,7 @@ The repository contains the current example configuration format in:
 config/profiles.example.json
 ```
 
-The draft Configuration Format v2 example is stored in:
+The validated Configuration Format v2 example is stored in:
 
 ```text
 config/profiles.v2.example.json
@@ -220,7 +220,7 @@ config/demos/network-isolation.json
 Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the configuration format but are not executed yet.
 
 Configuration Format v2 is documented in
-[docs/configuration-format-v2.md](docs/configuration-format-v2.md). The current runtime path still uses the installed configuration and existing startup flow; v2 is being validated before configuration-driven boot menu creation is introduced.
+[docs/configuration-format-v2.md](docs/configuration-format-v2.md). The current runtime path still uses the installed configuration and existing startup flow; v2 is ready to become the source for configuration-driven boot menu creation in the next milestone.
 
 Network Isolation is documented in detail in
 [docs/modules/network-isolation.md](docs/modules/network-isolation.md).

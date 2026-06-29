@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`) und den Network-Isolation-Meilenstein (`v1.1.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`) und den Meilenstein Configuration Format v2 (`v1.2.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.1.0 – Network Isolation` ist abgeschlossen. Dieser Release ergänzt das erste produktionsorientierte Lifecycle-Modul mit Adapter-Level-Network-Isolation, Baseline-Learning und Restore, eigener Moduldokumentation und installierbarer Network-Isolation-Demo.
+> Der Meilenstein `v1.2.0 – Configuration Format v2` ist abgeschlossen. Dieser Release ergänzt die validierte v2-Konfigurationsstruktur, profil-lokale Moduleinstellungen, begrenzte Default-Entry-Einstellungen, Validator-Abdeckung, Dokumentation und eine ADR zur Formatentscheidung.
 
 ## Überblick
 
@@ -211,7 +211,7 @@ Das Repository enthält das aktuelle Beispiel-Konfigurationsformat in:
 config/profiles.example.json
 ```
 
-Der Entwurf für Konfigurationsformat v2 liegt hier:
+Das validierte Beispiel für Konfigurationsformat v2 liegt hier:
 
 ```text
 config/profiles.v2.example.json
@@ -228,8 +228,9 @@ Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profi
 Konfigurationsformat v2 ist in
 [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md)
 dokumentiert. Der aktuelle Runtime-Pfad nutzt weiterhin die installierte
-Konfiguration und den bestehenden Startup-Ablauf; v2 wird validiert, bevor die
-Bootmenü-Erzeugung konfigurationsgetrieben wird.
+Konfiguration und den bestehenden Startup-Ablauf; v2 ist bereit, im nächsten
+Meilenstein als Quelle für die konfigurationsgetriebene Bootmenü-Erzeugung zu
+dienen.
 
 Network Isolation ist ausführlich in
 [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)
