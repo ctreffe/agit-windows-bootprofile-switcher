@@ -258,6 +258,42 @@ Current planning:
 
 The roadmap may evolve based on research findings.
 
+## v1.2.0 – Configuration Format v2
+
+Planned.
+
+Main target:
+
+* Design a second configuration format that can support variable managed boot profiles, configuration-driven boot menu creation and future production modules.
+* Keep the milestone focused on configuration design, validation and documentation. Runtime boot menu creation from the new format is planned for v1.3.0.
+* Preserve deterministic no-op behavior when configuration is missing, invalid or incomplete.
+
+Default profile design:
+
+* The Windows default boot entry is not a normal BootProfile Switcher profile.
+* The default profile is the system's recovery and return path and must be treated more conservatively than managed profiles.
+* Configuration Format v2 should model default boot behavior through constrained global boot menu settings, not through normal profile modules or scripts.
+* The default profile may later support only carefully scoped options such as display name changes or hiding from the boot menu if those operations prove technically safe and reversible.
+* Any future modification of the default boot entry must store enough baseline state to restore the desired normal system state during uninstall.
+* The Network Isolation baseline/restore model is the reference lesson: before changing system state, store the previous normal state; do not accidentally learn a manipulated state as normal; make removal traceable and reversible.
+
+Configuration topics to settle:
+
+* Whether managed profiles use `id`, `mode` or both.
+* How display names, boot menu titles and internal identifiers are represented.
+* How global module defaults and profile-specific module settings are merged.
+* How boot menu order, timeout and source entry are represented.
+* How custom scripts remain represented while execution stays postponed.
+* How future modules such as Service Control can express profile-specific policy without redesigning the format again.
+
+Acceptance criteria:
+
+* `config/profiles.example.json` documents the v2 shape.
+* `scripts/Test-BootProfileConfiguration.ps1` validates the v2 shape.
+* Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid modules, invalid default-profile settings and invalid module settings.
+* Documentation explains the distinction between the Windows default boot entry and managed BootProfile Switcher profiles.
+* v1.3.0 can use the v2 format as the source for configuration-driven boot menu installation.
+
 ## v1.1.0 – Network Isolation
 
 Completed.
