@@ -222,12 +222,6 @@ The default machine-wide configuration path is:
 %ProgramData%\BootProfileSwitcher\config\profiles.json
 ```
 
-The repository contains the current example configuration format in:
-
-```text
-config/profiles.example.json
-```
-
 The validated Configuration Format v2 example is stored in:
 
 ```text
@@ -246,7 +240,7 @@ The config-driven boot menu demo configuration is stored in:
 config/demos/config-driven-boot-menu.json
 ```
 
-Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved mode, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the configuration format but are not executed yet.
+Configuration now drives module dispatch. If the default `profiles.json` is missing, invalid or does not contain the resolved profile ID, the boot profile performs no action. The engine reports the reason in its structured output, and the startup hook logs the configuration status, validation errors and dispatch skip reason to `logs/startup-profile.log`. Custom script paths are structurally accepted by the configuration format but are not executed yet.
 
 Configuration Format v2 is documented in
 [docs/configuration-format-v2.md](docs/configuration-format-v2.md). Boot menu installation can now read v2 directly from the machine-wide configuration or from an explicit `-ConfigPath` override.
@@ -361,7 +355,7 @@ Core project documents:
 
 ### Current profile resolver
 
-After installing the boot menu and booting through a managed profile such as Mode A, Mode B or Network Isolation, run:
+After installing the boot menu and booting through a managed profile such as `Network Isolation`, `Experiment Local` or `Maintenance`, run:
 
 ```cmd
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Resolve-BootProfile.ps1

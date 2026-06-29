@@ -230,12 +230,6 @@ Der standardmäßige maschinenweite Konfigurationspfad ist:
 %ProgramData%\BootProfileSwitcher\config\profiles.json
 ```
 
-Das Repository enthält das aktuelle Beispiel-Konfigurationsformat in:
-
-```text
-config/profiles.example.json
-```
-
 Das validierte Beispiel für Konfigurationsformat v2 liegt hier:
 
 ```text
@@ -254,7 +248,7 @@ Die Demo-Konfiguration für das config-driven Bootmenü liegt in:
 config/demos/config-driven-boot-menu.json
 ```
 
-Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder den aufgelösten Modus nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Konfigurationsformat akzeptiert, aber noch nicht ausgeführt.
+Konfiguration steuert jetzt den Modul-Dispatch. Wenn die standardmäßige `profiles.json` fehlt, ungültig ist oder die aufgelöste Profil-ID nicht enthält, führt das Bootprofil keine Aktion aus. Die Engine meldet den Grund in ihrer strukturierten Ausgabe, und der Startup Hook protokolliert Konfigurationsstatus, Validierungsfehler und Dispatch-Skip-Grund in `logs/startup-profile.log`. Eigene Skriptpfade werden strukturell vom Konfigurationsformat akzeptiert, aber noch nicht ausgeführt.
 
 Konfigurationsformat v2 ist in
 [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md)
@@ -374,7 +368,7 @@ Zentrale Projektdokumente:
 
 ### Resolver des aktuellen Profils
 
-Nach der Installation des Bootmenüs und einem Start über ein verwaltetes Profil wie Mode A, Mode B oder Network Isolation:
+Nach der Installation des Bootmenüs und einem Start über ein verwaltetes Profil wie `Network Isolation`, `Experiment Local` oder `Maintenance`:
 
 ```cmd
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Resolve-BootProfile.ps1

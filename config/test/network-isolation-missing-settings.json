@@ -1,12 +1,24 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
   "profiles": [
     {
-      "name": "BootProfile Switcher - Mode A",
-      "mode": "A",
-      "modules": [
-        "network-isolation"
-      ],
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "network-isolation": {}
+      },
       "scripts": []
     }
   ]

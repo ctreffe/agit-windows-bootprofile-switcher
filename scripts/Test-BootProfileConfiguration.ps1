@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-Validates the BootProfile Switcher profile configuration schema.
+Validates the BootProfile Switcher Configuration Format v2 schema.
 
 .DESCRIPTION
-Reads a profile configuration JSON file and validates supported BootProfile
-Switcher configuration formats.
+Reads a profile configuration JSON file and validates BootProfile Switcher
+Configuration Format v2.
 The validator does not apply system changes, execute modules or run custom
 scripts. It only checks that the configuration is structurally valid and
 references known modules.
@@ -203,7 +203,7 @@ function Test-NetworkIsolationSettings {
     }
 }
 
-function Test-ModuleSettingsContainer {
+function Test-ModuleContainer {
     param(
         [object]$Settings,
         [string]$Prefix,
@@ -334,91 +334,9 @@ if ($configuration) {
     $schemaVersion = Get-JsonProperty -Object $configuration -Name 'schemaVersion'
     $profiles = Get-JsonProperty -Object $configuration -Name 'profiles'
 
-    if ($schemaVersion -notin @(1, 2)) {
-        Add-ValidationError -Errors $errors -Message 'schemaVersion must be 1 or 2.'
-    } elseif ($schemaVersion -eq 1) {
-        $rootModuleSettings = Get-JsonProperty -Object $configuration -Name 'moduleSettings'
-        $rootNetworkIsolationSettings = if ($null -ne $rootModuleSettings) { Get-JsonProperty -Object $rootModuleSettings -Name 'network-isolation' } else { $null }
-
-        if ($null -ne $rootModuleSettings -and -not (Test-ObjectProperty -Value $rootModuleSettings)) {
-            Add-ValidationError -Errors $errors -Message 'moduleSettings must be an object when present.'
-        }
-
-        Test-NetworkIsolationSettings `
-            -Settings $rootNetworkIsolationSettings `
-            -Prefix 'moduleSettings.network-isolation' `
-            -Errors $errors `
-            -RequireComplete $false
-
-        if (-not (Test-ArrayProperty -Value $profiles)) {
-            Add-ValidationError -Errors $errors -Message 'profiles must be an array.'
-        } else {
-            $seenNames = @{}
-            $seenModes = @{}
-
-            for ($index = 0; $index -lt $profiles.Count; $index++) {
-                $profile = $profiles[$index]
-                $prefix = "profiles[$index]"
-                $name = [string](Get-JsonProperty -Object $profile -Name 'name')
-                $mode = [string](Get-JsonProperty -Object $profile -Name 'mode')
-                $modules = Get-JsonProperty -Object $profile -Name 'modules'
-                $scripts = Get-JsonProperty -Object $profile -Name 'scripts'
-                $moduleSettings = Get-JsonProperty -Object $profile -Name 'moduleSettings'
-
-                if ([string]::IsNullOrWhiteSpace($name)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.name must not be empty."
-                } elseif ($seenNames.ContainsKey($name)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.name must be unique: $name"
-                } else {
-                    $seenNames[$name] = $true
-                }
-
-                if ([string]::IsNullOrWhiteSpace($mode)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.mode must not be empty."
-                } elseif ($seenModes.ContainsKey($mode)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.mode must be unique: $mode"
-                } else {
-                    $seenModes[$mode] = $true
-                }
-
-                if (-not (Test-ArrayProperty -Value $modules)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.modules must be an array."
-                } else {
-                    foreach ($moduleName in @($modules)) {
-                        if ([string]::IsNullOrWhiteSpace([string]$moduleName)) {
-                            Add-ValidationError -Errors $errors -Message "$prefix.modules must not contain empty module names."
-                        } elseif ($knownModules -notcontains [string]$moduleName) {
-                            Add-ValidationError -Errors $errors -Message "$prefix.modules references unknown module: $moduleName"
-                        }
-                    }
-                }
-
-                if (-not (Test-ArrayProperty -Value $scripts)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.scripts must be an array."
-                }
-
-                if ($null -ne $moduleSettings -and -not (Test-ObjectProperty -Value $moduleSettings)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.moduleSettings must be an object when present."
-                }
-
-                $profileNetworkIsolationSettings = if ($null -ne $moduleSettings) { Get-JsonProperty -Object $moduleSettings -Name 'network-isolation' } else { $null }
-
-                Test-NetworkIsolationSettings `
-                    -Settings $profileNetworkIsolationSettings `
-                    -Prefix "$prefix.moduleSettings.network-isolation" `
-                    -Errors $errors `
-                    -RequireComplete $false
-
-                if (@($modules) -contains 'network-isolation') {
-                    Test-NetworkIsolationSettings `
-                        -Settings $rootNetworkIsolationSettings `
-                        -Prefix 'moduleSettings.network-isolation' `
-                        -Errors $errors `
-                        -RequireComplete $true
-                }
-            }
-        }
-    } elseif ($schemaVersion -eq 2) {
+    if ($schemaVersion -ne 2) {
+        Add-ValidationError -Errors $errors -Message 'schemaVersion must be 2.'
+    } else {
         $bootMenu = Get-JsonProperty -Object $configuration -Name 'bootMenu'
 
         Test-AllowedProperties `
@@ -491,7 +409,7 @@ if ($configuration) {
                         Add-ValidationError -Errors $errors -Message "$prefix.modules must contain at least one module."
                     }
 
-                    Test-ModuleSettingsContainer -Settings $modules -Prefix "$prefix.modules" -Errors $errors -KnownModules $knownModules
+                    Test-ModuleContainer -Settings $modules -Prefix "$prefix.modules" -Errors $errors -KnownModules $knownModules
 
                     foreach ($moduleName in $modules.Keys) {
                         if ([string]::IsNullOrWhiteSpace([string]$moduleName)) {

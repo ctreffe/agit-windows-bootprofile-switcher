@@ -1,29 +1,38 @@
 {
-  "schemaVersion": 1,
-  "moduleSettings": {
-    "network-isolation": {
-      "dryRun": false,
-      "disable": {
-        "ethernet": true,
-        "wifi": true,
-        "cellular": true,
-        "bluetoothNetwork": true
-      },
-      "exclude": {
-        "macAddresses": [],
-        "interfaceDescriptions": [],
-        "interfaceAliases": []
-      }
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
     }
   },
   "profiles": [
     {
-      "name": "Network Isolation",
-      "mode": "network-isolation",
-      "modules": [
-        "network-isolation",
-        "validation-log"
-      ],
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "network-isolation": {
+          "dryRun": false,
+          "disable": {
+            "ethernet": true,
+            "wifi": true,
+            "cellular": true,
+            "bluetoothNetwork": true
+          },
+          "exclude": {
+            "macAddresses": [],
+            "interfaceDescriptions": [],
+            "interfaceAliases": []
+          }
+        },
+        "validation-log": {}
+      },
       "scripts": []
     }
   ]

@@ -466,7 +466,6 @@ if ($PSCmdlet.ShouldProcess('Windows Boot Configuration Data store', 'Create con
         $createdEntries += [ordered]@{
             id = $profileId
             profileId = $profileId
-            mode = $profileId
             name = $displayName
             displayName = $displayName
             identifier = $identifier

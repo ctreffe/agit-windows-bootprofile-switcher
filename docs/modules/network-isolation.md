@@ -23,7 +23,7 @@ The module targets hardware network interfaces by default. VPN, tunnel, loopback
 
 ## Safety Boundary
 
-Network Isolation in v1.1.0 is adapter-level isolation.
+Network Isolation is adapter-level isolation.
 
 It is intended to prevent ordinary users from simply continuing to use disabled target adapters. It is not a complete security boundary against local administrators, privileged management tools or later manual reconfiguration.
 
@@ -39,34 +39,45 @@ Use this module only with that boundary in mind.
 
 ## Configuration
 
-The policy is configured globally under `moduleSettings`. A profile activates isolation by listing `network-isolation` in its `modules` array.
+BootProfile Switcher uses Configuration Format v2. Each profile declares its module settings directly under `profiles[].modules`.
+
+A profile activates Network Isolation by adding a `network-isolation` object to its `modules` object:
 
 ```json
 {
-  "schemaVersion": 1,
-  "moduleSettings": {
-    "network-isolation": {
-      "dryRun": true,
-      "disable": {
-        "ethernet": true,
-        "wifi": true,
-        "cellular": false,
-        "bluetoothNetwork": false
-      },
-      "exclude": {
-        "macAddresses": [],
-        "interfaceDescriptions": [],
-        "interfaceAliases": []
-      }
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
     }
   },
   "profiles": [
     {
-      "name": "BootProfile Switcher - Mode A",
-      "mode": "A",
-      "modules": [
-        "network-isolation"
-      ],
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "network-isolation": {
+          "dryRun": true,
+          "disable": {
+            "ethernet": true,
+            "wifi": true,
+            "cellular": false,
+            "bluetoothNetwork": false
+          },
+          "exclude": {
+            "macAddresses": [],
+            "interfaceDescriptions": [],
+            "interfaceAliases": []
+          }
+        }
+      },
       "scripts": []
     }
   ]
@@ -75,36 +86,11 @@ The policy is configured globally under `moduleSettings`. A profile activates is
 
 Set `dryRun` to `false` only after validating the logged adapter decisions on the target machine.
 
-## Profile Overrides
+## Per-Profile Settings
 
-Profiles may override Network Isolation settings in their own `moduleSettings` section.
+Network Isolation settings are intentionally profile-local in v2. This keeps small deployments easy to read: two or three boot profiles can each declare their own network policy without global defaults.
 
-`dryRun` and individual `disable` flags override the global value when present.
-
-`exclude` values are additive. This means global management exceptions stay protected while profiles can add their own exceptions.
-
-```json
-{
-  "name": "BootProfile Switcher - Mode A",
-  "mode": "A",
-  "modules": [
-    "network-isolation"
-  ],
-  "moduleSettings": {
-    "network-isolation": {
-      "disable": {
-        "wifi": false
-      },
-      "exclude": {
-        "interfaceAliases": [
-          "Management LAN"
-        ]
-      }
-    }
-  },
-  "scripts": []
-}
-```
+Different profiles may disable different adapter categories or use different exclusions. For example, one profile may disable Wi-Fi only, while another disables Ethernet, Wi-Fi, cellular and Bluetooth PAN network adapters.
 
 ## Exclusions
 

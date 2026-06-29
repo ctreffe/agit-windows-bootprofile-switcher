@@ -16,6 +16,8 @@ This project follows Semantic Versioning.
 - Make boot menu installation read Configuration Format v2 directly.
 - Add non-interactive cleanup support for managed boot menu replacement.
 - Extend resolver and profile engine compatibility for v2-generated boot menu state.
+- Remove legacy Configuration Format v1 validation and runtime dispatch compatibility.
+- Migrate active Network Isolation configuration fixtures and demos to Configuration Format v2.
 
 ## [v1.2.0] - 2026-06-30
 

@@ -3,8 +3,8 @@
 Runs the BootProfile Switcher configuration validator against known fixtures.
 
 .DESCRIPTION
-Executes Test-BootProfileConfiguration.ps1 for the valid example configuration
-and a small set of intentionally invalid fixtures. The runner verifies expected
+Executes Test-BootProfileConfiguration.ps1 for valid Configuration Format v2
+examples and intentionally invalid v2 fixtures. The runner verifies expected
 valid/invalid outcomes without applying system changes or executing profile
 configuration.
 #>
@@ -65,11 +65,6 @@ if (-not (Test-Path $validatorScript)) {
 
 $fixtures = @(
     [ordered]@{
-        name = 'valid-example'
-        path = Join-Path $repoRoot 'config\profiles.example.json'
-        expectedValid = $true
-    },
-    [ordered]@{
         name = 'valid-v2-example'
         path = Join-Path $repoRoot 'config\profiles.v2.example.json'
         expectedValid = $true
@@ -88,26 +83,6 @@ $fixtures = @(
         name = 'config-driven-boot-menu-demo'
         path = Join-Path $repoRoot 'config\demos\config-driven-boot-menu.json'
         expectedValid = $true
-    },
-    [ordered]@{
-        name = 'duplicate-profile-name'
-        path = Join-Path $repoRoot 'config\test\duplicate-profile-name.json'
-        expectedValid = $false
-    },
-    [ordered]@{
-        name = 'duplicate-profile-mode'
-        path = Join-Path $repoRoot 'config\test\duplicate-profile-mode.json'
-        expectedValid = $false
-    },
-    [ordered]@{
-        name = 'missing-scripts-array'
-        path = Join-Path $repoRoot 'config\test\missing-scripts-array.json'
-        expectedValid = $false
-    },
-    [ordered]@{
-        name = 'unknown-module'
-        path = Join-Path $repoRoot 'config\test\unknown-module.json'
-        expectedValid = $false
     },
     [ordered]@{
         name = 'network-isolation-missing-settings'

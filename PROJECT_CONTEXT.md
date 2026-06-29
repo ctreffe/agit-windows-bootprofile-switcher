@@ -281,6 +281,7 @@ Acceptance criteria:
 * Uninstall removes managed entries and restores the default entry to the intended normal boot menu state.
 * Documentation and demo files explain the config-driven installation workflow.
 * ADR-0006 documents the configuration-driven boot menu installation decision.
+* Legacy Configuration Format v1 validation and runtime dispatch compatibility are removed after v2 is validated as the active configuration format.
 
 ## v1.2.0 – Configuration Format v2
 

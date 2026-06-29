@@ -1,40 +1,41 @@
 {
-  "schemaVersion": 1,
-  "moduleSettings": {
-    "network-isolation": {
-      "dryRun": true,
-      "disable": {
-        "ethernet": true,
-        "wifi": true,
-        "cellular": false,
-        "bluetoothNetwork": false
-      },
-      "exclude": {
-        "macAddresses": [],
-        "interfaceDescriptions": [],
-        "interfaceAliases": []
-      }
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
     }
   },
   "profiles": [
     {
-      "name": "BootProfile Switcher - Mode A",
-      "mode": "A",
-      "modules": [
-        "validation-log",
-        "network-isolation"
-      ],
-      "moduleSettings": {
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
         "network-isolation": {
+          "dryRun": true,
           "disable": {
-            "wifi": false
+            "ethernet": true,
+            "wifi": true,
+            "cellular": false,
+            "bluetoothNetwork": false
           },
           "exclude": {
+            "macAddresses": [],
+            "interfaceDescriptions": [
+              "Management Adapter"
+            ],
             "interfaceAliases": [
               "Management LAN"
             ]
           }
-        }
+        },
+        "validation-log": {}
       },
       "scripts": []
     }

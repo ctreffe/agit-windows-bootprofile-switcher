@@ -4,34 +4,34 @@
 
 `network-isolation` ist das erste produktionsorientierte Lifecycle-Modul im BootProfile Switcher.
 
-Es kann ausgewählte Netzwerkadapter-Kategorien für isolierende Bootprofile deaktivieren und die zuletzt gelernte normale Adapter-Baseline wiederherstellen, wenn das System wieder ohne aktive Isolation startet.
+Es kann ausgewaehlte Netzwerkadapter-Kategorien fuer isolierende Bootprofile deaktivieren und die zuletzt gelernte normale Adapter-Baseline wiederherstellen, wenn das System wieder ohne aktive Isolation startet.
 
-Das Modul ist für Szenarien gedacht, in denen eine Windows-Installation weiter nutzbar bleiben soll, während bestimmte Bootprofile mit eingeschränkter Netzwerkkonnektivität laufen.
+Das Modul ist fuer Szenarien gedacht, in denen eine Windows-Installation weiter nutzbar bleiben soll, waehrend bestimmte Bootprofile mit eingeschraenkter Netzwerkkonnektivitaet laufen.
 
 ## Was Das Modul Steuert
 
-Das Modul unterstützt diese Adapter-Kategorien:
+Das Modul unterstuetzt diese Adapter-Kategorien:
 
 - `ethernet`
 - `wifi`
 - `cellular`
 - `bluetoothNetwork`
 
-Bluetooth-Unterstützung meint Bluetooth-Netzwerkadapter wie Bluetooth-PAN-Einträge. Das Modul deaktiviert kein Bluetooth-Radio und keinen USB-Bluetooth-Adapter als Gerät. Vollständige Bluetooth-Device-Isolation gehört in ein späteres eigenes Modul oder Hardening-Milestone.
+Bluetooth-Unterstuetzung meint Bluetooth-Netzwerkadapter wie Bluetooth-PAN-Eintraege. Das Modul deaktiviert kein Bluetooth-Radio und keinen USB-Bluetooth-Adapter als Geraet. Vollstaendige Bluetooth-Device-Isolation gehoert in ein spaeteres eigenes Modul oder Hardening-Milestone.
 
-Das Modul zielt standardmäßig auf Hardware-Netzwerkinterfaces. VPN-, Tunnel-, Loopback- und virtuelle Adapter werden in dieser ersten Implementierung protokolliert und übersprungen. Bluetooth-Netzwerkadapter sind eine explizite Opt-in-Ausnahme, weil Windows sie als Nicht-Hardware-Interfaces melden kann.
+Das Modul zielt standardmaessig auf Hardware-Netzwerkinterfaces. VPN-, Tunnel-, Loopback- und virtuelle Adapter werden in dieser ersten Implementierung protokolliert und uebersprungen. Bluetooth-Netzwerkadapter sind eine explizite Opt-in-Ausnahme, weil Windows sie als Nicht-Hardware-Interfaces melden kann.
 
 ## Sicherheitsgrenze
 
-Network Isolation in v1.1.0 ist Adapter-Level-Isolation.
+Network Isolation ist Adapter-Level-Isolation.
 
-Sie soll verhindern, dass normale Nutzer:innen deaktivierte Zieladapter einfach weiterverwenden. Sie ist keine vollständige Sicherheitsgrenze gegen lokale Administrator:innen, privilegierte Management-Tools oder spätere manuelle Rekonfiguration.
+Sie soll verhindern, dass normale Nutzer:innen deaktivierte Zieladapter einfach weiterverwenden. Sie ist keine vollstaendige Sicherheitsgrenze gegen lokale Administrator:innen, privilegierte Management-Tools oder spaetere manuelle Rekonfiguration.
 
-Zukünftiges Hardening sollte prüfen:
+Zukuenftiges Hardening sollte pruefen:
 
 - Gruppenrichtlinien
-- Einschränkungen der Netzwerk-UI
-- Geräteverwaltungs-Kontrollen
+- Einschraenkungen der Netzwerk-UI
+- Geraeteverwaltungs-Kontrollen
 - Dienststeuerung
 - Firewall-Erzwingung
 
@@ -39,84 +39,70 @@ Das Modul sollte nur mit dieser Grenze im Hinterkopf eingesetzt werden.
 
 ## Konfiguration
 
-Die Policy wird global unter `moduleSettings` konfiguriert. Ein Profil aktiviert Isolation, indem es `network-isolation` in seiner `modules`-Liste aufführt.
+BootProfile Switcher nutzt Configuration Format v2. Jedes Profil definiert seine Modul-Einstellungen direkt unter `profiles[].modules`.
+
+Ein Profil aktiviert Network Isolation, indem es ein `network-isolation`-Objekt in seinem `modules`-Objekt enthaelt:
 
 ```json
 {
-  "schemaVersion": 1,
-  "moduleSettings": {
-    "network-isolation": {
-      "dryRun": true,
-      "disable": {
-        "ethernet": true,
-        "wifi": true,
-        "cellular": false,
-        "bluetoothNetwork": false
-      },
-      "exclude": {
-        "macAddresses": [],
-        "interfaceDescriptions": [],
-        "interfaceAliases": []
-      }
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
     }
   },
   "profiles": [
     {
-      "name": "BootProfile Switcher - Mode A",
-      "mode": "A",
-      "modules": [
-        "network-isolation"
-      ],
+      "id": "network-isolation",
+      "displayName": "Network Isolation",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "network-isolation": {
+          "dryRun": true,
+          "disable": {
+            "ethernet": true,
+            "wifi": true,
+            "cellular": false,
+            "bluetoothNetwork": false
+          },
+          "exclude": {
+            "macAddresses": [],
+            "interfaceDescriptions": [],
+            "interfaceAliases": []
+          }
+        }
+      },
       "scripts": []
     }
   ]
 }
 ```
 
-`dryRun` sollte erst auf `false` gesetzt werden, nachdem die protokollierten Adapterentscheidungen auf dem Zielsystem geprüft wurden.
+`dryRun` sollte erst auf `false` gesetzt werden, nachdem die protokollierten Adapterentscheidungen auf dem Zielsystem geprueft wurden.
 
-## Profil-Overrides
+## Profilbezogene Einstellungen
 
-Profile können Network-Isolation-Einstellungen in ihrem eigenen `moduleSettings`-Abschnitt überschreiben.
+Network-Isolation-Einstellungen sind in v2 bewusst profilbezogen. Das haelt kleine Deployments lesbar: Zwei oder drei Bootprofile koennen jeweils ihre eigene Netzwerk-Policy deklarieren, ohne globale Defaults.
 
-`dryRun` und einzelne `disable`-Flags überschreiben den globalen Wert, wenn sie vorhanden sind.
-
-`exclude`-Werte werden addiert. Dadurch bleiben globale Management-Ausnahmen geschützt, während Profile eigene Ausnahmen ergänzen können.
-
-```json
-{
-  "name": "BootProfile Switcher - Mode A",
-  "mode": "A",
-  "modules": [
-    "network-isolation"
-  ],
-  "moduleSettings": {
-    "network-isolation": {
-      "disable": {
-        "wifi": false
-      },
-      "exclude": {
-        "interfaceAliases": [
-          "Management LAN"
-        ]
-      }
-    }
-  },
-  "scripts": []
-}
-```
+Unterschiedliche Profile koennen unterschiedliche Adapter-Kategorien deaktivieren oder unterschiedliche Ausnahmen verwenden. Ein Profil kann zum Beispiel nur WLAN deaktivieren, waehrend ein anderes Ethernet, WLAN, Cellular und Bluetooth-PAN-Netzwerkadapter deaktiviert.
 
 ## Ausnahmen
 
-Adapter können ausgeschlossen werden per:
+Adapter koennen ausgeschlossen werden per:
 
 - MAC-Adresse
 - Interface Description
 - Interface Alias
 
-MAC-Adressen eignen sich für stabile Ausnahmen auf einzelnen Geräten.
+MAC-Adressen eignen sich fuer stabile Ausnahmen auf einzelnen Geraeten.
 
-Interface Descriptions eignen sich, um Hardwaremodelle über ähnliche Geräte hinweg zu erkennen.
+Interface Descriptions eignen sich, um Hardwaremodelle ueber aehnliche Geraete hinweg zu erkennen.
 
 Interface Aliases eignen sich, wenn Administrator:innen gezielt vorhersehbare Namen per Deployment oder Gruppenrichtlinie vergeben.
 
@@ -134,9 +120,9 @@ Der Lifecycle ist:
 2. Wenn das aktuelle Profil isolierend ist, werden die konfigurierten Adapter-Kategorien deaktiviert.
 3. Wenn der vorherige Lauf isolierend war und der aktuelle Start nicht isoliert, wird die gespeicherte Baseline wiederhergestellt, statt den durch Isolation entstandenen Zustand zu lernen.
 
-Dadurch können administrative Änderungen während normaler, nicht-isolierender Nutzung automatisch zur neuen Baseline werden.
+Dadurch koennen administrative Aenderungen waehrend normaler, nicht-isolierender Nutzung automatisch zur neuen Baseline werden.
 
-Restore-Entscheidungen verwenden den administrativen Adapterstatus. Das ist wichtig, weil durch `Disable-NetAdapter` deaktivierte Adapter von Windows mit Laufzeitstatus `Not Present` gemeldet werden können, während der administrative Zustand weiterhin zeigt, dass sie wieder aktiviert werden können.
+Restore-Entscheidungen verwenden den administrativen Adapterstatus. Das ist wichtig, weil durch `Disable-NetAdapter` deaktivierte Adapter von Windows mit Laufzeitstatus `Not Present` gemeldet werden koennen, waehrend der administrative Zustand weiterhin zeigt, dass sie wieder aktiviert werden koennen.
 
 ## Logging
 
@@ -152,19 +138,19 @@ Modulaktionen werden hier protokolliert:
 logs/module-actions.log
 ```
 
-Die Logs zeigen, ob die Konfiguration gültig war, ob ein Profil erkannt wurde, welche Module liefen, welche Adapterentscheidungen getroffen wurden und ob ein Dispatch-Pfad übersprungen wurde.
+Die Logs zeigen, ob die Konfiguration gueltig war, ob ein Profil erkannt wurde, welche Module liefen, welche Adapterentscheidungen getroffen wurden und ob ein Dispatch-Pfad uebersprungen wurde.
 
 ## Demo
 
-Das Modul enthält ein eigenes Demo-Setup:
+Das Modul enthaelt ein eigenes Demo-Setup:
 
 ```text
 install-network-isolation-demo.cmd
 ```
 
-Die Demo installiert einen verwalteten Bootmenü-Eintrag mit dem Namen `Network Isolation`, eine passende maschinenweite Profilkonfiguration und den Startup-Hook.
+Die Demo installiert einen verwalteten Bootmenue-Eintrag mit dem Namen `Network Isolation`, eine passende maschinenweite Profilkonfiguration und den Startup-Hook.
 
-Das Demo-Profil deaktiviert Ethernet-, WLAN-, Cellular- und Bluetooth-PAN-Netzwerkadapter. Es demonstriert den vollständigen Lifecycle:
+Das Demo-Profil deaktiviert Ethernet-, WLAN-, Cellular- und Bluetooth-PAN-Netzwerkadapter. Es demonstriert den vollstaendigen Lifecycle:
 
 1. normaler Start lernt die aktuelle Adapter-Baseline
 2. `Network Isolation`-Start deaktiviert die konfigurierten Netzwerkpfade
@@ -186,7 +172,7 @@ config/demos/network-isolation.json
 
 ## Validierung
 
-Die Repository-Fixtures können so validiert werden:
+Die Repository-Fixtures koennen so validiert werden:
 
 ```text
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Test-BootProfileConfigurationFixtures.ps1 -AsJson
@@ -200,7 +186,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Test-BootProfi
 
 ## Bekannte Grenzen
 
-- Das Modul deaktiviert keine Bluetooth-Radios und keine USB-Bluetooth-Adapter als Geräte.
+- Das Modul deaktiviert keine Bluetooth-Radios und keine USB-Bluetooth-Adapter als Geraete.
 - Das Modul verwaltet aktuell keine VPN-, Tunnel-, Loopback- oder virtuellen Adapter.
-- Adapter-Level-Isolation ist keine vollständige Sicherheitsgrenze gegen lokale Administrator:innen.
-- Stärkere Enterprise-Erzwingung gehört in ein zukünftiges Hardening-Milestone.
+- Adapter-Level-Isolation ist keine vollstaendige Sicherheitsgrenze gegen lokale Administrator:innen.
+- Staerkere Enterprise-Erzwingung gehoert in ein zukuenftiges Hardening-Milestone.
