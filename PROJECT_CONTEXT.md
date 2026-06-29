@@ -20,13 +20,15 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.0.0 – Initial Stable Release**
+**v1.1.0 – Network Isolation**
 
-The Initial Stable Release milestone is complete.
+The Network Isolation milestone is complete.
 
 ## Current Focus
 
-Prepare post-v1.0 planning after completing the initial stable foundation release.
+Prepare the next structural milestone: **v1.2.0 – Configuration Format v2**.
+
+The next planned work should improve the project configuration model before adding more production modules. The following milestone should then make boot menu creation configuration-driven.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -250,13 +252,15 @@ Validation note:
 
 Current planning:
 
-* v1.1.0 – Network Isolation lifecycle module as the first production-oriented module
+* v1.2.0 – Configuration Format v2
+* v1.3.0 – Boot Menu From Configuration
+* Later module milestone – Service Control module for configurable Windows service enable/disable behavior
 
 The roadmap may evolve based on research findings.
 
 ## v1.1.0 – Network Isolation
 
-In progress.
+Completed.
 
 Main target:
 
@@ -286,6 +290,18 @@ Follow-up roadmap note:
 
 * A later Network Isolation hardening milestone should evaluate Group Policy restrictions, network UI restrictions, device-management controls, service controls and firewall enforcement so isolated profiles can be made harder to bypass in enterprise deployments.
 * A later Bluetooth/device isolation milestone should evaluate how to disable Bluetooth radios or USB Bluetooth adapters when that is required in addition to Bluetooth network adapter isolation.
+
+## Later Module Candidate – Service Control
+
+Planned after the next structural milestones.
+
+Initial idea:
+
+* Add a production module that can disable or restore configured Windows services for selected boot profiles.
+* Target services by service name, similar in spirit to how Network Isolation uses explicit adapter policy and exclusions.
+* Initial use cases include disabling services such as Windows Update or Bitdefender components during experimental profiles so background activity does not interfere with tests.
+* The configuration model should support profile-specific service lists and should be suitable for enterprise deployment.
+* The module must define restore behavior carefully before implementation, because service startup type and running state may both matter.
 
 ## v1.0.0 – Initial Stable Release
 
@@ -407,15 +423,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare post-v1.0 planning.
+Plan **v1.2.0 – Configuration Format v2**.
 
 Primary objective:
 
-Decide which post-v1.0 direction should come first: production module design, configuration model evolution, enterprise deployment packaging or removal/replacement of the temporary demo module.
+Design the next configuration format so managed boot profiles, module settings, profile overrides and later module types can be represented cleanly.
 
 Immediate next validation target:
 
-Use the long-term configuration goals and open decisions to plan the next milestone after the initial stable release.
+Define the concrete questions and acceptance criteria for v1.2.0 before implementation starts.
 
 ---
 
