@@ -41,6 +41,10 @@ Jedes verwaltete Profil hat:
 - `modules` als Objekt mit ausgewählten Modulen und deren Einstellungen
 - `scripts` für spätere Custom-Script-Unterstützung
 
+Profil-IDs müssen Kleinbuchstaben, Zahlen und einzelne Bindestrich-Trenner
+verwenden, zum Beispiel `network-isolation` oder `experiment-local`. Das alte
+v1-Feld `mode` ist nicht Teil von v2.
+
 ## Moduleinstellungen
 
 Moduleinstellungen stehen direkt am jeweiligen Profil unter `modules`.
@@ -72,6 +76,23 @@ prüfen als vererbte globale Defaults.
 
 Globale Modul-Defaults können später erneut geprüft werden, wenn ein echter
 Deployment-Bedarf entsteht. Sie sind bewusst nicht Teil von v2.
+
+## Validierungsregeln
+
+Der v2-Validator lehnt absichtlich uneindeutige oder alte Formen ab:
+
+- nicht unterstützte Top-Level-Felder
+- reine v1-Profilfelder wie `mode` oder `moduleSettings`
+- ungültige Profil-IDs
+- doppelte Profil-IDs
+- doppelte Anzeigenamen
+- leere `modules`-Objekte
+- unbekannte Modulnamen
+- Script-Einträge, die keine Strings sind
+- Default-Entry-Anzeigenamen, wenn `rename` auf `false` steht
+
+Diese Regeln halten das Format explizit, bevor es zur Quelle für
+konfigurationsgetriebene Bootmenü-Erzeugung wird.
 
 ## Beispiel
 

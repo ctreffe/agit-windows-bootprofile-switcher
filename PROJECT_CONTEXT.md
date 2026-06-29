@@ -290,7 +290,7 @@ Acceptance criteria:
 
 * `config/profiles.v2.example.json` documents the v2 shape.
 * `scripts/Test-BootProfileConfiguration.ps1` validates the v2 shape while preserving v1 validation.
-* Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid default-profile settings and invalid module settings.
+* Valid and invalid v2 fixtures cover duplicate profile identifiers, duplicate display names, invalid default-profile settings, invalid module settings, legacy v1 fields, unknown properties, invalid profile IDs, empty module sets and invalid script entries.
 * Documentation explains the distinction between the Windows default boot entry and managed BootProfile Switcher profiles.
 * v1.3.0 can use the v2 format as the source for configuration-driven boot menu installation.
 

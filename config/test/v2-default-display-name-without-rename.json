@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": "Windows",
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "profile-a",
+      "displayName": "Profile A",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "validation-log": {}
+      },
+      "scripts": []
+    }
+  ]
+}

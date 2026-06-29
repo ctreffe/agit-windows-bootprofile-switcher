@@ -41,6 +41,10 @@ Each managed profile has:
 - `modules` as an object containing selected modules and their settings
 - `scripts` for future custom script support
 
+Profile IDs must use lowercase letters, numbers and single hyphen separators,
+for example `network-isolation` or `experiment-local`. The old v1 `mode` field
+is not part of v2.
+
 ## Module Settings
 
 Module settings are stored directly on each profile under `modules`.
@@ -72,6 +76,23 @@ defaults.
 
 Global module defaults may be reconsidered later if a real deployment need
 appears. They are intentionally not part of v2.
+
+## Validation Rules
+
+The v2 validator intentionally rejects ambiguous or legacy shapes:
+
+- unsupported top-level properties
+- v1-only profile fields such as `mode` or `moduleSettings`
+- invalid profile IDs
+- duplicate profile IDs
+- duplicate display names
+- empty `modules` objects
+- unknown module names
+- non-string script entries
+- default-entry display names when `rename` is `false`
+
+These rules keep the format explicit before it becomes the source for
+configuration-driven boot menu installation.
 
 ## Example
 

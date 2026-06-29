@@ -77,6 +77,22 @@ function Get-JsonProperty {
     Write-Output -NoEnumerate $property.Value
 }
 
+function Get-JsonPropertyNames {
+    param(
+        [object]$Object
+    )
+
+    if ($null -eq $Object) {
+        return @()
+    }
+
+    if ($Object -is [System.Collections.IDictionary]) {
+        return @($Object.Keys | ForEach-Object { [string]$_ })
+    }
+
+    return @($Object.PSObject.Properties.Name)
+}
+
 function Test-ObjectProperty {
     param(
         [object]$Value
@@ -211,6 +227,21 @@ function Test-ModuleSettingsContainer {
     }
 }
 
+function Test-AllowedProperties {
+    param(
+        [object]$Object,
+        [string]$Prefix,
+        [string[]]$AllowedProperties,
+        [System.Collections.Generic.List[string]]$Errors
+    )
+
+    foreach ($propertyName in @(Get-JsonPropertyNames -Object $Object)) {
+        if ($AllowedProperties -notcontains $propertyName) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix contains unsupported property: $propertyName"
+        }
+    }
+}
+
 function Test-BootMenuV2 {
     param(
         [object]$BootMenu,
@@ -221,6 +252,12 @@ function Test-BootMenuV2 {
         Add-ValidationError -Errors $Errors -Message 'bootMenu must be an object.'
         return
     }
+
+    Test-AllowedProperties `
+        -Object $BootMenu `
+        -Prefix 'bootMenu' `
+        -AllowedProperties @('timeoutSeconds', 'sourceEntry', 'defaultEntry') `
+        -Errors $Errors
 
     $timeoutSeconds = Get-JsonProperty -Object $BootMenu -Name 'timeoutSeconds'
     $sourceEntry = [string](Get-JsonProperty -Object $BootMenu -Name 'sourceEntry')
@@ -238,6 +275,12 @@ function Test-BootMenuV2 {
         Add-ValidationError -Errors $Errors -Message 'bootMenu.defaultEntry must be an object.'
         return
     }
+
+    Test-AllowedProperties `
+        -Object $defaultEntry `
+        -Prefix 'bootMenu.defaultEntry' `
+        -AllowedProperties @('rename', 'displayName', 'hide') `
+        -Errors $Errors
 
     $rename = Get-JsonProperty -Object $defaultEntry -Name 'rename'
     $displayName = Get-JsonProperty -Object $defaultEntry -Name 'displayName'
@@ -257,6 +300,10 @@ function Test-BootMenuV2 {
 
     if ($rename -eq $true -and [string]::IsNullOrWhiteSpace([string]$displayName)) {
         Add-ValidationError -Errors $Errors -Message 'bootMenu.defaultEntry.displayName must not be empty when rename is true.'
+    }
+
+    if ($rename -eq $false -and $null -ne $displayName) {
+        Add-ValidationError -Errors $Errors -Message 'bootMenu.defaultEntry.displayName must be null when rename is false.'
     }
 }
 
@@ -374,6 +421,12 @@ if ($configuration) {
     } elseif ($schemaVersion -eq 2) {
         $bootMenu = Get-JsonProperty -Object $configuration -Name 'bootMenu'
 
+        Test-AllowedProperties `
+            -Object $configuration `
+            -Prefix 'configuration' `
+            -AllowedProperties @('schemaVersion', 'bootMenu', 'profiles') `
+            -Errors $errors
+
         Test-BootMenuV2 -BootMenu $bootMenu -Errors $errors
 
         if (-not (Test-ArrayProperty -Value $profiles)) {
@@ -385,6 +438,13 @@ if ($configuration) {
             for ($index = 0; $index -lt $profiles.Count; $index++) {
                 $profile = $profiles[$index]
                 $prefix = "profiles[$index]"
+
+                Test-AllowedProperties `
+                    -Object $profile `
+                    -Prefix $prefix `
+                    -AllowedProperties @('id', 'displayName', 'bootMenu', 'modules', 'scripts') `
+                    -Errors $errors
+
                 $id = [string](Get-JsonProperty -Object $profile -Name 'id')
                 $displayName = [string](Get-JsonProperty -Object $profile -Name 'displayName')
                 $profileBootMenu = Get-JsonProperty -Object $profile -Name 'bootMenu'
@@ -393,6 +453,8 @@ if ($configuration) {
 
                 if ([string]::IsNullOrWhiteSpace($id)) {
                     Add-ValidationError -Errors $errors -Message "$prefix.id must not be empty."
+                } elseif ($id -notmatch '^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$') {
+                    Add-ValidationError -Errors $errors -Message "$prefix.id must use lowercase letters, numbers and single hyphen separators."
                 } elseif ($seenIds.ContainsKey($id)) {
                     Add-ValidationError -Errors $errors -Message "$prefix.id must be unique: $id"
                 } else {
@@ -410,6 +472,12 @@ if ($configuration) {
                 if (-not (Test-ObjectProperty -Value $profileBootMenu)) {
                     Add-ValidationError -Errors $errors -Message "$prefix.bootMenu must be an object."
                 } else {
+                    Test-AllowedProperties `
+                        -Object $profileBootMenu `
+                        -Prefix "$prefix.bootMenu" `
+                        -AllowedProperties @('enabled') `
+                        -Errors $errors
+
                     $bootMenuEnabled = Get-JsonProperty -Object $profileBootMenu -Name 'enabled'
                     if (-not (Test-BooleanProperty -Value $bootMenuEnabled)) {
                         Add-ValidationError -Errors $errors -Message "$prefix.bootMenu.enabled must be a boolean."
@@ -419,6 +487,10 @@ if ($configuration) {
                 if (-not (Test-ObjectProperty -Value $modules)) {
                     Add-ValidationError -Errors $errors -Message "$prefix.modules must be an object."
                 } else {
+                    if (@($modules.Keys).Count -eq 0) {
+                        Add-ValidationError -Errors $errors -Message "$prefix.modules must contain at least one module."
+                    }
+
                     Test-ModuleSettingsContainer -Settings $modules -Prefix "$prefix.modules" -Errors $errors -KnownModules $knownModules
 
                     foreach ($moduleName in $modules.Keys) {
@@ -428,8 +500,8 @@ if ($configuration) {
                     }
                 }
 
-                if (-not (Test-ArrayProperty -Value $scripts)) {
-                    Add-ValidationError -Errors $errors -Message "$prefix.scripts must be an array."
+                if (-not (Test-StringArrayProperty -Value $scripts)) {
+                    Add-ValidationError -Errors $errors -Message "$prefix.scripts must be an array of strings."
                 }
 
                 $profileNetworkIsolationSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'network-isolation' } else { $null }

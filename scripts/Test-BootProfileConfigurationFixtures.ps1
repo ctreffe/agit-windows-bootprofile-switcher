@@ -128,6 +128,41 @@ $fixtures = @(
         name = 'v2-invalid-module-settings'
         path = Join-Path $repoRoot 'config\test\v2-invalid-module-settings.json'
         expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-legacy-mode'
+        path = Join-Path $repoRoot 'config\test\v2-legacy-mode.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-legacy-module-settings'
+        path = Join-Path $repoRoot 'config\test\v2-legacy-module-settings.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-unknown-top-level'
+        path = Join-Path $repoRoot 'config\test\v2-unknown-top-level.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-invalid-profile-id'
+        path = Join-Path $repoRoot 'config\test\v2-invalid-profile-id.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-empty-modules'
+        path = Join-Path $repoRoot 'config\test\v2-empty-modules.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-invalid-scripts'
+        path = Join-Path $repoRoot 'config\test\v2-invalid-scripts.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'v2-default-display-name-without-rename'
+        path = Join-Path $repoRoot 'config\test\v2-default-display-name-without-rename.json'
+        expectedValid = $false
     }
 )
 
