@@ -21,6 +21,8 @@
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`) und den Meilenstein Configuration Format v2 (`v1.2.0`) abgeschlossen.
 >
 > Der Meilenstein `v1.2.0 – Configuration Format v2` ist abgeschlossen. Dieser Release ergänzt die validierte v2-Konfigurationsstruktur, profil-lokale Moduleinstellungen, begrenzte Default-Entry-Einstellungen, Validator-Abdeckung, Dokumentation und eine ADR zur Formatentscheidung.
+>
+> Der Meilenstein `v1.3.0 – Boot Menu From Configuration` ist implementiert und befindet sich aktuell in der Validierung. Das verbleibende Meilenstein-Gate ist die Real-System-Validierung von config-driven Bootmenü-Installation und -Deinstallation einschließlich des Restore-Pfads beim Uninstall der Network-Isolation-Demo.
 
 ## Überblick
 
@@ -314,7 +316,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.1.0 Network Isolation
+1.2.0 Configuration Format v2
 ```
 
 ## Validierung
@@ -365,6 +367,8 @@ Zentrale Projektdokumente:
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – Strategie zur Bootprofil-Erkennung
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – Grenze des Bootprofil-Resolvers
 - [docs/decisions/ADR-0004-network-isolation-lifecycle-module.md](docs/decisions/ADR-0004-network-isolation-lifecycle-module.md) – Architekturentscheidung zum Network-Isolation-Lifecycle-Modul
+- [docs/decisions/ADR-0005-configuration-format-v2.md](docs/decisions/ADR-0005-configuration-format-v2.md) – Architekturentscheidung zu Konfigurationsformat v2
+- [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – Architekturentscheidung zur konfigurationsgetriebenen Bootmenü-Installation
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ### Resolver des aktuellen Profils

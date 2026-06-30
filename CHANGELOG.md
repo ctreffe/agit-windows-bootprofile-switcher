@@ -18,6 +18,7 @@ This project follows Semantic Versioning.
 - Extend resolver and profile engine compatibility for v2-generated boot menu state.
 - Remove legacy Configuration Format v1 validation and runtime dispatch compatibility.
 - Migrate active Network Isolation configuration fixtures and demos to Configuration Format v2.
+- Clarify that v1.3.0 is implemented and in validation while v1.2.0 remains the latest completed milestone.
 
 ### Fixed
 

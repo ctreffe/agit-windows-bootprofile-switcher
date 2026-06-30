@@ -21,6 +21,8 @@
 > BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`) and the Configuration Format v2 milestone (`v1.2.0`).
 >
 > The `v1.2.0 – Configuration Format v2` milestone is complete. This release adds the validated v2 configuration shape, profile-local module settings, constrained default-entry handling, validator coverage, documentation and an ADR for the format decision.
+>
+> The `v1.3.0 – Boot Menu From Configuration` milestone is implemented and currently in validation. The remaining milestone gate is real-system validation of config-driven boot menu install/uninstall behavior, including the Network Isolation demo uninstall restore path.
 
 ## Overview
 
@@ -301,7 +303,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-1.1.0 Network Isolation
+1.2.0 Configuration Format v2
 ```
 
 ## Validation
@@ -352,6 +354,8 @@ Core project documents:
 - [docs/decisions/ADR-0002-boot-profile-detection.md](docs/decisions/ADR-0002-boot-profile-detection.md) – boot profile detection strategy
 - [docs/decisions/ADR-0003-boot-profile-resolver-boundary.md](docs/decisions/ADR-0003-boot-profile-resolver-boundary.md) – boot profile resolver boundary
 - [docs/decisions/ADR-0004-network-isolation-lifecycle-module.md](docs/decisions/ADR-0004-network-isolation-lifecycle-module.md) – Network Isolation lifecycle module decision
+- [docs/decisions/ADR-0005-configuration-format-v2.md](docs/decisions/ADR-0005-configuration-format-v2.md) – Configuration Format v2 decision
+- [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – configuration-driven boot menu installation decision
 - [LICENSE](LICENSE) – MIT License
 
 ### Current profile resolver
