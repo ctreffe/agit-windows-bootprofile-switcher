@@ -426,6 +426,11 @@ Expected validation:
 * Recommend the first implementable module scope, likely starting with robust system services such as Windows Search indexing.
 * Record unsupported or postponed targets explicitly as validated project knowledge.
 
+Initial discovery artifacts:
+
+* `docs/discovery/service-startup-control.md` defines the v1.4.0 discovery scope and safe inventory workflow.
+* `scripts/Inspect-ServiceStartupControlTargets.ps1` collects a read-only JSON inventory for the current target interests.
+
 ## v1.0.0 – Initial Stable Release
 
 Completed.
@@ -552,9 +557,9 @@ Primary objective:
 
 Discover how the requested local targets are controlled before implementing any service or startup control module.
 
-Immediate next planning target:
+Immediate next validation target:
 
-Create a read-only local inventory plan for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing.
+Run `scripts/Inspect-ServiceStartupControlTargets.ps1 -AsJson` locally, review the discovered services, scheduled tasks, startup entries and processes, and classify the first implementable module scope.
 
 ---
 

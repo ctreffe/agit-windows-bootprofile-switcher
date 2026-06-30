@@ -224,6 +224,7 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
+- `scripts/Inspect-ServiceStartupControlTargets.ps1` fuehrt eine rein lesende Discovery fuer Service-, Autostart- und User-Application-Control im v1.4.0-Planungsmeilenstein aus.
 
 Der standardmäßige maschinenweite Konfigurationspfad ist:
 
@@ -353,6 +354,7 @@ Zentrale Projektdokumente:
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
+- [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – deutsche Dokumentation des Network-Isolation-Moduls
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept

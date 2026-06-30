@@ -216,6 +216,7 @@ Current PowerShell entry points:
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
+- `scripts/Inspect-ServiceStartupControlTargets.ps1` performs read-only service, startup and user-application control discovery for the v1.4.0 planning milestone.
 
 The default machine-wide configuration path is:
 
@@ -340,6 +341,7 @@ Core project documents:
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – Configuration Format v2 documentation
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – German Configuration Format v2 documentation
+- [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – German Network Isolation module documentation
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept

@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Add a read-only Service and Startup Control discovery document and inventory script for v1.4.0 planning.
+
 ### Changed
 
 - Define v1.4.0 as a Service and Startup Control Discovery milestone before implementing service-control behavior.
