@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Changed
+
+- Define v1.4.0 as a Service and Startup Control Discovery milestone before implementing service-control behavior.
+
 ## [v1.3.0] - 2026-06-30
 
 ### Added

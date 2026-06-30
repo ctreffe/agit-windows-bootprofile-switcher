@@ -42,7 +42,7 @@ Completed v1.3.0 results:
 
 Next roadmap focus:
 
-* Prepare a later Service Control module milestone for configurable Windows service enable/disable behavior.
+* Prepare a discovery milestone for service, startup and user-application control before implementing the next production module.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -268,11 +268,17 @@ Last completed milestone:
 
 * v1.3.0 – Boot Menu From Configuration
 
-Planned next milestone candidate:
+Planned next milestone:
 
-* Later module milestone – Service Control module for configurable Windows service enable/disable behavior
+* v1.4.0 – Service and Startup Control Discovery
 
-The roadmap may evolve based on research findings.
+Later milestone candidates:
+
+* Service Control module for configurable Windows service enable/disable behavior.
+* Startup or user-application control module for Teams, OneDrive, ownCloud, Outlook and similar per-user applications.
+* Network Isolation hardening for policy-backed isolation controls.
+
+The roadmap may evolve based on discovery findings.
 
 ## v1.3.0 – Boot Menu From Configuration
 
@@ -379,17 +385,46 @@ Follow-up roadmap note:
 * A later Network Isolation hardening milestone should evaluate Group Policy restrictions, network UI restrictions, device-management controls, service controls and firewall enforcement so isolated profiles can be made harder to bypass in enterprise deployments.
 * A later Bluetooth/device isolation milestone should evaluate how to disable Bluetooth radios or USB Bluetooth adapters when that is required in addition to Bluetooth network adapter isolation.
 
-## Later Module Candidate – Service Control
+## v1.4.0 – Service and Startup Control Discovery
 
-Planned after the next structural milestones.
+Planned.
 
-Initial idea:
+Purpose:
 
-* Add a production module that can disable or restore configured Windows services for selected boot profiles.
-* Target services by service name, similar in spirit to how Network Isolation uses explicit adapter policy and exclusions.
-* Initial use cases include disabling services such as Windows Update or Bitdefender components during experimental profiles so background activity does not interfere with tests.
-* The configuration model should support profile-specific service lists and should be suitable for enterprise deployment.
-* The module must define restore behavior carefully before implementation, because service startup type and running state may both matter.
+* Inventory the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
+* Separate system services from scheduled tasks, per-user startup entries, running user processes, vendor-protected security components and policy-managed components.
+* Decide which targets are suitable for a first production module and which require separate modules or policy guidance.
+* Define the safety model, baseline state and restore behavior for any service-control implementation.
+
+Initial target categories:
+
+* `service-control`: Windows services with explicit service names, startup type and running-state restore.
+* `startup-control` or `user-app-control`: per-user startup applications such as Teams, OneDrive, ownCloud and Outlook, if needed after discovery.
+* `policy-or-vendor-guidance`: components such as Bitdefender or Windows Update where direct service stopping may be unreliable, unsupported or blocked by self-protection.
+
+Known initial target interests:
+
+* Windows Update.
+* Bitdefender.
+* Microsoft Teams.
+* OneDrive.
+* ownCloud.
+* Outlook.
+* Windows Search / drive indexing.
+
+Intentional non-goals for v1.4.0:
+
+* Do not disable or kill services, processes or security components during discovery.
+* Do not bypass vendor tamper protection or Windows self-healing behavior.
+* Do not treat per-user applications as normal Windows services without verifying their actual startup mechanism.
+* Do not implement the production `service-control` module until discovery has identified safe first targets and restore requirements.
+
+Expected validation:
+
+* Produce a local inventory of relevant services, scheduled tasks, startup entries and running processes.
+* Classify each requested target by control surface and risk.
+* Recommend the first implementable module scope, likely starting with robust system services such as Windows Search indexing.
+* Record unsupported or postponed targets explicitly as validated project knowledge.
 
 ## v1.0.0 – Initial Stable Release
 
@@ -511,15 +546,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan the next module milestone after **v1.3.0 – Boot Menu From Configuration**.
+Plan **v1.4.0 – Service and Startup Control Discovery**.
 
 Primary objective:
 
-Define the scope, safety model and validation expectations for the next production-oriented module candidate.
+Discover how the requested local targets are controlled before implementing any service or startup control module.
 
 Immediate next planning target:
 
-Evaluate the later Service Control module candidate and decide whether it should become the next milestone.
+Create a read-only local inventory plan for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing.
 
 ---
 
