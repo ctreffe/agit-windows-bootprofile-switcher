@@ -88,8 +88,9 @@ Die Network-Isolation-Demo kann entfernt werden mit:
 uninstall-network-isolation-demo.cmd
 ```
 
-Der Uninstall-Wrapper entfernt den Startup-Hook und den verwalteten
-Demo-Boot-Eintrag. Wenn bei der Installation eine vorherige
+Der Uninstall-Wrapper stellt bei Bedarf die gespeicherte normale
+Adapter-Baseline wieder her und entfernt danach den Startup-Hook und den
+verwalteten Demo-Boot-Eintrag. Wenn bei der Installation eine vorherige
 ProgramData-Profilkonfiguration gesichert wurde, wird sie wiederhergestellt.
 
 Jedes produktive Modul sollte, soweit praktikabel, eine kleine installierbare

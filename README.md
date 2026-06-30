@@ -86,9 +86,10 @@ The Network Isolation demo can be removed with:
 uninstall-network-isolation-demo.cmd
 ```
 
-The uninstall wrapper removes the startup hook and the managed demo boot entry.
-If an earlier ProgramData profile configuration was backed up during
-installation, it is restored.
+The uninstall wrapper restores the saved normal adapter baseline when needed,
+then removes the startup hook and the managed demo boot entry. If an earlier
+ProgramData profile configuration was backed up during installation, it is
+restored.
 
 Each production module should provide a small installable demo when practical.
 The demo should show the module's intended behavior without requiring manual

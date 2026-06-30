@@ -162,6 +162,12 @@ Die Demo kann entfernt werden mit:
 uninstall-network-isolation-demo.cmd
 ```
 
+Beim Entfernen fuehrt der Demo-Uninstaller den Network-Isolation-Lifecycle
+einmal im nicht-isolierenden Modus aus, bevor Startup Hook und Demo-Konfiguration
+entfernt werden. Dadurch wird die gespeicherte normale Adapter-Baseline auch
+dann wiederhergestellt, wenn zuletzt das Bootprofil `Network Isolation`
+ausgewaehlt war.
+
 Wenn bei der Installation eine vorherige ProgramData-Profilkonfiguration gesichert wurde, stellt der Uninstall-Wrapper sie wieder her.
 
 Die Demo-Konfiguration liegt hier:

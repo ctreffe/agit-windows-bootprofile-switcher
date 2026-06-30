@@ -19,6 +19,10 @@ This project follows Semantic Versioning.
 - Remove legacy Configuration Format v1 validation and runtime dispatch compatibility.
 - Migrate active Network Isolation configuration fixtures and demos to Configuration Format v2.
 
+### Fixed
+
+- Restore the Network Isolation adapter baseline during demo uninstall before removing the startup hook and demo configuration.
+
 ## [v1.2.0] - 2026-06-30
 
 ### Added

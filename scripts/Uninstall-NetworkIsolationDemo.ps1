@@ -32,8 +32,93 @@ $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $stateDir = Join-Path $repoRoot 'state'
 $stateFile = Join-Path $stateDir 'boot-menu.json'
 $uninstallStartupHookScript = Join-Path $repoRoot 'scripts\Uninstall-StartupHook.ps1'
+$profileEngineScript = Join-Path $repoRoot 'scripts\Invoke-ProfileEngine.ps1'
+$logDir = Join-Path $repoRoot 'logs'
+$configSource = Join-Path $repoRoot 'config\demos\network-isolation.json'
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-network-isolation-demo.json'
+$networkIsolationStatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\network-isolation-state.json'
+
+function Invoke-NetworkIsolationDemoRestore {
+    if (-not (Test-Path $networkIsolationStatePath)) {
+        Write-Host "No Network Isolation lifecycle state found at $networkIsolationStatePath"
+        return
+    }
+
+    if (-not (Test-Path $profileEngineScript)) {
+        Write-Warning "Cannot restore Network Isolation baseline because profile engine is missing: $profileEngineScript"
+        return
+    }
+
+    $restoreConfigPaths = @()
+
+    if (Test-Path $configDestination) {
+        $restoreConfigPaths += $configDestination
+    }
+
+    if ((Test-Path $configSource) -and ($restoreConfigPaths -notcontains $configSource)) {
+        $restoreConfigPaths += $configSource
+    }
+
+    if ($restoreConfigPaths.Count -eq 0) {
+        Write-Warning "Cannot restore Network Isolation baseline because no usable profile configuration was found."
+        return
+    }
+
+    New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
+    New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+
+    $restoreResolverStatePath = Join-Path $stateDir 'network-isolation-demo-uninstall-resolver.json'
+    $restoreResolverState = [ordered]@{
+        schemaVersion = 1
+        generatedAt = (Get-Date).ToString('o')
+        detected = $false
+        profileId = $null
+        mode = 'unmanaged'
+        name = 'Unmanaged Windows startup'
+        identifier = 'unmanaged'
+        source = 'network-isolation-demo-uninstall'
+        description = 'Network Isolation demo uninstall restore'
+        currentIdentifier = $null
+        outputPath = $restoreResolverStatePath
+        stateFile = $stateFile
+        error = $null
+    }
+
+    $restoreResolverState | ConvertTo-Json -Depth 5 | Set-Content -Path $restoreResolverStatePath -Encoding UTF8
+
+    foreach ($restoreConfigPath in $restoreConfigPaths) {
+        Write-Host "Restoring Network Isolation baseline before removing demo infrastructure using $restoreConfigPath..."
+        $engineJson = & powershell.exe `
+            -NoProfile `
+            -ExecutionPolicy Bypass `
+            -File $profileEngineScript `
+            -ResolverStatePath $restoreResolverStatePath `
+            -LogDir $logDir `
+            -ConfigPath $restoreConfigPath
+
+        $engineResult = ($engineJson | Out-String).Trim() | ConvertFrom-Json
+
+        if (-not [bool]$engineResult.configurationValid) {
+            Write-Warning "Network Isolation baseline restore did not run because this profile configuration is invalid: $restoreConfigPath"
+            foreach ($configurationError in @($engineResult.configurationErrors)) {
+                Write-Warning "- $configurationError"
+            }
+            continue
+        }
+
+        $networkIsolationExecuted = @($engineResult.modulesExecuted | Where-Object { $_.name -eq 'network-isolation' }).Count -gt 0
+
+        if ($networkIsolationExecuted) {
+            Write-Host 'Network Isolation baseline restore path completed.'
+            return
+        }
+    }
+
+    Write-Warning 'Network Isolation baseline restore path did not execute; adapters may need manual review.'
+}
+
+Invoke-NetworkIsolationDemoRestore
 
 & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $uninstallStartupHookScript
 
