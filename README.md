@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`) and the Boot Menu From Configuration milestone (`v1.3.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`) and the Service and Startup Control Discovery milestone (`v1.4.0`).
 >
-> The `v1.3.0 – Boot Menu From Configuration` milestone is complete. This release makes boot menu installation read Configuration Format v2 directly, adds the config-driven boot menu demo, removes legacy v1 configuration compatibility and validates the repaired Network Isolation demo uninstall restore path.
+> The `v1.4.0 – Service and Startup Control Discovery` milestone is complete. This release records the read-only discovery of requested service, startup and user-application targets, documents ADR-0007, and defines a generic allow-listed `service-control` design with `WSearch` as the first supported service candidate.
 
 ## Overview
 
@@ -216,7 +216,7 @@ Current PowerShell entry points:
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
-- `scripts/Inspect-ServiceStartupControlTargets.ps1` performs read-only service, startup and user-application control discovery for the v1.4.0 planning milestone.
+- `scripts/Inspect-ServiceStartupControlTargets.ps1` performs read-only service, startup and user-application control discovery for the v1.4.0 milestone.
 
 The default machine-wide configuration path is:
 
@@ -302,7 +302,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-1.3.0 Boot Menu From Configuration
+1.4.0 Service and Startup Control Discovery
 ```
 
 ## Validation

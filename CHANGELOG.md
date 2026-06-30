@@ -6,9 +6,13 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+No unreleased changes yet.
+
+## [v1.4.0] - 2026-06-30
+
 ### Added
 
-- Add a read-only Service and Startup Control discovery document and inventory script for v1.4.0 planning.
+- Add a read-only Service and Startup Control discovery document and inventory script for the v1.4.0 milestone.
 - Add ADR-0007 documenting Service and Startup Control modularization.
 - Add local Service and Startup Control discovery findings with a Windows Search service-control recommendation.
 - Add a generic Service Control module design with `WSearch` as the first supported service candidate.

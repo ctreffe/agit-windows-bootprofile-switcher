@@ -20,30 +20,28 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.3.0 – Boot Menu From Configuration**
+**v1.4.0 – Service and Startup Control Discovery**
 
-The Boot Menu From Configuration milestone is complete.
+The Service and Startup Control Discovery milestone is complete.
 
 ## Current Focus
 
-Prepare the next module milestone after **v1.3.0 – Boot Menu From Configuration**.
+Prepare the first dry-run-only implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
 
-v1.3.0 made managed boot menu creation use the validated v2 configuration format as its source of truth before adding more production modules.
+v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
-Completed v1.3.0 results:
+Completed v1.4.0 results:
 
-* `scripts/Install-BootProfileMenu.ps1` reads Configuration Format v2 directly and creates managed boot entries for profiles with `bootMenu.enabled = true`.
-* `scripts/Uninstall-BootProfileMenu.ps1` removes managed entries and restores recorded default-entry state.
-* `install-config-driven-boot-menu-demo.cmd` installs a v2 demo with `Network Isolation`, `Experiment Local` and `Maintenance` entries.
-* ADR-0006 documents the configuration-driven boot menu installation decision.
+* `scripts/Inspect-ServiceStartupControlTargets.ps1` collects a read-only inventory of service, scheduled task, startup registry, startup-folder and process matches.
 * ADR-0007 documents the Service and Startup Control modularization decision.
-* Legacy Configuration Format v1 validation and runtime dispatch compatibility have been removed.
-* The Network Isolation demo uninstall path now runs a non-isolating restore before removing demo infrastructure so adapter baseline restoration does not depend on a later startup hook run.
-* Configuration Format v2 documentation has been expanded with practical editing guidance, safe workflow notes and troubleshooting.
+* `docs/discovery/service-startup-control.md` defines the discovery scope and safe inventory workflow.
+* `docs/discovery/service-startup-control-findings.md` records validated local findings and recommends Windows Search / `WSearch` as the first narrow service-control candidate.
+* `docs/modules/service-control.md` defines a generic allow-listed `service-control` module design rather than a one-module-per-service approach.
+* The initial service-control design questions are resolved: `Disabled`/`Stopped` are the only explicit target values, `Manual`/`Automatic` and delayed automatic startup are restore-only baseline values, dependencies are inspected and logged only, and unsupported service names are configuration errors.
 
 Next roadmap focus:
 
-* Prepare a discovery milestone for service, startup and user-application control before implementing the next production module.
+* Implement the first dry-run-only `service-control` module path for Windows Search / `WSearch`.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -267,15 +265,15 @@ Validation note:
 
 Last completed milestone:
 
-* v1.3.0 – Boot Menu From Configuration
+* v1.4.0 – Service and Startup Control Discovery
 
 Planned next milestone:
 
-* v1.4.0 – Service and Startup Control Discovery
+* v1.5.0 – Dry-Run Service Control for Windows Search
 
 Later milestone candidates:
 
-* Service Control module for configurable Windows service enable/disable behavior.
+* Real Service Control apply/restore behavior after dry-run validation.
 * Startup or user-application control module for Teams, OneDrive, ownCloud, Outlook and similar per-user applications.
 * Network Isolation hardening for policy-backed isolation controls.
 
@@ -388,7 +386,7 @@ Follow-up roadmap note:
 
 ## v1.4.0 – Service and Startup Control Discovery
 
-Planned.
+Completed.
 
 Purpose:
 
@@ -564,11 +562,11 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan **v1.4.0 – Service and Startup Control Discovery**.
+Plan **v1.5.0 – Dry-Run Service Control for Windows Search**.
 
 Primary objective:
 
-Discover how the requested local targets are controlled before implementing any service or startup control module.
+Implement the first dry-run-only `service-control` module path for `WSearch` without changing service state.
 
 Immediate next validation target:
 

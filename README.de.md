@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`) und den Meilenstein Boot Menu From Configuration (`v1.3.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`) und den Meilenstein Service and Startup Control Discovery (`v1.4.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.3.0 – Boot Menu From Configuration` ist abgeschlossen. Dieser Release laesst die Bootmenue-Installation Konfigurationsformat v2 direkt lesen, ergaenzt die config-driven Bootmenue-Demo, entfernt alte v1-Konfigurationskompatibilitaet und validiert den reparierten Restore-Pfad beim Uninstall der Network-Isolation-Demo.
+> Der Meilenstein `v1.4.0 – Service and Startup Control Discovery` ist abgeschlossen. Dieser Release dokumentiert die rein lesende Discovery der angefragten Service-, Autostart- und User-Application-Ziele, ergaenzt ADR-0007 und definiert ein generisches allowlist-basiertes `service-control`-Design mit `WSearch` als erstem unterstuetzten Service-Kandidaten.
 
 ## Überblick
 
@@ -224,7 +224,7 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
-- `scripts/Inspect-ServiceStartupControlTargets.ps1` fuehrt eine rein lesende Discovery fuer Service-, Autostart- und User-Application-Control im v1.4.0-Planungsmeilenstein aus.
+- `scripts/Inspect-ServiceStartupControlTargets.ps1` fuehrt eine rein lesende Discovery fuer Service-, Autostart- und User-Application-Control im v1.4.0-Meilenstein aus.
 
 Der standardmäßige maschinenweite Konfigurationspfad ist:
 
@@ -315,7 +315,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.3.0 Boot Menu From Configuration
+1.4.0 Service and Startup Control Discovery
 ```
 
 ## Validierung
