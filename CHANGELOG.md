@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v1.3.0] - 2026-06-30
+
 ### Added
 
 - Add ADR-0006 documenting configuration-driven boot menu installation.
@@ -18,7 +20,8 @@ This project follows Semantic Versioning.
 - Extend resolver and profile engine compatibility for v2-generated boot menu state.
 - Remove legacy Configuration Format v1 validation and runtime dispatch compatibility.
 - Migrate active Network Isolation configuration fixtures and demos to Configuration Format v2.
-- Clarify that v1.3.0 is implemented and in validation while v1.2.0 remains the latest completed milestone.
+- Harmonize project status documentation for the completed v1.3.0 milestone.
+- Record successful real-system validation of the config-driven boot menu demo and Network Isolation demo uninstall restore path.
 - Expand Configuration Format v2 documentation with practical editing guidance, safe workflow notes and troubleshooting for less experienced users.
 
 ### Fixed

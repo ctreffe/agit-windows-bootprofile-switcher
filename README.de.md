@@ -18,11 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`) und den Meilenstein Configuration Format v2 (`v1.2.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`) und den Meilenstein Boot Menu From Configuration (`v1.3.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.2.0 – Configuration Format v2` ist abgeschlossen. Dieser Release ergänzt die validierte v2-Konfigurationsstruktur, profil-lokale Moduleinstellungen, begrenzte Default-Entry-Einstellungen, Validator-Abdeckung, Dokumentation und eine ADR zur Formatentscheidung.
->
-> Der Meilenstein `v1.3.0 – Boot Menu From Configuration` ist implementiert und befindet sich aktuell in der Validierung. Das verbleibende Meilenstein-Gate ist die Real-System-Validierung von config-driven Bootmenü-Installation und -Deinstallation einschließlich des Restore-Pfads beim Uninstall der Network-Isolation-Demo.
+> Der Meilenstein `v1.3.0 – Boot Menu From Configuration` ist abgeschlossen. Dieser Release laesst die Bootmenue-Installation Konfigurationsformat v2 direkt lesen, ergaenzt die config-driven Bootmenue-Demo, entfernt alte v1-Konfigurationskompatibilitaet und validiert den reparierten Restore-Pfad beim Uninstall der Network-Isolation-Demo.
 
 ## Überblick
 
@@ -316,7 +314,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.2.0 Configuration Format v2
+1.3.0 Boot Menu From Configuration
 ```
 
 ## Validierung

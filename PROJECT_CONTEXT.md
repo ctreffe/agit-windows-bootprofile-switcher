@@ -20,17 +20,17 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.2.0 – Configuration Format v2**
+**v1.3.0 – Boot Menu From Configuration**
 
-The Configuration Format v2 milestone is complete.
+The Boot Menu From Configuration milestone is complete.
 
 ## Current Focus
 
-Validate the next structural milestone: **v1.3.0 – Boot Menu From Configuration**.
+Prepare the next module milestone after **v1.3.0 – Boot Menu From Configuration**.
 
-The v1.3.0 implementation makes managed boot menu creation use the validated v2 configuration format as its source of truth before adding more production modules.
+v1.3.0 made managed boot menu creation use the validated v2 configuration format as its source of truth before adding more production modules.
 
-Current v1.3.0 status:
+Completed v1.3.0 results:
 
 * `scripts/Install-BootProfileMenu.ps1` reads Configuration Format v2 directly and creates managed boot entries for profiles with `bootMenu.enabled = true`.
 * `scripts/Uninstall-BootProfileMenu.ps1` removes managed entries and restores recorded default-entry state.
@@ -38,11 +38,11 @@ Current v1.3.0 status:
 * ADR-0006 documents the configuration-driven boot menu installation decision.
 * Legacy Configuration Format v1 validation and runtime dispatch compatibility have been removed.
 * The Network Isolation demo uninstall path now runs a non-isolating restore before removing demo infrastructure so adapter baseline restoration does not depend on a later startup hook run.
+* Configuration Format v2 documentation has been expanded with practical editing guidance, safe workflow notes and troubleshooting.
 
-Remaining v1.3.0 validation gate:
+Next roadmap focus:
 
-* Real-system validation of config-driven boot menu install/uninstall behavior.
-* Real-system validation that `uninstall-network-isolation-demo.cmd` restores the saved Network Isolation adapter baseline after an isolating boot.
+* Prepare a later Service Control module milestone for configurable Windows service enable/disable behavior.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -262,13 +262,13 @@ Validation note:
 
 ---
 
-## Active and Planned Milestones
+## Current Roadmap
 
-Current active milestone:
+Last completed milestone:
 
-* v1.3.0 – Boot Menu From Configuration, in validation
+* v1.3.0 – Boot Menu From Configuration
 
-Planned later milestone:
+Planned next milestone candidate:
 
 * Later module milestone – Service Control module for configurable Windows service enable/disable behavior
 
@@ -276,7 +276,7 @@ The roadmap may evolve based on research findings.
 
 ## v1.3.0 – Boot Menu From Configuration
 
-In validation.
+Completed.
 
 Main target:
 
@@ -307,7 +307,7 @@ Validation status:
 * Maintainer validation on another local system confirmed that the config-driven boot menu demo can be installed, tested and uninstalled.
 * Maintainer validation confirmed that the Network Isolation demo can be installed and can disable configured adapters.
 * Network Isolation demo uninstall initially removed boot menu/profile infrastructure without restoring disabled adapters. This was fixed in `scripts/Uninstall-NetworkIsolationDemo.ps1` by running a non-isolating restore before removing the startup hook and demo configuration.
-* The fixed Network Isolation demo uninstall restore path still needs real-system validation before v1.3.0 is marked complete.
+* Maintainer real-system validation confirmed that the fixed Network Isolation demo uninstall restores the adapter baseline successfully.
 
 ## v1.2.0 – Configuration Format v2
 
@@ -511,22 +511,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Validate **v1.3.0 – Boot Menu From Configuration**.
+Plan the next module milestone after **v1.3.0 – Boot Menu From Configuration**.
 
 Primary objective:
 
-Confirm that boot menu installation uses Configuration Format v2 as the source of truth for managed profile entries, boot menu behavior and constrained default-entry handling.
+Define the scope, safety model and validation expectations for the next production-oriented module candidate.
 
-Immediate next validation target:
+Immediate next planning target:
 
-Run the fixed Network Isolation demo lifecycle on a real Windows system:
-
-1. Install `install-network-isolation-demo.cmd`.
-2. Boot into `Network Isolation`.
-3. Confirm that configured network adapters are disabled.
-4. Run `uninstall-network-isolation-demo.cmd`.
-5. Confirm that the saved normal adapter baseline is restored.
-6. Review `logs/startup-profile.log` and `logs/module-actions.log` for the restore path.
+Evaluate the later Service Control module candidate and decide whether it should become the next milestone.
 
 ---
 

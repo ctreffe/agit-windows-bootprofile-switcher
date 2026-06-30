@@ -18,11 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`) and the Configuration Format v2 milestone (`v1.2.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`) and the Boot Menu From Configuration milestone (`v1.3.0`).
 >
-> The `v1.2.0 – Configuration Format v2` milestone is complete. This release adds the validated v2 configuration shape, profile-local module settings, constrained default-entry handling, validator coverage, documentation and an ADR for the format decision.
->
-> The `v1.3.0 – Boot Menu From Configuration` milestone is implemented and currently in validation. The remaining milestone gate is real-system validation of config-driven boot menu install/uninstall behavior, including the Network Isolation demo uninstall restore path.
+> The `v1.3.0 – Boot Menu From Configuration` milestone is complete. This release makes boot menu installation read Configuration Format v2 directly, adds the config-driven boot menu demo, removes legacy v1 configuration compatibility and validates the repaired Network Isolation demo uninstall restore path.
 
 ## Overview
 
@@ -303,7 +301,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-1.2.0 Configuration Format v2
+1.3.0 Boot Menu From Configuration
 ```
 
 ## Validation
