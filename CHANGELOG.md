@@ -9,6 +9,7 @@ This project follows Semantic Versioning.
 ### Added
 
 - Add a read-only Service and Startup Control discovery document and inventory script for v1.4.0 planning.
+- Add ADR-0007 documenting Service and Startup Control modularization.
 
 ### Changed
 

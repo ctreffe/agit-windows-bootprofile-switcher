@@ -356,6 +356,7 @@ Core project documents:
 - [docs/decisions/ADR-0004-network-isolation-lifecycle-module.md](docs/decisions/ADR-0004-network-isolation-lifecycle-module.md) – Network Isolation lifecycle module decision
 - [docs/decisions/ADR-0005-configuration-format-v2.md](docs/decisions/ADR-0005-configuration-format-v2.md) – Configuration Format v2 decision
 - [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – configuration-driven boot menu installation decision
+- [docs/decisions/ADR-0007-service-and-startup-control-modularization.md](docs/decisions/ADR-0007-service-and-startup-control-modularization.md) – Service and Startup Control modularization decision
 - [LICENSE](LICENSE) – MIT License
 
 ### Current profile resolver

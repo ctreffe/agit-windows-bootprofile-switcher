@@ -36,6 +36,7 @@ Completed v1.3.0 results:
 * `scripts/Uninstall-BootProfileMenu.ps1` removes managed entries and restores recorded default-entry state.
 * `install-config-driven-boot-menu-demo.cmd` installs a v2 demo with `Network Isolation`, `Experiment Local` and `Maintenance` entries.
 * ADR-0006 documents the configuration-driven boot menu installation decision.
+* ADR-0007 documents the Service and Startup Control modularization decision.
 * Legacy Configuration Format v1 validation and runtime dispatch compatibility have been removed.
 * The Network Isolation demo uninstall path now runs a non-isolating restore before removing demo infrastructure so adapter baseline restoration does not depend on a later startup hook run.
 * Configuration Format v2 documentation has been expanded with practical editing guidance, safe workflow notes and troubleshooting.
@@ -430,6 +431,7 @@ Initial discovery artifacts:
 
 * `docs/discovery/service-startup-control.md` defines the v1.4.0 discovery scope and safe inventory workflow.
 * `scripts/Inspect-ServiceStartupControlTargets.ps1` collects a read-only JSON inventory for the current target interests.
+* `docs/decisions/ADR-0007-service-and-startup-control-modularization.md` records the decision to separate service control, startup control, user-application control and policy/vendor guidance.
 
 ## v1.0.0 – Initial Stable Release
 

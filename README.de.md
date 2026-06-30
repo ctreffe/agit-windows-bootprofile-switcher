@@ -369,6 +369,7 @@ Zentrale Projektdokumente:
 - [docs/decisions/ADR-0004-network-isolation-lifecycle-module.md](docs/decisions/ADR-0004-network-isolation-lifecycle-module.md) – Architekturentscheidung zum Network-Isolation-Lifecycle-Modul
 - [docs/decisions/ADR-0005-configuration-format-v2.md](docs/decisions/ADR-0005-configuration-format-v2.md) – Architekturentscheidung zu Konfigurationsformat v2
 - [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – Architekturentscheidung zur konfigurationsgetriebenen Bootmenü-Installation
+- [docs/decisions/ADR-0007-service-and-startup-control-modularization.md](docs/decisions/ADR-0007-service-and-startup-control-modularization.md) – Architekturentscheidung zur Modularisierung von Service and Startup Control
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ### Resolver des aktuellen Profils
