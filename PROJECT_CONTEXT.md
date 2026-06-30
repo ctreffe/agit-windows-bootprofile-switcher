@@ -430,8 +430,17 @@ Expected validation:
 Initial discovery artifacts:
 
 * `docs/discovery/service-startup-control.md` defines the v1.4.0 discovery scope and safe inventory workflow.
+* `docs/discovery/service-startup-control-findings.md` records the first local discovery findings and recommends Windows Search / `WSearch` as the first narrow service-control candidate.
 * `scripts/Inspect-ServiceStartupControlTargets.ps1` collects a read-only JSON inventory for the current target interests.
 * `docs/decisions/ADR-0007-service-and-startup-control-modularization.md` records the decision to separate service control, startup control, user-application control and policy/vendor guidance.
+
+Validation status:
+
+* Local read-only inventory found Windows Search / `WSearch` as the clearest first `service-control` candidate.
+* Windows Update was found across `BITS`, `DoSvc`, `UsoSvc`, `WaaSMedicSvc`, `wuauserv` and several update scheduled tasks; it remains classified as `policy-or-vendor-guidance`.
+* Bitdefender was found across multiple endpoint/security services and remains classified as `policy-or-vendor-guidance`.
+* Teams, OneDrive, ownCloud and Outlook were found through startup entries, scheduled tasks or running user-application processes rather than as first service-control candidates.
+* The discovery inventory matching was tightened after initial validation to avoid broad update-task and Bitdefender false positives.
 
 ## v1.0.0 – Initial Stable Release
 
@@ -561,7 +570,7 @@ Discover how the requested local targets are controlled before implementing any 
 
 Immediate next validation target:
 
-Run `scripts/Inspect-ServiceStartupControlTargets.ps1 -AsJson` locally, review the discovered services, scheduled tasks, startup entries and processes, and classify the first implementable module scope.
+Design the first narrow `service-control` module scope for Windows Search / `WSearch`, including baseline capture, restore semantics, dry-run behavior and configuration shape.
 
 ---
 

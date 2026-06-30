@@ -342,6 +342,7 @@ Core project documents:
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – Configuration Format v2 documentation
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – German Configuration Format v2 documentation
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow
+- [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Service and Startup Control discovery findings and first module recommendation
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – German Network Isolation module documentation
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept

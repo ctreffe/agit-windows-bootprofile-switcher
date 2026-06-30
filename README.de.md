@@ -355,6 +355,7 @@ Zentrale Projektdokumente:
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control
+- [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Discovery-Ergebnisse und erste Modulempfehlung fuer Service and Startup Control
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – deutsche Dokumentation des Network-Isolation-Moduls
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 Boot Menu Proof of Concept

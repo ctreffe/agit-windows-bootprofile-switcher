@@ -296,7 +296,7 @@ $targets = @(
         -ServiceNamePatterns @('wuauserv', 'UsoSvc', 'BITS', 'DoSvc', 'WaaSMedicSvc') `
         -DisplayNamePatterns @('*Windows Update*', '*Update Orchestrator*', '*Background Intelligent Transfer*', '*Delivery Optimization*', '*Medic*') `
         -TaskPathPatterns @('\Microsoft\Windows\WindowsUpdate\*', '\Microsoft\Windows\UpdateOrchestrator\*', '\Microsoft\Windows\WaaSMedic\*') `
-        -TaskNamePatterns @('*Windows Update*', '*Update*', '*USO*', '*WaaSMedic*') `
+        -TaskNamePatterns @('*Windows Update*', '*USO*', '*WaaSMedic*', 'Schedule Scan', 'ScanForUpdates', 'ScanForUpdatesAsUser', 'WakeUpAndContinueUpdates', 'WakeUpAndScanForUpdates') `
         -StartupValuePatterns @() `
         -ProcessNamePatterns @('wuauclt', 'usoclient', 'MoUsoCoreWorker', 'TiWorker') `
         -InitialClassification 'policy-or-vendor-guidance' `
@@ -305,12 +305,12 @@ $targets = @(
     New-TargetDefinition `
         -Name 'Bitdefender' `
         -Category 'security-vendor' `
-        -ServiceNamePatterns @('*bd*', '*Bitdefender*', '*BDAux*', '*VSSERV*') `
+        -ServiceNamePatterns @('BDESVC', 'BDAux*', 'VSSERV', 'EPIntegrationService', 'EPProtectedService', 'EPRedline', 'EPSecurityService', 'EPUpdateService', '*Bitdefender*') `
         -DisplayNamePatterns @('*Bitdefender*') `
         -TaskPathPatterns @('*Bitdefender*') `
         -TaskNamePatterns @('*Bitdefender*') `
         -StartupValuePatterns @('*Bitdefender*') `
-        -ProcessNamePatterns @('*bd*', '*Bitdefender*', 'bdagent', 'bdservicehost') `
+        -ProcessNamePatterns @('bdagent', 'bdservicehost', 'bdredline', 'bdntwrk', 'bduserhost', '*Bitdefender*') `
         -InitialClassification 'policy-or-vendor-guidance' `
         -Notes 'Security products may use tamper protection; do not bypass vendor protections.'
 
