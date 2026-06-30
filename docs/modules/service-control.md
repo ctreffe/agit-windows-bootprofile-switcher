@@ -38,6 +38,10 @@ The first implementation should support a profile requesting that a service is
 disabled for a managed boot profile, then restored to its learned baseline when
 the system starts again without that request.
 
+The v1.5.0 milestone should deliver the full first `WSearch` service-control
+path. Dry-run is the first implementation and validation phase, not the final
+milestone boundary.
+
 The module should not control:
 
 - scheduled tasks
@@ -216,6 +220,10 @@ The first implementation should be validated in phases:
 6. Validate dependency inspection logging without controlling dependencies.
 7. Run a controlled real test only after dry-run output is reviewed.
 8. Confirm a later non-controlling startup restores the learned baseline.
+
+The dry-run phase should be committed and reviewed before the real apply/restore
+phase is added. Both phases belong to the same v1.5.0 milestone unless
+validation reveals a safety issue that requires rescoping.
 
 ## Non-Goals
 

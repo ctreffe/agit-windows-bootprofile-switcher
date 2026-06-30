@@ -26,7 +26,7 @@ The Service and Startup Control Discovery milestone is complete.
 
 ## Current Focus
 
-Prepare the first dry-run-only implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
+Prepare the first Service Control implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -41,7 +41,7 @@ Completed v1.4.0 results:
 
 Next roadmap focus:
 
-* Implement the first dry-run-only `service-control` module path for Windows Search / `WSearch`.
+* Implement the first `service-control` module for Windows Search / `WSearch`, using a dry-run-first implementation and validation sequence before real apply/restore behavior.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -269,11 +269,10 @@ Last completed milestone:
 
 Planned next milestone:
 
-* v1.5.0 – Dry-Run Service Control for Windows Search
+* v1.5.0 – Service Control for Windows Search
 
 Later milestone candidates:
 
-* Real Service Control apply/restore behavior after dry-run validation.
 * Startup or user-application control module for Teams, OneDrive, ownCloud, Outlook and similar per-user applications.
 * Network Isolation hardening for policy-backed isolation controls.
 
@@ -562,15 +561,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan **v1.5.0 – Dry-Run Service Control for Windows Search**.
+Plan **v1.5.0 – Service Control for Windows Search**.
 
 Primary objective:
 
-Implement the first dry-run-only `service-control` module path for `WSearch` without changing service state.
+Implement the generic allow-listed `service-control` module with Windows Search / `WSearch` as the first supported service, including dry-run, real apply and restore behavior.
 
 Immediate next validation target:
 
-Implement the first dry-run-only `service-control` module path for `WSearch`, including allow-list validation, baseline inspection, dependency logging and planned restore/action output.
+Implement the first dry-run `service-control` path for `WSearch`, including allow-list validation, baseline inspection, dependency logging and planned restore/action output. After that validates cleanly, extend the same milestone with controlled real apply/restore behavior.
 
 ---
 

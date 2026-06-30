@@ -6,7 +6,9 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
-No unreleased changes yet.
+### Changed
+
+- Scope v1.5.0 as full Windows Search Service Control with a dry-run-first implementation sequence instead of a dry-run-only milestone.
 
 ## [v1.4.0] - 2026-06-30
 
