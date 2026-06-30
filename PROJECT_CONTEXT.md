@@ -431,6 +431,7 @@ Initial discovery artifacts:
 
 * `docs/discovery/service-startup-control.md` defines the v1.4.0 discovery scope and safe inventory workflow.
 * `docs/discovery/service-startup-control-findings.md` records the first local discovery findings and recommends Windows Search / `WSearch` as the first narrow service-control candidate.
+* `docs/modules/service-control.md` designs a generic `service-control` module with `WSearch` as the first supported service, not a one-module-per-service approach.
 * `scripts/Inspect-ServiceStartupControlTargets.ps1` collects a read-only JSON inventory for the current target interests.
 * `docs/decisions/ADR-0007-service-and-startup-control-modularization.md` records the decision to separate service control, startup control, user-application control and policy/vendor guidance.
 
@@ -570,7 +571,7 @@ Discover how the requested local targets are controlled before implementing any 
 
 Immediate next validation target:
 
-Design the first narrow `service-control` module scope for Windows Search / `WSearch`, including baseline capture, restore semantics, dry-run behavior and configuration shape.
+Review the generic `service-control` design, decide the unresolved validation questions, and then implement the first dry-run-only module path for `WSearch`.
 
 ---
 

@@ -29,6 +29,11 @@ the next production module.
 Service, startup and user-application control will be modularized by control
 surface rather than implemented as one broad module.
 
+This does not mean one module per service. `service-control` is a generic
+module family for ordinary Windows services that pass explicit discovery and
+allow-list validation. Individual services such as `WSearch` are supported
+targets inside that module family, not separate module families of their own.
+
 The project will distinguish at least these module families or guidance areas:
 
 - `service-control` for real Windows services with explicit restore semantics.
@@ -47,6 +52,11 @@ Windows Search indexing is the likely first `service-control` implementation
 candidate because `WSearch` has a clear Windows service identity and a narrower
 restore model than Windows Update or security software.
 
+The first `service-control` implementation should therefore support `WSearch`
+as the initial allow-listed service while keeping the module shape reusable for
+later ordinary Windows services that meet the same safety and restore
+requirements.
+
 Windows Update and Bitdefender must not be implemented as simple forced
 disable/stop behavior. They require policy-aware or vendor-aware treatment, and
 BootProfile Switcher must not bypass vendor protection mechanisms.
@@ -59,6 +69,10 @@ the relevant control surface for a specific deployment.
 
 Separating control surfaces keeps the profile engine small and prevents one
 module from accumulating unrelated Windows behavior.
+
+Using an allow-listed generic `service-control` module avoids unnecessary
+module sprawl while still preventing arbitrary service shutdown through
+configuration.
 
 Windows services can often be inspected and controlled before user logon, but
 per-user startup and interactive applications belong to a different lifecycle.
@@ -84,6 +98,10 @@ only after discovery confirms an appropriate first candidate and restore model.
 
 The first candidate should likely be Windows Search indexing rather than
 Windows Update, Bitdefender or per-user sync/communication applications.
+
+Adding more ordinary Windows services should extend the `service-control`
+allow-list and validation coverage instead of creating one module per service,
+unless a future service has behavior that justifies a separate control surface.
 
 Future modules must declare which control surface they own and how they restore
 state after a profile no longer requests the behavior.

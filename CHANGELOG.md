@@ -11,11 +11,13 @@ This project follows Semantic Versioning.
 - Add a read-only Service and Startup Control discovery document and inventory script for v1.4.0 planning.
 - Add ADR-0007 documenting Service and Startup Control modularization.
 - Add local Service and Startup Control discovery findings with a Windows Search service-control recommendation.
+- Add a generic Service Control module design with `WSearch` as the first supported service candidate.
 
 ### Changed
 
 - Define v1.4.0 as a Service and Startup Control Discovery milestone before implementing service-control behavior.
 - Tighten Service and Startup Control inventory matching to reduce broad update and Bitdefender false positives.
+- Clarify ADR-0007 that `service-control` is a generic allow-listed module family, not one module per service.
 
 ## [v1.3.0] - 2026-06-30
 
