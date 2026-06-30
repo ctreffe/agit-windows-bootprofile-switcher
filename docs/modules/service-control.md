@@ -95,6 +95,9 @@ implementation:
 Restore behavior should use the learned baseline rather than hardcoded desired
 values.
 
+Unsupported service names are configuration errors. They should be rejected by
+the configuration validation path rather than silently skipped at runtime.
+
 ## Allow-List
 
 The module should include a small internal allow-list of supported service
@@ -108,6 +111,10 @@ The initial allow-list should contain:
 
 The allow-list exists to prevent a profile from using `service-control` as an
 arbitrary service-disabling mechanism.
+
+The allow-list is part of the safety model, not only documentation. A profile
+that references a service outside the allow-list is invalid for the current
+implementation.
 
 Future services can be added only after discovery confirms:
 
@@ -136,7 +143,9 @@ For each managed service, the state should record at least:
 - service name
 - whether the service existed when the baseline was learned
 - baseline startup type
+- baseline delayed automatic start flag, when Windows exposes it
 - baseline running state
+- observed dependent services, for diagnostics only
 - whether the previous run actively controlled the service
 - last profile id that requested control
 - timestamp of the baseline snapshot
@@ -153,6 +162,9 @@ Lifecycle rules:
    learning the controlled state as normal.
 4. If a service is missing, unsupported or cannot be inspected, the module logs
    a skip result and does not attempt modification.
+5. Service dependencies are inspected and logged for diagnostics, but the first
+   implementation does not automatically stop, start or reconfigure dependent
+   services.
 
 This mirrors the key Network Isolation lesson: do not accidentally learn a
 module-created state as the new normal baseline.
@@ -182,6 +194,10 @@ restore should return it to that state.
 If the baseline says that `WSearch` was originally manual and stopped, a
 restore should return it to that state.
 
+If the baseline says that `WSearch` used delayed automatic startup, restore
+should preserve that baseline value. Delayed automatic startup is a restore
+value, not an explicit first-version target setting.
+
 If the baseline service no longer exists, restore should log that the service
 is missing and skip modification.
 
@@ -193,9 +209,13 @@ The first implementation should be validated in phases:
 
 1. Validate configuration fixtures for supported and unsupported service names.
 2. Run the module in dry-run mode with `WSearch` and confirm planned actions.
-3. Validate lifecycle state creation without changing the service.
-4. Run a controlled real test only after dry-run output is reviewed.
-5. Confirm a later non-controlling startup restores the learned baseline.
+3. Validate that unsupported service names are hard configuration errors.
+4. Validate lifecycle state creation without changing the service.
+5. Validate delayed automatic startup baseline capture when the service exposes
+   that value.
+6. Validate dependency inspection logging without controlling dependencies.
+7. Run a controlled real test only after dry-run output is reviewed.
+8. Confirm a later non-controlling startup restores the learned baseline.
 
 ## Non-Goals
 
@@ -208,15 +228,17 @@ The first implementation should not:
 - edit startup registry entries
 - terminate user processes
 - control Teams, OneDrive, ownCloud or Outlook
+- control dependent services automatically
 - bypass vendor tamper protection
 - use service control as a complete security boundary
 
-## Open Design Questions
+## Resolved Design Questions
 
-- Should the module support `Manual` or `Automatic` as explicit target startup
-  types later, or should those remain restore-only values?
-- Should service dependencies be inspected before stopping a service?
-- Should the module support delayed automatic startup as a distinct baseline
-  value?
-- Should unsupported service names be hard validation errors or runtime module
-  skips?
+- `Manual` and `Automatic` are restore-only values in the first implementation.
+  The only explicit target startup type is `Disabled`.
+- Service dependencies are inspected and logged for diagnostics, but they are
+  not controlled automatically in the first implementation.
+- Delayed automatic startup is stored as baseline/restore metadata when
+  available, but it is not an explicit target setting in the first
+  implementation.
+- Unsupported service names are hard configuration errors, not runtime skips.

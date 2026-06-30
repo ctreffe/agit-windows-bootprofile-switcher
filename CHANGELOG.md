@@ -18,6 +18,7 @@ This project follows Semantic Versioning.
 - Define v1.4.0 as a Service and Startup Control Discovery milestone before implementing service-control behavior.
 - Tighten Service and Startup Control inventory matching to reduce broad update and Bitdefender false positives.
 - Clarify ADR-0007 that `service-control` is a generic allow-listed module family, not one module per service.
+- Resolve initial Service Control design questions for target startup type, dependency handling, delayed automatic startup and unsupported service validation.
 
 ## [v1.3.0] - 2026-06-30
 

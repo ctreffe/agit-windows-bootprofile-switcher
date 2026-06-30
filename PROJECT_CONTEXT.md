@@ -442,6 +442,7 @@ Validation status:
 * Bitdefender was found across multiple endpoint/security services and remains classified as `policy-or-vendor-guidance`.
 * Teams, OneDrive, ownCloud and Outlook were found through startup entries, scheduled tasks or running user-application processes rather than as first service-control candidates.
 * The discovery inventory matching was tightened after initial validation to avoid broad update-task and Bitdefender false positives.
+* The first `service-control` design questions are resolved: `Disabled`/`Stopped` are the only explicit target values, `Manual`/`Automatic` and delayed automatic startup are restore-only baseline values, dependencies are inspected and logged only, and unsupported service names are configuration errors.
 
 ## v1.0.0 – Initial Stable Release
 
@@ -571,7 +572,7 @@ Discover how the requested local targets are controlled before implementing any 
 
 Immediate next validation target:
 
-Review the generic `service-control` design, decide the unresolved validation questions, and then implement the first dry-run-only module path for `WSearch`.
+Implement the first dry-run-only `service-control` module path for `WSearch`, including allow-list validation, baseline inspection, dependency logging and planned restore/action output.
 
 ---
 
