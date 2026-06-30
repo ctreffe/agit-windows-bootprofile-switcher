@@ -15,6 +15,9 @@ demonstration and should be removed once production modules exist.
 The `network-isolation` module is the first production-oriented module. The
 validator checks its settings so unsafe or misspelled policies are rejected
 before startup execution.
+
+The `service-control` module is allow-list based. The first supported service
+is `WSearch`; unsupported service names are configuration errors.
 #>
 
 [CmdletBinding()]
@@ -203,6 +206,108 @@ function Test-NetworkIsolationSettings {
     }
 }
 
+function Test-ServiceControlSettings {
+    param(
+        [object]$Settings,
+        [string]$Prefix,
+        [System.Collections.Generic.List[string]]$Errors,
+        [bool]$RequireComplete
+    )
+
+    if ($null -eq $Settings) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix must be present when service-control is enabled."
+        }
+
+        return
+    }
+
+    if (-not (Test-ObjectProperty -Value $Settings)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix must be an object."
+        return
+    }
+
+    Test-AllowedProperties `
+        -Object $Settings `
+        -Prefix $Prefix `
+        -AllowedProperties @('dryRun', 'services') `
+        -Errors $Errors
+
+    $dryRun = Get-JsonProperty -Object $Settings -Name 'dryRun'
+    $services = Get-JsonProperty -Object $Settings -Name 'services'
+
+    if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
+    } elseif ($dryRun -eq $false) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be true until service-control apply/restore is implemented."
+    }
+
+    if ($null -eq $services) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix.services must be an array."
+        }
+
+        return
+    }
+
+    if (-not (Test-ArrayProperty -Value $services)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.services must be an array."
+        return
+    }
+
+    if (@($services).Count -eq 0) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.services must contain at least one service."
+        return
+    }
+
+    for ($serviceIndex = 0; $serviceIndex -lt $services.Count; $serviceIndex++) {
+        $service = $services[$serviceIndex]
+        $servicePrefix = "$Prefix.services[$serviceIndex]"
+
+        if (-not (Test-ObjectProperty -Value $service)) {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix must be an object."
+            continue
+        }
+
+        Test-AllowedProperties `
+            -Object $service `
+            -Prefix $servicePrefix `
+            -AllowedProperties @('name', 'target') `
+            -Errors $Errors
+
+        $serviceName = [string](Get-JsonProperty -Object $service -Name 'name')
+        $target = Get-JsonProperty -Object $service -Name 'target'
+
+        if ([string]::IsNullOrWhiteSpace($serviceName)) {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix.name must not be empty."
+        } elseif ($serviceName -ne 'WSearch') {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix.name is not supported by service-control: $serviceName"
+        }
+
+        if (-not (Test-ObjectProperty -Value $target)) {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix.target must be an object."
+            continue
+        }
+
+        Test-AllowedProperties `
+            -Object $target `
+            -Prefix "$servicePrefix.target" `
+            -AllowedProperties @('startupType', 'runningState') `
+            -Errors $Errors
+
+        $startupType = [string](Get-JsonProperty -Object $target -Name 'startupType')
+        $runningState = [string](Get-JsonProperty -Object $target -Name 'runningState')
+
+        if ($startupType -ne 'Disabled') {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix.target.startupType must be Disabled."
+        }
+
+        if ($runningState -ne 'Stopped') {
+            Add-ValidationError -Errors $Errors -Message "$servicePrefix.target.runningState must be Stopped."
+        }
+    }
+}
+
 function Test-ModuleContainer {
     param(
         [object]$Settings,
@@ -313,7 +418,7 @@ if (-not $ConfigPath) {
     $ConfigPath = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 }
 
-$knownModules = @('validation-log', 'demo-system-marker', 'network-isolation')
+$knownModules = @('validation-log', 'demo-system-marker', 'network-isolation', 'service-control')
 $errors = [System.Collections.Generic.List[string]]::new()
 $configuration = $null
 $schemaVersion = $null
@@ -423,6 +528,7 @@ if ($configuration) {
                 }
 
                 $profileNetworkIsolationSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'network-isolation' } else { $null }
+                $profileServiceControlSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'service-control' } else { $null }
 
                 Test-NetworkIsolationSettings `
                     -Settings $profileNetworkIsolationSettings `
@@ -434,6 +540,20 @@ if ($configuration) {
                     Test-NetworkIsolationSettings `
                         -Settings $profileNetworkIsolationSettings `
                         -Prefix "$prefix.modules.network-isolation" `
+                        -Errors $errors `
+                        -RequireComplete $true
+                }
+
+                Test-ServiceControlSettings `
+                    -Settings $profileServiceControlSettings `
+                    -Prefix "$prefix.modules.service-control" `
+                    -Errors $errors `
+                    -RequireComplete $false
+
+                if ($null -ne $profileServiceControlSettings) {
+                    Test-ServiceControlSettings `
+                        -Settings $profileServiceControlSettings `
+                        -Prefix "$prefix.modules.service-control" `
                         -Errors $errors `
                         -RequireComplete $true
                 }

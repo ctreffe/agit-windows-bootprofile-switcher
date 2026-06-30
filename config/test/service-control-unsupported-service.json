@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "unsupported-service-control",
+      "displayName": "Unsupported Service Control",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "service-control": {
+          "dryRun": true,
+          "services": [
+            {
+              "name": "wuauserv",
+              "target": {
+                "startupType": "Disabled",
+                "runningState": "Stopped"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

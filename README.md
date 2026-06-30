@@ -250,10 +250,16 @@ Configuration Format v2 is documented in
 Network Isolation is documented in detail in
 [docs/modules/network-isolation.md](docs/modules/network-isolation.md).
 
+Service Control is documented in
+[docs/modules/service-control.md](docs/modules/service-control.md). The current
+implementation is dry-run only and supports `WSearch` as the first allow-listed
+service candidate.
+
 Known modules in the current release:
 
 - `validation-log`
 - `network-isolation`
+- `service-control` dry-run Windows Search service-control module
 - `demo-system-marker` temporary foundation demo module
 
 ## Project Goals

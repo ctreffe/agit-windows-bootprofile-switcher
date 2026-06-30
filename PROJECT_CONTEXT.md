@@ -43,6 +43,14 @@ Next roadmap focus:
 
 * Implement the first `service-control` module for Windows Search / `WSearch`, using a dry-run-first implementation and validation sequence before real apply/restore behavior.
 
+Current v1.5.0 implementation status:
+
+* `modules/service-control/Invoke-ServiceControlModule.ps1` provides the first dry-run path for `WSearch`.
+* `scripts/Test-BootProfileConfiguration.ps1` recognizes `service-control`, validates the `WSearch` allow-list, rejects unsupported services and blocks `dryRun = false` until real apply/restore is implemented.
+* `scripts/Invoke-ProfileEngine.ps1` registers and dispatches `service-control` from valid profile configuration.
+* `config/test/service-control-wsearch-valid.json`, `config/test/service-control-unsupported-service.json` and `config/test/service-control-dry-run-false.json` cover the first validation cases.
+* Direct module and engine-level validation confirmed dry-run logging for baseline inspection, dependency diagnostics and planned `WSearch` target actions without changing service state.
+
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
 A1 has established a reversible boot menu with two entries:
@@ -569,7 +577,7 @@ Implement the generic allow-listed `service-control` module with Windows Search 
 
 Immediate next validation target:
 
-Implement the first dry-run `service-control` path for `WSearch`, including allow-list validation, baseline inspection, dependency logging and planned restore/action output. After that validates cleanly, extend the same milestone with controlled real apply/restore behavior.
+Review the dry-run `service-control` output, then implement controlled real apply/restore behavior for `WSearch` in the same v1.5.0 milestone.
 
 ---
 

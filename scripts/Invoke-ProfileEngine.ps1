@@ -93,6 +93,10 @@ $moduleRegistry = @(
     [ordered]@{
         name = 'network-isolation'
         path = Join-Path $repoRoot 'modules\network-isolation\Invoke-NetworkIsolationModule.ps1'
+    },
+    [ordered]@{
+        name = 'service-control'
+        path = Join-Path $repoRoot 'modules\service-control\Invoke-ServiceControlModule.ps1'
     }
 )
 

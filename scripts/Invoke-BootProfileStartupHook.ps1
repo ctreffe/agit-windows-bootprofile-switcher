@@ -7,9 +7,9 @@ Invoked by the startup scheduled task. The script calls
 Resolve-BootProfile.ps1, invokes the profile engine and writes the startup
 result to logs/startup-profile.log.
 
-The profile engine currently invokes only configuration-driven harmless
-validation modules so the boot-profile startup chain can be verified without
-changing system configuration.
+The profile engine invokes only modules selected by valid profile
+configuration. Module-specific safety behavior, such as dry-run handling or
+lifecycle restore behavior, is owned by the individual modules.
 #>
 
 [CmdletBinding()]

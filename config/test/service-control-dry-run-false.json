@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "service-control-real-apply",
+      "displayName": "Service Control Real Apply",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "service-control": {
+          "dryRun": false,
+          "services": [
+            {
+              "name": "WSearch",
+              "target": {
+                "startupType": "Disabled",
+                "runningState": "Stopped"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

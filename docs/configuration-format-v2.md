@@ -176,6 +176,8 @@ Known modules in the current repository:
 
 - `validation-log` writes harmless validation log entries.
 - `network-isolation` can disable and restore configured network adapter categories.
+- `service-control` can currently inspect planned Windows Search / `WSearch`
+  service-control actions in dry-run mode.
 - `demo-system-marker` is a temporary foundation demo module.
 
 ### Network Isolation Settings

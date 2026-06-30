@@ -80,6 +80,11 @@ $fixtures = @(
         expectedValid = $true
     },
     [ordered]@{
+        name = 'service-control-wsearch-valid'
+        path = Join-Path $repoRoot 'config\test\service-control-wsearch-valid.json'
+        expectedValid = $true
+    },
+    [ordered]@{
         name = 'config-driven-boot-menu-demo'
         path = Join-Path $repoRoot 'config\demos\config-driven-boot-menu.json'
         expectedValid = $true
@@ -87,6 +92,16 @@ $fixtures = @(
     [ordered]@{
         name = 'network-isolation-missing-settings'
         path = Join-Path $repoRoot 'config\test\network-isolation-missing-settings.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'service-control-unsupported-service'
+        path = Join-Path $repoRoot 'config\test\service-control-unsupported-service.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'service-control-dry-run-false'
+        path = Join-Path $repoRoot 'config\test\service-control-dry-run-false.json'
         expectedValid = $false
     },
     [ordered]@{

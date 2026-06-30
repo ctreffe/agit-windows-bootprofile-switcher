@@ -179,6 +179,7 @@ Aktuell bekannte Module im Repository:
 
 - `validation-log` schreibt harmlose Validierungs-Logeintraege.
 - `network-isolation` kann konfigurierte Netzwerkadapter-Kategorien deaktivieren und wiederherstellen.
+- `service-control` kann aktuell geplante Service-Control-Aktionen fuer Windows Search / `WSearch` im Dry-run pruefen.
 - `demo-system-marker` ist ein temporaeres Foundation-Demomodul.
 
 ### Network-Isolation-Einstellungen

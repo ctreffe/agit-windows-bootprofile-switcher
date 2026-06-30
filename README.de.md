@@ -263,10 +263,16 @@ Network Isolation ist ausführlich in
 [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md)
 dokumentiert.
 
+Service Control ist in
+[docs/modules/service-control.md](docs/modules/service-control.md)
+dokumentiert. Die aktuelle Implementierung ist rein trockenlaufend und
+unterstuetzt `WSearch` als ersten allowlist-basierten Service-Kandidaten.
+
 Bekannte Module im aktuellen Release:
 
 - `validation-log`
 - `network-isolation`
+- `service-control` trockenlaufendes Windows-Search-Service-Control-Modul
 - `demo-system-marker` temporäres Foundation-Demomodul
 
 ## Projektziele
