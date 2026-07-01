@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.4.0 – Service and Startup Control Discovery**
+**v1.5.0 – Service Control for Windows Search**
 
-The Service and Startup Control Discovery milestone is complete.
+The Service Control for Windows Search milestone is complete.
 
 ## Current Focus
 
-Finalize the first Service Control implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
+Plan the next milestone after **v1.5.0 – Service Control for Windows Search**.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -39,19 +39,19 @@ Completed v1.4.0 results:
 * `docs/modules/service-control.md` defines a generic allow-listed `service-control` module design rather than a one-module-per-service approach.
 * The initial service-control design questions are resolved: `Disabled`/`Stopped` are the only explicit target values, `Manual`/`Automatic` and delayed automatic startup are restore-only baseline values, dependencies are inspected and logged only, and unsupported service names are configuration errors.
 
-Next roadmap focus:
+Completed v1.5.0 results:
 
-* Finalize **v1.5.0 – Service Control for Windows Search** as the complete first `service-control` implementation for Windows Search / `WSearch`.
-
-Current v1.5.0 implementation status:
-
-* `modules/service-control/Invoke-ServiceControlModule.ps1` provides dry-run and controlled apply/restore paths for `WSearch`.
+* `modules/service-control/Invoke-ServiceControlModule.ps1` provides dry-run and controlled apply/restore paths for Windows Search / `WSearch`.
 * `scripts/Test-BootProfileConfiguration.ps1` recognizes `service-control`, validates the `WSearch` allow-list and rejects unsupported services.
 * `scripts/Invoke-ProfileEngine.ps1` registers and dispatches `service-control` as a lifecycle module from valid profile configuration.
 * `config/test/service-control-wsearch-valid.json`, `config/test/service-control-unsupported-service.json` and `config/test/service-control-real-apply-valid.json` cover the first validation cases.
 * Direct module and engine-level validation confirmed dry-run logging for baseline inspection, dependency diagnostics and planned `WSearch` target actions without changing service state.
 * Controlled elevated real-system validation confirmed baseline learning, apply to `Stopped`/`Disabled` and restore to the learned `Running`/`Auto`/delayed-auto baseline.
 * Non-dry-run execution now requires an elevated PowerShell session before state is written, preventing misleading controlling state from failed non-admin real runs.
+
+Next roadmap focus:
+
+* Plan the next control milestone for startup or user-application control, likely covering Teams, OneDrive, ownCloud, Outlook or similar per-user startup applications based on the v1.4.0 discovery results.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -275,11 +275,11 @@ Validation note:
 
 Last completed milestone:
 
-* v1.4.0 – Service and Startup Control Discovery
+* v1.5.0 – Service Control for Windows Search
 
 Planned next milestone:
 
-* v1.5.0 – Service Control for Windows Search
+* To be selected after v1.5.0, with startup or user-application control as the likely next candidate.
 
 Later milestone candidates:
 
@@ -392,6 +392,24 @@ Follow-up roadmap note:
 
 * A later Network Isolation hardening milestone should evaluate Group Policy restrictions, network UI restrictions, device-management controls, service controls and firewall enforcement so isolated profiles can be made harder to bypass in enterprise deployments.
 * A later Bluetooth/device isolation milestone should evaluate how to disable Bluetooth radios or USB Bluetooth adapters when that is required in addition to Bluetooth network adapter isolation.
+
+## v1.5.0 – Service Control for Windows Search
+
+Completed.
+
+Purpose:
+
+* Implement the first production `service-control` lifecycle module for Windows Search / `WSearch`.
+* Keep `service-control` generic and allow-listed rather than creating one module per service.
+* Support dry-run diagnostics, real apply to `Stopped`/`Disabled`, baseline learning and later restore.
+* Require elevated PowerShell for non-dry-run service changes before writing controlling state.
+
+Validation status:
+
+* `scripts/Test-BootProfileConfigurationFixtures.ps1` passes all configuration fixtures, including supported `WSearch`, unsupported service rejection and real-apply configuration.
+* Direct module and engine-level dry-run validation confirmed baseline inspection, dependency diagnostics and planned target actions without changing service state.
+* Controlled elevated real-system validation confirmed `WSearch` can be changed from `Running`/`Auto`/delayed automatic startup to `Stopped`/`Disabled` and restored to the learned baseline.
+* A non-admin real run now fails before state is written, preventing a misleading controlling state when elevation is missing.
 
 ## v1.4.0 – Service and Startup Control Discovery
 
@@ -571,15 +589,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Finalize **v1.5.0 – Service Control for Windows Search**.
+Plan the next milestone after **v1.5.0 – Service Control for Windows Search**.
 
 Primary objective:
 
-Complete the generic allow-listed `service-control` module with Windows Search / `WSearch` as the first supported service, including dry-run, real apply, restore behavior and elevation preflight.
+Select the next narrow control surface based on the v1.4.0 discovery findings and the completed v1.5.0 service-control safety model.
 
 Immediate next validation target:
 
-Perform the v1.5.0 release-readiness pass: confirm documentation, changelog and validation evidence reflect the completed and real-system-tested `WSearch` implementation.
+Decide whether the next milestone should start with startup-control, user-application control or policy/vendor guidance for targets such as Teams, OneDrive, ownCloud, Outlook, Windows Update or Bitdefender.
 
 ---
 

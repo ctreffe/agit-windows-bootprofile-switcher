@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`) und den Meilenstein Service and Startup Control Discovery (`v1.4.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`), den Meilenstein Service and Startup Control Discovery (`v1.4.0`) und den Meilenstein Service Control for Windows Search (`v1.5.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.5.0 – Service Control for Windows Search` ist in Finalisierung. Dieser Release implementiert das generische allowlist-basierte `service-control`-Modul fuer `WSearch`, inklusive Dry-run, realem Apply, Restore-Verhalten und Elevation-Preflight fuer Service-Aenderungen ausserhalb des Dry-run.
+> Der Meilenstein `v1.5.0 – Service Control for Windows Search` ist abgeschlossen. Dieser Release implementiert das generische allowlist-basierte `service-control`-Modul fuer `WSearch`, inklusive Dry-run, realem Apply, Restore-Verhalten und Elevation-Preflight fuer Service-Aenderungen ausserhalb des Dry-run.
 
 ## Überblick
 

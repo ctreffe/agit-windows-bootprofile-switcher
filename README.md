@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`) and the Service and Startup Control Discovery milestone (`v1.4.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`), the Service and Startup Control Discovery milestone (`v1.4.0`) and the Service Control for Windows Search milestone (`v1.5.0`).
 >
-> The `v1.5.0 – Service Control for Windows Search` milestone is in finalization. This release implements the generic allow-listed `service-control` module for `WSearch`, including dry-run, real apply, restore behavior and an elevation preflight for non-dry-run service changes.
+> The `v1.5.0 – Service Control for Windows Search` milestone is complete. This release implements the generic allow-listed `service-control` module for `WSearch`, including dry-run, real apply, restore behavior and an elevation preflight for non-dry-run service changes.
 
 ## Overview
 

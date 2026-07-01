@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v1.5.0] - 2026-07-01
+
 ### Added
 
 - Add the first dry-run `service-control` module path for Windows Search / `WSearch`.
