@@ -81,6 +81,13 @@ function ConvertTo-Array {
     return @($Value)
 }
 
+function Test-IsAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
 function Get-DelayedAutoStart {
     param([string]$ServiceName)
 
@@ -393,6 +400,10 @@ New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
 
 $dryRun = [bool](Get-SettingValue -Object $ModuleSettings -Name 'dryRun' -Default $true)
 $serviceSettings = ConvertTo-Array -Value (Get-SettingValue -Object $ModuleSettings -Name 'services' -Default @())
+
+if (-not $dryRun -and -not (Test-IsAdministrator)) {
+    throw 'Service Control requires an elevated PowerShell session when dryRun is false.'
+}
 
 if (-not $StatePath) {
     $StatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\service-control-state.json'
