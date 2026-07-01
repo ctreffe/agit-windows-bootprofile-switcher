@@ -45,11 +45,12 @@ Next roadmap focus:
 
 Current v1.5.0 implementation status:
 
-* `modules/service-control/Invoke-ServiceControlModule.ps1` provides the first dry-run path for `WSearch`.
-* `scripts/Test-BootProfileConfiguration.ps1` recognizes `service-control`, validates the `WSearch` allow-list, rejects unsupported services and blocks `dryRun = false` until real apply/restore is implemented.
-* `scripts/Invoke-ProfileEngine.ps1` registers and dispatches `service-control` from valid profile configuration.
-* `config/test/service-control-wsearch-valid.json`, `config/test/service-control-unsupported-service.json` and `config/test/service-control-dry-run-false.json` cover the first validation cases.
+* `modules/service-control/Invoke-ServiceControlModule.ps1` provides dry-run and controlled apply/restore paths for `WSearch`.
+* `scripts/Test-BootProfileConfiguration.ps1` recognizes `service-control`, validates the `WSearch` allow-list and rejects unsupported services.
+* `scripts/Invoke-ProfileEngine.ps1` registers and dispatches `service-control` as a lifecycle module from valid profile configuration.
+* `config/test/service-control-wsearch-valid.json`, `config/test/service-control-unsupported-service.json` and `config/test/service-control-real-apply-valid.json` cover the first validation cases.
 * Direct module and engine-level validation confirmed dry-run logging for baseline inspection, dependency diagnostics and planned `WSearch` target actions without changing service state.
+* Apply/restore code is implemented but still needs controlled real-system validation before v1.5.0 can be finalized.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -577,7 +578,7 @@ Implement the generic allow-listed `service-control` module with Windows Search 
 
 Immediate next validation target:
 
-Review the dry-run `service-control` output, then implement controlled real apply/restore behavior for `WSearch` in the same v1.5.0 milestone.
+Run controlled real-system validation for `service-control` with `WSearch`, confirming baseline learning, apply to Disabled/Stopped and later restore to the learned baseline.
 
 ---
 

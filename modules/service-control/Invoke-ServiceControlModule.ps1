@@ -1,14 +1,14 @@
 <#
 .SYNOPSIS
-Inspects planned Service Control actions for supported Windows services.
+Controls supported Windows services for BootProfile Switcher profiles.
 
 .DESCRIPTION
-Runs the first dry-run Service Control path for BootProfile Switcher.
+Runs Service Control for BootProfile Switcher.
 
 The module is allow-list based. The initial supported service is Windows Search
-(`WSearch`). This first implementation inspects service baseline information,
-dependency information and planned target actions without changing service
-state.
+(`WSearch`). The module learns baseline service state, applies configured
+target state for controlling profiles and restores the learned baseline when a
+later startup no longer requests service control.
 #>
 
 [CmdletBinding()]
@@ -28,7 +28,13 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$LogDir,
 
-    [object]$ModuleSettings
+    [object]$ModuleSettings,
+
+    [bool]$Controlling = $true,
+
+    [bool]$Detected = $false,
+
+    [string]$StatePath
 )
 
 Set-StrictMode -Version Latest
@@ -93,6 +99,27 @@ function Get-DelayedAutoStart {
     return [int]$value.DelayedAutoStart -eq 1
 }
 
+function Set-DelayedAutoStart {
+    param(
+        [string]$ServiceName,
+        [AllowNull()]
+        [object]$DelayedAutoStart
+    )
+
+    if ($null -eq $DelayedAutoStart) {
+        return
+    }
+
+    $path = "HKLM:\SYSTEM\CurrentControlSet\Services\$ServiceName"
+
+    if (-not (Test-Path $path)) {
+        return
+    }
+
+    $value = if ([bool]$DelayedAutoStart) { 1 } else { 0 }
+    Set-ItemProperty -Path $path -Name 'DelayedAutoStart' -Value $value -Type DWord -ErrorAction Stop
+}
+
 function Get-ServiceSnapshot {
     param([string]$ServiceName)
 
@@ -141,6 +168,219 @@ function Write-ServiceControlLog {
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
 
+function Read-ServiceControlState {
+    param([string]$Path)
+
+    if (-not (Test-Path $Path)) {
+        return $null
+    }
+
+    Get-Content -Path $Path -Raw | ConvertFrom-Json
+}
+
+function Save-ServiceControlState {
+    param(
+        [string]$Path,
+        [object[]]$BaselineServices,
+        [bool]$CurrentRunControlling
+    )
+
+    $state = [ordered]@{
+        schemaVersion = 1
+        generatedAt = (Get-Date).ToString('o')
+        lastRun = [ordered]@{
+            generatedAt = (Get-Date).ToString('o')
+            controlling = $CurrentRunControlling
+            detected = $Detected
+            mode = $Mode
+            name = $Name
+            identifier = $Identifier
+        }
+        baseline = [ordered]@{
+            updatedAt = (Get-Date).ToString('o')
+            services = @($BaselineServices)
+        }
+    }
+
+    New-Item -ItemType Directory -Path (Split-Path -Parent $Path) -Force | Out-Null
+    $state | ConvertTo-Json -Depth 8 | Set-Content -Path $Path -Encoding UTF8
+}
+
+function ConvertTo-StartupType {
+    param([string]$StartMode)
+
+    switch ($StartMode) {
+        'Auto' { return 'Automatic' }
+        'Manual' { return 'Manual' }
+        'Disabled' { return 'Disabled' }
+        default { return $StartMode }
+    }
+}
+
+function Get-BaselineService {
+    param(
+        [object[]]$BaselineServices,
+        [string]$ServiceName
+    )
+
+    $BaselineServices | Where-Object { [string]$_.name -eq $ServiceName } | Select-Object -First 1
+}
+
+function Set-ServiceStartupMode {
+    param(
+        [string]$ServiceName,
+        [string]$StartMode
+    )
+
+    $startupType = ConvertTo-StartupType -StartMode $StartMode
+    Set-Service -Name $ServiceName -StartupType $startupType -ErrorAction Stop
+}
+
+function Apply-ServiceTarget {
+    param(
+        [string]$ServiceName,
+        [object]$Snapshot,
+        [string]$TargetStartupType,
+        [string]$TargetRunningState,
+        [bool]$DryRun
+    )
+
+    $plannedActions = @()
+
+    if ($Snapshot.startMode -ne $TargetStartupType) {
+        $plannedActions += "set-startup-type:$TargetStartupType"
+    }
+
+    if ($Snapshot.state -ne $TargetRunningState) {
+        $plannedActions += "set-running-state:$TargetRunningState"
+    }
+
+    if (@($plannedActions).Count -eq 0) {
+        Write-ServiceControlLog `
+            -Action 'skip' `
+            -ServiceName $ServiceName `
+            -Reason 'already-target-state' `
+            -Details ([ordered]@{
+                dryRun = $DryRun
+                targetStartupType = $TargetStartupType
+                targetRunningState = $TargetRunningState
+            })
+        return
+    }
+
+    if ($DryRun) {
+        Write-ServiceControlLog `
+            -Action 'would-apply-target' `
+            -ServiceName $ServiceName `
+            -Reason 'dry-run' `
+            -Details ([ordered]@{
+                plannedActions = @($plannedActions)
+                targetStartupType = $TargetStartupType
+                targetRunningState = $TargetRunningState
+                currentStartupType = $Snapshot.startMode
+                currentRunningState = $Snapshot.state
+            })
+        return
+    }
+
+    try {
+        if ($Snapshot.state -ne $TargetRunningState -and $TargetRunningState -eq 'Stopped') {
+            Stop-Service -Name $ServiceName -ErrorAction Stop
+            Write-ServiceControlLog -Action 'stop-service' -ServiceName $ServiceName -Reason 'apply-target' -Details ([ordered]@{ targetRunningState = $TargetRunningState })
+        }
+
+        if ($Snapshot.startMode -ne $TargetStartupType) {
+            Set-ServiceStartupMode -ServiceName $ServiceName -StartMode $TargetStartupType
+            Write-ServiceControlLog -Action 'set-startup-type' -ServiceName $ServiceName -Reason 'apply-target' -Details ([ordered]@{ targetStartupType = $TargetStartupType })
+        }
+    } catch {
+        Write-ServiceControlLog -Action 'error' -ServiceName $ServiceName -Reason 'apply-target-failed' -Details ([ordered]@{ error = $_.Exception.Message })
+        throw
+    }
+}
+
+function Restore-ServiceBaseline {
+    param(
+        [string]$ServiceName,
+        [object]$BaselineService,
+        [object]$Snapshot,
+        [bool]$DryRun
+    )
+
+    if ($null -eq $BaselineService) {
+        Write-ServiceControlLog -Action 'skip-restore' -ServiceName $ServiceName -Reason 'missing-baseline' -Details $null
+        return
+    }
+
+    if (-not [bool]$BaselineService.exists) {
+        Write-ServiceControlLog -Action 'skip-restore' -ServiceName $ServiceName -Reason 'baseline-service-did-not-exist' -Details $BaselineService
+        return
+    }
+
+    if ($null -eq $Snapshot) {
+        Write-ServiceControlLog -Action 'skip-restore' -ServiceName $ServiceName -Reason 'service-not-found' -Details $BaselineService
+        return
+    }
+
+    $plannedActions = @()
+
+    if ($Snapshot.startMode -ne [string]$BaselineService.startMode) {
+        $plannedActions += "restore-startup-type:$($BaselineService.startMode)"
+    }
+
+    if ($Snapshot.delayedAutoStart -ne $BaselineService.delayedAutoStart) {
+        $plannedActions += "restore-delayed-auto-start:$($BaselineService.delayedAutoStart)"
+    }
+
+    if ($Snapshot.state -ne [string]$BaselineService.state) {
+        $plannedActions += "restore-running-state:$($BaselineService.state)"
+    }
+
+    if (@($plannedActions).Count -eq 0) {
+        Write-ServiceControlLog -Action 'skip-restore' -ServiceName $ServiceName -Reason 'already-baseline-state' -Details $BaselineService
+        return
+    }
+
+    if ($DryRun) {
+        Write-ServiceControlLog `
+            -Action 'would-restore-baseline' `
+            -ServiceName $ServiceName `
+            -Reason 'dry-run' `
+            -Details ([ordered]@{
+                plannedActions = @($plannedActions)
+                baseline = $BaselineService
+                current = $Snapshot
+            })
+        return
+    }
+
+    try {
+        if ($Snapshot.startMode -ne [string]$BaselineService.startMode) {
+            Set-ServiceStartupMode -ServiceName $ServiceName -StartMode ([string]$BaselineService.startMode)
+            Write-ServiceControlLog -Action 'restore-startup-type' -ServiceName $ServiceName -Reason 'restore-baseline' -Details ([ordered]@{ baselineStartupType = $BaselineService.startMode })
+        }
+
+        if ($Snapshot.delayedAutoStart -ne $BaselineService.delayedAutoStart) {
+            Set-DelayedAutoStart -ServiceName $ServiceName -DelayedAutoStart $BaselineService.delayedAutoStart
+            Write-ServiceControlLog -Action 'restore-delayed-auto-start' -ServiceName $ServiceName -Reason 'restore-baseline' -Details ([ordered]@{ baselineDelayedAutoStart = $BaselineService.delayedAutoStart })
+        }
+
+        $postStartupSnapshot = Get-ServiceSnapshot -ServiceName $ServiceName
+        if ($postStartupSnapshot.state -ne [string]$BaselineService.state) {
+            if ([string]$BaselineService.state -eq 'Running') {
+                Start-Service -Name $ServiceName -ErrorAction Stop
+                Write-ServiceControlLog -Action 'start-service' -ServiceName $ServiceName -Reason 'restore-baseline' -Details ([ordered]@{ baselineRunningState = $BaselineService.state })
+            } elseif ([string]$BaselineService.state -eq 'Stopped') {
+                Stop-Service -Name $ServiceName -ErrorAction Stop
+                Write-ServiceControlLog -Action 'stop-service' -ServiceName $ServiceName -Reason 'restore-baseline' -Details ([ordered]@{ baselineRunningState = $BaselineService.state })
+            }
+        }
+    } catch {
+        Write-ServiceControlLog -Action 'error' -ServiceName $ServiceName -Reason 'restore-baseline-failed' -Details ([ordered]@{ error = $_.Exception.Message })
+        throw
+    }
+}
+
 $supportedServices = @{
     WSearch = [ordered]@{
         displayPurpose = 'Windows Search indexing'
@@ -154,9 +394,24 @@ New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
 $dryRun = [bool](Get-SettingValue -Object $ModuleSettings -Name 'dryRun' -Default $true)
 $serviceSettings = ConvertTo-Array -Value (Get-SettingValue -Object $ModuleSettings -Name 'services' -Default @())
 
-if (-not $dryRun) {
-    throw 'service-control real apply/restore is not implemented yet; dryRun must be true.'
+if (-not $StatePath) {
+    $StatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\service-control-state.json'
 }
+
+$statePath = $StatePath
+$previousState = Read-ServiceControlState -Path $statePath
+$previousRunWasControlling = $false
+$baselineServices = @()
+
+if ($null -ne $previousState -and $null -ne $previousState.PSObject.Properties['lastRun']) {
+    $previousRunWasControlling = [bool]$previousState.lastRun.controlling
+}
+
+if ($null -ne $previousState -and $null -ne $previousState.PSObject.Properties['baseline']) {
+    $baselineServices = @($previousState.baseline.services)
+}
+
+$currentSnapshots = @()
 
 foreach ($serviceSetting in @($serviceSettings)) {
     $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
@@ -176,6 +431,8 @@ foreach ($serviceSetting in @($serviceSettings)) {
         continue
     }
 
+    $currentSnapshots += $snapshot
+
     Write-ServiceControlLog `
         -Action 'inspect-baseline' `
         -ServiceName $serviceName `
@@ -190,39 +447,59 @@ foreach ($serviceSetting in @($serviceSettings)) {
             dependentServices = @($snapshot.dependentServices)
             requiredServices = @($snapshot.requiredServices)
         })
+}
 
-    $plannedActions = @()
+if (-not $previousRunWasControlling) {
+    $baselineServices = @($currentSnapshots)
+    $baselineAction = if ($dryRun) { 'would-update-baseline' } else { 'update-baseline' }
 
-    if ($snapshot.startMode -ne $targetStartupType) {
-        $plannedActions += "set-startup-type:$targetStartupType"
+    foreach ($snapshot in @($currentSnapshots)) {
+        Write-ServiceControlLog -Action $baselineAction -ServiceName ([string]$snapshot.name) -Reason 'previous-run-not-controlling' -Details $snapshot
     }
+}
 
-    if ($snapshot.state -ne $targetRunningState) {
-        $plannedActions += "set-running-state:$targetRunningState"
+if ((-not $Controlling) -and $previousRunWasControlling) {
+    foreach ($serviceSetting in @($serviceSettings)) {
+        $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
+        if (-not $supportedServices.ContainsKey($serviceName)) {
+            continue
+        }
+
+        $snapshot = $currentSnapshots | Where-Object { [string]$_.name -eq $serviceName } | Select-Object -First 1
+        $baselineService = Get-BaselineService -BaselineServices $baselineServices -ServiceName $serviceName
+        Restore-ServiceBaseline -ServiceName $serviceName -BaselineService $baselineService -Snapshot $snapshot -DryRun $dryRun
     }
+}
 
-    if (@($plannedActions).Count -eq 0) {
-        Write-ServiceControlLog `
-            -Action 'skip' `
+if ($Controlling -and -not $dryRun) {
+    Save-ServiceControlState -Path $statePath -BaselineServices $baselineServices -CurrentRunControlling $true
+}
+
+if ($Controlling) {
+    foreach ($serviceSetting in @($serviceSettings)) {
+        $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
+        $target = Get-SettingValue -Object $serviceSetting -Name 'target' -Default $null
+        $targetStartupType = [string](Get-SettingValue -Object $target -Name 'startupType' -Default '')
+        $targetRunningState = [string](Get-SettingValue -Object $target -Name 'runningState' -Default '')
+
+        if (-not $supportedServices.ContainsKey($serviceName)) {
+            continue
+        }
+
+        $snapshot = $currentSnapshots | Where-Object { [string]$_.name -eq $serviceName } | Select-Object -First 1
+        if ($null -eq $snapshot) {
+            continue
+        }
+
+        Apply-ServiceTarget `
             -ServiceName $serviceName `
-            -Reason 'already-target-state' `
-            -Details ([ordered]@{
-                dryRun = $dryRun
-                targetStartupType = $targetStartupType
-                targetRunningState = $targetRunningState
-            })
-        continue
+            -Snapshot $snapshot `
+            -TargetStartupType $targetStartupType `
+            -TargetRunningState $targetRunningState `
+            -DryRun $dryRun
     }
+}
 
-    Write-ServiceControlLog `
-        -Action 'would-apply-target' `
-        -ServiceName $serviceName `
-        -Reason 'dry-run' `
-        -Details ([ordered]@{
-            plannedActions = @($plannedActions)
-            targetStartupType = $targetStartupType
-            targetRunningState = $targetRunningState
-            currentStartupType = $snapshot.startMode
-            currentRunningState = $snapshot.state
-        })
+if (-not $dryRun) {
+    Save-ServiceControlState -Path $statePath -BaselineServices $baselineServices -CurrentRunControlling $Controlling
 }

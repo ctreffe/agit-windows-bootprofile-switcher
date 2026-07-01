@@ -42,11 +42,11 @@ The v1.5.0 milestone should deliver the full first `WSearch` service-control
 path. Dry-run is the first implementation and validation phase, not the final
 milestone boundary.
 
-The current implementation provides the first dry-run path only. It validates
-allow-listed `WSearch` configuration, inspects the current service baseline,
-logs dependent and required services for diagnostics and logs planned target
-actions without changing service state. Real apply and restore behavior remain
-the next implementation phase in v1.5.0.
+The current implementation provides dry-run and controlled apply/restore paths.
+It validates allow-listed `WSearch` configuration, inspects the current service
+baseline, logs dependent and required services for diagnostics, applies the
+configured target state when `dryRun = false` and restores the learned baseline
+when a later startup no longer requests service control.
 
 The module should not control:
 
@@ -183,8 +183,7 @@ module-created state as the new normal baseline.
 
 The first implementation should default examples and demos to `dryRun = true`.
 
-Until real apply/restore behavior is implemented, `dryRun = false` is rejected
-by configuration validation and by the module at runtime.
+Set `dryRun = false` only after reviewing dry-run logs on the target machine.
 
 In dry-run mode, the module should:
 
@@ -230,9 +229,9 @@ The first implementation should be validated in phases:
 7. Run a controlled real test only after dry-run output is reviewed.
 8. Confirm a later non-controlling startup restores the learned baseline.
 
-The dry-run phase should be committed and reviewed before the real apply/restore
-phase is added. Both phases belong to the same v1.5.0 milestone unless
-validation reveals a safety issue that requires rescoping.
+The dry-run phase should be reviewed before real apply/restore validation. Both
+phases belong to the same v1.5.0 milestone unless validation reveals a safety
+issue that requires rescoping.
 
 ## Non-Goals
 

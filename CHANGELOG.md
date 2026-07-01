@@ -9,12 +9,13 @@ This project follows Semantic Versioning.
 ### Added
 
 - Add the first dry-run `service-control` module path for Windows Search / `WSearch`.
-- Add service-control configuration validation and fixtures for supported `WSearch`, unsupported services and blocked non-dry-run configuration.
+- Add service-control configuration validation and fixtures for supported `WSearch`, unsupported services and real apply configuration.
 
 ### Changed
 
 - Scope v1.5.0 as full Windows Search Service Control with a dry-run-first implementation sequence instead of a dry-run-only milestone.
 - Register `service-control` in the profile engine and update startup-hook documentation for module-owned safety behavior.
+- Add lifecycle apply/restore behavior for `service-control` with `WSearch`.
 
 ## [v1.4.0] - 2026-06-30
 

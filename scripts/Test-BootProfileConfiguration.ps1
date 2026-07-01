@@ -238,8 +238,6 @@ function Test-ServiceControlSettings {
 
     if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
         Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
-    } elseif ($dryRun -eq $false) {
-        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be true until service-control apply/restore is implemented."
     }
 
     if ($null -eq $services) {

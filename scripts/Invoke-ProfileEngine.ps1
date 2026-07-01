@@ -225,6 +225,22 @@ function Get-NetworkIsolationSettingsForRestore {
     return $null
 }
 
+function Get-ServiceControlSettingsForRestore {
+    param(
+        [object]$Configuration
+    )
+
+    foreach ($profile in @($Configuration.profiles)) {
+        $modules = Get-ProfileModuleContainer -Profile $profile
+        $settings = Get-ProfileModuleSettings -ModuleSettings $modules -ModuleName 'service-control'
+        if ($null -ne $settings) {
+            return $settings
+        }
+    }
+
+    return $null
+}
+
 function Invoke-NetworkIsolationLifecycle {
     param(
         [object]$ModuleSettings,
@@ -258,6 +274,39 @@ function Invoke-NetworkIsolationLifecycle {
     return $true
 }
 
+function Invoke-ServiceControlLifecycle {
+    param(
+        [object]$ModuleSettings,
+        [bool]$Controlling,
+        [bool]$Detected,
+        [string]$Mode,
+        [string]$Name,
+        [string]$Identifier
+    )
+
+    if ($null -eq $ModuleSettings) {
+        return $false
+    }
+
+    $serviceControlModule = $moduleRegistry | Where-Object { $_.name -eq 'service-control' } | Select-Object -First 1
+    & $serviceControlModule.path `
+        -Mode $Mode `
+        -Name $Name `
+        -Identifier $Identifier `
+        -RepoRoot $repoRoot `
+        -LogDir $LogDir `
+        -ModuleSettings $ModuleSettings `
+        -Controlling $Controlling `
+        -Detected $Detected
+
+    $script:modulesExecuted += [ordered]@{
+        name = $serviceControlModule.name
+        path = $serviceControlModule.path
+    }
+
+    return $true
+}
+
 if ($resolverResult.detected) {
     if (-not $configurationValidation.valid) {
         $dispatchSkippedReason = 'configuration-invalid'
@@ -275,6 +324,14 @@ if ($resolverResult.detected) {
                 -Name $resolverResult.name `
                 -Identifier $resolverResult.identifier | Out-Null
 
+            Invoke-ServiceControlLifecycle `
+                -ModuleSettings (Get-ServiceControlSettingsForRestore -Configuration $configuration) `
+                -Controlling $false `
+                -Detected ([bool]$resolverResult.detected) `
+                -Mode $resolverResult.mode `
+                -Name $resolverResult.name `
+                -Identifier $resolverResult.identifier | Out-Null
+
             $dispatchSkippedReason = "profile-not-configured:$($resolverResult.mode)"
         } else {
             $profileConfigured = $true
@@ -282,7 +339,9 @@ if ($resolverResult.detected) {
             $moduleSettings = Get-ProfileModuleContainer -Profile $configuredProfile
             $moduleNames = Get-ProfileModuleNames -Profile $configuredProfile
             $currentRunIsolating = @($moduleNames) -contains 'network-isolation'
+            $currentRunControlsServices = @($moduleNames) -contains 'service-control'
             $networkIsolationSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'network-isolation'
+            $serviceControlSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'service-control'
 
             if ($currentRunIsolating) {
                 Invoke-NetworkIsolationLifecycle `
@@ -302,8 +361,26 @@ if ($resolverResult.detected) {
                     -Identifier $resolverResult.identifier | Out-Null
             }
 
+            if ($currentRunControlsServices) {
+                Invoke-ServiceControlLifecycle `
+                    -ModuleSettings $serviceControlSettings `
+                    -Controlling $true `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            } else {
+                Invoke-ServiceControlLifecycle `
+                    -ModuleSettings (Get-ServiceControlSettingsForRestore -Configuration $configuration) `
+                    -Controlling $false `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            }
+
             foreach ($moduleName in @($moduleNames)) {
-                if ([string]$moduleName -eq 'network-isolation') {
+                if ([string]$moduleName -eq 'network-isolation' -or [string]$moduleName -eq 'service-control') {
                     continue
                 }
 
@@ -343,6 +420,14 @@ if ($resolverResult.detected) {
         Invoke-NetworkIsolationLifecycle `
             -ModuleSettings (Get-NetworkIsolationSettingsForRestore -Configuration $configuration) `
             -Isolating $false `
+            -Detected ([bool]$resolverResult.detected) `
+            -Mode 'unmanaged' `
+            -Name 'Unmanaged Windows startup' `
+            -Identifier 'unmanaged' | Out-Null
+
+        Invoke-ServiceControlLifecycle `
+            -ModuleSettings (Get-ServiceControlSettingsForRestore -Configuration $configuration) `
+            -Controlling $false `
             -Detected ([bool]$resolverResult.detected) `
             -Mode 'unmanaged' `
             -Name 'Unmanaged Windows startup' `

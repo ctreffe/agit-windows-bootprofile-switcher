@@ -265,14 +265,15 @@ dokumentiert.
 
 Service Control ist in
 [docs/modules/service-control.md](docs/modules/service-control.md)
-dokumentiert. Die aktuelle Implementierung ist rein trockenlaufend und
-unterstuetzt `WSearch` als ersten allowlist-basierten Service-Kandidaten.
+dokumentiert. Die aktuelle Implementierung unterstuetzt Dry-run sowie
+kontrolliertes Apply/Restore fuer `WSearch` als ersten allowlist-basierten
+Service-Kandidaten.
 
-Bekannte Module im aktuellen Release:
+Bekannte Module im aktuellen Repository:
 
 - `validation-log`
 - `network-isolation`
-- `service-control` trockenlaufendes Windows-Search-Service-Control-Modul
+- `service-control` Windows-Search-Service-Control-Modul
 - `demo-system-marker` temporäres Foundation-Demomodul
 
 ## Projektziele
