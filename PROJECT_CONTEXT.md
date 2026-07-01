@@ -26,7 +26,7 @@ The Service and Startup Control Discovery milestone is complete.
 
 ## Current Focus
 
-Prepare the first Service Control implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
+Finalize the first Service Control implementation milestone after **v1.4.0 – Service and Startup Control Discovery**.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -41,7 +41,7 @@ Completed v1.4.0 results:
 
 Next roadmap focus:
 
-* Implement the first `service-control` module for Windows Search / `WSearch`, using a dry-run-first implementation and validation sequence before real apply/restore behavior.
+* Finalize **v1.5.0 – Service Control for Windows Search** as the complete first `service-control` implementation for Windows Search / `WSearch`.
 
 Current v1.5.0 implementation status:
 
@@ -50,7 +50,8 @@ Current v1.5.0 implementation status:
 * `scripts/Invoke-ProfileEngine.ps1` registers and dispatches `service-control` as a lifecycle module from valid profile configuration.
 * `config/test/service-control-wsearch-valid.json`, `config/test/service-control-unsupported-service.json` and `config/test/service-control-real-apply-valid.json` cover the first validation cases.
 * Direct module and engine-level validation confirmed dry-run logging for baseline inspection, dependency diagnostics and planned `WSearch` target actions without changing service state.
-* Apply/restore code is implemented but still needs controlled real-system validation before v1.5.0 can be finalized.
+* Controlled elevated real-system validation confirmed baseline learning, apply to `Stopped`/`Disabled` and restore to the learned `Running`/`Auto`/delayed-auto baseline.
+* Non-dry-run execution now requires an elevated PowerShell session before state is written, preventing misleading controlling state from failed non-admin real runs.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -570,15 +571,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan **v1.5.0 – Service Control for Windows Search**.
+Finalize **v1.5.0 – Service Control for Windows Search**.
 
 Primary objective:
 
-Implement the generic allow-listed `service-control` module with Windows Search / `WSearch` as the first supported service, including dry-run, real apply and restore behavior.
+Complete the generic allow-listed `service-control` module with Windows Search / `WSearch` as the first supported service, including dry-run, real apply, restore behavior and elevation preflight.
 
 Immediate next validation target:
 
-Run controlled real-system validation for `service-control` with `WSearch`, confirming baseline learning, apply to Disabled/Stopped and later restore to the learned baseline.
+Perform the v1.5.0 release-readiness pass: confirm documentation, changelog and validation evidence reflect the completed and real-system-tested `WSearch` implementation.
 
 ---
 

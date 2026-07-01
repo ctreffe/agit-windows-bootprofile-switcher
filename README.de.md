@@ -20,7 +20,7 @@
 >
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`) und den Meilenstein Service and Startup Control Discovery (`v1.4.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.4.0 – Service and Startup Control Discovery` ist abgeschlossen. Dieser Release dokumentiert die rein lesende Discovery der angefragten Service-, Autostart- und User-Application-Ziele, ergaenzt ADR-0007 und definiert ein generisches allowlist-basiertes `service-control`-Design mit `WSearch` als erstem unterstuetzten Service-Kandidaten.
+> Der Meilenstein `v1.5.0 – Service Control for Windows Search` ist in Finalisierung. Dieser Release implementiert das generische allowlist-basierte `service-control`-Modul fuer `WSearch`, inklusive Dry-run, realem Apply, Restore-Verhalten und Elevation-Preflight fuer Service-Aenderungen ausserhalb des Dry-run.
 
 ## Überblick
 
@@ -267,7 +267,7 @@ Service Control ist in
 [docs/modules/service-control.md](docs/modules/service-control.md)
 dokumentiert. Die aktuelle Implementierung unterstuetzt Dry-run sowie
 kontrolliertes Apply/Restore fuer `WSearch` als ersten allowlist-basierten
-Service-Kandidaten.
+Service.
 
 Bekannte Module im aktuellen Repository:
 

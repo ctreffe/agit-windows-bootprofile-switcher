@@ -2,24 +2,24 @@
 
 ## Purpose
 
-`service-control` is the planned module family for controlling ordinary Windows
+`service-control` is the module family for controlling ordinary Windows
 services from BootProfile Switcher profiles.
 
 The module is intended to be generic. It should not become one module per
 service. Instead, it should support an explicit allow-list of services that
 have been validated as safe enough for BootProfile Switcher control.
 
-The first supported service should be Windows Search / `WSearch`.
+The first supported service is Windows Search / `WSearch`.
 
 ## First Supported Service
 
-The initial implementation should support only:
+The initial implementation supports only:
 
 ```text
 WSearch
 ```
 
-`WSearch` is the first candidate because the v1.4.0 read-only discovery found a
+`WSearch` was selected first because the v1.4.0 read-only discovery found a
 clear service identity for Windows Search indexing.
 
 Supporting `WSearch` first keeps the first implementation narrow while still
@@ -27,18 +27,18 @@ building the reusable shape for later ordinary Windows services.
 
 ## What The Module Controls
 
-The module should control Windows services by service name.
+The module controls Windows services by service name.
 
 For each supported service, the module may control:
 
 - service startup type
 - current running state
 
-The first implementation should support a profile requesting that a service is
+The first implementation supports a profile requesting that a service is
 disabled for a managed boot profile, then restored to its learned baseline when
 the system starts again without that request.
 
-The v1.5.0 milestone should deliver the full first `WSearch` service-control
+The v1.5.0 milestone delivers the full first `WSearch` service-control
 path. Dry-run is the first implementation and validation phase, not the final
 milestone boundary.
 
@@ -47,6 +47,10 @@ It validates allow-listed `WSearch` configuration, inspects the current service
 baseline, logs dependent and required services for diagnostics, applies the
 configured target state when `dryRun = false` and restores the learned baseline
 when a later startup no longer requests service control.
+
+Non-dry-run execution requires an elevated PowerShell session before state is
+written. This prevents a failed non-admin real run from recording a misleading
+controlling state.
 
 The module should not control:
 

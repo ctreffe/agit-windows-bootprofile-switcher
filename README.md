@@ -20,7 +20,7 @@
 >
 > BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`) and the Service and Startup Control Discovery milestone (`v1.4.0`).
 >
-> The `v1.4.0 – Service and Startup Control Discovery` milestone is complete. This release records the read-only discovery of requested service, startup and user-application targets, documents ADR-0007, and defines a generic allow-listed `service-control` design with `WSearch` as the first supported service candidate.
+> The `v1.5.0 – Service Control for Windows Search` milestone is in finalization. This release implements the generic allow-listed `service-control` module for `WSearch`, including dry-run, real apply, restore behavior and an elevation preflight for non-dry-run service changes.
 
 ## Overview
 
@@ -253,7 +253,7 @@ Network Isolation is documented in detail in
 Service Control is documented in
 [docs/modules/service-control.md](docs/modules/service-control.md). The current
 implementation supports dry-run and controlled apply/restore behavior for
-`WSearch` as the first allow-listed service candidate.
+`WSearch` as the first allow-listed service.
 
 Known modules in the current repository:
 
