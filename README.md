@@ -255,6 +255,11 @@ Service Control is documented in
 implementation supports dry-run and controlled apply/restore behavior for
 `WSearch` as the first allow-listed service.
 
+Startup and User-Application Control planning is documented in
+[docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md).
+The v1.6.0 design addresses Teams, OneDrive, ownCloud and Outlook through a
+shared control-surface model with per-application capability notes.
+
 Known modules in the current repository:
 
 - `validation-log`
@@ -350,6 +355,7 @@ Core project documents:
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow
 - [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Service and Startup Control discovery findings and first module recommendation
 - [docs/modules/service-control.md](docs/modules/service-control.md) – Service Control module design
+- [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md) – Startup and User-Application Control module design
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation
 - [docs/modules/network-isolation.de.md](docs/modules/network-isolation.de.md) – German Network Isolation module documentation
 - [docs/poc/a1-boot-menu.md](docs/poc/a1-boot-menu.md) – A1 boot menu proof of concept
@@ -365,6 +371,7 @@ Core project documents:
 - [docs/decisions/ADR-0005-configuration-format-v2.md](docs/decisions/ADR-0005-configuration-format-v2.md) – Configuration Format v2 decision
 - [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – configuration-driven boot menu installation decision
 - [docs/decisions/ADR-0007-service-and-startup-control-modularization.md](docs/decisions/ADR-0007-service-and-startup-control-modularization.md) – Service and Startup Control modularization decision
+- [docs/decisions/ADR-0008-startup-and-user-application-control.md](docs/decisions/ADR-0008-startup-and-user-application-control.md) – Startup and User-Application Control decision
 - [LICENSE](LICENSE) – MIT License
 
 ### Current profile resolver

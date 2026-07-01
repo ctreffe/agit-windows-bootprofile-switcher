@@ -51,7 +51,10 @@ Completed v1.5.0 results:
 
 Next roadmap focus:
 
-* Plan the next control milestone for startup or user-application control, likely covering Teams, OneDrive, ownCloud, Outlook or similar per-user startup applications based on the v1.4.0 discovery results.
+* Plan **v1.6.0 – Startup and User-Application Control** for Microsoft Teams, OneDrive, ownCloud and Outlook based on the v1.4.0 discovery results.
+* Address all four applications in the milestone through one shared control-surface model where possible, while allowing per-application capability notes when a target cannot be safely controlled through the same mechanism.
+* ADR-0008 records the decision to address all four applications through shared startup/user-application control surfaces instead of one module per application.
+* `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -279,12 +282,12 @@ Last completed milestone:
 
 Planned next milestone:
 
-* To be selected after v1.5.0, with startup or user-application control as the likely next candidate.
+* v1.6.0 – Startup and User-Application Control for Teams, OneDrive, ownCloud and Outlook.
 
 Later milestone candidates:
 
-* Startup or user-application control module for Teams, OneDrive, ownCloud, Outlook and similar per-user applications.
 * Network Isolation hardening for policy-backed isolation controls.
+* Policy or vendor guidance for Windows Update and Bitdefender.
 
 The roadmap may evolve based on discovery findings.
 
@@ -589,15 +592,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan the next milestone after **v1.5.0 – Service Control for Windows Search**.
+Plan **v1.6.0 – Startup and User-Application Control**.
 
 Primary objective:
 
-Select the next narrow control surface based on the v1.4.0 discovery findings and the completed v1.5.0 service-control safety model.
+Define the startup/user-application control design for Microsoft Teams, OneDrive, ownCloud and Outlook as one milestone with shared module boundaries and per-application capability notes.
 
 Immediate next validation target:
 
-Decide whether the next milestone should start with startup-control, user-application control or policy/vendor guidance for targets such as Teams, OneDrive, ownCloud, Outlook, Windows Update or Bitdefender.
+Refresh the read-only startup/user-application inventory for Teams, OneDrive, ownCloud and Outlook, then turn the v1.6.0 design into validation fixtures and dry-run behavior.
 
 ---
 
