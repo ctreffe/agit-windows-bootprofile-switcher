@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`), the Service and Startup Control Discovery milestone (`v1.4.0`) and the Service Control for Windows Search milestone (`v1.5.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`), the Service and Startup Control Discovery milestone (`v1.4.0`), the Service Control for Windows Search milestone (`v1.5.0`) and the Startup and User-Application Control milestone (`v1.6.0`).
 >
-> The `v1.5.0 – Service Control for Windows Search` milestone is complete. This release implements the generic allow-listed `service-control` module for `WSearch`, including dry-run, real apply, restore behavior and an elevation preflight for non-dry-run service changes.
+> The `v1.6.0 - Startup and User-Application Control` milestone is complete. This release implements allow-listed control for Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot and the discovered AnyDesk service, including dry-run planning, real apply, baseline restore and elevation preflights.
 
 ## Overview
 
@@ -90,6 +90,42 @@ The uninstall wrapper restores the saved normal adapter baseline when needed,
 then removes the startup hook and the managed demo boot entry. If an earlier
 ProgramData profile configuration was backed up during installation, it is
 restored.
+
+## Quick Start: Startup and User-Application Control Demo
+
+The Startup and User-Application Control module has its own demonstration setup:
+
+```text
+install-startup-user-application-control-demo.cmd
+```
+
+This installs one managed boot menu entry named `App Startup Control`, installs
+a matching machine-wide profile configuration and installs the startup plus
+user-logon hooks. Runtime scripts and modules are copied to
+`%ProgramData%\BootProfileSwitcher\runtime`, so hook execution does not depend
+on the installing user's profile directory. The demo profile uses real apply/restore behavior for
+allow-listed Teams, OneDrive, ownCloud and Microsoft Office startup surfaces,
+the AnyDesk support service and Microsoft 365 Copilot:
+
+1. normal startup can restore a learned startup baseline
+2. `App Startup Control` startup disables the configured startup registry values, scheduled tasks and AnyDesk service
+3. user logon waits briefly for delayed autostarts, then handles per-user startup entries and configured process stops, including Microsoft 365 Copilot and AnyDesk
+4. a later normal startup or demo uninstall restores the learned baseline
+
+It can be removed with:
+
+```text
+uninstall-startup-user-application-control-demo.cmd
+```
+
+The uninstall wrapper runs the restore path when module state exists, then
+removes the startup hook, user-logon hook and managed demo boot entry. If an
+earlier ProgramData profile configuration was backed up during installation, it
+is restored.
+
+The user-logon hook is launched through Windows Script Host without a console
+window. Do not start its runtime script manually from an interactive console
+during normal use.
 
 Each production module should provide a small installable demo when practical.
 The demo should show the module's intended behavior without requiring manual
@@ -195,6 +231,8 @@ Current command wrappers:
 - `uninstall-demo.cmd` removes the startup hook, managed boot menu entries and temporary demo marker while leaving ProgramData configuration unchanged.
 - `install-network-isolation-demo.cmd` installs the Network Isolation module demo with one managed `Network Isolation` boot profile.
 - `uninstall-network-isolation-demo.cmd` removes the Network Isolation module demo and restores the previous ProgramData profile configuration when a backup exists.
+- `install-startup-user-application-control-demo.cmd` installs the Startup and User-Application Control module demo with one managed `App Startup Control` boot profile.
+- `uninstall-startup-user-application-control-demo.cmd` removes the Startup and User-Application Control module demo, runs the restore path when state exists and restores the previous ProgramData profile configuration when a backup exists.
 - `install-config-driven-boot-menu-demo.cmd` installs the Configuration Format v2 boot menu demo with multiple named managed profiles.
 - `uninstall-config-driven-boot-menu-demo.cmd` removes the config-driven boot menu demo and restores the previous ProgramData profile configuration when a backup exists.
 - `install.cmd` installs the managed BootProfile Switcher boot menu entries and requests elevation when needed.
@@ -253,21 +291,23 @@ Network Isolation is documented in detail in
 Service Control is documented in
 [docs/modules/service-control.md](docs/modules/service-control.md). The current
 implementation supports dry-run and controlled apply/restore behavior for
-`WSearch` as the first allow-listed service.
+`WSearch` and the logical `anydesk` target.
 
 Startup and User-Application Control planning is documented in
 [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md).
-The v1.6.0 design addresses Teams, OneDrive, ownCloud and Microsoft Office through a
-shared control-surface model with per-application capability notes.
+The v1.6.0 design addresses Teams, OneDrive, ownCloud, Microsoft Office,
+Microsoft 365 Copilot and AnyDesk through a shared control-surface model with
+per-application capability notes.
 The current implementation supports dry-run planning plus controlled apply and
 restore behavior for allow-listed startup registry values and scheduled tasks.
-Processes remain inspect-only.
+Processes can remain inspect-only or be stopped after user logon when the
+configuration explicitly requests `processes.action = "stop"`.
 
 Known modules in the current repository:
 
 - `validation-log`
 - `network-isolation`
-- `service-control` Windows Search service-control module
+- `service-control` allow-listed Windows service-control module
 - `startup-user-application-control` startup and user-application control module
 - `demo-system-marker` temporary foundation demo module
 

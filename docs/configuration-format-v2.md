@@ -36,6 +36,7 @@ For development, tests and demos, scripts can use another file through
 - `config/profiles.v2.example.json` is the general v2 example.
 - `config/demos/config-driven-boot-menu.json` demonstrates multiple managed boot entries.
 - `config/demos/network-isolation.json` demonstrates the real Network Isolation lifecycle.
+- `config/demos/startup-user-application-control.json` demonstrates the real Startup and User-Application Control lifecycle.
 
 Do not edit the installed ProgramData file blindly. Prefer editing a copy in
 the repository or another working location, validating it, then installing it
@@ -176,11 +177,11 @@ Known modules in the current repository:
 
 - `validation-log` writes harmless validation log entries.
 - `network-isolation` can disable and restore configured network adapter categories.
-- `service-control` can currently inspect planned Windows Search / `WSearch`
-  service-control actions in dry-run mode.
+- `service-control` can control allow-listed Windows Search / `WSearch` and
+  the discovered AnyDesk support service.
 - `startup-user-application-control` validates and dry-runs planned
-  startup/user-application control settings for Teams, OneDrive, ownCloud and
-  Microsoft Office.
+  startup/user-application control settings for Teams, OneDrive, ownCloud,
+  Microsoft Office, Microsoft 365 Copilot and AnyDesk.
 - `demo-system-marker` is a temporary foundation demo module.
 
 ### Network Isolation Settings
@@ -253,14 +254,16 @@ Supported application identifiers are:
 - `onedrive`
 - `owncloud`
 - `microsoft-office`
+- `microsoft-365-copilot`
+- `anydesk`
 
-`startup.enabled` must be a boolean. The first validated process behavior is
-`inspect-only`; terminating user processes is intentionally not accepted by the
-configuration validator.
+`startup.enabled` must be a boolean. Supported process actions are
+`inspect-only` and `stop`. Process stops run only in the user-logon scope and
+only for allow-listed process names owned by supported application targets.
 
 When `dryRun = false`, the module can remove and restore allow-listed registry
-Run values and disable or restore allow-listed scheduled tasks. Processes remain
-inspection-only.
+Run values, disable or restore allow-listed scheduled tasks and stop matching
+allow-listed user processes when configured.
 
 ## Validation Rules
 

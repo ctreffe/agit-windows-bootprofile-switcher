@@ -28,6 +28,15 @@
               "processes": {
                 "action": "inspect-only"
               }
+            },
+            {
+              "id": "microsoft-365-copilot",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
             }
           ]
         }

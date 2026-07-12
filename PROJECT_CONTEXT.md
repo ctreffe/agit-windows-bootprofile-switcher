@@ -10,7 +10,7 @@
 
 **Purpose**
 
-BootProfile Switcher is a configurable Windows boot profile engine that allows different system configurations to be applied automatically before user logon based on the selected Windows boot profile.
+BootProfile Switcher is a configurable Windows boot profile engine that allows different system and user-session configurations to be applied automatically based on the selected Windows boot profile.
 
 The project focuses on a modular architecture, deterministic behavior and enterprise-ready deployment.
 
@@ -20,13 +20,13 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.5.0 – Service Control for Windows Search**
+**v1.6.0 - Startup and User-Application Control**
 
-The Service Control for Windows Search milestone is complete.
+The Startup and User-Application Control milestone is complete.
 
 ## Current Focus
 
-Plan the next milestone after **v1.5.0 – Service Control for Windows Search**.
+Plan the next milestone after **v1.6.0 - Startup and User-Application Control**.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -49,17 +49,26 @@ Completed v1.5.0 results:
 * Controlled elevated real-system validation confirmed baseline learning, apply to `Stopped`/`Disabled` and restore to the learned `Running`/`Auto`/delayed-auto baseline.
 * Non-dry-run execution now requires an elevated PowerShell session before state is written, preventing misleading controlling state from failed non-admin real runs.
 
-Next roadmap focus:
+Completed v1.6.0 results:
 
-* Plan **v1.6.0 – Startup and User-Application Control** for Microsoft Teams, OneDrive, ownCloud and Microsoft Office based on the v1.4.0 discovery results.
-* Address all four applications in the milestone through one shared control-surface model where possible, while allowing per-application capability notes when a target cannot be safely controlled through the same mechanism.
-* ADR-0008 records the decision to address all four applications through shared startup/user-application control surfaces instead of one module per application.
+* ADR-0008 records the decision to address application targets through shared startup/user-application control surfaces instead of one module per application, while reusing `service-control` for the discovered AnyDesk service.
+* ADR-0009 defines machine-wide, AD-compatible and version-resilient control rules: no named user or SID in machine configuration, per-user state only where Windows requires it, and logical target IDs resolved through narrow allow-listed patterns.
+* `scripts/Install-BootProfileRuntime.ps1` installs active runtime code under `%ProgramData%\BootProfileSwitcher\runtime`; the Startup and User-Application Control demo registers hooks against that machine-wide location.
 * `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
-* `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office.
+* `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office; the current-machine extension also identified AnyDesk as a service and Microsoft 365 Copilot as `M365Copilot`.
 * `scripts/Test-BootProfileConfiguration.ps1` validates the first `startup-user-application-control` configuration shape and allow-listed application IDs.
 * `modules/startup-user-application-control/Invoke-StartupUserApplicationControlModule.ps1` provides dry-run planning plus elevated real apply/restore for allow-listed startup registry values and scheduled tasks.
-* ADR-0008 and `docs/modules/startup-user-application-control.md` define the baseline/restore model for registry Run values and scheduled tasks; processes remain inspect-only.
-* Elevated local validation confirmed real apply/restore for Teams and ownCloud registry Run values, OneDrive startup tasks and Microsoft Office scheduled tasks.
+* `scripts/Invoke-BootProfileUserLogonHook.ps1` adds a user-logon runtime scope for per-user `HKCU` startup values and explicitly configured allow-listed process stops.
+* `config/demos/startup-user-application-control.json` and the Startup and User-Application Control demo wrappers provide a real apply/restore module demo with startup and user-logon hooks.
+* ADR-0008 and `docs/modules/startup-user-application-control.md` define the baseline/restore model for registry Run values, scheduled tasks and user-logon process handling.
+* Elevated local validation confirmed real apply/restore for Teams and ownCloud registry Run values, OneDrive startup tasks and Microsoft Office scheduled tasks. The v1.6.0 demo additionally controls the allow-listed logical `anydesk` service target and can stop `M365Copilot` at user logon.
+* Full demo validation confirmed machine-wide runtime installation, a hidden delayed user-logon hook, controlled apply for Copilot and AnyDesk, and a later unmanaged-start restore for the service and startup baselines.
+
+Next roadmap focus:
+
+* Plan the next milestone after v1.6.0.
+* Remaining original target areas include Windows Update and Bitdefender, which are likely policy, vendor-guidance or hardening topics rather than ordinary service-control targets.
+* Evaluate whether Windows Search needs any future per-drive indexing refinement beyond the validated `WSearch` service-control milestone.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -283,16 +292,17 @@ Validation note:
 
 Last completed milestone:
 
-* v1.5.0 – Service Control for Windows Search
+* v1.6.0 - Startup and User-Application Control
 
 Planned next milestone:
 
-* v1.6.0 – Startup and User-Application Control for Teams, OneDrive, ownCloud and Microsoft Office.
+* To be planned after v1.6.0.
 
 Later milestone candidates:
 
 * Network Isolation hardening for policy-backed isolation controls.
 * Policy or vendor guidance for Windows Update and Bitdefender.
+* Possible Windows Search per-drive indexing refinement, if service-level control is not sufficient.
 
 The roadmap may evolve based on discovery findings.
 
@@ -400,6 +410,25 @@ Follow-up roadmap note:
 
 * A later Network Isolation hardening milestone should evaluate Group Policy restrictions, network UI restrictions, device-management controls, service controls and firewall enforcement so isolated profiles can be made harder to bypass in enterprise deployments.
 * A later Bluetooth/device isolation milestone should evaluate how to disable Bluetooth radios or USB Bluetooth adapters when that is required in addition to Bluetooth network adapter isolation.
+
+## v1.6.0 - Startup and User-Application Control
+
+Completed.
+
+Purpose:
+
+* Implement allow-listed startup/user-application control for Microsoft Teams, OneDrive, ownCloud and Microsoft Office.
+* Keep the implementation generic by Windows control surface rather than creating one module per application.
+* Support dry-run planning, baseline learning, elevated real apply and later restore for registry Run values and scheduled tasks.
+* Add a user-logon execution scope so per-user `HKCU` startup values and explicitly configured allow-listed process stops run in the logged-on user's session instead of the SYSTEM startup-hook context.
+
+Validation status:
+
+* `scripts\Test-BootProfileConfigurationFixtures.ps1` passes all configuration fixtures, including supported application IDs, unsupported application rejection, invalid process-action rejection and real-apply configuration.
+* Direct module and engine-level dry-run validation confirmed baseline learning, planned startup registry changes and non-persistent default dry-run state behavior.
+* Elevated dry-run validation confirmed OneDrive and Microsoft Office scheduled-task baseline discovery and restore planning.
+* Controlled elevated real-system validation confirmed apply/restore for Teams and ownCloud registry Run values, OneDrive startup tasks and Microsoft Office scheduled tasks.
+* A non-admin real run fails before state is written, preventing misleading controlling state when elevation is missing.
 
 ## v1.5.0 – Service Control for Windows Search
 
@@ -597,15 +626,15 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan **v1.6.0 – Startup and User-Application Control**.
+Plan the next milestone after **v1.6.0 - Startup and User-Application Control**.
 
 Primary objective:
 
-Define the startup/user-application control design for Microsoft Teams, OneDrive, ownCloud and Microsoft Office as one milestone with shared module boundaries and per-application capability notes.
+Decide whether the next milestone should focus on policy/vendor guidance for Windows Update and Bitdefender, Network Isolation hardening, or Windows Search indexing refinement.
 
 Immediate next validation target:
 
-Review and commit the `startup-user-application-control` real apply/restore implementation, then prepare v1.6.0 finalization.
+Review the remaining original target areas and choose the v1.7.0 milestone scope.
 
 ---
 

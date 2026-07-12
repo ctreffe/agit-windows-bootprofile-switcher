@@ -3,7 +3,7 @@
 ## Purpose
 
 Startup and User-Application Control is the v1.6.0 design area for Microsoft
-Teams, OneDrive, ownCloud and Microsoft Office.
+Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot and AnyDesk.
 
 The goal is to control application startup behavior from BootProfile Switcher
 profiles without treating user applications as ordinary Windows services and
@@ -15,7 +15,8 @@ per-application capability notes for differences between targets.
 The current implementation validates allow-listed application IDs, learns and
 restores baselines for supported startup registry values and scheduled tasks,
 and can apply real startup-surface changes when `dryRun = false` in an elevated
-PowerShell session. Running processes remain inspect-only.
+PowerShell session. Running processes can remain inspect-only or be stopped in
+the user-logon scope when the configuration explicitly requests it.
 
 ## Target Applications
 
@@ -25,8 +26,10 @@ The v1.6.0 milestone addresses:
 | --- | --- | --- |
 | Microsoft Teams | startup-control-or-user-app-control | Allow-listed startup registry values first; machine-wide installer startup needs caution |
 | OneDrive | startup-control-or-user-app-control | Allow-listed startup scheduled tasks first; reporting and update tasks need a separate decision |
-| ownCloud | startup-control-or-user-app-control | Allow-listed per-user startup registry value first; running process behavior remains inspect-only |
+| ownCloud | startup-control-or-user-app-control | Allow-listed per-user startup registry value plus user-logon process stop when configured |
 | Microsoft Office | startup-control-or-user-app-control | Allow-listed Office startup/update scheduled tasks are in scope; arbitrary broad Office matching is not |
+| Microsoft 365 Copilot | user-app-control | Allow-listed `M365Copilot` process stop at user logon; no unverified package-autostart switch is changed |
+| AnyDesk | service-control plus user-app-control | The allow-listed service is stopped at startup and its delayed user process is stopped after user logon |
 
 Each application must be explicitly addressed. If a target cannot be safely
 controlled in the initial implementation, the module documentation should say
@@ -120,6 +123,8 @@ Supported application identifiers should be allow-listed:
 - `onedrive`
 - `owncloud`
 - `microsoft-office`
+- `microsoft-365-copilot`
+- `anydesk`
 
 Unsupported application identifiers should be configuration errors.
 
@@ -218,15 +223,22 @@ Lifecycle rules:
    the controlled state as normal.
 4. If a surface is missing, ambiguous or unsupported, the module logs a skip or
    validation error and does not attempt modification.
-5. Running processes are inspected and logged unless a later explicit decision
-   allows real process control.
+5. Running processes are inspected and logged by default. If
+   `processes.action = "stop"` is configured, process stop runs only in the
+   user-logon scope.
 
-The real-change implementation continues to treat processes as inspect-only
-even when `dryRun = false`.
+The real-change implementation separates execution scopes:
+
+- `Startup` scope runs from the SYSTEM startup hook and handles machine-wide
+  registry values plus scheduled tasks.
+- `UserLogon` scope runs from the user-logon hook and handles per-user `HKCU`
+  registry values plus configured user-process stops.
 
 ## Dry-Run Behavior
 
-Examples and demos should default to `dryRun = true`.
+Examples used for configuration editing may use `dryRun = true` while planned
+actions are reviewed. The installable module demo uses `dryRun = false` so it
+matches the real module lifecycle.
 
 In dry-run mode, the module should:
 
@@ -236,16 +248,46 @@ In dry-run mode, the module should:
 - show which startup entries would be disabled
 - show which scheduled tasks would be disabled
 - show which baseline entries would be restored
-- log running process matches without terminating them
+- log running process matches and show whether they would be stopped
 - avoid editing registry values
 - avoid changing scheduled task enabled state
 - avoid deleting startup-folder entries
 - avoid terminating processes
 
-When `dryRun = false`, the module requires an elevated PowerShell session. It
-may remove or restore allow-listed registry Run values and disable or restore
-allow-listed scheduled tasks. It still does not delete scheduled tasks, edit task
-actions, alter triggers, delete startup-folder entries or terminate processes.
+When `dryRun = false`, startup-scope execution requires an elevated PowerShell
+session. It may remove or restore allow-listed registry Run values and disable
+or restore allow-listed scheduled tasks. User-logon execution may remove or
+restore the logged-on user's allow-listed `HKCU` Run values and stop matching
+allow-listed user processes when configured. It still does not delete scheduled
+tasks, edit task actions, alter triggers or delete startup-folder entries.
+
+## Demo
+
+The installable demo uses real apply/restore behavior:
+
+```text
+install-startup-user-application-control-demo.cmd
+```
+
+It creates one managed boot menu entry named `App Startup Control` using
+`config/demos/startup-user-application-control.json`. The demo targets Teams,
+OneDrive, ownCloud and Microsoft Office startup surfaces with `dryRun = false`.
+It installs both the startup hook and the user-logon hook. The demo config sets
+`processes.action = "stop"` so matching user processes are stopped after logon
+when the controlled boot profile is active.
+
+The startup hook runs as `SYSTEM`. This is correct for machine-wide startup
+surfaces and scheduled tasks. Per-user Run values such as ownCloud are handled
+by the user-logon hook so `HKCU` resolves to the logged-on user's hive rather
+than the `SYSTEM` hive.
+
+The uninstall wrapper restores the learned startup baseline when module state
+exists, then removes the startup hook, user-logon hook and managed demo boot
+entry:
+
+```text
+uninstall-startup-user-application-control-demo.cmd
+```
 
 ## Per-Application Notes
 
@@ -283,9 +325,9 @@ The v1.4.0 discovery found an `ownCloud` startup registry entry and an
 The v1.6.0 discovery refresh again found the `ownCloud` per-user startup
 registry value and an active `owncloud` process.
 
-The first implementation should treat the startup entry as the primary
-candidate and keep process handling inspect-only until user-session behavior is
-validated.
+The implementation removes and restores the allow-listed startup entry. The
+user-logon hook also stops `owncloud` when explicitly configured with
+`processes.action = "stop"`.
 
 ### Microsoft Office
 
@@ -298,12 +340,27 @@ The v1.6.0 discovery refresh found broad Microsoft Office scheduled tasks, but
 no Outlook-specific startup registry entry, startup-folder entry or running
 process.
 
-The first implementation may control explicitly allow-listed Office scheduled
-tasks, especially Office update and Click-to-Run startup behavior, when the
-profile requests Microsoft Office control. It must not use broad
-`*Office*` matching as a generic task-disabling mechanism. Outlook process
-handling remains inspect-only until user-session behavior has explicit safety
-rules.
+The implementation controls explicitly allow-listed Office scheduled tasks,
+especially Office update and Click-to-Run startup behavior, when the profile
+requests Microsoft Office control. It does not use broad `*Office*` matching as
+a generic task-disabling mechanism. Outlook process handling remains
+inspect-only unless it is explicitly allow-listed in a later change.
+
+### Microsoft 365 Copilot
+
+Local discovery found the packaged Microsoft Office Hub application running as
+`M365Copilot`. It did not expose an allow-listable Run value or scheduled task.
+The module therefore does not change an unverified packaged-app autostart
+surface. When explicitly configured with `processes.action = "stop"`, it stops
+the allow-listed `M365Copilot` process in the user-logon scope.
+
+### AnyDesk
+
+Local discovery identified an `AnyDesk-*` automatic support service,
+which is controlled through `service-control` at system startup. The same
+executable can then start as a user process after logon. The user-logon hook
+waits briefly for delayed autostarts before stopping the allow-listed
+`AnyDesk-*` process when configured.
 
 ## Validation Plan
 

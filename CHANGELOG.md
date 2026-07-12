@@ -6,8 +6,11 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v1.6.0] - 2026-07-12
+
 ### Added
 
+- Add an installable Startup and User-Application Control module demo with startup and user-logon hooks.
 - Add ADR-0008 for Startup and User-Application Control.
 - Add v1.6.0 startup and user-application control module design for Teams, OneDrive, ownCloud and Microsoft Office.
 - Add v1.6.0 read-only discovery findings for Teams, OneDrive, ownCloud and Microsoft Office startup/user-application control.
@@ -15,8 +18,15 @@ This project follows Semantic Versioning.
 - Add the first dry-run `startup-user-application-control` module path and register it in the profile engine.
 - Document the baseline/restore model for registry Run values and scheduled tasks before real startup-surface changes.
 - Add `startup-user-application-control` lifecycle dispatch, explicit-state baseline learning and restore dry-run planning.
-- Add elevated real apply/restore support for allow-listed startup registry values and scheduled tasks while keeping processes inspect-only.
+- Add elevated real apply/restore support for allow-listed startup registry values and scheduled tasks.
+- Add user-logon scoped process stop support for explicitly configured allow-listed application processes.
 - Validate elevated real apply/restore for Teams, OneDrive, ownCloud and Microsoft Office startup surfaces.
+- Add the discovered AnyDesk service to the `service-control` allow-list with baseline/restore behavior and stop its delayed user process after logon.
+- Add Microsoft 365 Copilot as an allow-listed user-logon process-stop target.
+- Add ADR-0009 for machine-wide, AD-compatible and version-resilient control rules.
+- Move the active demo runtime to `%ProgramData%\BootProfileSwitcher\runtime` and register hooks against that machine-wide location.
+- Run the delayed user-logon hook without a visible console window.
+- Validate real apply and restore for AnyDesk, Microsoft 365 Copilot and the full Startup and User-Application Control demo lifecycle.
 
 ## [v1.5.0] - 2026-07-01
 

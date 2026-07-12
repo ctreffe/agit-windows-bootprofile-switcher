@@ -5,8 +5,9 @@ Controls supported Windows services for BootProfile Switcher profiles.
 .DESCRIPTION
 Runs Service Control for BootProfile Switcher.
 
-The module is allow-list based. The initial supported service is Windows Search
-(`WSearch`). The module learns baseline service state, applies configured
+The module is allow-list based. Supported services are Windows Search
+(`WSearch`) and the discovered AnyDesk support service (`anydesk`).
+The module learns baseline service state, applies configured
 target state for controlling profiles and restores the learned baseline when a
 later startup no longer requests service control.
 #>
@@ -394,6 +395,30 @@ $supportedServices = @{
         allowedTargetStartupTypes = @('Disabled')
         allowedTargetRunningStates = @('Stopped')
     }
+    anydesk = [ordered]@{
+        displayPurpose = 'AnyDesk support service'
+        serviceNamePatterns = @('AnyDesk-*')
+        allowedTargetStartupTypes = @('Disabled')
+        allowedTargetRunningStates = @('Stopped')
+    }
+}
+
+function Resolve-SupportedServiceNames {
+    param([string]$TargetId)
+
+    $definition = $supportedServices[$TargetId]
+    if ($null -eq $definition) {
+        return @()
+    }
+
+    $patterns = if ($definition.Contains('serviceNamePatterns')) { @($definition.serviceNamePatterns) } else { @($TargetId) }
+    $names = @()
+
+    foreach ($pattern in $patterns) {
+        $names += @(Get-Service -Name ([string]$pattern) -ErrorAction SilentlyContinue | ForEach-Object { [string]$_.Name })
+    }
+
+    return @($names | Sort-Object -Unique)
 }
 
 New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
@@ -423,41 +448,54 @@ if ($null -ne $previousState -and $null -ne $previousState.PSObject.Properties['
 }
 
 $currentSnapshots = @()
+$managedServices = @()
 
 foreach ($serviceSetting in @($serviceSettings)) {
-    $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
+    $targetId = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
     $target = Get-SettingValue -Object $serviceSetting -Name 'target' -Default $null
     $targetStartupType = [string](Get-SettingValue -Object $target -Name 'startupType' -Default '')
     $targetRunningState = [string](Get-SettingValue -Object $target -Name 'runningState' -Default '')
 
-    if (-not $supportedServices.ContainsKey($serviceName)) {
-        Write-ServiceControlLog -Action 'skip' -ServiceName $serviceName -Reason 'unsupported-service' -Details $null
+    if (-not $supportedServices.ContainsKey($targetId)) {
+        Write-ServiceControlLog -Action 'skip' -ServiceName $targetId -Reason 'unsupported-service' -Details $null
         continue
     }
 
-    $snapshot = Get-ServiceSnapshot -ServiceName $serviceName
-
-    if ($null -eq $snapshot) {
-        Write-ServiceControlLog -Action 'skip' -ServiceName $serviceName -Reason 'service-not-found' -Details $null
+    $serviceNames = @(Resolve-SupportedServiceNames -TargetId $targetId)
+    if ($serviceNames.Count -eq 0) {
+        Write-ServiceControlLog -Action 'skip' -ServiceName $targetId -Reason 'service-not-found' -Details $null
         continue
     }
 
-    $currentSnapshots += $snapshot
+    foreach ($serviceName in $serviceNames) {
+        $snapshot = Get-ServiceSnapshot -ServiceName $serviceName
+        if ($null -eq $snapshot) {
+            Write-ServiceControlLog -Action 'skip' -ServiceName $serviceName -Reason 'service-not-found' -Details $null
+            continue
+        }
 
-    Write-ServiceControlLog `
-        -Action 'inspect-baseline' `
-        -ServiceName $serviceName `
-        -Reason 'current-service-state' `
-        -Details $snapshot
+        $managedServices += [ordered]@{
+            serviceName = $serviceName
+            targetStartupType = $targetStartupType
+            targetRunningState = $targetRunningState
+        }
+        $currentSnapshots += $snapshot
 
-    Write-ServiceControlLog `
-        -Action 'inspect-dependencies' `
-        -ServiceName $serviceName `
-        -Reason 'diagnostics-only' `
-        -Details ([ordered]@{
-            dependentServices = @($snapshot.dependentServices)
-            requiredServices = @($snapshot.requiredServices)
-        })
+        Write-ServiceControlLog `
+            -Action 'inspect-baseline' `
+            -ServiceName $serviceName `
+            -Reason 'current-service-state' `
+            -Details $snapshot
+
+        Write-ServiceControlLog `
+            -Action 'inspect-dependencies' `
+            -ServiceName $serviceName `
+            -Reason 'diagnostics-only' `
+            -Details ([ordered]@{
+                dependentServices = @($snapshot.dependentServices)
+                requiredServices = @($snapshot.requiredServices)
+            })
+    }
 }
 
 if (-not $previousRunWasControlling) {
@@ -470,12 +508,8 @@ if (-not $previousRunWasControlling) {
 }
 
 if ((-not $Controlling) -and $previousRunWasControlling) {
-    foreach ($serviceSetting in @($serviceSettings)) {
-        $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
-        if (-not $supportedServices.ContainsKey($serviceName)) {
-            continue
-        }
-
+    foreach ($managedService in @($managedServices)) {
+        $serviceName = [string]$managedService.serviceName
         $snapshot = $currentSnapshots | Where-Object { [string]$_.name -eq $serviceName } | Select-Object -First 1
         $baselineService = Get-BaselineService -BaselineServices $baselineServices -ServiceName $serviceName
         Restore-ServiceBaseline -ServiceName $serviceName -BaselineService $baselineService -Snapshot $snapshot -DryRun $dryRun
@@ -487,16 +521,10 @@ if ($Controlling -and -not $dryRun) {
 }
 
 if ($Controlling) {
-    foreach ($serviceSetting in @($serviceSettings)) {
-        $serviceName = [string](Get-SettingValue -Object $serviceSetting -Name 'name' -Default '')
-        $target = Get-SettingValue -Object $serviceSetting -Name 'target' -Default $null
-        $targetStartupType = [string](Get-SettingValue -Object $target -Name 'startupType' -Default '')
-        $targetRunningState = [string](Get-SettingValue -Object $target -Name 'runningState' -Default '')
-
-        if (-not $supportedServices.ContainsKey($serviceName)) {
-            continue
-        }
-
+    foreach ($managedService in @($managedServices)) {
+        $serviceName = [string]$managedService.serviceName
+        $targetStartupType = [string]$managedService.targetStartupType
+        $targetRunningState = [string]$managedService.targetRunningState
         $snapshot = $currentSnapshots | Where-Object { [string]$_.name -eq $serviceName } | Select-Object -First 1
         if ($null -eq $snapshot) {
             continue

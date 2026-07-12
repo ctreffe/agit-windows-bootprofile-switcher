@@ -9,7 +9,8 @@ The module is intended to be generic. It should not become one module per
 service. Instead, it should support an explicit allow-list of services that
 have been validated as safe enough for BootProfile Switcher control.
 
-The first supported service is Windows Search / `WSearch`.
+The supported services are Windows Search / `WSearch` and the discovered
+AnyDesk support service / `anydesk`.
 
 ## First Supported Service
 
@@ -17,13 +18,15 @@ The initial implementation supports only:
 
 ```text
 WSearch
+anydesk
 ```
 
 `WSearch` was selected first because the v1.4.0 read-only discovery found a
 clear service identity for Windows Search indexing.
 
-Supporting `WSearch` first keeps the first implementation narrow while still
-building the reusable shape for later ordinary Windows services.
+`WSearch` established the reusable service lifecycle. `anydesk` was
+added after local discovery confirmed an ordinary automatic service with a
+stable service identity and an explicit user request for reversible control.
 
 ## What The Module Controls
 
@@ -122,6 +125,7 @@ The initial allow-list should contain:
 | Service | Display purpose | Initial support |
 | --- | --- | --- |
 | `WSearch` | Windows Search indexing | Disable and restore |
+| `anydesk` | AnyDesk support service resolved through `AnyDesk-*` | Disable, stop and restore |
 
 The allow-list exists to prevent a profile from using `service-control` as an
 arbitrary service-disabling mechanism.
@@ -224,7 +228,7 @@ If restore fails, the module should log the attempted action and error clearly.
 The first implementation should be validated in phases:
 
 1. Validate configuration fixtures for supported and unsupported service names.
-2. Run the module in dry-run mode with `WSearch` and confirm planned actions.
+2. Run the module in dry-run mode with each requested supported service and confirm planned actions.
 3. Validate that unsupported service names are hard configuration errors.
 4. Validate lifecycle state creation without changing the service.
 5. Validate delayed automatic startup baseline capture when the service exposes

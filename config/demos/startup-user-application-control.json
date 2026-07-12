@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "app-startup-control",
+      "displayName": "App Startup Control",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "service-control": {
+          "dryRun": false,
+          "services": [
+            {
+              "name": "anydesk",
+              "target": {
+                "startupType": "Disabled",
+                "runningState": "Stopped"
+              }
+            }
+          ]
+        },
+        "startup-user-application-control": {
+          "dryRun": false,
+          "applications": [
+            {
+              "id": "teams",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            },
+            {
+              "id": "onedrive",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            },
+            {
+              "id": "owncloud",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            },
+            {
+              "id": "microsoft-office",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            },
+            {
+              "id": "microsoft-365-copilot",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            },
+            {
+              "id": "anydesk",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "stop"
+              }
+            }
+          ]
+        },
+        "validation-log": {}
+      },
+      "scripts": []
+    }
+  ]
+}

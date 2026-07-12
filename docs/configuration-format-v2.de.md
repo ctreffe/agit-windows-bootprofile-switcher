@@ -38,6 +38,7 @@ andere Datei verwenden. Im Repository sind diese Beispiele wichtig:
 - `config/profiles.v2.example.json` ist das allgemeine v2-Beispiel.
 - `config/demos/config-driven-boot-menu.json` zeigt mehrere verwaltete Boot-Eintraege.
 - `config/demos/network-isolation.json` zeigt den echten Network-Isolation-Lifecycle.
+- `config/demos/startup-user-application-control.json` zeigt den echten Startup-and-User-Application-Control-Lifecycle.
 
 Die installierte ProgramData-Datei sollte nicht blind bearbeitet werden. Besser
 ist es, eine Kopie im Repository oder an einem anderen Arbeitsort zu aendern,
@@ -179,8 +180,9 @@ Aktuell bekannte Module im Repository:
 
 - `validation-log` schreibt harmlose Validierungs-Logeintraege.
 - `network-isolation` kann konfigurierte Netzwerkadapter-Kategorien deaktivieren und wiederherstellen.
-- `service-control` kann aktuell geplante Service-Control-Aktionen fuer Windows Search / `WSearch` im Dry-run pruefen.
-- `startup-user-application-control` validiert und dry-runnt geplante Startup- und User-Application-Control-Einstellungen fuer Teams, OneDrive, ownCloud und Microsoft Office.
+- `service-control` kann allowlist-basierte Windows-Search-/`WSearch`- und
+  AnyDesk-Support-Service-Control ausfuehren.
+- `startup-user-application-control` validiert und dry-runnt geplante Startup- und User-Application-Control-Einstellungen fuer Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot und AnyDesk.
 - `demo-system-marker` ist ein temporaeres Foundation-Demomodul.
 
 ### Network-Isolation-Einstellungen
@@ -256,14 +258,17 @@ Unterstuetzte Applikations-IDs sind:
 - `onedrive`
 - `owncloud`
 - `microsoft-office`
+- `microsoft-365-copilot`
+- `anydesk`
 
-`startup.enabled` muss ein Boolean sein. Das erste validierte Prozessverhalten
-ist `inspect-only`; das Beenden von User-Prozessen wird vom Validator bewusst
-nicht akzeptiert.
+`startup.enabled` muss ein Boolean sein. Unterstuetzte Prozessaktionen sind
+`inspect-only` und `stop`. Prozess-Stopps laufen nur im User-Logon-Scope und
+nur fuer allowlist-basierte Prozessnamen unterstuetzter Applikationsziele.
 
 Wenn `dryRun = false` ist, kann das Modul allowlist-basierte Registry-Run-Werte
 entfernen und wiederherstellen sowie allowlist-basierte Scheduled Tasks
-deaktivieren oder wiederherstellen. Prozesse bleiben reine Inspektion.
+deaktivieren oder wiederherstellen. Konfigurierte allowlist-basierte
+User-Prozesse koennen gestoppt werden.
 
 ## Validierungsregeln
 

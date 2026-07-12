@@ -4,6 +4,11 @@
 
 Accepted
 
+Updated after demo validation: v1.6.0 uses separate startup and user-logon
+execution scopes. The SYSTEM startup hook handles machine-wide startup
+surfaces. A user-logon hook handles per-user `HKCU` startup values and
+explicitly configured allow-listed process stops for the logged-on user.
+
 ## Context
 
 After v1.5.0, BootProfile Switcher has a validated `service-control`
@@ -25,26 +30,29 @@ These control surfaces are related but not identical:
 - Running user processes are active session state and cannot always be managed
   safely before user logon.
 
-The project needs to address all four requested applications in one milestone
+The project needs to address the requested applications in one milestone
 without creating one module per application and without pretending that every
 application can be controlled through the same Windows mechanism.
 
 ## Decision
 
 v1.6.0 will be scoped as **Startup and User-Application Control** for Microsoft
-Teams, OneDrive, ownCloud and Microsoft Office.
+Teams, OneDrive, ownCloud, Microsoft Office and Microsoft 365 Copilot. The
+discovered AnyDesk support service is controlled through the existing generic
+`service-control` module in the same demo profile.
 
 The milestone will use a shared module design for startup and user-application
 control surfaces. The module family may be implemented as one module or as two
 closely coordinated modules if validation shows that startup configuration and
 running user-session process control need separate lifecycles.
 
-The milestone must address all four applications:
+The milestone must address these user-application targets:
 
 - Microsoft Teams
 - OneDrive
 - ownCloud
 - Microsoft Office
+- Microsoft 365 Copilot
 
 "Address" means each application receives explicit inventory, configuration
 validation, documentation and a capability decision. If an application can be
@@ -61,9 +69,9 @@ The initial shared design will focus on reversible startup-surface control:
   restore
 
 Running user processes are a separate capability inside the same problem space.
-They may be inventoried and classified in v1.6.0, but terminating interactive
-applications should require an explicit design decision, dry-run evidence and
-clear user-session safety rules before implementation.
+They may be inventoried and classified in v1.6.0. After demo validation showed
+that per-user autostart can still launch applications after boot, v1.6.0 also
+allows explicit allow-listed process stops in the user-logon scope.
 
 Windows Update and Bitdefender remain outside v1.6.0 implementation scope.
 They belong to policy or vendor guidance unless a later discovery milestone
@@ -71,7 +79,7 @@ identifies a supported management surface.
 
 ## Rationale
 
-Teams, OneDrive, ownCloud and Microsoft Office are user-facing application
+Teams, OneDrive, ownCloud, Microsoft Office and Microsoft 365 Copilot are user-facing application
 targets, not a set of ordinary Windows services. Treating them as
 service-control targets would violate ADR-0007 and would produce unreliable
 behavior.
@@ -81,15 +89,16 @@ architecture. The safer boundary is the Windows control surface: startup
 registry entries, startup folders, scheduled tasks and user-session processes.
 
 Using shared module logic with per-application capability notes keeps the
-system understandable. It allows the project to support all four requested
+system understandable. It allows the project to support the requested
 target areas while still admitting that OneDrive scheduled tasks, Teams startup
-entries, ownCloud process behavior and Microsoft Office task behavior may need
+entries, ownCloud process behavior, Microsoft Office task behavior and Copilot
+process behavior may need
 different treatment.
 
-BootProfile Switcher runs before normal user workflows. Startup configuration
-can often be changed before a user logs on, but running interactive processes
-belong to a later session lifecycle. That difference must remain visible in
-the design.
+BootProfile Switcher has two lifecycle moments. Startup configuration for
+machine-wide surfaces can be changed before a user logs on. Per-user `HKCU`
+startup entries and running interactive processes belong to the user-logon
+lifecycle. That difference must remain visible in the design.
 
 ## Consequences
 
@@ -118,7 +127,7 @@ Dry-run behavior should be the first validation phase. Real changes should be
 enabled only after the inventory and planned changes are reviewed.
 
 The project should document per-application capability notes for Teams,
-OneDrive, ownCloud and Microsoft Office. These notes should distinguish
+OneDrive, ownCloud, Microsoft Office and Microsoft 365 Copilot. These notes should distinguish
 implemented control, dry-run-only classification and intentionally unsupported
 behavior.
 
@@ -127,10 +136,13 @@ update tasks when they are intentionally in scope, including Office
 Click-to-Run or Office update startup behavior. It must not disable arbitrary
 Windows Update, vendor or unrelated scheduled tasks through broad name matching.
 
-Running process termination remains a high-caution behavior. It should not be
-implemented as implicit cleanup unless later validation proves that it is safe,
-necessary and reversible enough for the project goals.
+Running process termination remains a high-caution behavior. It must not be
+implicit cleanup. It is allowed only when configuration explicitly sets the
+process action to `stop`, only for allow-listed target process names and only in
+the user-logon scope. Startup surfaces can be restored; stopped user processes
+cannot be restored with the same safety guarantees.
 
-The first real-change implementation should still keep running processes
-inspect-only. Startup surfaces can be restored; terminated user work cannot be
-restored with the same safety guarantees.
+AnyDesk is an explicit exception to the user-application classification: local
+discovery identified `AnyDesk-*` as a normal automatic service pattern. It is
+allow-listed in `service-control`, with the same learned-baseline and restore
+semantics as `WSearch`.

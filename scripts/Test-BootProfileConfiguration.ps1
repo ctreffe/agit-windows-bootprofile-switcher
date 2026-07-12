@@ -282,7 +282,7 @@ function Test-ServiceControlSettings {
 
         if ([string]::IsNullOrWhiteSpace($serviceName)) {
             Add-ValidationError -Errors $Errors -Message "$servicePrefix.name must not be empty."
-        } elseif ($serviceName -ne 'WSearch') {
+        } elseif ($serviceName -notin @('WSearch', 'anydesk')) {
             Add-ValidationError -Errors $Errors -Message "$servicePrefix.name is not supported by service-control: $serviceName"
         }
 
@@ -339,7 +339,7 @@ function Test-StartupUserApplicationControlSettings {
 
     $dryRun = Get-JsonProperty -Object $Settings -Name 'dryRun'
     $applications = Get-JsonProperty -Object $Settings -Name 'applications'
-    $supportedApplications = @('teams', 'onedrive', 'owncloud', 'microsoft-office')
+    $supportedApplications = @('teams', 'onedrive', 'owncloud', 'microsoft-office', 'microsoft-365-copilot', 'anydesk')
 
     if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
         Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
@@ -425,8 +425,8 @@ function Test-StartupUserApplicationControlSettings {
                 -Errors $Errors
 
             $processAction = [string](Get-JsonProperty -Object $processes -Name 'action')
-            if ($processAction -ne 'inspect-only') {
-                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.processes.action must be inspect-only."
+            if (@('inspect-only', 'stop') -notcontains $processAction) {
+                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.processes.action must be inspect-only or stop."
             }
         }
     }

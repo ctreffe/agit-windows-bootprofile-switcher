@@ -32,7 +32,10 @@ param(
 
     [string]$LogDir,
 
-    [string]$ConfigPath
+    [string]$ConfigPath,
+
+    [ValidateSet('Startup', 'UserLogon')]
+    [string]$ExecutionScope = 'Startup'
 )
 
 Set-StrictMode -Version Latest
@@ -304,6 +307,10 @@ function Invoke-ServiceControlLifecycle {
         [string]$Identifier
     )
 
+    if ($ExecutionScope -eq 'UserLogon') {
+        return $false
+    }
+
     if ($null -eq $ModuleSettings) {
         return $false
     }
@@ -350,7 +357,8 @@ function Invoke-StartupUserApplicationControlLifecycle {
         -LogDir $LogDir `
         -ModuleSettings $ModuleSettings `
         -Controlling $Controlling `
-        -Detected $Detected
+        -Detected $Detected `
+        -ExecutionScope $ExecutionScope
 
     $script:modulesExecuted += [ordered]@{
         name = $startupUserApplicationControlModule.name
@@ -537,6 +545,7 @@ $result = [ordered]@{
     resolverError = $resolverResult.error
     resolverStatePath = $ResolverStatePath
     configurationPath = $ConfigPath
+    executionScope = $ExecutionScope
     configurationValid = [bool]$configurationValidation.valid
     configurationValidationExitCode = $configurationValidationExitCode
     configurationErrors = @($configurationValidation.errors)

@@ -90,6 +90,11 @@ $fixtures = @(
         expectedValid = $true
     },
     [ordered]@{
+        name = 'startup-user-application-control-demo'
+        path = Join-Path $repoRoot 'config\demos\startup-user-application-control.json'
+        expectedValid = $true
+    },
+    [ordered]@{
         name = 'network-isolation-missing-settings'
         path = Join-Path $repoRoot 'config\test\network-isolation-missing-settings.json'
         expectedValid = $false

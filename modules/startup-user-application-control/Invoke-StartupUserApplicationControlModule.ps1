@@ -6,7 +6,8 @@ Controls supported startup and user-application control targets.
 Runs Startup and User-Application Control for BootProfile Switcher.
 
 The module is allow-list based. The initial supported application targets are
-Teams, OneDrive, ownCloud and Microsoft Office. Startup registry values and
+Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot and
+AnyDesk. Startup registry values and
 scheduled tasks can be disabled and restored. Running processes remain
 inspect-only.
 #>
@@ -33,6 +34,9 @@ param(
     [bool]$Controlling = $true,
 
     [bool]$Detected = $false,
+
+    [ValidateSet('Startup', 'UserLogon')]
+    [string]$ExecutionScope = 'Startup',
 
     [string]$StatePath
 )
@@ -79,6 +83,18 @@ function ConvertTo-Array {
     }
 
     return @($Value)
+}
+
+function Test-StartupRegistryValueInScope {
+    param([string]$Path)
+
+    $isPerUserPath = $Path -like 'HKCU:\*'
+
+    if ($ExecutionScope -eq 'UserLogon') {
+        return $isPerUserPath
+    }
+
+    return -not $isPerUserPath
 }
 
 function Test-IsAdministrator {
@@ -162,6 +178,7 @@ function Save-StartupUserApplicationControlState {
             mode = $Mode
             name = $Name
             identifier = $Identifier
+            executionScope = $ExecutionScope
         }
         baseline = [ordered]@{
             updatedAt = $generatedAt
@@ -223,6 +240,10 @@ function Get-StartupRegistryValueSnapshots {
 function Get-ScheduledTaskMatches {
     param([object[]]$Definitions)
 
+    if ($ExecutionScope -eq 'UserLogon') {
+        return @()
+    }
+
     $patterns = @($Definitions | ForEach-Object { @($_.scheduledTaskNamePatterns) } | Where-Object { -not [string]::IsNullOrWhiteSpace([string]$_) })
     if ($patterns.Count -eq 0) {
         return @()
@@ -258,21 +279,38 @@ function Get-ScheduledTaskMatches {
 function Get-ProcessMatches {
     param([object[]]$Definitions)
 
+    if ($ExecutionScope -ne 'UserLogon') {
+        return @()
+    }
+
     $allProcesses = @(Get-Process -ErrorAction Stop)
     $matches = @()
 
     foreach ($definition in @($Definitions)) {
-        foreach ($processName in @($definition.processNames)) {
-            $matches += @($allProcesses | Where-Object {
-                [string]$_.ProcessName -eq [string]$processName
-            } | ForEach-Object {
+        $exactNames = @($definition.processNames)
+        $namePatterns = if ($definition.Contains('processNamePatterns')) { @($definition.processNamePatterns) } else { @() }
+
+        foreach ($process in $allProcesses) {
+            $processName = [string]$process.ProcessName
+            $isMatch = $exactNames -contains $processName
+
+            if (-not $isMatch) {
+                foreach ($namePattern in $namePatterns) {
+                    if ($processName -like ([string]$namePattern)) {
+                        $isMatch = $true
+                        break
+                    }
+                }
+            }
+
+            if ($isMatch) {
                 [ordered]@{
                     applicationId = [string]$definition.id
-                    name = [string]$_.ProcessName
-                    id = [int]$_.Id
-                    path = try { [string]$_.Path } catch { $null }
+                    name = $processName
+                    id = [int]$process.Id
+                    path = try { [string]$process.Path } catch { $null }
                 }
-            })
+            }
         }
     }
 
@@ -454,6 +492,47 @@ function Apply-ScheduledTaskTarget {
     }
 }
 
+function Apply-ProcessTarget {
+    param(
+        [object]$Process,
+        [string]$Action,
+        [bool]$DryRun
+    )
+
+    if ($Action -eq 'inspect-only') {
+        Write-StartupUserApplicationControlLog `
+            -Action 'inspect-process' `
+            -ApplicationId ([string]$Process.applicationId) `
+            -Surface 'process' `
+            -Reason 'inspect-only' `
+            -Details $Process
+        return
+    }
+
+    if ($Action -ne 'stop') {
+        Write-StartupUserApplicationControlLog -Action 'skip' -ApplicationId ([string]$Process.applicationId) -Surface 'process' -Reason 'unsupported-process-action' -Details ([ordered]@{ action = $Action; process = $Process })
+        return
+    }
+
+    $details = [ordered]@{
+        action = $Action
+        process = $Process
+    }
+
+    if ($DryRun) {
+        Write-StartupUserApplicationControlLog -Action 'would-stop-process' -ApplicationId ([string]$Process.applicationId) -Surface 'process' -Reason 'dry-run' -Details $details
+        return
+    }
+
+    try {
+        Stop-Process -Id ([int]$Process.id) -Force -ErrorAction Stop
+        Write-StartupUserApplicationControlLog -Action 'stop-process' -ApplicationId ([string]$Process.applicationId) -Surface 'process' -Reason 'apply-target' -Details $details
+    } catch {
+        Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Process.applicationId) -Surface 'process' -Reason 'apply-target-failed' -Details ([ordered]@{ error = $_.Exception.Message; target = $details })
+        throw
+    }
+}
+
 function Restore-RegistryValueBaseline {
     param(
         [object]$Baseline,
@@ -577,13 +656,17 @@ function Restore-ScheduledTaskBaseline {
 New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
 
 $dryRun = [bool](Get-SettingValue -Object $ModuleSettings -Name 'dryRun' -Default $true)
-if (-not $dryRun -and -not (Test-IsAdministrator)) {
+if (-not $dryRun -and $ExecutionScope -eq 'Startup' -and -not (Test-IsAdministrator)) {
     throw 'Startup and User-Application Control requires an elevated PowerShell session when dryRun is false.'
 }
 
 $statePathWasProvided = -not [string]::IsNullOrWhiteSpace($StatePath)
 if (-not $statePathWasProvided) {
-    $StatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\startup-user-application-control-state.json'
+    if ($ExecutionScope -eq 'UserLogon') {
+        $StatePath = Join-Path $env:LOCALAPPDATA 'BootProfileSwitcher\state\startup-user-application-control-state.json'
+    } else {
+        $StatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\startup-user-application-control-state.json'
+    }
 }
 
 $applications = ConvertTo-Array -Value (Get-SettingValue -Object $ModuleSettings -Name 'applications' -Default @())
@@ -622,6 +705,19 @@ $targetDefinitions = @(
             'Office Feature Updates Logon'
         )
         processNames = @('OUTLOOK', 'olk')
+    },
+    [ordered]@{
+        id = 'microsoft-365-copilot'
+        registryValues = @()
+        scheduledTaskNamePatterns = @()
+        processNames = @('M365Copilot')
+    },
+    [ordered]@{
+        id = 'anydesk'
+        registryValues = @()
+        scheduledTaskNamePatterns = @()
+        processNames = @()
+        processNamePatterns = @('AnyDesk-*')
     }
 )
 
@@ -654,6 +750,14 @@ foreach ($application in @($applications)) {
     if ($null -eq $definition) {
         Write-StartupUserApplicationControlLog -Action 'skip' -ApplicationId $applicationId -Surface 'application' -Reason 'unsupported-application' -Details $null
         continue
+    }
+
+    $definition = [ordered]@{
+        id = [string]$definition.id
+        registryValues = @($definition.registryValues | Where-Object { Test-StartupRegistryValueInScope -Path ([string]$_.path) })
+        scheduledTaskNamePatterns = @($definition.scheduledTaskNamePatterns)
+        processNames = @($definition.processNames)
+        processNamePatterns = if ($definition.Contains('processNamePatterns')) { @($definition.processNamePatterns) } else { @() }
     }
 
     $registryEntries = @(Get-StartupRegistryValueSnapshots -Definitions @($definition))
@@ -788,12 +892,7 @@ if ($Controlling) {
         }
 
         foreach ($process in @($plan.processMatches)) {
-            Write-StartupUserApplicationControlLog `
-                -Action 'inspect-process' `
-                -ApplicationId ([string]$plan.applicationId) `
-                -Surface 'process' `
-                -Reason 'inspect-only' `
-                -Details $process
+            Apply-ProcessTarget -Process $process -Action ([string]$plan.processAction) -DryRun $dryRun
         }
     }
 }

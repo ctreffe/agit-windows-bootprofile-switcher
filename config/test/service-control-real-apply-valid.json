@@ -26,6 +26,13 @@
                 "startupType": "Disabled",
                 "runningState": "Stopped"
               }
+            },
+            {
+              "name": "anydesk",
+              "target": {
+                "startupType": "Disabled",
+                "runningState": "Stopped"
+              }
             }
           ]
         }
