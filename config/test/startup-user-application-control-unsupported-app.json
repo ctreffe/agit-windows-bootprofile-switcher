@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "unsupported-app-control",
+      "displayName": "Unsupported App Control",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "startup-user-application-control": {
+          "dryRun": true,
+          "applications": [
+            {
+              "id": "slack",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

@@ -180,6 +180,7 @@ Aktuell bekannte Module im Repository:
 - `validation-log` schreibt harmlose Validierungs-Logeintraege.
 - `network-isolation` kann konfigurierte Netzwerkadapter-Kategorien deaktivieren und wiederherstellen.
 - `service-control` kann aktuell geplante Service-Control-Aktionen fuer Windows Search / `WSearch` im Dry-run pruefen.
+- `startup-user-application-control` validiert und dry-runnt geplante Startup- und User-Application-Control-Einstellungen fuer Teams, OneDrive, ownCloud und Microsoft Office.
 - `demo-system-marker` ist ein temporaeres Foundation-Demomodul.
 
 ### Network-Isolation-Einstellungen
@@ -223,6 +224,40 @@ notwendige Verbindung aktiv bleiben muss.
 `bluetoothNetwork` deaktiviert nicht das Bluetooth-Funkmodul und kein
 USB-Bluetooth-Geraet. Es betrifft nur Bluetooth-Netzwerkadapter wie Bluetooth
 PAN.
+
+### Startup-and-User-Application-Control-Einstellungen
+
+`startup-user-application-control` ist das v1.6.0-Modul fuer
+allowlist-basierte Applikations-Startup-Flaechen. Die erste Implementierung
+ist rein lesend und protokolliert geplante Aktionen im Dry-run:
+
+```json
+"startup-user-application-control": {
+  "dryRun": true,
+  "applications": [
+    {
+      "id": "teams",
+      "startup": {
+        "enabled": false
+      },
+      "processes": {
+        "action": "inspect-only"
+      }
+    }
+  ]
+}
+```
+
+Unterstuetzte Applikations-IDs sind:
+
+- `teams`
+- `onedrive`
+- `owncloud`
+- `microsoft-office`
+
+`startup.enabled` muss ein Boolean sein. Das erste validierte Prozessverhalten
+ist `inspect-only`; das Beenden von User-Prozessen wird vom Validator bewusst
+nicht akzeptiert.
 
 ## Validierungsregeln
 

@@ -178,6 +178,9 @@ Known modules in the current repository:
 - `network-isolation` can disable and restore configured network adapter categories.
 - `service-control` can currently inspect planned Windows Search / `WSearch`
   service-control actions in dry-run mode.
+- `startup-user-application-control` validates and dry-runs planned
+  startup/user-application control settings for Teams, OneDrive, ownCloud and
+  Microsoft Office.
 - `demo-system-marker` is a temporary foundation demo module.
 
 ### Network Isolation Settings
@@ -219,6 +222,40 @@ available.
 
 `bluetoothNetwork` does not disable the Bluetooth radio or a USB Bluetooth
 device. It only targets Bluetooth network adapters such as Bluetooth PAN.
+
+### Startup And User-Application Control Settings
+
+`startup-user-application-control` is the v1.6.0 module for allow-listed
+application startup surfaces. Its first implementation is read-only and logs
+planned actions in dry-run mode:
+
+```json
+"startup-user-application-control": {
+  "dryRun": true,
+  "applications": [
+    {
+      "id": "teams",
+      "startup": {
+        "enabled": false
+      },
+      "processes": {
+        "action": "inspect-only"
+      }
+    }
+  ]
+}
+```
+
+Supported application identifiers are:
+
+- `teams`
+- `onedrive`
+- `owncloud`
+- `microsoft-office`
+
+`startup.enabled` must be a boolean. The first validated process behavior is
+`inspect-only`; terminating user processes is intentionally not accepted by the
+configuration validator.
 
 ## Validation Rules
 

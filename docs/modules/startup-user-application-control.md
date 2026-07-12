@@ -12,6 +12,11 @@ without creating one module per application.
 The design should use shared module logic for Windows control surfaces and
 per-application capability notes for differences between targets.
 
+The current implementation provides the first read-only dry-run path. It
+validates allow-listed application IDs, inspects known registry, scheduled task
+and process surfaces, and logs planned startup/task actions without changing
+Windows state.
+
 ## Target Applications
 
 The v1.6.0 milestone addresses:

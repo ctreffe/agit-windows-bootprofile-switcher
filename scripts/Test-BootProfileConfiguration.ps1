@@ -18,6 +18,10 @@ before startup execution.
 
 The `service-control` module is allow-list based. The first supported service
 is `WSearch`; unsupported service names are configuration errors.
+
+The `startup-user-application-control` module is allow-list based. The first
+supported application targets are Teams, OneDrive, ownCloud and Microsoft
+Office.
 #>
 
 [CmdletBinding()]
@@ -306,6 +310,130 @@ function Test-ServiceControlSettings {
     }
 }
 
+function Test-StartupUserApplicationControlSettings {
+    param(
+        [object]$Settings,
+        [string]$Prefix,
+        [System.Collections.Generic.List[string]]$Errors,
+        [bool]$RequireComplete
+    )
+
+    if ($null -eq $Settings) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix must be present when startup-user-application-control is enabled."
+        }
+
+        return
+    }
+
+    if (-not (Test-ObjectProperty -Value $Settings)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix must be an object."
+        return
+    }
+
+    Test-AllowedProperties `
+        -Object $Settings `
+        -Prefix $Prefix `
+        -AllowedProperties @('dryRun', 'applications') `
+        -Errors $Errors
+
+    $dryRun = Get-JsonProperty -Object $Settings -Name 'dryRun'
+    $applications = Get-JsonProperty -Object $Settings -Name 'applications'
+    $supportedApplications = @('teams', 'onedrive', 'owncloud', 'microsoft-office')
+
+    if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
+    } elseif ($dryRun -eq $false) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be true for the current startup-user-application-control implementation."
+    }
+
+    if ($null -eq $applications) {
+        if ($RequireComplete) {
+            Add-ValidationError -Errors $Errors -Message "$Prefix.applications must be an array."
+        }
+
+        return
+    }
+
+    if (-not (Test-ArrayProperty -Value $applications)) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.applications must be an array."
+        return
+    }
+
+    if (@($applications).Count -eq 0) {
+        Add-ValidationError -Errors $Errors -Message "$Prefix.applications must contain at least one application."
+        return
+    }
+
+    for ($applicationIndex = 0; $applicationIndex -lt $applications.Count; $applicationIndex++) {
+        $application = $applications[$applicationIndex]
+        $applicationPrefix = "$Prefix.applications[$applicationIndex]"
+
+        if (-not (Test-ObjectProperty -Value $application)) {
+            Add-ValidationError -Errors $Errors -Message "$applicationPrefix must be an object."
+            continue
+        }
+
+        Test-AllowedProperties `
+            -Object $application `
+            -Prefix $applicationPrefix `
+            -AllowedProperties @('id', 'startup', 'processes') `
+            -Errors $Errors
+
+        $applicationId = [string](Get-JsonProperty -Object $application -Name 'id')
+        $startup = Get-JsonProperty -Object $application -Name 'startup'
+        $processes = Get-JsonProperty -Object $application -Name 'processes'
+
+        if ([string]::IsNullOrWhiteSpace($applicationId)) {
+            Add-ValidationError -Errors $Errors -Message "$applicationPrefix.id must not be empty."
+        } elseif ($supportedApplications -notcontains $applicationId) {
+            Add-ValidationError -Errors $Errors -Message "$applicationPrefix.id is not supported by startup-user-application-control: $applicationId"
+        }
+
+        if ($null -eq $startup) {
+            if ($RequireComplete) {
+                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.startup must be an object."
+            }
+        } elseif (-not (Test-ObjectProperty -Value $startup)) {
+            Add-ValidationError -Errors $Errors -Message "$applicationPrefix.startup must be an object."
+        } else {
+            Test-AllowedProperties `
+                -Object $startup `
+                -Prefix "$applicationPrefix.startup" `
+                -AllowedProperties @('enabled') `
+                -Errors $Errors
+
+            $startupEnabled = Get-JsonProperty -Object $startup -Name 'enabled'
+            if ($null -eq $startupEnabled) {
+                if ($RequireComplete) {
+                    Add-ValidationError -Errors $Errors -Message "$applicationPrefix.startup.enabled must be a boolean."
+                }
+            } elseif (-not (Test-BooleanProperty -Value $startupEnabled)) {
+                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.startup.enabled must be a boolean."
+            }
+        }
+
+        if ($null -eq $processes) {
+            if ($RequireComplete) {
+                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.processes must be an object."
+            }
+        } elseif (-not (Test-ObjectProperty -Value $processes)) {
+            Add-ValidationError -Errors $Errors -Message "$applicationPrefix.processes must be an object."
+        } else {
+            Test-AllowedProperties `
+                -Object $processes `
+                -Prefix "$applicationPrefix.processes" `
+                -AllowedProperties @('action') `
+                -Errors $Errors
+
+            $processAction = [string](Get-JsonProperty -Object $processes -Name 'action')
+            if ($processAction -ne 'inspect-only') {
+                Add-ValidationError -Errors $Errors -Message "$applicationPrefix.processes.action must be inspect-only."
+            }
+        }
+    }
+}
+
 function Test-ModuleContainer {
     param(
         [object]$Settings,
@@ -416,7 +544,7 @@ if (-not $ConfigPath) {
     $ConfigPath = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 }
 
-$knownModules = @('validation-log', 'demo-system-marker', 'network-isolation', 'service-control')
+$knownModules = @('validation-log', 'demo-system-marker', 'network-isolation', 'service-control', 'startup-user-application-control')
 $errors = [System.Collections.Generic.List[string]]::new()
 $configuration = $null
 $schemaVersion = $null
@@ -527,6 +655,7 @@ if ($configuration) {
 
                 $profileNetworkIsolationSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'network-isolation' } else { $null }
                 $profileServiceControlSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'service-control' } else { $null }
+                $profileStartupUserApplicationControlSettings = if ($null -ne $modules) { Get-JsonProperty -Object $modules -Name 'startup-user-application-control' } else { $null }
 
                 Test-NetworkIsolationSettings `
                     -Settings $profileNetworkIsolationSettings `
@@ -552,6 +681,20 @@ if ($configuration) {
                     Test-ServiceControlSettings `
                         -Settings $profileServiceControlSettings `
                         -Prefix "$prefix.modules.service-control" `
+                        -Errors $errors `
+                        -RequireComplete $true
+                }
+
+                Test-StartupUserApplicationControlSettings `
+                    -Settings $profileStartupUserApplicationControlSettings `
+                    -Prefix "$prefix.modules.startup-user-application-control" `
+                    -Errors $errors `
+                    -RequireComplete $false
+
+                if ($null -ne $profileStartupUserApplicationControlSettings) {
+                    Test-StartupUserApplicationControlSettings `
+                        -Settings $profileStartupUserApplicationControlSettings `
+                        -Prefix "$prefix.modules.startup-user-application-control" `
                         -Errors $errors `
                         -RequireComplete $true
                 }

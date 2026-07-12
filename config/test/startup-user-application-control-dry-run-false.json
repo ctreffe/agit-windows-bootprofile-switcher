@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "app-startup-real",
+      "displayName": "App Startup Real",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "startup-user-application-control": {
+          "dryRun": false,
+          "applications": [
+            {
+              "id": "teams",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

@@ -105,6 +105,26 @@ $fixtures = @(
         expectedValid = $true
     },
     [ordered]@{
+        name = 'startup-user-application-control-valid'
+        path = Join-Path $repoRoot 'config\test\startup-user-application-control-valid.json'
+        expectedValid = $true
+    },
+    [ordered]@{
+        name = 'startup-user-application-control-unsupported-app'
+        path = Join-Path $repoRoot 'config\test\startup-user-application-control-unsupported-app.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'startup-user-application-control-invalid-process-action'
+        path = Join-Path $repoRoot 'config\test\startup-user-application-control-invalid-process-action.json'
+        expectedValid = $false
+    },
+    [ordered]@{
+        name = 'startup-user-application-control-dry-run-false'
+        path = Join-Path $repoRoot 'config\test\startup-user-application-control-dry-run-false.json'
+        expectedValid = $false
+    },
+    [ordered]@{
         name = 'v2-duplicate-profile-id'
         path = Join-Path $repoRoot 'config\test\v2-duplicate-profile-id.json'
         expectedValid = $false

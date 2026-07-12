@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "app-startup-disabled",
+      "displayName": "App Startup Disabled",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "startup-user-application-control": {
+          "dryRun": true,
+          "applications": [
+            {
+              "id": "teams",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            },
+            {
+              "id": "onedrive",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            },
+            {
+              "id": "owncloud",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            },
+            {
+              "id": "microsoft-office",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "inspect-only"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

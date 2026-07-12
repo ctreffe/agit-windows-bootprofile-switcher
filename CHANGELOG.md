@@ -11,6 +11,8 @@ This project follows Semantic Versioning.
 - Add ADR-0008 for Startup and User-Application Control.
 - Add v1.6.0 startup and user-application control module design for Teams, OneDrive, ownCloud and Microsoft Office.
 - Add v1.6.0 read-only discovery findings for Teams, OneDrive, ownCloud and Microsoft Office startup/user-application control.
+- Add configuration validation and fixtures for `startup-user-application-control`.
+- Add the first dry-run `startup-user-application-control` module path and register it in the profile engine.
 
 ## [v1.5.0] - 2026-07-01
 

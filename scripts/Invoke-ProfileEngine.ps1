@@ -97,6 +97,10 @@ $moduleRegistry = @(
     [ordered]@{
         name = 'service-control'
         path = Join-Path $repoRoot 'modules\service-control\Invoke-ServiceControlModule.ps1'
+    },
+    [ordered]@{
+        name = 'startup-user-application-control'
+        path = Join-Path $repoRoot 'modules\startup-user-application-control\Invoke-StartupUserApplicationControlModule.ps1'
     }
 )
 

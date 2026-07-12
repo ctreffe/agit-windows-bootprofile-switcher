@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 2,
+  "bootMenu": {
+    "timeoutSeconds": 10,
+    "sourceEntry": "{default}",
+    "defaultEntry": {
+      "rename": false,
+      "displayName": null,
+      "hide": false
+    }
+  },
+  "profiles": [
+    {
+      "id": "invalid-process-control",
+      "displayName": "Invalid Process Control",
+      "bootMenu": {
+        "enabled": true
+      },
+      "modules": {
+        "startup-user-application-control": {
+          "dryRun": true,
+          "applications": [
+            {
+              "id": "owncloud",
+              "startup": {
+                "enabled": false
+              },
+              "processes": {
+                "action": "terminate"
+              }
+            }
+          ]
+        }
+      },
+      "scripts": []
+    }
+  ]
+}

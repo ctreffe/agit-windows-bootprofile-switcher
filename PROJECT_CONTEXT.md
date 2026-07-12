@@ -56,6 +56,8 @@ Next roadmap focus:
 * ADR-0008 records the decision to address all four applications through shared startup/user-application control surfaces instead of one module per application.
 * `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
 * `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office.
+* `scripts/Test-BootProfileConfiguration.ps1` validates the first `startup-user-application-control` configuration shape and allow-listed application IDs.
+* `modules/startup-user-application-control/Invoke-StartupUserApplicationControlModule.ps1` provides the first read-only dry-run module path and logs planned startup/task actions without changing Windows state.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -601,7 +603,7 @@ Define the startup/user-application control design for Microsoft Teams, OneDrive
 
 Immediate next validation target:
 
-Turn the v1.6.0 startup/user-application control findings into configuration validation fixtures and dry-run behavior.
+Design the baseline and restore model for real startup-surface changes after the validated dry-run path.
 
 ---
 
