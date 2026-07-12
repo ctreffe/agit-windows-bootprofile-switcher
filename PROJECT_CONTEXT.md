@@ -26,7 +26,7 @@ The Startup and User-Application Control milestone is complete.
 
 ## Current Focus
 
-Plan the next milestone after **v1.6.0 - Startup and User-Application Control**.
+Prepare **v1.7.0 - Machine-Wide Runtime and Deployment**.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -66,9 +66,9 @@ Completed v1.6.0 results:
 
 Next roadmap focus:
 
-* Plan the next milestone after v1.6.0.
-* Remaining original target areas include Windows Update and Bitdefender, which are likely policy, vendor-guidance or hardening topics rather than ordinary service-control targets.
-* Evaluate whether Windows Search needs any future per-drive indexing refinement beyond the validated `WSearch` service-control milestone.
+* v1.7.0 standardizes all active runtime, state, installer, uninstaller and hook paths under `%ProgramData%\BootProfileSwitcher`; it should remove repository-profile dependencies and validate the multi-user/AD deployment model.
+* v1.8.0 follows as **Policy and Vendor Control Discovery** for Windows Update and Bitdefender. It must identify supported Windows policy/management and vendor/enterprise control surfaces before considering any production control module.
+* Windows Search per-drive indexing refinement and Network Isolation hardening remain later candidates after those two milestones.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -296,12 +296,20 @@ Last completed milestone:
 
 Planned next milestone:
 
-* To be planned after v1.6.0.
+* v1.7.0 - Machine-Wide Runtime and Deployment
+
+  Standardize active runtime, state, hooks and lifecycle tooling under
+  `%ProgramData%\BootProfileSwitcher`. Extend the successful v1.6.0 demo
+  runtime migration across relevant installers, uninstallers and status tools.
+  Verify that no scheduled task or active runtime path depends on a particular
+  repository checkout or user profile, and validate the multi-user/AD model.
 
 Later milestone candidates:
 
+* v1.8.0 - Policy and Vendor Control Discovery for Windows Update and
+  Bitdefender. Investigate supported policy, management and vendor surfaces;
+  do not force-stop protected or self-healing services.
 * Network Isolation hardening for policy-backed isolation controls.
-* Policy or vendor guidance for Windows Update and Bitdefender.
 * Possible Windows Search per-drive indexing refinement, if service-level control is not sufficient.
 
 The roadmap may evolve based on discovery findings.
@@ -626,15 +634,21 @@ Key principles include:
 
 # Next Immediate Task
 
-Plan the next milestone after **v1.6.0 - Startup and User-Application Control**.
+Prepare **v1.7.0 - Machine-Wide Runtime and Deployment**.
 
 Primary objective:
 
-Decide whether the next milestone should focus on policy/vendor guidance for Windows Update and Bitdefender, Network Isolation hardening, or Windows Search indexing refinement.
+Standardize the active BootProfile Switcher runtime under
+`%ProgramData%\BootProfileSwitcher` across the relevant installers,
+uninstallers, hooks and status tools. Remove dependencies on a particular
+repository checkout or Windows user profile, then validate the multi-user/AD
+deployment model.
 
-Immediate next validation target:
+Immediate follow-up roadmap:
 
-Review the remaining original target areas and choose the v1.7.0 milestone scope.
+After v1.7.0, start **v1.8.0 - Policy and Vendor Control Discovery** for
+Windows Update and Bitdefender. Establish supported Windows policy/management
+and Bitdefender vendor/enterprise control surfaces before any implementation.
 
 ---
 
