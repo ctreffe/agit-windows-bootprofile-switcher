@@ -245,6 +245,22 @@ function Get-ServiceControlSettingsForRestore {
     return $null
 }
 
+function Get-StartupUserApplicationControlSettingsForRestore {
+    param(
+        [object]$Configuration
+    )
+
+    foreach ($profile in @($Configuration.profiles)) {
+        $modules = Get-ProfileModuleContainer -Profile $profile
+        $settings = Get-ProfileModuleSettings -ModuleSettings $modules -ModuleName 'startup-user-application-control'
+        if ($null -ne $settings) {
+            return $settings
+        }
+    }
+
+    return $null
+}
+
 function Invoke-NetworkIsolationLifecycle {
     param(
         [object]$ModuleSettings,
@@ -311,6 +327,39 @@ function Invoke-ServiceControlLifecycle {
     return $true
 }
 
+function Invoke-StartupUserApplicationControlLifecycle {
+    param(
+        [object]$ModuleSettings,
+        [bool]$Controlling,
+        [bool]$Detected,
+        [string]$Mode,
+        [string]$Name,
+        [string]$Identifier
+    )
+
+    if ($null -eq $ModuleSettings) {
+        return $false
+    }
+
+    $startupUserApplicationControlModule = $moduleRegistry | Where-Object { $_.name -eq 'startup-user-application-control' } | Select-Object -First 1
+    & $startupUserApplicationControlModule.path `
+        -Mode $Mode `
+        -Name $Name `
+        -Identifier $Identifier `
+        -RepoRoot $repoRoot `
+        -LogDir $LogDir `
+        -ModuleSettings $ModuleSettings `
+        -Controlling $Controlling `
+        -Detected $Detected
+
+    $script:modulesExecuted += [ordered]@{
+        name = $startupUserApplicationControlModule.name
+        path = $startupUserApplicationControlModule.path
+    }
+
+    return $true
+}
+
 if ($resolverResult.detected) {
     if (-not $configurationValidation.valid) {
         $dispatchSkippedReason = 'configuration-invalid'
@@ -336,6 +385,14 @@ if ($resolverResult.detected) {
                 -Name $resolverResult.name `
                 -Identifier $resolverResult.identifier | Out-Null
 
+            Invoke-StartupUserApplicationControlLifecycle `
+                -ModuleSettings (Get-StartupUserApplicationControlSettingsForRestore -Configuration $configuration) `
+                -Controlling $false `
+                -Detected ([bool]$resolverResult.detected) `
+                -Mode $resolverResult.mode `
+                -Name $resolverResult.name `
+                -Identifier $resolverResult.identifier | Out-Null
+
             $dispatchSkippedReason = "profile-not-configured:$($resolverResult.mode)"
         } else {
             $profileConfigured = $true
@@ -344,8 +401,10 @@ if ($resolverResult.detected) {
             $moduleNames = Get-ProfileModuleNames -Profile $configuredProfile
             $currentRunIsolating = @($moduleNames) -contains 'network-isolation'
             $currentRunControlsServices = @($moduleNames) -contains 'service-control'
+            $currentRunControlsStartupUserApplications = @($moduleNames) -contains 'startup-user-application-control'
             $networkIsolationSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'network-isolation'
             $serviceControlSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'service-control'
+            $startupUserApplicationControlSettings = Get-ProfileModuleSettings -ModuleSettings $moduleSettings -ModuleName 'startup-user-application-control'
 
             if ($currentRunIsolating) {
                 Invoke-NetworkIsolationLifecycle `
@@ -383,8 +442,26 @@ if ($resolverResult.detected) {
                     -Identifier $resolverResult.identifier | Out-Null
             }
 
+            if ($currentRunControlsStartupUserApplications) {
+                Invoke-StartupUserApplicationControlLifecycle `
+                    -ModuleSettings $startupUserApplicationControlSettings `
+                    -Controlling $true `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            } else {
+                Invoke-StartupUserApplicationControlLifecycle `
+                    -ModuleSettings (Get-StartupUserApplicationControlSettingsForRestore -Configuration $configuration) `
+                    -Controlling $false `
+                    -Detected ([bool]$resolverResult.detected) `
+                    -Mode $resolverResult.mode `
+                    -Name $resolverResult.name `
+                    -Identifier $resolverResult.identifier | Out-Null
+            }
+
             foreach ($moduleName in @($moduleNames)) {
-                if ([string]$moduleName -eq 'network-isolation' -or [string]$moduleName -eq 'service-control') {
+                if ([string]$moduleName -eq 'network-isolation' -or [string]$moduleName -eq 'service-control' -or [string]$moduleName -eq 'startup-user-application-control') {
                     continue
                 }
 
@@ -431,6 +508,14 @@ if ($resolverResult.detected) {
 
         Invoke-ServiceControlLifecycle `
             -ModuleSettings (Get-ServiceControlSettingsForRestore -Configuration $configuration) `
+            -Controlling $false `
+            -Detected ([bool]$resolverResult.detected) `
+            -Mode 'unmanaged' `
+            -Name 'Unmanaged Windows startup' `
+            -Identifier 'unmanaged' | Out-Null
+
+        Invoke-StartupUserApplicationControlLifecycle `
+            -ModuleSettings (Get-StartupUserApplicationControlSettingsForRestore -Configuration $configuration) `
             -Controlling $false `
             -Detected ([bool]$resolverResult.detected) `
             -Mode 'unmanaged' `

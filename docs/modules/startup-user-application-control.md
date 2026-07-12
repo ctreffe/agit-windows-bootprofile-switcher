@@ -131,13 +131,16 @@ It needs to run when a profile requests startup control and also when the
 current profile no longer requests it, because the latter case may need to
 restore startup entries or scheduled tasks changed by a previous run.
 
-The state file should live under:
+The state file should live at:
 
 ```text
-%ProgramData%\BootProfileSwitcher\state\
+%ProgramData%\BootProfileSwitcher\state\startup-user-application-control-state.json
 ```
 
-The exact file name should be chosen when the module name is finalized.
+The current dry-run implementation does not write this default ProgramData
+state file unless a state path is explicitly passed for validation. This keeps
+normal dry-run engine dispatch non-persistent while still allowing baseline and
+restore behavior to be tested with an isolated temporary state file.
 
 For each controlled startup surface, the state should record at least:
 
@@ -150,6 +153,59 @@ For each controlled startup surface, the state should record at least:
 - profile id that requested control
 - timestamp of the baseline snapshot
 - timestamp of the last module run
+
+### Registry Startup Baseline
+
+Registry startup entries should be represented as allow-listed Run values.
+
+For each controlled registry value, the baseline should record:
+
+- application id
+- registry path
+- value name
+- whether the value existed
+- original command value
+- value kind when available
+
+When a profile requests `startup.enabled = false`, the real implementation
+should disable the startup entry by removing the allow-listed registry value
+after the baseline has been learned. It should not replace the value with an
+empty string, rename it or write a shadow value into the Run key.
+
+Restore should use the learned baseline:
+
+- If the value existed, recreate it with the original command.
+- If the value did not exist, leave it absent.
+- If the parent registry path no longer exists, log a restore skip instead of
+  creating broad registry structure.
+
+### Scheduled Task Baseline
+
+Scheduled tasks should be represented by exact allow-listed task path and task
+name. Wildcard matching may be used only to discover SID-scoped OneDrive
+startup tasks; the concrete matched task identities must be stored before real
+changes.
+
+For each controlled task, the baseline should record:
+
+- application id
+- task path
+- task name
+- whether the task existed
+- original task state
+- whether the task was enabled
+
+When a profile requests `startup.enabled = false`, the real implementation
+should disable the allow-listed scheduled task. It should not delete tasks,
+edit task actions or alter triggers.
+
+Restore should use the learned baseline:
+
+- If the task existed and was enabled, enable it again.
+- If the task existed and was disabled, leave or return it disabled.
+- If the task did not exist, leave it absent.
+- If the task disappeared after baseline learning, log a restore skip and do
+  not recreate it.
 
 Lifecycle rules:
 
@@ -165,6 +221,9 @@ Lifecycle rules:
 5. Running processes are inspected and logged unless a later explicit decision
    allows real process control.
 
+The first real-change implementation should continue to treat processes as
+inspect-only even when `dryRun = false`.
+
 ## Dry-Run Behavior
 
 Examples and demos should default to `dryRun = true`.
@@ -173,6 +232,7 @@ In dry-run mode, the module should:
 
 - inventory supported application startup surfaces
 - show whether a baseline would be learned
+- write baseline state only when an explicit validation state path is provided
 - show which startup entries would be disabled
 - show which scheduled tasks would be disabled
 - show which baseline entries would be restored
@@ -251,9 +311,10 @@ The v1.6.0 implementation should be validated in phases:
 3. Define the allow-list and configuration validation fixtures.
 4. Validate dry-run inventory and planned changes.
 5. Validate baseline state creation without changing startup surfaces.
-6. Run controlled real tests only after dry-run output is reviewed.
-7. Confirm a later non-controlling startup restores the learned baseline.
-8. Record per-application capability notes for any target that remains
+6. Validate a non-controlling restore dry-run after a controlling dry-run.
+7. Run controlled real tests only after dry-run output is reviewed.
+8. Confirm a later non-controlling startup restores the learned baseline.
+9. Record per-application capability notes for any target that remains
    inspect-only or unsupported.
 
 ## Non-Goals

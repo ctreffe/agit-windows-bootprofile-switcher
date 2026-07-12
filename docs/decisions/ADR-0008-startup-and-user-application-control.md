@@ -103,6 +103,17 @@ The implementation should learn a baseline before changing startup surfaces and
 restore the learned baseline when the current profile no longer requests
 control.
 
+Registry startup entries will be controlled by removing the allow-listed Run
+value after recording its previous presence and command value. Restore will
+recreate the value only when the learned baseline says it existed. This avoids
+inventing startup entries that were absent before BootProfile Switcher acted.
+
+Scheduled tasks will be controlled by changing the task enabled state after
+recording whether the allow-listed task existed and whether it was enabled.
+Restore will return existing tasks to the learned enabled or disabled state.
+If a task disappears after baseline learning, restore will log the missing
+task and skip recreation.
+
 Dry-run behavior should be the first validation phase. Real changes should be
 enabled only after the inventory and planned changes are reviewed.
 
@@ -119,3 +130,7 @@ Windows Update, vendor or unrelated scheduled tasks through broad name matching.
 Running process termination remains a high-caution behavior. It should not be
 implemented as implicit cleanup unless later validation proves that it is safe,
 necessary and reversible enough for the project goals.
+
+The first real-change implementation should still keep running processes
+inspect-only. Startup surfaces can be restored; terminated user work cannot be
+restored with the same safety guarantees.

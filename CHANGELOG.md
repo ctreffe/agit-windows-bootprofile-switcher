@@ -13,6 +13,8 @@ This project follows Semantic Versioning.
 - Add v1.6.0 read-only discovery findings for Teams, OneDrive, ownCloud and Microsoft Office startup/user-application control.
 - Add configuration validation and fixtures for `startup-user-application-control`.
 - Add the first dry-run `startup-user-application-control` module path and register it in the profile engine.
+- Document the baseline/restore model for registry Run values and scheduled tasks before real startup-surface changes.
+- Add `startup-user-application-control` lifecycle dispatch, explicit-state baseline learning and restore dry-run planning.
 
 ## [v1.5.0] - 2026-07-01
 
