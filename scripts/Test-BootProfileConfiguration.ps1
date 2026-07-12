@@ -343,8 +343,6 @@ function Test-StartupUserApplicationControlSettings {
 
     if ($null -ne $dryRun -and -not (Test-BooleanProperty -Value $dryRun)) {
         Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be a boolean."
-    } elseif ($dryRun -eq $false) {
-        Add-ValidationError -Errors $Errors -Message "$Prefix.dryRun must be true for the current startup-user-application-control implementation."
     }
 
     if ($null -eq $applications) {

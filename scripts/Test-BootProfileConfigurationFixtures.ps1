@@ -120,9 +120,9 @@ $fixtures = @(
         expectedValid = $false
     },
     [ordered]@{
-        name = 'startup-user-application-control-dry-run-false'
-        path = Join-Path $repoRoot 'config\test\startup-user-application-control-dry-run-false.json'
-        expectedValid = $false
+        name = 'startup-user-application-control-real-apply-valid'
+        path = Join-Path $repoRoot 'config\test\startup-user-application-control-real-apply-valid.json'
+        expectedValid = $true
     },
     [ordered]@{
         name = 'v2-duplicate-profile-id'

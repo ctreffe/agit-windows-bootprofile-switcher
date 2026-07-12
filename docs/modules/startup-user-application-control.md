@@ -12,10 +12,10 @@ without creating one module per application.
 The design should use shared module logic for Windows control surfaces and
 per-application capability notes for differences between targets.
 
-The current implementation provides the first read-only dry-run path. It
-validates allow-listed application IDs, inspects known registry, scheduled task
-and process surfaces, and logs planned startup/task actions without changing
-Windows state.
+The current implementation validates allow-listed application IDs, learns and
+restores baselines for supported startup registry values and scheduled tasks,
+and can apply real startup-surface changes when `dryRun = false` in an elevated
+PowerShell session. Running processes remain inspect-only.
 
 ## Target Applications
 
@@ -221,8 +221,8 @@ Lifecycle rules:
 5. Running processes are inspected and logged unless a later explicit decision
    allows real process control.
 
-The first real-change implementation should continue to treat processes as
-inspect-only even when `dryRun = false`.
+The real-change implementation continues to treat processes as inspect-only
+even when `dryRun = false`.
 
 ## Dry-Run Behavior
 
@@ -241,6 +241,11 @@ In dry-run mode, the module should:
 - avoid changing scheduled task enabled state
 - avoid deleting startup-folder entries
 - avoid terminating processes
+
+When `dryRun = false`, the module requires an elevated PowerShell session. It
+may remove or restore allow-listed registry Run values and disable or restore
+allow-listed scheduled tasks. It still does not delete scheduled tasks, edit task
+actions, alter triggers, delete startup-folder entries or terminate processes.
 
 ## Per-Application Notes
 
@@ -312,9 +317,10 @@ The v1.6.0 implementation should be validated in phases:
 4. Validate dry-run inventory and planned changes.
 5. Validate baseline state creation without changing startup surfaces.
 6. Validate a non-controlling restore dry-run after a controlling dry-run.
-7. Run controlled real tests only after dry-run output is reviewed.
-8. Confirm a later non-controlling startup restores the learned baseline.
-9. Record per-application capability notes for any target that remains
+7. Validate elevated scheduled-task baseline and restore behavior.
+8. Run controlled real tests only after dry-run output is reviewed.
+9. Confirm a later non-controlling startup restores the learned baseline.
+10. Record per-application capability notes for any target that remains
    inspect-only or unsupported.
 
 ## Non-Goals

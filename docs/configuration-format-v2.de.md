@@ -228,8 +228,10 @@ PAN.
 ### Startup-and-User-Application-Control-Einstellungen
 
 `startup-user-application-control` ist das v1.6.0-Modul fuer
-allowlist-basierte Applikations-Startup-Flaechen. Die erste Implementierung
-ist rein lesend und protokolliert geplante Aktionen im Dry-run:
+allowlist-basierte Applikations-Startup-Flaechen. `dryRun` sollte auf `true`
+bleiben, solange geplante Aktionen geprueft werden. `dryRun = false` sollte nur
+aus einer erhoehten PowerShell-Sitzung verwendet werden, wenn echte
+Startup-Flaechen geaendert werden sollen:
 
 ```json
 "startup-user-application-control": {
@@ -258,6 +260,10 @@ Unterstuetzte Applikations-IDs sind:
 `startup.enabled` muss ein Boolean sein. Das erste validierte Prozessverhalten
 ist `inspect-only`; das Beenden von User-Prozessen wird vom Validator bewusst
 nicht akzeptiert.
+
+Wenn `dryRun = false` ist, kann das Modul allowlist-basierte Registry-Run-Werte
+entfernen und wiederherstellen sowie allowlist-basierte Scheduled Tasks
+deaktivieren oder wiederherstellen. Prozesse bleiben reine Inspektion.
 
 ## Validierungsregeln
 

@@ -57,8 +57,9 @@ Next roadmap focus:
 * `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
 * `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office.
 * `scripts/Test-BootProfileConfiguration.ps1` validates the first `startup-user-application-control` configuration shape and allow-listed application IDs.
-* `modules/startup-user-application-control/Invoke-StartupUserApplicationControlModule.ps1` provides the read-only dry-run module path, explicit-state baseline learning and restore dry-run planning without changing Windows startup surfaces.
-* ADR-0008 and `docs/modules/startup-user-application-control.md` define the baseline/restore model for registry Run values and scheduled tasks before real changes are enabled.
+* `modules/startup-user-application-control/Invoke-StartupUserApplicationControlModule.ps1` provides dry-run planning plus elevated real apply/restore for allow-listed startup registry values and scheduled tasks.
+* ADR-0008 and `docs/modules/startup-user-application-control.md` define the baseline/restore model for registry Run values and scheduled tasks; processes remain inspect-only.
+* Elevated local validation confirmed real apply/restore for Teams and ownCloud registry Run values, OneDrive startup tasks and Microsoft Office scheduled tasks.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -604,7 +605,7 @@ Define the startup/user-application control design for Microsoft Teams, OneDrive
 
 Immediate next validation target:
 
-Validate `startup-user-application-control` scheduled-task baseline/restore behavior from an elevated shell, then enable the first real startup-surface changes behind the existing safety gates.
+Review and commit the `startup-user-application-control` real apply/restore implementation, then prepare v1.6.0 finalization.
 
 ---
 

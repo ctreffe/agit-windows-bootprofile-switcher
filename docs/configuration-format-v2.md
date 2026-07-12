@@ -226,8 +226,9 @@ device. It only targets Bluetooth network adapters such as Bluetooth PAN.
 ### Startup And User-Application Control Settings
 
 `startup-user-application-control` is the v1.6.0 module for allow-listed
-application startup surfaces. Its first implementation is read-only and logs
-planned actions in dry-run mode:
+application startup surfaces. Keep `dryRun` set to `true` while reviewing
+planned actions, then use `dryRun = false` only from an elevated PowerShell
+session when real startup-surface changes should be applied:
 
 ```json
 "startup-user-application-control": {
@@ -256,6 +257,10 @@ Supported application identifiers are:
 `startup.enabled` must be a boolean. The first validated process behavior is
 `inspect-only`; terminating user processes is intentionally not accepted by the
 configuration validator.
+
+When `dryRun = false`, the module can remove and restore allow-listed registry
+Run values and disable or restore allow-listed scheduled tasks. Processes remain
+inspection-only.
 
 ## Validation Rules
 

@@ -259,14 +259,16 @@ Startup and User-Application Control planning is documented in
 [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md).
 The v1.6.0 design addresses Teams, OneDrive, ownCloud and Microsoft Office through a
 shared control-surface model with per-application capability notes.
-The current implementation provides a read-only dry-run path.
+The current implementation supports dry-run planning plus controlled apply and
+restore behavior for allow-listed startup registry values and scheduled tasks.
+Processes remain inspect-only.
 
 Known modules in the current repository:
 
 - `validation-log`
 - `network-isolation`
 - `service-control` Windows Search service-control module
-- `startup-user-application-control` startup and user-application dry-run module
+- `startup-user-application-control` startup and user-application control module
 - `demo-system-marker` temporary foundation demo module
 
 ## Project Goals

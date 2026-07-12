@@ -1,16 +1,14 @@
 <#
 .SYNOPSIS
-Inspects supported startup and user-application control targets.
+Controls supported startup and user-application control targets.
 
 .DESCRIPTION
-Runs the first dry-run Startup and User-Application Control module path for
-BootProfile Switcher.
+Runs Startup and User-Application Control for BootProfile Switcher.
 
 The module is allow-list based. The initial supported application targets are
-Teams, OneDrive, ownCloud and Microsoft Office. This first implementation is
-read-only: it inventories known startup surfaces and logs what would be
-controlled, but it does not edit registry values, change scheduled tasks or
-terminate processes.
+Teams, OneDrive, ownCloud and Microsoft Office. Startup registry values and
+scheduled tasks can be disabled and restored. Running processes remain
+inspect-only.
 #>
 
 [CmdletBinding()]
@@ -83,6 +81,13 @@ function ConvertTo-Array {
     return @($Value)
 }
 
+function Test-IsAdministrator {
+    $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
 function Write-StartupUserApplicationControlLog {
     param(
         [string]$Action,
@@ -107,6 +112,25 @@ function Write-StartupUserApplicationControlLog {
         $detailsJson
 
     Add-Content -Path $logFile -Value $line -Encoding UTF8
+}
+
+function ConvertTo-RegistryPropertyType {
+    param([AllowNull()][object]$ValueKind)
+
+    $kind = [string]$ValueKind
+    if ([string]::IsNullOrWhiteSpace($kind)) {
+        return 'String'
+    }
+
+    switch ($kind) {
+        'String' { return 'String' }
+        'ExpandString' { return 'ExpandString' }
+        'MultiString' { return 'MultiString' }
+        'Binary' { return 'Binary' }
+        'DWord' { return 'DWord' }
+        'QWord' { return 'QWord' }
+        default { return 'String' }
+    }
 }
 
 function Read-StartupUserApplicationControlState {
@@ -285,11 +309,53 @@ function Get-BaselineScheduledTask {
     } | Select-Object -First 1
 }
 
-function Write-RegistryTargetPlan {
+function Set-RegistryValueFromBaseline {
+    param([object]$Baseline)
+
+    if (-not (Test-Path ([string]$Baseline.registryPath))) {
+        Write-StartupUserApplicationControlLog -Action 'skip-restore' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'registry-path-not-found' -Details $Baseline
+        return $false
+    }
+
+    $item = Get-ItemProperty -Path ([string]$Baseline.registryPath) -Name ([string]$Baseline.valueName) -ErrorAction SilentlyContinue
+    $exists = $null -ne $item -and $null -ne $item.PSObject.Properties[([string]$Baseline.valueName)]
+
+    if ($exists) {
+        Set-ItemProperty -Path ([string]$Baseline.registryPath) -Name ([string]$Baseline.valueName) -Value ([string]$Baseline.command) -ErrorAction Stop
+    } else {
+        New-ItemProperty `
+            -Path ([string]$Baseline.registryPath) `
+            -Name ([string]$Baseline.valueName) `
+            -Value ([string]$Baseline.command) `
+            -PropertyType (ConvertTo-RegistryPropertyType -ValueKind $Baseline.valueKind) `
+            -ErrorAction Stop | Out-Null
+    }
+
+    return $true
+}
+
+function Set-ScheduledTaskEnabledState {
+    param(
+        [string]$TaskPath,
+        [string]$TaskName,
+        [bool]$Enabled
+    )
+
+    if ($Enabled) {
+        Enable-ScheduledTask -TaskPath $TaskPath -TaskName $TaskName -ErrorAction Stop | Out-Null
+    } else {
+        Disable-ScheduledTask -TaskPath $TaskPath -TaskName $TaskName -ErrorAction Stop | Out-Null
+    }
+}
+
+function Apply-RegistryTarget {
     param(
         [object]$Snapshot,
         [AllowNull()]
-        [object]$TargetEnabled
+        [object]$TargetEnabled,
+        [AllowNull()]
+        [object]$Baseline,
+        [bool]$DryRun
     )
 
     if ($null -eq $TargetEnabled) {
@@ -301,26 +367,54 @@ function Write-RegistryTargetPlan {
         return
     }
 
-    Write-StartupUserApplicationControlLog `
-        -Action 'would-set-startup-enabled' `
-        -ApplicationId ([string]$Snapshot.applicationId) `
-        -Surface 'startup-registry' `
-        -Reason 'dry-run' `
-        -Details ([ordered]@{
-            registryPath = $Snapshot.registryPath
-            valueName = $Snapshot.valueName
-            exists = [bool]$Snapshot.exists
-            command = $Snapshot.command
-            targetEnabled = [bool]$TargetEnabled
-            plannedActions = if ([bool]$TargetEnabled) { @('inspect-existing-registry-value') } else { @('remove-registry-value') }
-        })
+    if ([bool]$TargetEnabled -and [bool]$Snapshot.exists) {
+        Write-StartupUserApplicationControlLog -Action 'skip' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'already-target-state' -Details $Snapshot
+        return
+    }
+
+    $plannedActions = if ([bool]$TargetEnabled) { @('set-registry-value-from-baseline') } else { @('remove-registry-value') }
+    $details = [ordered]@{
+        registryPath = $Snapshot.registryPath
+        valueName = $Snapshot.valueName
+        exists = [bool]$Snapshot.exists
+        command = $Snapshot.command
+        targetEnabled = [bool]$TargetEnabled
+        plannedActions = @($plannedActions)
+    }
+
+    if ($DryRun) {
+        Write-StartupUserApplicationControlLog -Action 'would-set-startup-enabled' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'dry-run' -Details $details
+        return
+    }
+
+    try {
+        if (-not [bool]$TargetEnabled) {
+            Remove-ItemProperty -Path ([string]$Snapshot.registryPath) -Name ([string]$Snapshot.valueName) -ErrorAction Stop
+            Write-StartupUserApplicationControlLog -Action 'remove-registry-value' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'apply-target' -Details $details
+            return
+        }
+
+        if ($null -eq $Baseline -or -not [bool]$Baseline.exists -or [string]::IsNullOrWhiteSpace([string]$Baseline.command)) {
+            Write-StartupUserApplicationControlLog -Action 'skip' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'missing-baseline-command' -Details $details
+            return
+        }
+
+        $applied = Set-RegistryValueFromBaseline -Baseline $Baseline
+        if ($applied) {
+            Write-StartupUserApplicationControlLog -Action 'set-registry-value' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'apply-target' -Details $details
+        }
+    } catch {
+        Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'startup-registry' -Reason 'apply-target-failed' -Details ([ordered]@{ error = $_.Exception.Message; target = $details })
+        throw
+    }
 }
 
-function Write-ScheduledTaskTargetPlan {
+function Apply-ScheduledTaskTarget {
     param(
         [object]$Snapshot,
         [AllowNull()]
-        [object]$TargetEnabled
+        [object]$TargetEnabled,
+        [bool]$DryRun
     )
 
     if ($null -eq $TargetEnabled) {
@@ -337,26 +431,35 @@ function Write-ScheduledTaskTargetPlan {
         return
     }
 
-    Write-StartupUserApplicationControlLog `
-        -Action 'would-set-startup-enabled' `
-        -ApplicationId ([string]$Snapshot.applicationId) `
-        -Surface 'scheduled-task' `
-        -Reason 'dry-run' `
-        -Details ([ordered]@{
-            taskPath = $Snapshot.taskPath
-            taskName = $Snapshot.taskName
-            state = $Snapshot.state
-            enabled = $Snapshot.enabled
-            targetEnabled = [bool]$TargetEnabled
-            plannedActions = @($plannedActions)
-        })
+    $details = [ordered]@{
+        taskPath = $Snapshot.taskPath
+        taskName = $Snapshot.taskName
+        state = $Snapshot.state
+        enabled = $Snapshot.enabled
+        targetEnabled = [bool]$TargetEnabled
+        plannedActions = @($plannedActions)
+    }
+
+    if ($DryRun) {
+        Write-StartupUserApplicationControlLog -Action 'would-set-startup-enabled' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'scheduled-task' -Reason 'dry-run' -Details $details
+        return
+    }
+
+    try {
+        Set-ScheduledTaskEnabledState -TaskPath ([string]$Snapshot.taskPath) -TaskName ([string]$Snapshot.taskName) -Enabled ([bool]$TargetEnabled)
+        Write-StartupUserApplicationControlLog -Action 'set-task-enabled' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'scheduled-task' -Reason 'apply-target' -Details $details
+    } catch {
+        Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Snapshot.applicationId) -Surface 'scheduled-task' -Reason 'apply-target-failed' -Details ([ordered]@{ error = $_.Exception.Message; target = $details })
+        throw
+    }
 }
 
 function Restore-RegistryValueBaseline {
     param(
         [object]$Baseline,
         [AllowNull()]
-        [object]$Current
+        [object]$Current,
+        [bool]$DryRun
     )
 
     if ($null -eq $Baseline) {
@@ -365,16 +468,29 @@ function Restore-RegistryValueBaseline {
 
     if (-not [bool]$Baseline.exists) {
         if ($null -ne $Current -and [bool]$Current.exists) {
+            $details = [ordered]@{
+                plannedActions = @('remove-registry-value')
+                baseline = $Baseline
+                current = $Current
+            }
+
+            if (-not $DryRun) {
+                try {
+                    Remove-ItemProperty -Path ([string]$Current.registryPath) -Name ([string]$Current.valueName) -ErrorAction Stop
+                    Write-StartupUserApplicationControlLog -Action 'restore-remove-registry-value' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'restore-baseline' -Details $details
+                    return
+                } catch {
+                    Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'restore-baseline-failed' -Details ([ordered]@{ error = $_.Exception.Message; restore = $details })
+                    throw
+                }
+            }
+
             Write-StartupUserApplicationControlLog `
                 -Action 'would-restore-baseline' `
                 -ApplicationId ([string]$Baseline.applicationId) `
                 -Surface 'startup-registry' `
                 -Reason 'dry-run' `
-                -Details ([ordered]@{
-                    plannedActions = @('remove-registry-value')
-                    baseline = $Baseline
-                    current = $Current
-                })
+                -Details $details
             return
         }
 
@@ -389,23 +505,34 @@ function Restore-RegistryValueBaseline {
         return
     }
 
-    Write-StartupUserApplicationControlLog `
-        -Action 'would-restore-baseline' `
-        -ApplicationId ([string]$Baseline.applicationId) `
-        -Surface 'startup-registry' `
-        -Reason 'dry-run' `
-        -Details ([ordered]@{
+    $details = [ordered]@{
             plannedActions = @('set-registry-value')
             baseline = $Baseline
             current = $Current
-        })
+    }
+
+    if ($DryRun) {
+        Write-StartupUserApplicationControlLog -Action 'would-restore-baseline' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'dry-run' -Details $details
+        return
+    }
+
+    try {
+        $restored = Set-RegistryValueFromBaseline -Baseline $Baseline
+        if ($restored) {
+            Write-StartupUserApplicationControlLog -Action 'restore-registry-value' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'restore-baseline' -Details $details
+        }
+    } catch {
+        Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Baseline.applicationId) -Surface 'startup-registry' -Reason 'restore-baseline-failed' -Details ([ordered]@{ error = $_.Exception.Message; restore = $details })
+        throw
+    }
 }
 
 function Restore-ScheduledTaskBaseline {
     param(
         [object]$Baseline,
         [AllowNull()]
-        [object]$Current
+        [object]$Current,
+        [bool]$DryRun
     )
 
     if ($null -eq $Baseline) {
@@ -427,23 +554,31 @@ function Restore-ScheduledTaskBaseline {
         return
     }
 
-    Write-StartupUserApplicationControlLog `
-        -Action 'would-restore-baseline' `
-        -ApplicationId ([string]$Baseline.applicationId) `
-        -Surface 'scheduled-task' `
-        -Reason 'dry-run' `
-        -Details ([ordered]@{
+    $details = [ordered]@{
             plannedActions = @("set-task-enabled:$($Baseline.enabled)")
             baseline = $Baseline
             current = $Current
-        })
+    }
+
+    if ($DryRun) {
+        Write-StartupUserApplicationControlLog -Action 'would-restore-baseline' -ApplicationId ([string]$Baseline.applicationId) -Surface 'scheduled-task' -Reason 'dry-run' -Details $details
+        return
+    }
+
+    try {
+        Set-ScheduledTaskEnabledState -TaskPath ([string]$Baseline.taskPath) -TaskName ([string]$Baseline.taskName) -Enabled ([bool]$Baseline.enabled)
+        Write-StartupUserApplicationControlLog -Action 'restore-task-enabled' -ApplicationId ([string]$Baseline.applicationId) -Surface 'scheduled-task' -Reason 'restore-baseline' -Details $details
+    } catch {
+        Write-StartupUserApplicationControlLog -Action 'error' -ApplicationId ([string]$Baseline.applicationId) -Surface 'scheduled-task' -Reason 'restore-baseline-failed' -Details ([ordered]@{ error = $_.Exception.Message; restore = $details })
+        throw
+    }
 }
 
 New-Item -ItemType Directory -Path $LogDir -Force | Out-Null
 
 $dryRun = [bool](Get-SettingValue -Object $ModuleSettings -Name 'dryRun' -Default $true)
-if (-not $dryRun) {
-    throw 'Startup and User-Application Control currently supports dryRun only.'
+if (-not $dryRun -and -not (Test-IsAdministrator)) {
+    throw 'Startup and User-Application Control requires an elevated PowerShell session when dryRun is false.'
 }
 
 $statePathWasProvided = -not [string]::IsNullOrWhiteSpace($StatePath)
@@ -581,7 +716,7 @@ if ((-not $Controlling) -and $previousRunWasControlling) {
             -RegistryPath ([string]$baseline.registryPath) `
             -ValueName ([string]$baseline.valueName)
 
-        Restore-RegistryValueBaseline -Baseline $baseline -Current $current
+        Restore-RegistryValueBaseline -Baseline $baseline -Current $current -DryRun $dryRun
     }
 
     foreach ($baseline in @($baselineScheduledTasks)) {
@@ -591,7 +726,15 @@ if ((-not $Controlling) -and $previousRunWasControlling) {
             -TaskPath ([string]$baseline.taskPath) `
             -TaskName ([string]$baseline.taskName)
 
-        Restore-ScheduledTaskBaseline -Baseline $baseline -Current $current
+        Restore-ScheduledTaskBaseline -Baseline $baseline -Current $current -DryRun $dryRun
+    }
+
+    if (-not $dryRun) {
+        Save-StartupUserApplicationControlState `
+            -Path $StatePath `
+            -BaselineRegistryValues $baselineRegistryValues `
+            -BaselineScheduledTasks $baselineScheduledTasks `
+            -CurrentRunControlling $false
     }
 }
 
@@ -631,11 +774,17 @@ if ($Controlling) {
 
     foreach ($plan in @($applicationPlans)) {
         foreach ($entry in @($plan.registryEntries)) {
-            Write-RegistryTargetPlan -Snapshot $entry -TargetEnabled $plan.startupEnabled
+            $baseline = Get-BaselineRegistryValue `
+                -BaselineRegistryValues $baselineRegistryValues `
+                -ApplicationId ([string]$entry.applicationId) `
+                -RegistryPath ([string]$entry.registryPath) `
+                -ValueName ([string]$entry.valueName)
+
+            Apply-RegistryTarget -Snapshot $entry -TargetEnabled $plan.startupEnabled -Baseline $baseline -DryRun $dryRun
         }
 
         foreach ($task in @($plan.taskMatches)) {
-            Write-ScheduledTaskTargetPlan -Snapshot $task -TargetEnabled $plan.startupEnabled
+            Apply-ScheduledTaskTarget -Snapshot $task -TargetEnabled $plan.startupEnabled -DryRun $dryRun
         }
 
         foreach ($process in @($plan.processMatches)) {

@@ -15,6 +15,8 @@ This project follows Semantic Versioning.
 - Add the first dry-run `startup-user-application-control` module path and register it in the profile engine.
 - Document the baseline/restore model for registry Run values and scheduled tasks before real startup-surface changes.
 - Add `startup-user-application-control` lifecycle dispatch, explicit-state baseline learning and restore dry-run planning.
+- Add elevated real apply/restore support for allow-listed startup registry values and scheduled tasks while keeping processes inspect-only.
+- Validate elevated real apply/restore for Teams, OneDrive, ownCloud and Microsoft Office startup surfaces.
 
 ## [v1.5.0] - 2026-07-01
 
