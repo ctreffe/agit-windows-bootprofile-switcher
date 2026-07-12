@@ -3,7 +3,7 @@
 ## Purpose
 
 Startup and User-Application Control is the v1.6.0 design area for Microsoft
-Teams, OneDrive, ownCloud and Outlook.
+Teams, OneDrive, ownCloud and Microsoft Office.
 
 The goal is to control application startup behavior from BootProfile Switcher
 profiles without treating user applications as ordinary Windows services and
@@ -18,10 +18,10 @@ The v1.6.0 milestone addresses:
 
 | Application | Discovery classification | Initial v1.6.0 treatment |
 | --- | --- | --- |
-| Microsoft Teams | startup-control-or-user-app-control | Startup entries first; process behavior requires explicit user-session rules |
-| OneDrive | startup-control-or-user-app-control | Startup entries and clearly owned scheduled tasks first; update/reporting tasks require caution |
-| ownCloud | startup-control-or-user-app-control | Startup entries first; running process behavior requires explicit user-session rules |
-| Outlook | startup-control-or-user-app-control | Inventory and capability decision first; broad Office tasks must not be disabled by name alone |
+| Microsoft Teams | startup-control-or-user-app-control | Allow-listed startup registry values first; machine-wide installer startup needs caution |
+| OneDrive | startup-control-or-user-app-control | Allow-listed startup scheduled tasks first; reporting and update tasks need a separate decision |
+| ownCloud | startup-control-or-user-app-control | Allow-listed per-user startup registry value first; running process behavior remains inspect-only |
+| Microsoft Office | startup-control-or-user-app-control | Allow-listed Office startup/update scheduled tasks are in scope; arbitrary broad Office matching is not |
 
 Each application must be explicitly addressed. If a target cannot be safely
 controlled in the initial implementation, the module documentation should say
@@ -89,7 +89,7 @@ shape is:
           }
         },
         {
-          "id": "outlook",
+          "id": "microsoft-office",
           "startup": {
             "enabled": false
           },
@@ -114,7 +114,7 @@ Supported application identifiers should be allow-listed:
 - `teams`
 - `onedrive`
 - `owncloud`
-- `outlook`
+- `microsoft-office`
 
 Unsupported application identifiers should be configuration errors.
 
@@ -184,6 +184,9 @@ In dry-run mode, the module should:
 The v1.4.0 discovery found startup registry entries such as
 `com.squirrel.Teams.Teams` and `TeamsMachineInstaller`.
 
+The v1.6.0 discovery refresh found the same two startup registry values and no
+Teams service, scheduled task, startup-folder entry or running process.
+
 The first implementation should classify exact Teams startup entries and avoid
 wide pattern matching that could affect unrelated Microsoft components.
 
@@ -191,6 +194,12 @@ wide pattern matching that could affect unrelated Microsoft components.
 
 The v1.4.0 discovery found OneDrive scheduled tasks, startup registry entries
 and a running process.
+
+The v1.6.0 discovery refresh found SID-scoped OneDrive scheduled tasks and no
+OneDrive service, startup registry entry, startup-folder entry or running
+process. `OneDrive Startup Task-<SID>` is the clearest first startup-control
+candidate. Reporting and standalone update tasks should not be disabled by
+default.
 
 The first implementation should distinguish user startup behavior from update,
 reporting or cleanup tasks. Disabling broad OneDrive update infrastructure may
@@ -201,26 +210,37 @@ have different consequences than suppressing user-session startup.
 The v1.4.0 discovery found an `ownCloud` startup registry entry and an
 `owncloud` running process.
 
+The v1.6.0 discovery refresh again found the `ownCloud` per-user startup
+registry value and an active `owncloud` process.
+
 The first implementation should treat the startup entry as the primary
 candidate and keep process handling inspect-only until user-session behavior is
 validated.
 
-### Outlook
+### Microsoft Office
 
 The v1.4.0 discovery found Office scheduled tasks and a running `OUTLOOK`
+process. For v1.6.0, the target is intentionally defined as Microsoft Office
+because Office startup and update behavior is part of the desired control
+scope, and no Outlook-specific startup surface was found in the refresh.
+
+The v1.6.0 discovery refresh found broad Microsoft Office scheduled tasks, but
+no Outlook-specific startup registry entry, startup-folder entry or running
 process.
 
-The first implementation must not disable broad Office update or Click-to-Run
-tasks merely to control Outlook startup. Outlook may require a capability note
-or a later user-session design if no safe Outlook-specific startup surface is
-found.
+The first implementation may control explicitly allow-listed Office scheduled
+tasks, especially Office update and Click-to-Run startup behavior, when the
+profile requests Microsoft Office control. It must not use broad
+`*Office*` matching as a generic task-disabling mechanism. Outlook process
+handling remains inspect-only until user-session behavior has explicit safety
+rules.
 
 ## Validation Plan
 
 The v1.6.0 implementation should be validated in phases:
 
-1. Refresh read-only inventory for Teams, OneDrive, ownCloud and Outlook on the
-   current machine.
+1. Refresh read-only inventory for Teams, OneDrive, ownCloud and Microsoft
+   Office on the current machine.
 2. Document exact startup registry entries, startup-folder entries, scheduled
    tasks and running process matches for each application.
 3. Define the allow-list and configuration validation fixtures.
@@ -238,8 +258,8 @@ The v1.6.0 design should not:
 - control arbitrary applications
 - disable Windows Update tasks
 - disable Bitdefender or other vendor/security components
-- disable broad Office tasks unless they are explicitly accepted as part of an
-  Outlook-specific control decision
+- disable arbitrary Office tasks unless they are explicitly allow-listed as
+  part of the Microsoft Office target
 - terminate user processes by default
 - delete user startup entries when disabling/restoring can be represented more
   safely

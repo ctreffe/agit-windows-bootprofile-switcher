@@ -51,10 +51,11 @@ Completed v1.5.0 results:
 
 Next roadmap focus:
 
-* Plan **v1.6.0 – Startup and User-Application Control** for Microsoft Teams, OneDrive, ownCloud and Outlook based on the v1.4.0 discovery results.
+* Plan **v1.6.0 – Startup and User-Application Control** for Microsoft Teams, OneDrive, ownCloud and Microsoft Office based on the v1.4.0 discovery results.
 * Address all four applications in the milestone through one shared control-surface model where possible, while allowing per-application capability notes when a target cannot be safely controlled through the same mechanism.
 * ADR-0008 records the decision to address all four applications through shared startup/user-application control surfaces instead of one module per application.
 * `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
+* `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office.
 
 The completed proof of concept validated whether a Windows Boot Manager selection can be used as the basis for selecting a boot profile before user logon.
 
@@ -282,7 +283,7 @@ Last completed milestone:
 
 Planned next milestone:
 
-* v1.6.0 – Startup and User-Application Control for Teams, OneDrive, ownCloud and Outlook.
+* v1.6.0 – Startup and User-Application Control for Teams, OneDrive, ownCloud and Microsoft Office.
 
 Later milestone candidates:
 
@@ -596,11 +597,11 @@ Plan **v1.6.0 – Startup and User-Application Control**.
 
 Primary objective:
 
-Define the startup/user-application control design for Microsoft Teams, OneDrive, ownCloud and Outlook as one milestone with shared module boundaries and per-application capability notes.
+Define the startup/user-application control design for Microsoft Teams, OneDrive, ownCloud and Microsoft Office as one milestone with shared module boundaries and per-application capability notes.
 
 Immediate next validation target:
 
-Refresh the read-only startup/user-application inventory for Teams, OneDrive, ownCloud and Outlook, then turn the v1.6.0 design into validation fixtures and dry-run behavior.
+Turn the v1.6.0 startup/user-application control findings into configuration validation fixtures and dry-run behavior.
 
 ---
 

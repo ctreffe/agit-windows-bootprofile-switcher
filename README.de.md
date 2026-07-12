@@ -272,7 +272,7 @@ Service.
 Die Planung fuer Startup and User-Application Control ist in
 [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md)
 dokumentiert. Das v1.6.0-Design adressiert Teams, OneDrive, ownCloud und
-Outlook ueber ein gemeinsames Control-Surface-Modell mit applikationsbezogenen
+Microsoft Office ueber ein gemeinsames Control-Surface-Modell mit applikationsbezogenen
 Capability Notes.
 
 Bekannte Module im aktuellen Repository:
@@ -369,6 +369,7 @@ Zentrale Projektdokumente:
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control
 - [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Discovery-Ergebnisse und erste Modulempfehlung fuer Service and Startup Control
+- [docs/discovery/startup-user-application-control-findings.md](docs/discovery/startup-user-application-control-findings.md) – Discovery-Ergebnisse fuer Startup and User-Application Control
 - [docs/modules/service-control.md](docs/modules/service-control.md) – Design des Service-Control-Moduls
 - [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md) – Design fuer Startup and User-Application Control
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls

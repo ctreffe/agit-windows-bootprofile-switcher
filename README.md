@@ -257,7 +257,7 @@ implementation supports dry-run and controlled apply/restore behavior for
 
 Startup and User-Application Control planning is documented in
 [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md).
-The v1.6.0 design addresses Teams, OneDrive, ownCloud and Outlook through a
+The v1.6.0 design addresses Teams, OneDrive, ownCloud and Microsoft Office through a
 shared control-surface model with per-application capability notes.
 
 Known modules in the current repository:
@@ -354,6 +354,7 @@ Core project documents:
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – German Configuration Format v2 documentation
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow
 - [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Service and Startup Control discovery findings and first module recommendation
+- [docs/discovery/startup-user-application-control-findings.md](docs/discovery/startup-user-application-control-findings.md) – Startup and User-Application Control discovery findings
 - [docs/modules/service-control.md](docs/modules/service-control.md) – Service Control module design
 - [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md) – Startup and User-Application Control module design
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation

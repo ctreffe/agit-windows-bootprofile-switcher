@@ -10,9 +10,11 @@ After v1.5.0, BootProfile Switcher has a validated `service-control`
 lifecycle module for Windows Search / `WSearch`.
 
 The next requested milestone should address Microsoft Teams, OneDrive,
-ownCloud and Outlook. The v1.4.0 discovery found that these targets are not
-ordinary Windows services on the validated machine. They appear through startup
-registry entries, scheduled tasks or running user applications.
+ownCloud and Microsoft Office. The v1.4.0 discovery started from Outlook as
+the user-facing request, but the validated control surface is Office-wide
+startup and update behavior. These targets are not ordinary Windows services
+on the validated machine. They appear through startup registry entries,
+scheduled tasks or running user applications.
 
 These control surfaces are related but not identical:
 
@@ -30,7 +32,7 @@ application can be controlled through the same Windows mechanism.
 ## Decision
 
 v1.6.0 will be scoped as **Startup and User-Application Control** for Microsoft
-Teams, OneDrive, ownCloud and Outlook.
+Teams, OneDrive, ownCloud and Microsoft Office.
 
 The milestone will use a shared module design for startup and user-application
 control surfaces. The module family may be implemented as one module or as two
@@ -42,7 +44,7 @@ The milestone must address all four applications:
 - Microsoft Teams
 - OneDrive
 - ownCloud
-- Outlook
+- Microsoft Office
 
 "Address" means each application receives explicit inventory, configuration
 validation, documentation and a capability decision. If an application can be
@@ -69,9 +71,10 @@ identifies a supported management surface.
 
 ## Rationale
 
-Teams, OneDrive, ownCloud and Outlook are user-facing applications, not a set
-of ordinary Windows services. Treating them as service-control targets would
-violate ADR-0007 and would produce unreliable behavior.
+Teams, OneDrive, ownCloud and Microsoft Office are user-facing application
+targets, not a set of ordinary Windows services. Treating them as
+service-control targets would violate ADR-0007 and would produce unreliable
+behavior.
 
 At the same time, implementing one module per application would fragment the
 architecture. The safer boundary is the Windows control surface: startup
@@ -79,8 +82,8 @@ registry entries, startup folders, scheduled tasks and user-session processes.
 
 Using shared module logic with per-application capability notes keeps the
 system understandable. It allows the project to support all four requested
-applications while still admitting that OneDrive scheduled tasks, Teams startup
-entries, ownCloud process behavior and Outlook/Office task behavior may need
+target areas while still admitting that OneDrive scheduled tasks, Teams startup
+entries, ownCloud process behavior and Microsoft Office task behavior may need
 different treatment.
 
 BootProfile Switcher runs before normal user workflows. Startup configuration
@@ -104,11 +107,14 @@ Dry-run behavior should be the first validation phase. Real changes should be
 enabled only after the inventory and planned changes are reviewed.
 
 The project should document per-application capability notes for Teams,
-OneDrive, ownCloud and Outlook. These notes should distinguish implemented
-control, dry-run-only classification and intentionally unsupported behavior.
+OneDrive, ownCloud and Microsoft Office. These notes should distinguish
+implemented control, dry-run-only classification and intentionally unsupported
+behavior.
 
-The module must not disable broad Microsoft Office, Windows Update or vendor
-tasks merely because their names are adjacent to a requested application.
+The module may control explicitly allow-listed Microsoft Office startup and
+update tasks when they are intentionally in scope, including Office
+Click-to-Run or Office update startup behavior. It must not disable arbitrary
+Windows Update, vendor or unrelated scheduled tasks through broad name matching.
 
 Running process termination remains a high-caution behavior. It should not be
 implemented as implicit cleanup unless later validation proves that it is safe,
