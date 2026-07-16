@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Project Status**
 >
-> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`), the Service and Startup Control Discovery milestone (`v1.4.0`), the Service Control for Windows Search milestone (`v1.5.0`) and the Startup and User-Application Control milestone (`v1.6.0`).
+> BootProfile Switcher has completed the Architecture milestone (`v0.2.0`), the Boot Profile Detection Proof of Concept (`v0.3.0`), the Boot Profile Detection milestone (`v0.4.0`), the Profile Engine milestone (`v0.5.0`), the Module System milestone (`v0.6.0`), the Configuration milestone (`v0.7.0`), the Integration milestone (`v0.8.0`), the Validation milestone (`v0.9.0`), the Initial Stable Release milestone (`v1.0.0`), the Network Isolation milestone (`v1.1.0`), the Configuration Format v2 milestone (`v1.2.0`), the Boot Menu From Configuration milestone (`v1.3.0`), the Service and Startup Control Discovery milestone (`v1.4.0`), the Service Control for Windows Search milestone (`v1.5.0`), the Startup and User-Application Control milestone (`v1.6.0`) and the Machine-Wide Runtime and Deployment milestone (`v1.7.0`).
 >
-> The `v1.6.0 - Startup and User-Application Control` milestone is complete. This release implements allow-listed control for Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot and the discovered AnyDesk service, including dry-run planning, real apply, baseline restore and elevation preflights.
+> The `v1.7.0 - Machine-Wide Runtime and Deployment` milestone is complete. This release provides an MDT-compatible local ProgramData runtime, unattended deployment and removal entry points, explicit boot-menu management, restore-aware multi-user cleanup and validated LocalSystem operation.
 
 ## Overview
 
@@ -361,7 +361,7 @@ BootProfile Switcher follows Semantic Versioning.
 The latest completed project milestone is:
 
 ```text
-1.6.0 Startup and User-Application Control
+1.7.0 Machine-Wide Runtime and Deployment
 ```
 
 ## Validation

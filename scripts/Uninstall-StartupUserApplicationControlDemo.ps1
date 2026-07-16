@@ -3,21 +3,24 @@
 Removes the Startup and User-Application Control module demonstration.
 
 .DESCRIPTION
-Removes the startup hook and managed demo boot entry created by
-Install-StartupUserApplicationControlDemo.ps1. If a ProgramData profile
-configuration backup exists, it is restored so the demo does not permanently
-replace the previous configuration.
+Removes the Startup and User-Application Control demonstration through the
+installed machine-wide deployment uninstaller. The standard removal restores
+machine baselines, schedules each affected user's HKCU baseline restore at the
+next logon, and removes only the startup hook and managed boot-menu entries.
+It intentionally retains the user-logon hook until every affected user has
+completed their restore.
 
-If a startup-user-application-control lifecycle state file exists, the script
-invokes the profile engine with an unmanaged resolver state before removing the
-demo infrastructure. This restores the learned startup baseline after the real
-demo profile has applied startup changes.
+Use -FinalizeUserRestore only after reviewing that completion evidence. It
+removes the remaining user-logon hook in a separate final-cleanup run. If a
+ProgramData profile configuration backup exists, it is restored so the demo
+does not permanently replace the previous configuration.
 #>
 
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
     [switch]$KeepStateFile,
-    [switch]$KeepConfiguration
+    [switch]$KeepConfiguration,
+    [switch]$FinalizeUserRestore
 )
 
 Set-StrictMode -Version Latest
@@ -33,126 +36,33 @@ if (-not (Test-Administrator)) {
     throw 'This script must be run from an elevated PowerShell session.'
 }
 
-$sourceRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
-$runtimeRoot = Join-Path $env:ProgramData 'BootProfileSwitcher\runtime'
-$repoRoot = if (Test-Path (Join-Path $runtimeRoot 'scripts\Invoke-ProfileEngine.ps1')) { $runtimeRoot } else { $sourceRoot }
-$stateDir = Join-Path $repoRoot 'state'
-$stateFile = Join-Path $stateDir 'boot-menu.json'
-$uninstallStartupHookScript = Join-Path $repoRoot 'scripts\Uninstall-StartupHook.ps1'
-$uninstallUserLogonHookScript = Join-Path $repoRoot 'scripts\Uninstall-UserLogonHook.ps1'
-$profileEngineScript = Join-Path $repoRoot 'scripts\Invoke-ProfileEngine.ps1'
-$logDir = Join-Path $repoRoot 'logs'
-$configSource = Join-Path $repoRoot 'config\demos\startup-user-application-control.json'
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-startup-user-application-control-demo.json'
-$startupUserApplicationControlStatePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\startup-user-application-control-state.json'
+$deploymentUninstaller = Join-Path $env:ProgramData 'BootProfileSwitcher\runtime\scripts\Uninstall-BootProfileSwitcherDeployment.ps1'
+$demoRestoreConfiguration = Join-Path $env:ProgramData 'BootProfileSwitcher\runtime\config\demos\startup-user-application-control.json'
 
-function Invoke-StartupUserApplicationControlDemoRestore {
-    if (-not (Test-Path $startupUserApplicationControlStatePath)) {
-        Write-Host "No Startup and User-Application Control lifecycle state found at $startupUserApplicationControlStatePath"
-        return
-    }
-
-    if (-not (Test-Path $profileEngineScript)) {
-        Write-Warning "Cannot restore Startup and User-Application Control baseline because profile engine is missing: $profileEngineScript"
-        return
-    }
-
-    $restoreConfigPaths = @()
-
-    if (Test-Path $configDestination) {
-        $restoreConfigPaths += $configDestination
-    }
-
-    if ((Test-Path $configSource) -and ($restoreConfigPaths -notcontains $configSource)) {
-        $restoreConfigPaths += $configSource
-    }
-
-    if ($restoreConfigPaths.Count -eq 0) {
-        Write-Warning "Cannot restore Startup and User-Application Control baseline because no usable profile configuration was found."
-        return
-    }
-
-    New-Item -ItemType Directory -Path $stateDir -Force | Out-Null
-    New-Item -ItemType Directory -Path $logDir -Force | Out-Null
-
-    $restoreResolverStatePath = Join-Path $stateDir 'startup-user-application-control-demo-uninstall-resolver.json'
-    $restoreResolverState = [ordered]@{
-        schemaVersion = 1
-        generatedAt = (Get-Date).ToString('o')
-        detected = $false
-        profileId = $null
-        mode = 'unmanaged'
-        name = 'Unmanaged Windows startup'
-        identifier = 'unmanaged'
-        source = 'startup-user-application-control-demo-uninstall'
-        description = 'Startup and User-Application Control demo uninstall restore'
-        currentIdentifier = $null
-        outputPath = $restoreResolverStatePath
-        stateFile = $stateFile
-        error = $null
-    }
-
-    $restoreResolverState | ConvertTo-Json -Depth 5 | Set-Content -Path $restoreResolverStatePath -Encoding UTF8
-
-    foreach ($restoreConfigPath in $restoreConfigPaths) {
-        Write-Host "Restoring Startup and User-Application Control baseline before removing demo infrastructure using $restoreConfigPath..."
-        $engineJson = & powershell.exe `
-            -NoProfile `
-            -ExecutionPolicy Bypass `
-            -File $profileEngineScript `
-            -ResolverStatePath $restoreResolverStatePath `
-            -LogDir $logDir `
-            -ConfigPath $restoreConfigPath
-
-        $engineResult = ($engineJson | Out-String).Trim() | ConvertFrom-Json
-
-        if (-not [bool]$engineResult.configurationValid) {
-            Write-Warning "Startup and User-Application Control baseline restore did not run because this profile configuration is invalid: $restoreConfigPath"
-            foreach ($configurationError in @($engineResult.configurationErrors)) {
-                Write-Warning "- $configurationError"
-            }
-            continue
-        }
-
-        $moduleExecuted = @($engineResult.modulesExecuted | Where-Object { $_.name -eq 'startup-user-application-control' }).Count -gt 0
-
-        if ($moduleExecuted) {
-            Write-Host 'Startup and User-Application Control baseline restore path completed.'
-            return
-        }
-    }
-
-    Write-Warning 'Startup and User-Application Control baseline restore path did not execute; startup surfaces may need manual review.'
+if (-not (Test-Path $deploymentUninstaller)) {
+    throw "Installed deployment uninstaller not found: $deploymentUninstaller"
 }
 
-Invoke-StartupUserApplicationControlDemoRestore
-
-& $uninstallStartupHookScript
-& $uninstallUserLogonHookScript
-
-if (Test-Path $stateFile) {
-    $state = Get-Content -Path $stateFile -Raw | ConvertFrom-Json
-
-    foreach ($entry in @($state.entries)) {
-        if ($PSCmdlet.ShouldProcess($entry.identifier, "Delete demo boot entry $($entry.name)")) {
-            try {
-                & bcdedit /delete ([string]$entry.identifier) /f | Out-Null
-                Write-Host "Deleted demo boot entry $($entry.name) ($($entry.identifier))."
-            } catch {
-                Write-Warning "Could not delete demo boot entry $($entry.identifier): $($_.Exception.Message)"
-            }
-        }
+$uninstallArguments = @('-RemoveStartupHook', '-RemoveBootMenu', '-AsJson')
+if ($FinalizeUserRestore) {
+    $uninstallArguments += @('-RemoveUserLogonHook', '-Force')
+}
+else {
+    if (-not (Test-Path $demoRestoreConfiguration)) {
+        throw "Installed demo restore configuration not found: $demoRestoreConfiguration"
     }
+    $uninstallArguments += @('-RestoreMachineBaselines', '-ScheduleUserBaselineRestore', '-UserBaselineRestoreConfigPath', $demoRestoreConfiguration)
+}
 
-    if (-not $KeepStateFile) {
-        $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-        $archivedStateFile = Join-Path $stateDir "boot-menu.removed-startup-user-application-control-demo-$timestamp.json"
-        Move-Item -Path $stateFile -Destination $archivedStateFile -Force
-        Write-Host "Archived state file: $archivedStateFile"
-    }
-} else {
-    Write-Warning "No managed BootProfile Switcher state file found at $stateFile"
+$result = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $deploymentUninstaller @uninstallArguments
+if ($LASTEXITCODE -ne 0) {
+    throw "Startup and User-Application Control demo removal failed with exit code ${LASTEXITCODE}: $($result | Out-String)"
+}
+
+if ($KeepStateFile) {
+    Write-Warning 'KeepStateFile is retained for compatibility but managed boot-menu state is archived by the central uninstaller.'
 }
 
 if (-not $KeepConfiguration) {
@@ -166,7 +76,11 @@ if (-not $KeepConfiguration) {
     }
 }
 
-& bcdedit /displayorder '{current}' /addfirst | Out-Null
-& bcdedit /timeout 0 | Out-Null
-
-Write-Host 'Startup and User-Application Control demo removed.'
+if ($FinalizeUserRestore) {
+    Write-Host 'Startup and User-Application Control demo final cleanup completed.'
+}
+else {
+    Write-Host 'Machine baseline restore and per-user baseline restore scheduling completed.'
+    Write-Host 'Keep the User-Logon hook installed until all affected users have logged on and their completion evidence has been reviewed.'
+    Write-Host 'Then rerun this script with -FinalizeUserRestore to remove that hook.'
+}

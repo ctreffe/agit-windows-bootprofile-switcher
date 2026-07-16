@@ -6,6 +6,8 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+## [v1.7.0] - 2026-07-16
+
 ### Added
 
 - Define the planned v1.7.0 MDT-compatible machine deployment model, including local runtime ownership, unattended parameters, explicit boot-menu opt-in, exit codes and validation criteria.
@@ -23,11 +25,17 @@ This project follows Semantic Versioning.
   representative local `LocalSystem` context.
 - Validate a later logon by a second user, including the user-scoped completion
   marker, local runtime hook action and final multi-user cleanup.
+- Route the remaining active demo removals through the installed machine-wide
+  deployment uninstaller, including the two-stage per-user baseline cleanup
+  for the Startup and User-Application Control demonstration.
 
 ### Fixed
 
 - Allow managed boot-menu replacement when the current schema-v2 state entry
   does not contain the legacy optional `mode` property.
+- Preserve the Startup and User-Application Control demo's module settings for
+  pending user restoration after its previous ProgramData configuration is
+  restored.
 
 ## [v1.6.0] - 2026-07-12
 

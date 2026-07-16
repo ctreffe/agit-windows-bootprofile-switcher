@@ -26,6 +26,8 @@ param(
 
     [switch]$ScheduleUserBaselineRestore,
 
+    [string]$UserBaselineRestoreConfigPath,
+
     [switch]$RemoveConfiguration,
 
     [switch]$RemoveMachineState,
@@ -111,6 +113,7 @@ function Write-UninstallResult {
         bootMenuRequested = [bool]$RemoveBootMenu
         machineBaselineRestoreRequested = [bool]$RestoreMachineBaselines
         userBaselineRestoreScheduled = [bool]$ScheduleUserBaselineRestore
+        userBaselineRestoreConfigurationPath = $UserBaselineRestoreConfigPath
         configurationRemovalRequested = [bool]$RemoveConfiguration
         machineStateRemovalRequested = [bool]$RemoveMachineState
         runtimeRemovalRequested = [bool]$RemoveRuntime
@@ -157,6 +160,10 @@ try {
 
     if ($ScheduleUserBaselineRestore -and $RemoveUserLogonHook) {
         Set-Failure -ExitCode 1 -Message 'Do not remove the user-logon hook while scheduling per-user baseline restoration.'
+    }
+
+    if ($UserBaselineRestoreConfigPath -and -not $ScheduleUserBaselineRestore) {
+        Set-Failure -ExitCode 1 -Message 'UserBaselineRestoreConfigPath requires ScheduleUserBaselineRestore.'
     }
 
     if (($RemoveConfiguration -or $RemoveMachineState) -and -not $Force) {
@@ -255,7 +262,11 @@ try {
 
     if ($ScheduleUserBaselineRestore) {
         Invoke-UninstallStep -Name 'user-baseline-restore-scheduled' -ExitCode 5 -Action {
-            $scheduleOutput = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $userRestoreStarter -AsJson
+            $scheduleArguments = @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $userRestoreStarter, '-AsJson')
+            if ($UserBaselineRestoreConfigPath) {
+                $scheduleArguments += @('-ConfigPath', $UserBaselineRestoreConfigPath)
+            }
+            $scheduleOutput = & powershell.exe @scheduleArguments
             if ($LASTEXITCODE -ne 0) { throw "User baseline restore scheduling failed with exit code ${LASTEXITCODE}: $($scheduleOutput | Out-String)" }
         }
     }

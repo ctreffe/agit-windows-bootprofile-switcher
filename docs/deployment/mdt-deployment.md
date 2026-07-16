@@ -141,6 +141,7 @@ Its parameter surface is:
 -RemoveBootMenu                    Remove entries recorded in managed state
 -RestoreMachineBaselines           Restore machine baselines before removal
 -ScheduleUserBaselineRestore       Keep the user hook and restore HKCU baselines at next logon
+-UserBaselineRestoreConfigPath     Optional retained configuration for the pending HKCU restore
 -RemoveConfiguration               Remove ProgramData configuration after validation (requires -Force)
 -RemoveMachineState                Remove ProgramData lifecycle state after validation (requires -Force)
 -RemoveRuntime                     Schedule external runtime removal (requires -Force; separate final run)
@@ -270,6 +271,19 @@ User-Logon task returned code `0`, and its registered action used the local
 ProgramData runtime. The original user subsequently completed the same restore
 ID. The user hook, configuration and machine state were then removed, followed
 by successful external runtime removal.
+
+Release-close validation also exercised the active Config-Driven Boot Menu and
+Startup and User-Application Control demo uninstallers against a clean local
+machine state. Both demo installations and their central removal paths returned
+code `0`. This exposed and corrected one ordering defect: restoring the demo's
+previous ProgramData configuration before the next user logon left the pending
+user restore without its module settings. The central uninstaller now accepts
+an explicit retained restore-configuration path; the user-application demo
+uses its installed runtime copy. The real user-logon hook then returned code
+`0`, recorded the user's completion marker, and its explicit final-cleanup run
+removed the remaining hook. A final external-runtime cleanup returned
+`succeeded: true`; no managed tasks, boot-menu entries, runtime, configuration
+or machine state remained.
 
 ## Relationship to Existing Components
 

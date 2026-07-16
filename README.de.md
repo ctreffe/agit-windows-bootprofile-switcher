@@ -18,9 +18,9 @@
 > [!NOTE]
 > **Projektstatus**
 >
-> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`), den Meilenstein Service and Startup Control Discovery (`v1.4.0`), den Meilenstein Service Control for Windows Search (`v1.5.0`) und den Meilenstein Startup and User-Application Control (`v1.6.0`) abgeschlossen.
+> BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`), den Meilenstein Service and Startup Control Discovery (`v1.4.0`), den Meilenstein Service Control for Windows Search (`v1.5.0`), den Meilenstein Startup and User-Application Control (`v1.6.0`) und den Meilenstein Machine-Wide Runtime and Deployment (`v1.7.0`) abgeschlossen.
 >
-> Der Meilenstein `v1.6.0 - Startup and User-Application Control` ist abgeschlossen. Dieser Release implementiert allowlist-basierte Control fuer Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot und den ermittelten AnyDesk-Dienst, inklusive Dry-run-Planung, realem Apply, Baseline-Restore und Elevation-Preflights.
+> Der Meilenstein `v1.7.0 - Machine-Wide Runtime and Deployment` ist abgeschlossen. Dieser Release bietet eine MDT-kompatible lokale ProgramData-Runtime, unbeaufsichtigte Deployment- und Removal-Einstiegspunkte, explizite Bootmenüverwaltung, restore-fähiges Multi-User-Cleanup und validierten LocalSystem-Betrieb.
 
 ## Überblick
 
@@ -381,7 +381,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.6.0 Startup and User-Application Control
+1.7.0 Machine-Wide Runtime and Deployment
 ```
 
 ## Validierung

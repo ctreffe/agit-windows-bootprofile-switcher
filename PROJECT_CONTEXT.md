@@ -20,15 +20,16 @@ The project focuses on a modular architecture, deterministic behavior and enterp
 
 ## Last Completed Milestone
 
-**v1.6.0 - Startup and User-Application Control**
+**v1.7.0 - Machine-Wide Runtime and Deployment**
 
-The Startup and User-Application Control milestone is complete.
+The Machine-Wide Runtime and Deployment milestone is complete.
 
 ## Current Focus
 
-Prepare **v1.7.0 - Machine-Wide Runtime and Deployment**.
+Prepare **v1.8.0 - Policy and Vendor Control Discovery** for Windows Update
+and Bitdefender.
 
-The v1.7.0 deployment model is now specified in
+The completed v1.7.0 deployment model is specified in
 `docs/deployment/mdt-deployment.md`. It defines unattended MDT Task Sequence
 deployment as `LocalSystem`, a fully local ProgramData runtime, separated
 runtime and configuration updates, explicit boot-menu opt-in, idempotent
@@ -79,6 +80,18 @@ completed: a later logon by `GWDG\0ctreffe` wrote its own completion marker for
 the pending restore, the User-Logon task returned code 0 and its action used
 the local ProgramData runtime. The original user subsequently completed the
 same restore ID; final cleanup and external runtime removal then succeeded.
+
+Release-close validation additionally exercised the active Config-Driven Boot
+Menu and Startup and User-Application Control demo removal paths on a clean
+local machine state. Both installs and central removals returned code 0. This
+identified an ordering defect in the user-application demo: restoring its
+previous ProgramData configuration before user logon removed the pending
+restore's module settings. The central uninstaller now accepts a retained
+restore configuration path, and the demo supplies its installed runtime copy.
+The real user-logon hook then returned code 0, wrote the completion marker and
+the explicit finalization removed the remaining hook. A final worker cleanup
+reported `succeeded: true`; no BootProfile Switcher tasks, managed boot-menu
+entries, runtime, configuration or machine state remained.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
@@ -687,21 +700,17 @@ Key principles include:
 
 # Next Immediate Task
 
-Prepare **v1.7.0 - Machine-Wide Runtime and Deployment**.
+Prepare **v1.8.0 - Policy and Vendor Control Discovery**.
 
 Primary objective:
 
-Standardize the active BootProfile Switcher runtime under
-`%ProgramData%\BootProfileSwitcher` across the relevant installers,
-uninstallers, hooks and status tools. Remove dependencies on a particular
-repository checkout or Windows user profile, then validate the multi-user/AD
-deployment model.
+Identify supported Windows policy/management and Bitdefender vendor or
+enterprise control surfaces before considering any production control module.
 
 Immediate follow-up roadmap:
 
-After v1.7.0, start **v1.8.0 - Policy and Vendor Control Discovery** for
-Windows Update and Bitdefender. Establish supported Windows policy/management
-and Bitdefender vendor/enterprise control surfaces before any implementation.
+Windows Search per-drive indexing refinement and Network Isolation hardening
+remain later candidates after the v1.8.0 discovery milestone.
 
 ---
 

@@ -27,25 +27,22 @@ if (-not (Test-Administrator)) {
     throw 'This script must be run from an elevated PowerShell session.'
 }
 
-$repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-config-driven-boot-menu-demo.json'
-$uninstallStartupHookScript = Join-Path $repoRoot 'scripts\Uninstall-StartupHook.ps1'
-$uninstallBootMenuScript = Join-Path $repoRoot 'scripts\Uninstall-BootProfileMenu.ps1'
+$deploymentUninstaller = Join-Path $env:ProgramData 'BootProfileSwitcher\runtime\scripts\Uninstall-BootProfileSwitcherDeployment.ps1'
 
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $uninstallStartupHookScript
-
-$bootMenuArguments = @(
-    '-NoProfile',
-    '-ExecutionPolicy', 'Bypass',
-    '-File', $uninstallBootMenuScript
-)
-
-if ($KeepStateFile) {
-    $bootMenuArguments += '-KeepStateFile'
+if (-not (Test-Path $deploymentUninstaller)) {
+    throw "Installed deployment uninstaller not found: $deploymentUninstaller"
 }
 
-& powershell.exe @bootMenuArguments
+$result = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $deploymentUninstaller -RemoveStartupHook -RemoveBootMenu -AsJson
+if ($LASTEXITCODE -ne 0) {
+    throw "Config-driven boot menu demo removal failed with exit code ${LASTEXITCODE}: $($result | Out-String)"
+}
+
+if ($KeepStateFile) {
+    Write-Warning 'KeepStateFile is retained for compatibility but managed boot-menu state is archived by the central uninstaller.'
+}
 
 if (-not $KeepConfiguration) {
     if (Test-Path $configBackup) {
