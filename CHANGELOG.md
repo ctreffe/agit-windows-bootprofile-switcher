@@ -10,6 +10,7 @@ This project follows Semantic Versioning.
 
 - Define the planned v1.7.0 MDT-compatible machine deployment model, including local runtime ownership, unattended parameters, explicit boot-menu opt-in, exit codes and validation criteria.
 - Add the first non-interactive deployment entry point for machine-wide runtime, validated configuration and scheduled-hook installation.
+- Add explicit non-interactive managed boot-menu installation and replacement through the deployment entry point.
 
 ## [v1.6.0] - 2026-07-12
 

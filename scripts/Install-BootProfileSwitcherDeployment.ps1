@@ -6,7 +6,8 @@ Installs the machine-wide BootProfile Switcher runtime for unattended deployment
 Provides the first v1.7.0 deployment path for MDT and similar tools. The
 script copies the runtime to ProgramData, optionally validates and installs a
 profile configuration, then optionally registers the machine startup and
-user-logon hooks. It never prompts for input and does not manage BCD entries.
+user-logon hooks. An explicit option can also install managed BCD entries. It
+never prompts for input.
 
 The source directory is supplied explicitly so the script works from an MDT
 package location without depending on its current working directory. After a
@@ -23,6 +24,10 @@ param(
     [switch]$InstallStartupHook,
 
     [switch]$InstallUserLogonHook,
+
+    [switch]$InstallBootMenu,
+
+    [switch]$CleanupExistingBootMenu,
 
     [switch]$Force,
 
@@ -135,7 +140,8 @@ function Write-DeploymentResult {
         [bool]$Succeeded,
         [int]$ExitCode,
         [string]$ErrorMessage,
-        [string]$ConfigurationAction
+        [string]$ConfigurationAction,
+        [string]$BootMenuAction
     )
 
     $result = [ordered]@{
@@ -149,6 +155,9 @@ function Write-DeploymentResult {
         configurationAction = $ConfigurationAction
         startupHookRequested = [bool]$InstallStartupHook
         userLogonHookRequested = [bool]$InstallUserLogonHook
+        bootMenuRequested = [bool]$InstallBootMenu
+        cleanupExistingBootMenuRequested = [bool]$CleanupExistingBootMenu
+        bootMenuAction = $BootMenuAction
         actions = @($actions)
         error = $ErrorMessage
     }
@@ -161,8 +170,13 @@ function Write-DeploymentResult {
 }
 
 $configurationAction = 'not-requested'
+$bootMenuAction = 'not-requested'
 
 try {
+    if ($CleanupExistingBootMenu -and -not $InstallBootMenu) {
+        Set-Failure -ExitCode 1 -Message '-CleanupExistingBootMenu requires -InstallBootMenu.'
+    }
+
     # Resolve-Path participates in PowerShell WhatIf handling on some systems.
     # Path.GetFullPath keeps validation read-only and therefore makes WhatIf a
     # useful complete deployment preview.
@@ -206,6 +220,14 @@ try {
         }
     }
 
+    if ($InstallBootMenu -and -not $ConfigurationPath) {
+        if (-not (Test-Path -LiteralPath $installedConfigurationPath)) {
+            Set-Failure -ExitCode 1 -Message "Boot-menu installation requires an installed configuration at $installedConfigurationPath or an explicit -ConfigurationPath."
+        }
+
+        Test-ConfigurationFile -ValidatorScript $sourceValidator -Path $installedConfigurationPath
+    }
+
     if ($WhatIfPreference) {
         $actions.Add('would-install-or-update-runtime')
         if ($configurationAction -in @('install', 'replace')) {
@@ -217,8 +239,12 @@ try {
         if ($InstallUserLogonHook) {
             $actions.Add('would-install-user-logon-hook')
         }
+        if ($InstallBootMenu) {
+            $bootMenuAction = if ($CleanupExistingBootMenu) { 'replace-managed-entries' } else { 'install-managed-entries' }
+            $actions.Add("would-$bootMenuAction")
+        }
 
-        Write-DeploymentResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -ConfigurationAction $configurationAction
+        Write-DeploymentResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -ConfigurationAction $configurationAction -BootMenuAction $bootMenuAction
         exit 0
     }
 
@@ -265,8 +291,34 @@ try {
         }
     }
 
-    Write-DeploymentLog -Message "deployment-success actions=$(@($actions) -join ',') configurationAction=$configurationAction"
-    Write-DeploymentResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -ConfigurationAction $configurationAction
+    if ($InstallBootMenu) {
+        $bootMenuInstaller = Join-Path $runtimeRoot 'scripts\Install-BootProfileMenu.ps1'
+        if (-not (Test-Path -LiteralPath $bootMenuInstaller)) {
+            Set-Failure -ExitCode 2 -Message "Installed boot-menu installer not found: $bootMenuInstaller"
+        }
+
+        # The underlying installer treats -Force without cleanup as a safe
+        # non-interactive failure when managed entries already exist. Passing
+        # it here prevents an MDT task from ever reaching its local prompt.
+        $bootMenuParameters = @{
+            ConfigPath = $installedConfigurationPath
+            Force = $true
+        }
+        if ($CleanupExistingBootMenu) {
+            $bootMenuParameters.CleanupExisting = $true
+            $bootMenuAction = 'replace-managed-entries'
+        }
+        else {
+            $bootMenuAction = 'install-managed-entries'
+        }
+
+        Invoke-DeploymentStep -Name "boot-menu-$bootMenuAction" -ExitCode 4 -Action {
+            & $bootMenuInstaller @bootMenuParameters
+        }
+    }
+
+    Write-DeploymentLog -Message "deployment-success actions=$(@($actions) -join ',') configurationAction=$configurationAction bootMenuAction=$bootMenuAction"
+    Write-DeploymentResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -ConfigurationAction $configurationAction -BootMenuAction $bootMenuAction
     exit 0
 }
 catch {
@@ -285,6 +337,7 @@ catch {
         -Succeeded $false `
         -ExitCode $script:failureExitCode `
         -ErrorMessage $message `
-        -ConfigurationAction $configurationAction
+        -ConfigurationAction $configurationAction `
+        -BootMenuAction $bootMenuAction
     exit $script:failureExitCode
 }

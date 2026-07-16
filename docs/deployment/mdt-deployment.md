@@ -4,9 +4,9 @@
 
 In progress for v1.7.0 - Machine-Wide Runtime and Deployment.
 
-The first implementation step provides the non-interactive runtime,
-configuration and scheduled-hook deployment path. Boot-menu deployment and
-the dedicated unattended uninstaller remain planned follow-up steps.
+The current implementation provides the non-interactive runtime,
+configuration, scheduled-hook and explicit boot-menu deployment path. The
+dedicated unattended uninstaller remains a planned follow-up step.
 
 ## Purpose
 
@@ -60,15 +60,18 @@ Its planned parameter surface is:
 -ConfigurationPath <path>          Optional profile configuration to validate and install
 -InstallStartupHook                Register the SYSTEM startup hook
 -InstallUserLogonHook              Register the built-in-Users logon hook
+-InstallBootMenu                   Explicitly manage BCD entries
+-CleanupExistingBootMenu           Replace only known managed BCD entries
 -Force                             Permit documented replacement operations
 -WhatIf                            Report planned changes without changing the machine
 -AsJson                            Emit the deployment result as JSON
 ```
 
-`-InstallBootMenu` and `-CleanupExistingBootMenu` remain planned parameters
-for the following BCD-specific implementation step. They are intentionally not
-part of the initial deployment script so file, configuration and hook behavior
-can be validated without changing BCD.
+Boot-menu deployment is explicit. If known managed entries already exist, a
+non-interactive deployment fails unless `-CleanupExistingBootMenu` is supplied.
+The replacement path passes `-CleanupExisting -Force` to the local boot-menu
+installer, which removes only managed entries recorded or recognized by that
+installer before creating the configured replacement entries.
 
 ### MDT Task Sequence Command
 
@@ -83,6 +86,12 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTROOT%\scripts\In
 `-Force` makes repeated deployment replace a previously installed, different
 managed configuration. Omit `-ConfigurationPath` when updating only runtime
 files and hooks while deliberately retaining the existing machine policy.
+
+For a deliberate managed boot-menu replacement, append:
+
+```text
+-InstallBootMenu -CleanupExistingBootMenu
+```
 
 The normal MDT runtime deployment installs or updates the local runtime, then
 optionally installs a supplied configuration and hooks. `-InstallBootMenu` is
@@ -168,7 +177,8 @@ target or equivalent `LocalSystem` deployment context:
    that the user-logon hook uses the local runtime and handles only that user's
    `HKCU` state.
 5. Explicit boot-menu installation and replacement, confirming that only
-   recorded managed entries are changed.
+   recorded managed entries are changed and that an existing menu without the
+   cleanup option fails without prompting.
 6. Explicit uninstall and module baseline restore, confirming that managed
    infrastructure is removed and unrelated system state remains intact.
 
