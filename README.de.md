@@ -418,7 +418,8 @@ Zentrale Projektdokumente:
 - [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
-- [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – geplantes MDT-kompatibles Deployment-Modell
+- [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – technisches MDT-kompatibles Deployment-Modell
+- [docs/deployment/mdt-administrator-guide.de.md](docs/deployment/mdt-administrator-guide.de.md) – Praxisanleitung für MDT-Administratoren: Bereitstellung, Update und Entfernung
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control

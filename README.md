@@ -398,7 +398,8 @@ Core project documents:
 - [CODEX.md](CODEX.md) – local Codex operating policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
-- [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – planned MDT-compatible deployment model
+- [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – MDT-compatible deployment model and technical reference
+- [docs/deployment/mdt-administrator-guide.md](docs/deployment/mdt-administrator-guide.md) – practical administrator guide for MDT deployment, updates and removal
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – Configuration Format v2 documentation
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – German Configuration Format v2 documentation
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow

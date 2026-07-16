@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress for v1.7.0 - Machine-Wide Runtime and Deployment.
+Implemented and validated for v1.7.0 - Machine-Wide Runtime and Deployment.
 
 The current implementation provides non-interactive runtime, configuration,
 scheduled-hook and explicit boot-menu deployment, plus restore-aware,
@@ -12,8 +12,9 @@ unattended removal and final external-runtime cleanup.
 
 This document defines the intended unattended deployment model for BootProfile
 Switcher when it is installed by Microsoft Deployment Toolkit (MDT). It is an
-implementation specification for the v1.7.0 deployment entry points; it does
-not claim that those entry points exist yet.
+technical reference for the v1.7.0 deployment entry points. For practical
+administrator workflows, see the [English guide](mdt-administrator-guide.md)
+or the [German guide](mdt-administrator-guide.de.md).
 
 The design supports an MDT Task Sequence running as `LocalSystem`. It must not
 depend on an interactive desktop, a particular Windows user, a mapped drive or
@@ -47,11 +48,11 @@ The installed production configuration is a separate, validated input. This
 allows a runtime update without replacing site-specific profile policy, and a
 configuration update without replacing executable runtime code.
 
-## Planned Deployment Entry Point
+## Deployment Entry Point
 
-v1.7.0 introduces a machine deployment script named
-`Install-BootProfileSwitcherDeployment.ps1`. It is intended for MDT and other
-unattended software-deployment tools.
+v1.7.0 provides a machine deployment script named
+`Install-BootProfileSwitcherDeployment.ps1` for MDT and other unattended
+software-deployment tools.
 
 Its planned parameter surface is:
 
