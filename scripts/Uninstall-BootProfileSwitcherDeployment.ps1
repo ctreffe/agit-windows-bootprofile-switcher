@@ -30,6 +30,8 @@ param(
 
     [switch]$RemoveMachineState,
 
+    [switch]$RemoveRuntime,
+
     [switch]$Force,
 
     [switch]$AsJson
@@ -45,6 +47,7 @@ $bootMenuStatePath = Join-Path $runtimeRoot 'state\boot-menu.json'
 $configurationRoot = Join-Path $machineRoot 'config'
 $machineStateRoot = Join-Path $machineRoot 'state'
 $pendingUserRestorePath = Join-Path $machineStateRoot 'pending-user-baseline-restore.json'
+$runtimeRemovalResultPath = Join-Path $machineRoot 'runtime-removal-result.json'
 $script:failureExitCode = 1
 $actions = [System.Collections.Generic.List[string]]::new()
 
@@ -110,6 +113,7 @@ function Write-UninstallResult {
         userBaselineRestoreScheduled = [bool]$ScheduleUserBaselineRestore
         configurationRemovalRequested = [bool]$RemoveConfiguration
         machineStateRemovalRequested = [bool]$RemoveMachineState
+        runtimeRemovalRequested = [bool]$RemoveRuntime
         bootMenuAction = $BootMenuAction
         actions = @($actions)
         error = $ErrorMessage
@@ -126,7 +130,7 @@ function Write-UninstallResult {
 $bootMenuAction = 'not-requested'
 
 try {
-    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore -or $RemoveConfiguration -or $RemoveMachineState)) {
+    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore -or $RemoveConfiguration -or $RemoveMachineState -or $RemoveRuntime)) {
         Set-Failure -ExitCode 1 -Message 'Specify at least one removal option.'
     }
 
@@ -135,6 +139,7 @@ try {
     $bootMenuUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-BootProfileMenu.ps1'
     $machineRestoreScript = Join-Path $runtimeRoot 'scripts\Restore-BootProfileSwitcherMachineBaselines.ps1'
     $userRestoreStarter = Join-Path $runtimeRoot 'scripts\Start-BootProfileSwitcherUserBaselineRestore.ps1'
+    $runtimeRemovalWorker = Join-Path $runtimeRoot 'scripts\Remove-BootProfileSwitcherRuntimeWorker.ps1'
 
     foreach ($scriptPath in @($startupHookUninstaller, $userLogonHookUninstaller, $bootMenuUninstaller)) {
         if (-not (Test-Path -LiteralPath $scriptPath)) {
@@ -156,6 +161,24 @@ try {
 
     if (($RemoveConfiguration -or $RemoveMachineState) -and -not $Force) {
         Set-Failure -ExitCode 1 -Message 'Removing configuration or machine state requires -Force after restore validation.'
+    }
+
+    if ($RemoveRuntime) {
+        if (-not $Force) {
+            Set-Failure -ExitCode 1 -Message 'Removing the runtime requires -Force after final cleanup validation.'
+        }
+        if ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore -or $RemoveConfiguration -or $RemoveMachineState) {
+            Set-Failure -ExitCode 1 -Message 'RemoveRuntime must run separately after all other cleanup operations have completed.'
+        }
+        if (-not (Test-Path -LiteralPath $runtimeRemovalWorker)) {
+            Set-Failure -ExitCode 1 -Message "Runtime removal worker not found: $runtimeRemovalWorker"
+        }
+        if ($null -ne (Get-ScheduledTask -TaskName 'BootProfileSwitcher-StartupHook' -ErrorAction SilentlyContinue) -or $null -ne (Get-ScheduledTask -TaskName 'BootProfileSwitcher-UserLogonHook' -ErrorAction SilentlyContinue)) {
+            Set-Failure -ExitCode 1 -Message 'Remove both managed hooks before removing the runtime.'
+        }
+        if ((Test-Path -LiteralPath $bootMenuStatePath) -or (Test-Path -LiteralPath $pendingUserRestorePath) -or (Test-Path -LiteralPath $configurationRoot) -or (Test-Path -LiteralPath $machineStateRoot)) {
+            Set-Failure -ExitCode 1 -Message 'Remove managed boot-menu state, pending user restore, configuration and machine state before removing the runtime.'
+        }
     }
 
     if ($RemoveUserLogonHook -and (Test-Path -LiteralPath $pendingUserRestorePath) -and -not $Force) {
@@ -202,6 +225,7 @@ try {
         }
         if ($RemoveConfiguration) { $actions.Add('would-remove-configuration') }
         if ($RemoveMachineState) { $actions.Add('would-remove-machine-state') }
+        if ($RemoveRuntime) { $actions.Add('would-schedule-runtime-removal-worker') }
 
         Write-UninstallResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -BootMenuAction $bootMenuAction
         exit 0
@@ -266,6 +290,16 @@ try {
     if ($RemoveMachineState -and (Test-Path -LiteralPath $machineStateRoot)) {
         Invoke-UninstallStep -Name 'machine-state-removed' -ExitCode 5 -Action {
             Remove-Item -LiteralPath $machineStateRoot -Recurse -Force
+        }
+    }
+
+    if ($RemoveRuntime) {
+        $workerDirectory = Join-Path $env:TEMP "BootProfileSwitcherCleanup\$([guid]::NewGuid().ToString())"
+        $workerPath = Join-Path $workerDirectory 'Remove-BootProfileSwitcherRuntimeWorker.ps1'
+        Invoke-UninstallStep -Name 'runtime-removal-worker-scheduled' -ExitCode 5 -Action {
+            New-Item -ItemType Directory -Path $workerDirectory -Force | Out-Null
+            Copy-Item -LiteralPath $runtimeRemovalWorker -Destination $workerPath -Force
+            Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $workerPath, '-RuntimeRoot', $runtimeRoot, '-ResultPath', $runtimeRemovalResultPath)
         }
     }
 

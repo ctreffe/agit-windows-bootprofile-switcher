@@ -49,7 +49,9 @@ The central uninstaller now exposes `-RemoveConfiguration` and
 `-RemoveMachineState` as explicit `-Force`-protected cleanup options. Runtime
 removal remains the final v1.7.0 implementation task because it needs an
 external cleanup bootstrap rather than deleting the directory containing the
-running uninstaller.
+running uninstaller. `-RemoveRuntime -Force` now schedules an external worker
+only after all remaining managed hooks, boot-menu state, pending user restore,
+configuration and machine state have been removed.
 
 Validation update: on 2026-07-16, the development device successfully ran the
 machine baseline restore and then completed the pending per-user restore after

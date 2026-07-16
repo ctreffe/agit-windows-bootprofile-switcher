@@ -16,6 +16,7 @@ This project follows Semantic Versioning.
 - Add pending per-user baseline restore scheduling and one-time user-logon completion markers for deployment cleanup.
 - Validate the machine baseline restore and real per-user pending restore path on the development device.
 - Add explicit Force-protected removal of installed configuration and machine lifecycle state after restore validation.
+- Add external worker-based final runtime removal after all managed deployment artifacts are gone.
 
 ## [v1.6.0] - 2026-07-12
 

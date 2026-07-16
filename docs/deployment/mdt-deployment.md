@@ -142,6 +142,7 @@ Its parameter surface is:
 -ScheduleUserBaselineRestore       Keep the user hook and restore HKCU baselines at next logon
 -RemoveConfiguration               Remove ProgramData configuration after validation (requires -Force)
 -RemoveMachineState                Remove ProgramData lifecycle state after validation (requires -Force)
+-RemoveRuntime                     Schedule external runtime removal (requires -Force; separate final run)
 -Force                             Confirm destructive final-cleanup options
 -WhatIf                            Report planned changes without changing the machine
 -AsJson                            Emit the removal result as JSON
@@ -180,7 +181,12 @@ or application state merely because their names resemble supported targets.
 Configuration and machine-state removal are explicit `-Force` options, not a
 default effect of an update. They are available only after restore evidence has
 been reviewed. Runtime removal remains a separate final step because the
-uninstaller must first move execution outside the runtime directory it removes.
+uninstaller first copies `Remove-BootProfileSwitcherRuntimeWorker.ps1` to a
+temporary external location. The worker waits for the uninstaller to exit,
+removes the runtime and writes `runtime-removal-result.json` under the machine
+root. `-RemoveRuntime` must be invoked by itself and is rejected while hooks,
+managed boot-menu state, pending per-user restore, configuration or machine
+state remain.
 
 ## MDT Result Contract
 
