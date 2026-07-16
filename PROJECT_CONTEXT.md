@@ -32,8 +32,11 @@ The v1.7.0 deployment model is now specified in
 `docs/deployment/mdt-deployment.md`. It defines unattended MDT Task Sequence
 deployment as `LocalSystem`, a fully local ProgramData runtime, separated
 runtime and configuration updates, explicit boot-menu opt-in, idempotent
-operations and a deployment exit-code contract. Implementation is the next
-step; the documented deployment entry point does not exist yet.
+operations and a deployment exit-code contract. The first implementation step
+adds `scripts/Install-BootProfileSwitcherDeployment.ps1` for non-interactive
+runtime, optional configuration and optional scheduled-hook deployment;
+boot-menu deployment and the dedicated unattended uninstaller remain next
+steps.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 

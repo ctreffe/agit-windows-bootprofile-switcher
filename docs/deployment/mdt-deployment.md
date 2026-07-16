@@ -2,7 +2,11 @@
 
 ## Status
 
-Planned for v1.7.0 - Machine-Wide Runtime and Deployment.
+In progress for v1.7.0 - Machine-Wide Runtime and Deployment.
+
+The first implementation step provides the non-interactive runtime,
+configuration and scheduled-hook deployment path. Boot-menu deployment and
+the dedicated unattended uninstaller remain planned follow-up steps.
 
 ## Purpose
 
@@ -45,9 +49,9 @@ configuration update without replacing executable runtime code.
 
 ## Planned Deployment Entry Point
 
-v1.7.0 will introduce a machine deployment script named
-`Install-BootProfileSwitcherDeployment.ps1`. It will be intended for MDT and
-other unattended software-deployment tools.
+v1.7.0 introduces a machine deployment script named
+`Install-BootProfileSwitcherDeployment.ps1`. It is intended for MDT and other
+unattended software-deployment tools.
 
 Its planned parameter surface is:
 
@@ -56,11 +60,29 @@ Its planned parameter surface is:
 -ConfigurationPath <path>          Optional profile configuration to validate and install
 -InstallStartupHook                Register the SYSTEM startup hook
 -InstallUserLogonHook              Register the built-in-Users logon hook
--InstallBootMenu                   Explicitly manage BCD entries
--CleanupExistingBootMenu           Replace only known managed BCD entries
 -Force                             Permit documented replacement operations
 -WhatIf                            Report planned changes without changing the machine
+-AsJson                            Emit the deployment result as JSON
 ```
+
+`-InstallBootMenu` and `-CleanupExistingBootMenu` remain planned parameters
+for the following BCD-specific implementation step. They are intentionally not
+part of the initial deployment script so file, configuration and hook behavior
+can be validated without changing BCD.
+
+### MDT Task Sequence Command
+
+For a deployment package whose root is available as MDT's `%SCRIPTROOT%`, use
+the following command in an elevated Task Sequence step. Substitute the
+configuration path with the site-specific package configuration when needed.
+
+```text
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%SCRIPTROOT%\scripts\Install-BootProfileSwitcherDeployment.ps1" -SourceRoot "%SCRIPTROOT%" -ConfigurationPath "%SCRIPTROOT%\config\profiles.v2.example.json" -InstallStartupHook -InstallUserLogonHook -Force -AsJson
+```
+
+`-Force` makes repeated deployment replace a previously installed, different
+managed configuration. Omit `-ConfigurationPath` when updating only runtime
+files and hooks while deliberately retaining the existing machine policy.
 
 The normal MDT runtime deployment installs or updates the local runtime, then
 optionally installs a supplied configuration and hooks. `-InstallBootMenu` is
