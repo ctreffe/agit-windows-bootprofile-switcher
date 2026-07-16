@@ -35,8 +35,11 @@ runtime and configuration updates, explicit boot-menu opt-in, idempotent
 operations and a deployment exit-code contract. The first implementation step
 adds `scripts/Install-BootProfileSwitcherDeployment.ps1` for non-interactive
 runtime, optional configuration, optional scheduled-hook and explicit
-boot-menu deployment. The dedicated unattended uninstaller remains the next
-step.
+boot-menu deployment. `scripts/Uninstall-BootProfileSwitcherDeployment.ps1`
+now provides the first non-interactive removal step for explicitly selected
+hooks and managed boot-menu entries while preserving runtime, configuration and
+module lifecycle state. The next step is restore-aware baseline handling before
+any explicit runtime or configuration removal.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 

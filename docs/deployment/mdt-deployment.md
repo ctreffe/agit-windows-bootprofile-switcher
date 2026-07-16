@@ -121,8 +121,29 @@ Runtime deployment is repeatable. An update may replace files owned below the
 BootProfile Switcher runtime directory, but it must preserve configuration and
 state unless the corresponding explicit operation requests replacement.
 
-The planned uninstallation entry point will remove only infrastructure owned
-by BootProfile Switcher:
+`Uninstall-BootProfileSwitcherDeployment.ps1` provides the first unattended
+uninstall step. It can remove selected hooks and managed boot-menu entries,
+while preserving runtime, configuration and module lifecycle state for a later
+restore-aware cleanup step.
+
+Its parameter surface is:
+
+```text
+-RemoveStartupHook                 Remove the named SYSTEM startup task
+-RemoveUserLogonHook               Remove the named built-in-Users logon task
+-RemoveBootMenu                    Remove entries recorded in managed state
+-WhatIf                            Report planned changes without changing the machine
+-AsJson                            Emit the removal result as JSON
+```
+
+Run it from the installed local runtime, for example:
+
+```text
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%ProgramData%\BootProfileSwitcher\runtime\scripts\Uninstall-BootProfileSwitcherDeployment.ps1" -RemoveStartupHook -RemoveUserLogonHook -RemoveBootMenu -AsJson
+```
+
+The complete planned removal model removes only infrastructure owned by
+BootProfile Switcher:
 
 - the named startup and user-logon tasks;
 - runtime files and directories below the machine root, when explicitly
@@ -132,8 +153,9 @@ by BootProfile Switcher:
 
 It must not delete arbitrary BCD entries, user startup values, scheduled tasks
 or application state merely because their names resemble supported targets.
-Removal of a boot menu, configuration or the complete machine root will be
-separate explicit options, not the default effect of a runtime update.
+Removal of configuration or the complete machine root will be separate
+explicit options, not the default effect of a runtime update. Baseline restore
+must finish before either is introduced.
 
 ## MDT Result Contract
 

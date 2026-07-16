@@ -268,6 +268,7 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Uninstall-ConfigDrivenBootMenuDemo.ps1` entfernt die config-driven Bootmenü-Demo.
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Install-BootProfileSwitcherDeployment.ps1` ist der nicht-interaktive MDT-kompatible Deployment-Einstieg für lokale Runtime, Konfiguration, Hooks und die explizite Installation verwalteter Bootmenü-Einträge.
+- `scripts/Uninstall-BootProfileSwitcherDeployment.ps1` ist der nicht-interaktive MDT-kompatible Removal-Einstieg für explizit ausgewählte Hooks und verwaltete Bootmenü-Einträge; Runtime, Konfiguration und Modul-Lifecycle-State bleiben erhalten.
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
 - `scripts/Inspect-ServiceStartupControlTargets.ps1` fuehrt eine rein lesende Discovery fuer Service-, Autostart- und User-Application-Control im v1.4.0-Meilenstein aus.
