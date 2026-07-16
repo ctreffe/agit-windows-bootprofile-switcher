@@ -2,7 +2,9 @@
 
 This document describes the engineering philosophy of BootProfile Switcher.
 
-It complements the Collaboration Model by documenting the principles that influence technical decisions throughout the lifetime of the project.
+It complements the Collaboration Model in `ChatGPT.md` by documenting the
+principles that influence technical decisions throughout the lifetime of the
+project.
 
 BootProfile Switcher should feel like a natural extension of Windows: robust, understandable and maintainable.
 
@@ -56,7 +58,10 @@ A project artifact should never be described as completed unless it actually exi
 
 This applies to code, documentation, generated archives, commits, validation results and AI-assisted repository updates. Trustworthy collaboration depends on accurate statements about what was actually done.
 
-Standard template artifacts should also be preserved with care. Required disclosure such as the AI Collaboration Note should remain visible and factually accurate.
+Standard template artifacts should also be preserved with care. Required
+disclosure such as the AI Collaboration Note should remain visible and
+factually accurate. Project-specific wording should be used when literal
+template wording would be misleading.
 
 ---
 
@@ -77,6 +82,11 @@ User-facing documentation should help people use the project successfully. Setup
 Code comments should be purposeful and close to the relevant implementation. They should explain intent, constraints and trade-offs where those are not obvious from names and structure alone.
 
 Important architectural decisions should be documented before they become hard to change.
+
+Assistant-authored code and comments should use English as the repository
+standard. Non-obvious scripts and interfaces should document their purpose,
+inputs, outputs, side effects, failure behavior and lifecycle constraints for
+the maintainers who are expected to inspect and extend them.
 
 ---
 
@@ -112,11 +122,29 @@ The roadmap should guide implementation.
 
 Projects should establish an explicit initial roadmap before implementation accelerates.
 
+The roadmap should be derived from maintainer intent, operating context,
+desired end state, boundaries and non-goals. Milestones should represent
+meaningful capabilities while implementation progresses through smaller
+validated working commits.
+
 Technical exploration should support the active milestone rather than replace it.
 
 Before continuing with additional experiments, ask whether the current milestone objective has already been satisfied.
 
 This prevents the project from drifting into open-ended engineering work after the important question has already been answered.
+
+---
+
+# Sensitive Inputs and Generated Artifacts
+
+Local logs, inventories, screenshots, dumps and vendor diagnostics may contain
+user names, machine identifiers, product details or other sensitive
+information.
+
+Inspection, Git versioning and external publication are separate decisions.
+Prefer sanitized fixtures or reviewed derivatives, keep raw inputs outside Git
+by default and treat automated checks as warnings rather than proof that an
+artifact is safe.
 
 ---
 
@@ -191,6 +219,10 @@ Successful engineering practices should be retained.
 Unnecessary complexity should be removed whenever practical.
 
 The goal is steady evolution rather than constant reinvention.
+
+Meaningful implementation, validation, fixes and documentation should normally
+be recorded in regular commits before a separate milestone closure commit
+harmonizes version and milestone-facing documentation.
 
 ---
 

@@ -47,6 +47,13 @@ Codex may prepare working tree changes, explain diffs, run checks and propose co
 
 The maintainer decides what to stage, commit, tag, push or discard.
 
+Codex has no default permission to perform Git history actions. Approval to
+edit files or prepare a commit-ready change does not authorize staging,
+committing, tagging, pushing or another history action. Each such action
+requires a maintainer instruction for that specific action using a recognized
+control word: `explicit` or `explicitly` in English, or the German word family
+`explizit`.
+
 ---
 
 # Allowed by Default
@@ -72,7 +79,8 @@ Codex should report important command results that affect the conclusion of the 
 
 # Read-Only Git Usage
 
-Codex may use Git only for read-only inspection unless the maintainer explicitly changes this policy.
+Codex may use Git only for read-only inspection unless the maintainer instructs
+Codex to perform a specific Git history action using a recognized control word.
 
 Allowed read-only Git commands include:
 
@@ -118,6 +126,8 @@ Codex must not edit `.git/` directly.
 
 If a Git command can change repository state, Codex should treat it as forbidden even if the command is convenient.
 
+This remains separate from permission to edit normal project files.
+
 ---
 
 # Allowed with Maintainer Approval
@@ -152,13 +162,19 @@ Default rules:
 - Treat package installation as network activity that may disclose package names, versions and environment metadata to package sources.
 - Keep generated ZIP files, reports and artifacts local unless the maintainer explicitly requests external sharing.
 
+Assistant access, Git versioning and publication or external sharing are
+separate maintainer decisions. Approval for one does not authorize another.
+Automated privacy, secret or content checks are warning systems and do not
+establish that an artifact is safe.
+
 If data disclosure is possible, Codex should state that before using the external tool.
 
 ---
 
 # Forbidden by Default
 
-Codex must not perform the following actions unless the maintainer explicitly overrides the policy for a specific task:
+Codex must not perform the following actions unless the maintainer overrides
+the policy for a specific task using a recognized control word:
 
 - Git history actions
 - staging, committing, tagging, branching, pushing or pulling
@@ -218,8 +234,15 @@ When preparing a repository change, Codex should provide:
 - known limitations or skipped checks
 - a suggested commit summary
 - a suggested commit description
+- concise numbered maintainer decisions or next steps when practical
 
 The maintainer performs staging, commits, tags and pushes in GitHub Desktop unless a project explicitly defines a different process.
+
+Regular working commits use an appropriate Conventional Commit prefix and
+represent one logical validated step. Milestone commits use a human-readable
+summary containing the completed version and close work already recorded in
+regular commits. Suggested metadata is advisory and does not authorize Codex to
+create the commit.
 
 ---
 
@@ -247,9 +270,12 @@ Use the project documents as follows:
 - `CODEX.md` defines local Codex operating rules.
 - `PROJECT_CONTEXT.md` describes the current project state and next development focus.
 - `README.md` and `README.de.md` define the user-facing project entry points.
+- `docs/roadmap.md` defines the current milestone sequence and boundaries.
 - `CHANGELOG.md` records version history.
 - `PHILOSOPHY.md` defines project-specific engineering principles.
 
 These documents should remain aligned when the collaboration process changes.
 
-`PROJECT_SETUP.md`, `REPOSITORY.md` and `DOCUMENTATION.md` were template-only setup documents and are not part of this derived repository anymore.
+`PROJECT_SETUP.md`, `REPOSITORY.md` and `DOCUMENTATION.md` remain template
+references and are not maintained as separate files in this mature derived
+repository. Applicable rules are incorporated into the project documents above.

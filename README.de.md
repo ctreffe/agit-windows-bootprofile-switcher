@@ -11,9 +11,9 @@
 >
 > Dieses Projekt wird in Zusammenarbeit zwischen dem Repository-Maintainer und einem KI-Assistenten entwickelt.
 >
-> Das Collaboration Model dokumentiert Engineering-Praktiken, Kollaborations-Workflows und Repository-Konventionen, die in diesem Projekt verwendet werden.
+> Das Collaboration Model dokumentiert Engineering-Praktiken, KI-unterstützte Entwicklungsworkflows und Repository-Konventionen, die in diesem Projekt verwendet werden.
 >
-> Es wird in [ChatGPT.md](ChatGPT.md) gepflegt.
+> Das in diesem Projekt verwendete Modell ist in [ChatGPT.md](ChatGPT.md) dokumentiert.
 
 > [!NOTE]
 > **Projektstatus**
@@ -21,6 +21,8 @@
 > BootProfile Switcher hat den Architektur-Meilenstein (`v0.2.0`), den Boot Profile Detection Proof of Concept (`v0.3.0`), den Boot-Profile-Detection-Meilenstein (`v0.4.0`), den Profile-Engine-Meilenstein (`v0.5.0`), den Module-System-Meilenstein (`v0.6.0`), den Configuration-Meilenstein (`v0.7.0`), den Integration-Meilenstein (`v0.8.0`), den Validation-Meilenstein (`v0.9.0`), den Initial-Stable-Release-Meilenstein (`v1.0.0`), den Network-Isolation-Meilenstein (`v1.1.0`), den Meilenstein Configuration Format v2 (`v1.2.0`), den Meilenstein Boot Menu From Configuration (`v1.3.0`), den Meilenstein Service and Startup Control Discovery (`v1.4.0`), den Meilenstein Service Control for Windows Search (`v1.5.0`), den Meilenstein Startup and User-Application Control (`v1.6.0`) und den Meilenstein Machine-Wide Runtime and Deployment (`v1.7.0`) abgeschlossen.
 >
 > Der Meilenstein `v1.7.0 - Machine-Wide Runtime and Deployment` ist abgeschlossen. Dieser Release bietet eine MDT-kompatible lokale ProgramData-Runtime, unbeaufsichtigte Deployment- und Removal-Einstiegspunkte, explizite Bootmenüverwaltung, restore-fähiges Multi-User-Cleanup und validierten LocalSystem-Betrieb.
+>
+> Der aktive Roadmap-Meilenstein ist `v1.8.0 - Policy and Vendor Control Foundation`. Er verbindet die Ermittlung unterstützter Steuerflächen mit Entscheidungsdokumentation, Modul- und Konfigurationsdesign, einer reversiblen Windows-Policy-Implementierung bei bestätigter stabiler Schnittstelle sowie Deployment-/Restore-Validierung. Siehe [Projekt-Roadmap](docs/roadmap.md).
 
 ## Überblick
 
@@ -126,10 +128,14 @@ Die Demo kann entfernt werden mit:
 uninstall-startup-user-application-control-demo.cmd
 ```
 
-Der Uninstall-Wrapper fuehrt den Restore-Pfad aus, wenn Modul-State vorhanden
-ist, und entfernt danach den Startup Hook, den User-Logon-Hook und den
-verwalteten Demo-Boot-Eintrag. Wenn bei der Installation eine vorherige
-ProgramData-Profilkonfiguration gesichert wurde, wird sie wiederhergestellt.
+Der erste Uninstall-Lauf stellt Maschinen-Baselines wieder her, entfernt den
+Startup-Hook und den verwalteten Boot-Eintrag und plant die Wiederherstellung
+der HKCU-Baseline betroffener Benutzer über den beibehaltenen User-Logon-Hook.
+Nachdem alle betroffenen Benutzer angemeldet waren und ihre Completion-Nachweise
+geprüft wurden, entfernt ein Aufruf des PowerShell-Uninstallers mit
+`-FinalizeUserRestore` den verbleibenden User-Logon-Hook. Eine zuvor gesicherte
+ProgramData-Profilkonfiguration wird wiederhergestellt, ohne den ausstehenden
+benutzerspezifischen Restore ungültig zu machen.
 
 Der User-Logon-Hook wird ohne Konsolenfenster ueber den Windows Script Host
 gestartet. Sein Runtime-Skript sollte im normalen Betrieb nicht manuell aus
@@ -242,7 +248,7 @@ uninstall-startup-hook.cmd
 Aktuelle Command-Wrapper:
 
 - `install-startup-user-application-control-demo.cmd` installiert die Startup-and-User-Application-Control-Moduldemo mit einem verwalteten Bootprofil `App Startup Control`.
-- `uninstall-startup-user-application-control-demo.cmd` entfernt die Startup-and-User-Application-Control-Moduldemo, fuehrt bei vorhandenem State den Restore-Pfad aus und stellt die vorherige ProgramData-Profilkonfiguration wieder her, wenn ein Backup vorhanden ist.
+- `uninstall-startup-user-application-control-demo.cmd` startet die restore-fähige Entfernung der Startup-and-User-Application-Control-Moduldemo und behält den User-Logon-Hook für ausstehende benutzerspezifische Restores bei.
 
 - `install-demo.cmd` installiert das v1.0.0-Foundation-Demo-Setup in der erwarteten Reihenfolge und fordert bei Bedarf erhöhte Rechte an.
 - `uninstall-demo.cmd` entfernt Startup-Hook, verwaltete Bootmenü-Einträge und temporären Demo-Marker, lässt die ProgramData-Konfiguration aber unverändert.
@@ -266,6 +272,7 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Uninstall-NetworkIsolationDemo.ps1` entfernt die Network-Isolation-Moduldemo und stellt bei Bedarf das vorherige Profilkonfigurations-Backup wieder her.
 - `scripts/Install-ConfigDrivenBootMenuDemo.ps1` installiert die config-driven Bootmenü-Demo.
 - `scripts/Uninstall-ConfigDrivenBootMenuDemo.ps1` entfernt die config-driven Bootmenü-Demo.
+- `scripts/Uninstall-StartupUserApplicationControlDemo.ps1` führt die zweistufige Entfernung der Startup-and-User-Application-Control-Demo aus; `-FinalizeUserRestore` entfernt den beibehaltenen User-Logon-Hook nach Prüfung der Completion-Nachweise.
 - `scripts/Install-BootProfileConfiguration.ps1` validiert und installiert eine Profilkonfigurationsdatei an den standardmäßigen maschinenweiten Konfigurationspfad.
 - `scripts/Install-BootProfileSwitcherDeployment.ps1` ist der nicht-interaktive MDT-kompatible Deployment-Einstieg für lokale Runtime, Konfiguration, Hooks und die explizite Installation verwalteter Bootmenü-Einträge.
 - `scripts/Uninstall-BootProfileSwitcherDeployment.ps1` ist der nicht-interaktive MDT-kompatible Removal-Einstieg für explizit ausgewählte Hooks und verwaltete Bootmenü-Einträge; Runtime, Konfiguration und Modul-Lifecycle-State bleiben erhalten.
@@ -384,18 +391,36 @@ Der zuletzt abgeschlossene Projektmeilenstein ist:
 1.7.0 Machine-Wide Runtime and Deployment
 ```
 
-## Validierung
+## Roadmap
 
-Der wiederholbare Validierungsumfang für den aktuellen Runtime-Pfad ist hier dokumentiert:
+Der aktive Meilenstein ist:
 
 ```text
-docs/validation/v0.9-validation-checklist.md
+v1.8.0 Policy and Vendor Control Foundation
 ```
 
-Der geplante Umfang des initialen stabilen Releases ist hier dokumentiert:
+Er umfasst die Capability Discovery für Windows Update und Bitdefender,
+dauerhafte Entscheidungen zu Steuerflächen, allowlist-basiertes Policy-Design,
+mindestens einen unterstützten reversiblen Windows-Policy-Pfad bei bestätigter
+Schnittstelle sowie unbeaufsichtigte Lifecycle-Validierung. Spätere
+Meilensteine behandeln Network-Isolation-Hardening, Windows-Search-Scope-Control
+und Operational Readiness.
+
+Ziele, Validierungserwartungen und Nicht-Ziele stehen in
+[docs/roadmap.md](docs/roadmap.md).
+
+## Validierung
+
+Die aktuelle Validierung für maschinenweites Deployment und Cleanup ist hier dokumentiert:
 
 ```text
-docs/release/v1.0.0-release-scope.md
+docs/deployment/mdt-deployment.md
+```
+
+Die Konfigurations-Regressions-Fixtures werden ausgeführt mit:
+
+```text
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\Test-BootProfileConfigurationFixtures.ps1
 ```
 
 Versionstags sollen ein führendes `v` verwenden, zum Beispiel:
@@ -417,7 +442,9 @@ Zentrale Projektdokumente:
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
 - [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
+- [docs/roadmap.md](docs/roadmap.md) – aktive Meilensteinziele, Validierungserwartungen und weitere Roadmap
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/decisions/PDR-0001-roadmap-after-v1.7.md](docs/decisions/PDR-0001-roadmap-after-v1.7.md) – Entscheidung zum Roadmap-Zuschnitt nach v1.7.0
 - [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – technisches MDT-kompatibles Deployment-Modell
 - [docs/deployment/mdt-administrator-guide.de.md](docs/deployment/mdt-administrator-guide.de.md) – Praxisanleitung für MDT-Administratoren: Bereitstellung, Update und Entfernung
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2

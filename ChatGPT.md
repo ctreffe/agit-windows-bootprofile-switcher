@@ -1,6 +1,6 @@
 # ChatGPT.md
 
-# Collaboration Model v1.12
+# Collaboration Model v1.18
 
 **Status:** Stable  
 **Applies to:** AGIT software projects  
@@ -98,7 +98,7 @@ Every AGIT project should maintain `PROJECT_CONTEXT.md`.
 - collaboration notes
 - notes for the next session
 
-The document should describe the current state, not the full history. History belongs in `CHANGELOG.md`, ADRs or commit history.
+The document should describe the current state, not the full history. History belongs in `CHANGELOG.md`, decision records or commit history.
 
 At the start of a new AI-assisted session, the assistant should read or reconstruct `PROJECT_CONTEXT.md` before proposing implementation work.
 
@@ -112,8 +112,11 @@ The assistant should not rely on private chat history remaining available. When 
 
 If the assistant environment exposes remaining context or token budget, the assistant should reserve enough capacity for a useful handoff update before the context becomes full. Exact token counts are environment-specific, so the rule is to preserve practical handoff capacity rather than depend on a fixed number.
 
-A useful handoff update should capture:
+If no budget information is visible, the assistant should use conservative judgment. Warning signs include long conversations, many changed files, multiple unresolved decisions, extended validation work or a likely transition to another session.
 
+A handoff update should capture enough information for a new session to continue from the repository alone, including:
+
+- the current repository baseline
 - the active objective
 - completed changes since the last context update
 - open tasks
@@ -133,43 +136,100 @@ Projects evolve through iterative collaboration.
 The preferred workflow is:
 
 1. Establish the current repository baseline.
-2. Understand the roadmap objective.
-3. Discuss architectural alternatives when needed.
-4. Agree on the next small step.
-5. Implement incrementally.
-6. Validate on a real system whenever practical.
-7. Review the result against the roadmap objective.
-8. Fix issues discovered during validation.
-9. Update all affected documentation.
-10. Prepare a repository-ready contribution.
-11. Commit only after the work is complete and validated.
-12. Finalize milestones separately from feature work.
+2. Establish maintainer-owned project context and desired end state.
+3. Derive or review the roadmap objective.
+4. Discuss architectural alternatives when needed.
+5. Agree on the next small step.
+6. Implement incrementally.
+7. Validate on a real system whenever practical.
+8. Review the result against the roadmap objective.
+9. Fix issues discovered during validation.
+10. Update all affected documentation.
+11. Prepare a repository-ready contribution.
+12. Prepare commit-ready changes only after the work is complete and validated.
+13. Finalize milestones separately from feature work.
 
 For proof-of-concept work, the expected loop is:
 
 ```text
-Implement -> Validate -> Adjust -> Commit -> Continue
+Implement -> Validate -> Adjust -> Prepare commit -> Continue
 ```
 
-A feature commit should represent a validated logical step. A milestone commit should represent the explicit conclusion of a roadmap milestone.
+A feature commit should represent a validated logical step. A milestone commit
+should represent the explicit conclusion of a roadmap milestone. The maintainer
+controls when these commits are actually created unless the maintainer gives an
+instruction with a recognized control word for the assistant to perform a
+specific Git history action.
+
+---
+
+# Git History Authority
+
+The assistant has no default permission to perform Git history actions.
+
+Git history actions include, but are not limited to:
+
+- staging files
+- creating commits
+- amending commits
+- rebasing
+- resetting
+- reverting
+- creating, deleting or switching branches
+- creating or deleting tags
+- pushing or force-pushing
+- pulling or merging
+- changing `.git/` contents directly
+
+The assistant may inspect Git status, diffs and logs when useful. The assistant
+may prepare file changes, propose commit boundaries and suggest commit summaries
+and descriptions.
+
+The assistant must not perform Git history actions unless the maintainer
+instructs the assistant to perform that specific action and uses a recognized
+control word.
+
+Recognized control words are `explicit` and `explicitly` in English-language
+instructions, and the German word family `explizit`, including inflected forms
+such as `explizite`, `expliziten`, `expliziter` and `explizites`, in
+German-language instructions.
+
+Maintainer approval for file edits does not imply approval for Git history
+actions. A request to create, implement, build, organize, document or prepare a
+commit does not imply permission to run Git history commands. Approval for one
+class of Git history action does not imply approval for another; local commits,
+tags and pushes each require their own maintainer instruction with a recognized
+control word.
+
+Repository history is maintainer-controlled project memory.
 
 ---
 
 # Code Documentation and Maintainability
 
 Assistant-written code must be understandable without private chat history.
+Code has a target readership just as user documentation has a target audience.
+During initialization, the project should identify who is expected to inspect,
+debug, maintain, review or extend the code and what technical context those
+readers can reasonably be expected to have.
 
 The assistant should document non-obvious behavior, assumptions, constraints and architectural decisions close to the code or in the appropriate project documentation. Comments should explain why something exists or why an approach was chosen, not repeat what the code already says.
 
 Public functions, scripts, modules, configuration formats and integration points should be named and structured so a maintainer or future contributor can understand their purpose from the repository itself.
+
+Code comments and doc comments should use English when English is the
+repository standard. Assistant-authored scripts and code files should document
+their purpose, inputs, outputs, side effects, important invariants, failure
+behavior and non-obvious platform or lifecycle constraints at the level needed
+by the identified human code readers. Comments should explain intent and
+rationale rather than narrating self-evident syntax.
 
 A change is not repository-ready if the maintainer or a future contributor would need the original AI conversation to understand the implementation.
 
 ---
 
 # Milestone Work Rhythm
-
-AGIT project work is most efficient when roadmap milestones are handled as small, validated loops.
+Recent AGIT project work has shown that collaboration is most efficient when roadmap milestones are handled as small, validated loops.
 
 For an active milestone, the assistant should normally help maintain a rhythm like:
 
@@ -178,12 +238,30 @@ For an active milestone, the assistant should normally help maintain a rhythm li
 3. Implement only that step.
 4. Validate the step with the maintainer, especially when real-system or privileged checks are needed.
 5. Interpret validation output before declaring success.
-6. Prepare a feature commit with summary and description.
+6. Prepare feature-commit guidance with summary and description.
 7. Repeat until the milestone objective is satisfied.
-8. Prepare a separate milestone commit.
-9. Tag the completed milestone when appropriate.
+8. Perform a documentation freshness pass before preparing the milestone commit.
+9. Prepare separate milestone-commit guidance.
+10. Recommend a tag for the completed milestone when appropriate.
+
+This rhythm is especially useful when a project is evolving through architecture, proof-of-concept validation, local system integration or other work where small confirmed steps build confidence.
 
 The assistant should avoid expanding the milestone opportunistically once the agreed objective is satisfied. If additional ideas emerge, they should be recorded as future roadmap candidates unless they are necessary to complete the current milestone.
+
+A milestone should normally contain multiple regular working commits when the
+work divides into meaningful validated steps. The project should not defer all
+implementation, fixes and documentation into one oversized milestone commit.
+The milestone commit is a separate closure commit and should primarily
+harmonize version, changelog, context and milestone-facing documentation. A
+small milestone may legitimately have only one preceding working commit, but
+commit boundaries follow logical work, not version boundaries.
+
+Before a milestone commit is prepared, the assistant should help verify that the repository documentation reflects the milestone state. This freshness pass should normally include version and status wording, roadmap and current-focus notes, changelog entries, README and translated README files, links to new specialized documentation, setup or demo instructions when applicable, and validation results. The objective is for the milestone commit itself to contain the consistent completed state, not to rely on a later cleanup commit.
+
+After each meaningful implementation step, the assistant should provide a
+concise numbered handoff covering the result ready for review, validation
+performed, known limitations or disclosure risks, maintainer decisions, the
+next proposed step and, when ready, a commit summary and description.
 
 ---
 
@@ -192,6 +270,20 @@ The assistant should avoid expanding the milestone opportunistically once the ag
 The roadmap is the primary guide for deciding what to build next.
 
 At the beginning of a project, or when a project enters a substantially new phase, the maintainer and assistant should explicitly establish a roadmap before implementation work accelerates.
+
+Before the roadmap is established, the maintainer should describe the project intent and context from the maintainer's point of view. This is a maintainer-owned input, not something the assistant should invent from technical possibilities alone.
+
+The initial intent discussion should normally cover:
+
+- the problem space or operating context
+- the intended users, maintainers or operating environment
+- the desired end state or target experience
+- the technical or product outcome that would make the project successful
+- important boundaries, risks and intentional non-goals
+
+The end state does not need to be a complete specification. It may be a desired user experience, a technical capability, an operational workflow, a deployment model or another clear target that gives the project direction.
+
+The assistant should use this intent and context to help derive a roadmap. The roadmap should not be based only on isolated technical ideas when the broader project direction is still undefined.
 
 An initial roadmap should normally define:
 
@@ -232,7 +324,7 @@ A failed hypothesis is not a failed milestone if the milestone was designed to r
 
 # Validation Partnership
 
-Some BootProfile Switcher work must be validated by the repository maintainer because it requires local system access, elevated permissions, boot state, Windows Scheduled Tasks or other environment-specific conditions.
+Some AGIT work must be validated by the repository maintainer because it requires local system access, elevated permissions, hardware state, GUI tools or other environment-specific conditions.
 
 In these cases, the assistant should:
 
@@ -249,6 +341,28 @@ When validation reveals an issue, the assistant should fix the issue and re-ente
 
 ---
 
+# Sensitive Development Inputs
+
+Before inspecting private, confidential or personal raw development material, the assistant should first inventory the material at the metadata level and ask whether direct inspection is appropriate. This includes `.env` files, logs, database dumps, API responses, screenshots, crash reports, customer data, user data and generated artifacts.
+
+When possible, prefer sanitized fixtures, redacted logs, minimal reproduction cases or reviewed derivatives that expose only the information needed for the engineering task.
+
+The maintainer remains responsible for approving access to sensitive material
+and deciding what may be versioned or shared. Approval for assistant inspection,
+approval for Git versioning and approval for publication or external sharing
+are separate decisions. None implies another.
+
+Generated logs, reports, screenshots, archives, fixtures and diagnostic
+artifacts may still expose secrets, personal information, internal topology or
+confidential behavior after raw inputs have been removed. Review visible
+content, embedded resources and file metadata before versioning or sharing.
+
+Automated secret, privacy or content checks are warning systems, not approval.
+A clean result does not prove that an artifact is sanitized or safe for access,
+Git or publication.
+
+---
+
 # Decision Making
 
 Whenever multiple technical solutions exist:
@@ -262,6 +376,12 @@ Whenever multiple technical solutions exist:
 The objective is informed engineering decisions rather than simply generating code.
 
 If practical validation disproves an earlier assumption, update the plan instead of defending the assumption.
+
+When a decision affects architecture, configuration formats, lifecycle behavior, deployment, security boundaries, sensitive input handling, fixture or dump versioning, generated artifact versioning or other durable project structure, the assistant should explicitly check whether an Architecture Decision Record should be created or updated in `decisions/`.
+
+When a decision affects project scope, roadmap, collaboration structure, privacy boundaries, repository organization, documentation structure or user-facing documentation model, the assistant should check whether a PDR or DDR is more appropriate than an ADR.
+
+Decision records are not required for minor implementation choices. They are appropriate when future maintainers should be able to understand why an approach was chosen without relying on chat history.
 
 ---
 
@@ -287,7 +407,7 @@ Its responsibilities include:
 
 The assistant should actively improve both the software and the engineering process.
 
-Whenever recurring patterns or successful collaboration practices emerge during a project, the assistant should propose them for a retrospective. Accepted improvements should be incorporated into the AGIT Project Template.
+Whenever recurring patterns or successful collaboration practices emerge during a project, the assistant should propose them for a retrospective. Accepted improvements should be incorporated into the AGIT Dev Template or, when they are not development-specific, into the generic AGIT Project Template.
 
 ---
 
@@ -297,7 +417,12 @@ The wording of a maintainer request matters.
 
 If the maintainer asks to discuss, plan, review, compare or decide, the assistant should remain in planning mode.
 
-If the maintainer asks to create, implement, build, update or prepare a commit, the assistant should treat the planning phase as complete and produce the requested deliverable.
+If the maintainer asks to create, implement, build, update or prepare a commit,
+the assistant should treat the planning phase as complete and produce the
+requested repository-ready deliverable in the working tree.
+
+Preparing a commit means preparing the files and commit metadata for maintainer
+review. It does not authorize staging, committing, tagging or pushing.
 
 A request such as:
 
@@ -305,7 +430,9 @@ A request such as:
 Create the commit.
 ```
 
-means:
+only authorizes an actual Git commit when the maintainer asks the assistant to
+perform that Git history action and uses a recognized control word. Otherwise,
+commit-related wording means:
 
 - modify the required files
 - perform consistency checks
@@ -320,6 +447,24 @@ It does not mean:
 - claim completion without the agreed result
 
 The assistant should interrupt delivery only when essential information is missing, requirements conflict or the agreed result cannot be produced. In that case, it must state the blocker clearly.
+
+Whenever the assistant recommends a commit, it should provide both:
+
+- a concise commit summary
+- a meaningful commit description
+
+This applies to feature commits, documentation commits and milestone commits. The description should match the actual diff and should not describe future work as if it had already been completed.
+
+When a change is approaching commit readiness, the assistant should provide concise numbered next steps for the repository maintainer whenever practical. This is especially useful when the maintainer must perform actions outside the assistant environment, such as running validation commands, reviewing generated files, making decisions, committing through GitHub Desktop or creating tags.
+
+Numbered next steps should be operational rather than decorative. They should distinguish:
+
+- decisions the maintainer must make
+- commands or checks the maintainer should run
+- information the maintainer should review
+- commit or tag actions the maintainer should perform
+
+The assistant should keep these lists short, ordered and directly actionable. For very small changes, a one-step or two-step list is sufficient. For larger work, numbered steps help preserve efficient communication and reduce back-and-forth.
 
 
 ---
@@ -354,17 +499,6 @@ A repository-ready contribution should normally include:
 - updates to affected documentation
 - consistency checks across related documents
 - tag or release guidance when relevant
-
-When a change is approaching commit readiness, the assistant should provide concise numbered next steps for the repository maintainer whenever practical. This is especially useful when the maintainer must perform actions outside the assistant environment, such as running validation commands, reviewing generated files, making decisions, committing through GitHub Desktop or creating tags.
-
-Numbered next steps should be operational rather than decorative. They should distinguish:
-
-- decisions the maintainer must make
-- commands or checks the maintainer should run
-- information the maintainer should review
-- commit or tag actions the maintainer should perform
-
-The assistant should keep these lists short, ordered and directly actionable. For very small changes, a one-step or two-step list is sufficient. For larger work, numbered steps help preserve efficient communication and reduce back-and-forth.
 
 The delivery form depends on the working environment.
 
@@ -463,6 +597,12 @@ GitHub Desktop is the preferred Git client for the repository maintainer.
 
 The assistant should therefore avoid assuming command-line Git usage whenever practical and should provide guidance that works naturally with GitHub Desktop.
 
+The maintainer controls staging, commits, tags, pushes and other Git history
+actions by default. The assistant may inspect Git state and prepare
+repository-ready changes, but must not perform Git history actions unless the
+maintainer instructs the assistant to perform that specific action with a
+recognized control word.
+
 ## Branching Strategy
 
 For projects maintained primarily by a single repository owner, committing directly to `main` is acceptable.
@@ -492,7 +632,7 @@ Unrelated changes should be split into separate commits whenever practical.
 
 Feature commits implement or improve a specific logical step.
 
-They may use conventional prefixes such as:
+Regular working commits must use Conventional Commit prefixes such as:
 
 ```text
 feat:
@@ -500,17 +640,18 @@ fix:
 docs:
 chore:
 refactor:
+test:
+ci:
+build:
 ```
 
-The prefix should match the actual change.
+The prefix should match the actual change. Documentation-only changes should normally use `docs:`.
 
 ## Milestone Commits
 
 Milestone commits finalize a completed roadmap milestone.
 
-They are separate from feature commits. They usually update version metadata, changelog entries, project context and documentation that summarizes the completed milestone.
-
-Milestone commits may use human-readable summaries without conventional prefixes, for example:
+They are separate from feature commits. Milestone commits should not use a Conventional Commit prefix. They should use human-readable summaries that include the completed version number, for example:
 
 ```text
 Finalize proof-of-concept milestone (v0.3.0)
@@ -571,7 +712,7 @@ Every document should have a clear role:
 - `CHANGELOG.md` records version history.
 - `ChatGPT.md` defines the collaboration model.
 - `PHILOSOPHY.md` defines engineering principles.
-- ADRs explain important architectural decisions, when used.
+- Decision records explain important decisions and durable reasoning, when used.
 
 Documentation should evolve together with implementation.
 
@@ -581,11 +722,13 @@ Technical documentation should use precise, objective language.
 
 Avoid promotional, exaggerated or marketing-oriented wording.
 
+READMEs should remain entry points and navigation aids. When a module, integration, component or workflow becomes too substantial for the README, the detailed user-facing and maintainer-facing documentation should move into a dedicated document such as `docs/modules/<name>.md`, `docs/integrations/<name>.md` or another project-appropriate location. The README should summarize the component briefly and link to the dedicated documentation instead of duplicating all details.
+
 ---
 
 # User-Facing Documentation
 
-BootProfile Switcher should be documented so users can set it up, configure it and use it productively without relying on private chat history or maintainer explanations.
+Projects should be documented so users can set them up, configure them and use them productively without relying on private chat history or maintainer explanations.
 
 User-facing documentation should normally explain:
 
@@ -593,13 +736,15 @@ User-facing documentation should normally explain:
 - prerequisites, installation and setup
 - configuration and important defaults
 - common usage workflows and examples
-- available commands, scripts, flags, settings or profiles
-- expected outputs, logs, files or system effects
-- permissions, safety notes, platform constraints and rollback or uninstall guidance
+- available commands, scripts, flags, settings or profiles when the project exposes them
+- expected outputs, logs, files or system effects where relevant
+- permissions, safety notes, platform constraints and rollback or uninstall guidance when applicable
 - troubleshooting steps for common failures
 - current maturity, limitations and intentionally unsupported scenarios
 
-Reference documentation is encouraged when the project exposes a meaningful command surface, configuration schema, module interface or operational workflow. Keep it concise, accurate and easy to verify when practical.
+Reference documentation is encouraged when a project exposes a meaningful command surface, configuration schema, module interface or operational workflow. Keep it concise, accurate and generated or easy to verify when practical.
+
+If a project exposes production modules, integrations or other reusable components, each substantial component should include a small demonstration, example configuration or validation path when applicable. The form should fit the project: a demo installer, sample configuration, reproducible command sequence, fixture or documented validation checklist may all be appropriate.
 
 Documentation should make the first successful use of the project easy, and it should make repeated productive use predictable.
 
@@ -619,7 +764,7 @@ However, documents should be fully harmonized when a retrospective changes core 
 
 # Retrospectives and Template Evolution
 
-The AGIT Project Template evolves through retrospectives based on practical project experience.
+The AGIT Dev Template evolves through retrospectives based on practical project experience.
 
 Retrospectives normally occur at the end of a project. They may also occur during a project when enough practical experience has accumulated.
 
@@ -694,12 +839,30 @@ Version 1.7 adds Context Handoff Discipline. It clarifies that assistants should
 
 Version 1.8 adds numbered maintainer next steps before commit-ready handoff. It clarifies that assistants should use concise ordered lists for decisions, validation actions, review points and commit or tag actions when this improves efficiency.
 
-Version 1.9 adds milestone work rhythm and validation partnership guidance derived from BootProfile Switcher milestone work. It also clarifies that commit recommendations should include both a summary and a description.
+Version 1.9 adds milestone work rhythm and validation partnership guidance derived from the BootProfile Switcher v0.4.0 through v0.7.0 workflow. It also clarifies that commit recommendations should include both a summary and a description.
 
 Version 1.10 adds explicit initial roadmap agreement guidance. It clarifies that new projects or substantially new phases should establish early milestones, milestone purpose, intended validation and intentional non-goals before implementation accelerates.
 
 Version 1.11 adds explicit code documentation and maintainability guidance for assistant-written implementation work. It clarifies that code must be understandable from the repository itself without relying on private AI conversation history.
 
 Version 1.12 adds explicit user-facing documentation guidance. It clarifies that projects should document setup, configuration, productive usage, command or settings references, troubleshooting, permissions, safety notes and maturity where relevant.
+
+Version 1.13 adds maintainer-owned project intent and context as an explicit project-start step before roadmap derivation. It clarifies that the maintainer should describe the problem context, desired end state and boundaries so the roadmap can be derived from project direction rather than isolated technical ideas.
+
+Version 1.14 adds dedicated documentation guidance for substantial modules, integrations and workflows. It also adds a documentation freshness pass before milestone commits and clarifies that substantial production components should include a demonstration, example configuration or validation path when applicable.
+
+Version 1.15 adds explicit ADR checkpoint guidance. It clarifies that important architecture, configuration-format, lifecycle, deployment and security decisions should trigger a deliberate check for creating or updating an Architecture Decision Record.
+
+Version 1.16 adds explicit Git history authority. It clarifies that repository
+history is maintainer-controlled project memory and that assistants have no
+default permission to stage, commit, tag, push or otherwise perform Git history
+actions.
+
+Version 1.17 adds sensitive development input handling. It clarifies that assistants should inventory private logs, dumps, API responses, screenshots, customer data and generated artifacts before raw inspection, prefer sanitized fixtures or reviewed derivatives when possible, and consider ADRs for sensitive-input, fixture-versioning and generated-artifact decisions.
+
+Version 1.18 formalizes human code readership, English documentation standards
+for assistant-authored code, and the expectation that roadmap milestones
+advance through regular validated commits before a separate milestone closure
+commit.
 
 Future AGIT projects should adopt the latest version from this repository.
