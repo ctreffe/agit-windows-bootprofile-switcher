@@ -126,12 +126,19 @@ uninstall step. It can remove selected hooks and managed boot-menu entries,
 while preserving runtime, configuration and module lifecycle state for a later
 restore-aware cleanup step.
 
+`Restore-BootProfileSwitcherMachineBaselines.ps1` is the restore-aware step.
+It runs the installed engine with an unmanaged resolver result before removal,
+restoring Network Isolation, Service Control and machine-scoped startup
+surfaces from their recorded baselines. It requires a valid configuration with
+`dryRun = false` for every configured lifecycle module that may need restore.
+
 Its parameter surface is:
 
 ```text
 -RemoveStartupHook                 Remove the named SYSTEM startup task
 -RemoveUserLogonHook               Remove the named built-in-Users logon task
 -RemoveBootMenu                    Remove entries recorded in managed state
+-RestoreMachineBaselines           Restore machine baselines before removal
 -WhatIf                            Report planned changes without changing the machine
 -AsJson                            Emit the removal result as JSON
 ```
@@ -141,6 +148,12 @@ Run it from the installed local runtime, for example:
 ```text
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%ProgramData%\BootProfileSwitcher\runtime\scripts\Uninstall-BootProfileSwitcherDeployment.ps1" -RemoveStartupHook -RemoveUserLogonHook -RemoveBootMenu -AsJson
 ```
+
+Do not combine `-RestoreMachineBaselines` with `-RemoveUserLogonHook` while
+`startup-user-application-control` is configured. Per-user `HKCU` baseline
+state is stored per user and must be restored by the existing user-logon hook
+in each affected user's session. The machine restore result exposes this as
+`userLogonRestoreRequired`.
 
 The complete planned removal model removes only infrastructure owned by
 BootProfile Switcher:

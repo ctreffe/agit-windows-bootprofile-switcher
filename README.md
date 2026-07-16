@@ -254,6 +254,7 @@ Current PowerShell entry points:
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Install-BootProfileSwitcherDeployment.ps1` is the non-interactive MDT-compatible deployment entry point for local runtime, configuration, hooks and explicit managed boot-menu installation.
 - `scripts/Uninstall-BootProfileSwitcherDeployment.ps1` is the non-interactive MDT-compatible removal entry point for explicitly selected hooks and managed boot-menu entries; it preserves runtime, configuration and module lifecycle state.
+- `scripts/Restore-BootProfileSwitcherMachineBaselines.ps1` restores machine lifecycle baselines before removal; per-user HKCU baselines remain a user-logon responsibility.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
 - `scripts/Inspect-ServiceStartupControlTargets.ps1` performs read-only service, startup and user-application control discovery for the v1.4.0 milestone.

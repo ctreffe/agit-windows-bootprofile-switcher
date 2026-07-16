@@ -22,6 +22,8 @@ param(
 
     [switch]$RemoveBootMenu,
 
+    [switch]$RestoreMachineBaselines,
+
     [switch]$AsJson
 )
 
@@ -93,6 +95,7 @@ function Write-UninstallResult {
         startupHookRequested = [bool]$RemoveStartupHook
         userLogonHookRequested = [bool]$RemoveUserLogonHook
         bootMenuRequested = [bool]$RemoveBootMenu
+        machineBaselineRestoreRequested = [bool]$RestoreMachineBaselines
         bootMenuAction = $BootMenuAction
         actions = @($actions)
         error = $ErrorMessage
@@ -109,17 +112,37 @@ function Write-UninstallResult {
 $bootMenuAction = 'not-requested'
 
 try {
-    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu)) {
+    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines)) {
         Set-Failure -ExitCode 1 -Message 'Specify at least one removal option.'
     }
 
     $startupHookUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-StartupHook.ps1'
     $userLogonHookUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-UserLogonHook.ps1'
     $bootMenuUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-BootProfileMenu.ps1'
+    $machineRestoreScript = Join-Path $runtimeRoot 'scripts\Restore-BootProfileSwitcherMachineBaselines.ps1'
 
     foreach ($scriptPath in @($startupHookUninstaller, $userLogonHookUninstaller, $bootMenuUninstaller)) {
         if (-not (Test-Path -LiteralPath $scriptPath)) {
             Set-Failure -ExitCode 1 -Message "Installed deployment component not found: $scriptPath"
+        }
+    }
+
+    if ($RestoreMachineBaselines -and -not (Test-Path -LiteralPath $machineRestoreScript)) {
+        Set-Failure -ExitCode 1 -Message "Installed machine baseline restore script not found: $machineRestoreScript"
+    }
+
+    if ($RestoreMachineBaselines -and $RemoveUserLogonHook) {
+        $configPath = Join-Path $machineRoot 'config\profiles.json'
+        if (Test-Path -LiteralPath $configPath) {
+            $configuration = Get-Content -LiteralPath $configPath -Raw | ConvertFrom-Json
+            $hasUserScopedControl = @($configuration.profiles | Where-Object {
+                $modules = $_.PSObject.Properties['modules']
+                $null -ne $modules -and $null -ne $modules.Value -and $null -ne $modules.Value.PSObject.Properties['startup-user-application-control']
+            }).Count -gt 0
+
+            if ($hasUserScopedControl) {
+                Set-Failure -ExitCode 1 -Message 'Do not remove the user-logon hook together with machine baseline restore while startup-user-application-control is configured. Per-user HKCU baselines must be restored at user logon first.'
+            }
         }
     }
 
@@ -128,6 +151,9 @@ try {
     }
 
     if ($WhatIfPreference) {
+        if ($RestoreMachineBaselines) {
+            $actions.Add('would-restore-machine-baselines')
+        }
         if ($RemoveStartupHook) {
             $actions.Add('would-remove-startup-hook')
         }
@@ -158,6 +184,15 @@ try {
 
     # Remove hooks before BCD entries so no further automatic run can start
     # while managed boot infrastructure is being removed.
+    if ($RestoreMachineBaselines) {
+        Invoke-UninstallStep -Name 'machine-baselines-restored' -ExitCode 5 -Action {
+            $restoreOutput = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $machineRestoreScript -AsJson
+            if ($LASTEXITCODE -ne 0) {
+                throw "Machine baseline restore failed with exit code ${LASTEXITCODE}: $($restoreOutput | Out-String)"
+            }
+        }
+    }
+
     if ($RemoveStartupHook) {
         Invoke-UninstallStep -Name 'startup-hook-removed' -ExitCode 3 -Action {
             & $startupHookUninstaller

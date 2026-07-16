@@ -38,8 +38,12 @@ runtime, optional configuration, optional scheduled-hook and explicit
 boot-menu deployment. `scripts/Uninstall-BootProfileSwitcherDeployment.ps1`
 now provides the first non-interactive removal step for explicitly selected
 hooks and managed boot-menu entries while preserving runtime, configuration and
-module lifecycle state. The next step is restore-aware baseline handling before
-any explicit runtime or configuration removal.
+module lifecycle state. `scripts/Restore-BootProfileSwitcherMachineBaselines.ps1`
+now restores machine lifecycle baselines before removal. Per-user HKCU state
+remains a user-logon responsibility, so the central uninstaller blocks its
+simultaneous user-hook removal when Startup and User-Application Control is
+configured. The next step is explicit runtime/configuration removal only after
+the remaining per-user restore design is validated.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 

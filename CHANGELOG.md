@@ -12,6 +12,7 @@ This project follows Semantic Versioning.
 - Add the first non-interactive deployment entry point for machine-wide runtime, validated configuration and scheduled-hook installation.
 - Add explicit non-interactive managed boot-menu installation and replacement through the deployment entry point.
 - Add the first non-interactive deployment removal entry point for selected hooks and managed boot-menu entries.
+- Add machine lifecycle baseline restoration before deployment removal and preserve per-user HKCU restoration for the user-logon context.
 
 ## [v1.6.0] - 2026-07-12
 
