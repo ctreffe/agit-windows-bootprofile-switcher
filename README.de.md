@@ -377,7 +377,7 @@ BootProfile Switcher verwendet Semantic Versioning.
 Der zuletzt abgeschlossene Projektmeilenstein ist:
 
 ```text
-1.4.0 Service and Startup Control Discovery
+1.6.0 Startup and User-Application Control
 ```
 
 ## Validierung
@@ -414,6 +414,7 @@ Zentrale Projektdokumente:
 - [CODEX.md](CODEX.md) – lokale Codex Operating Policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – Projektphilosophie
 - [docs/architecture.md](docs/architecture.md) – konzeptionelle Systemarchitektur
+- [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – geplantes MDT-kompatibles Deployment-Modell
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – englische Dokumentation zu Konfigurationsformat v2
 - [docs/configuration-format-v2.de.md](docs/configuration-format-v2.de.md) – deutsche Dokumentation zu Konfigurationsformat v2
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control
@@ -437,6 +438,7 @@ Zentrale Projektdokumente:
 - [docs/decisions/ADR-0006-configuration-driven-boot-menu.md](docs/decisions/ADR-0006-configuration-driven-boot-menu.md) – Architekturentscheidung zur konfigurationsgetriebenen Bootmenü-Installation
 - [docs/decisions/ADR-0007-service-and-startup-control-modularization.md](docs/decisions/ADR-0007-service-and-startup-control-modularization.md) – Architekturentscheidung zur Modularisierung von Service and Startup Control
 - [docs/decisions/ADR-0008-startup-and-user-application-control.md](docs/decisions/ADR-0008-startup-and-user-application-control.md) – Architekturentscheidung zu Startup and User-Application Control
+- [docs/decisions/ADR-0009-machine-wide-and-version-resilient-controls.md](docs/decisions/ADR-0009-machine-wide-and-version-resilient-controls.md) – Architekturentscheidung zu maschinenweiten und versionsresilienten Controls
 - [LICENSE](LICENSE) – MIT-Lizenz
 
 ### Resolver des aktuellen Profils

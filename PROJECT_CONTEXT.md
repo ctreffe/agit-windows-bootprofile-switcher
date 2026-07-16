@@ -28,6 +28,13 @@ The Startup and User-Application Control milestone is complete.
 
 Prepare **v1.7.0 - Machine-Wide Runtime and Deployment**.
 
+The v1.7.0 deployment model is now specified in
+`docs/deployment/mdt-deployment.md`. It defines unattended MDT Task Sequence
+deployment as `LocalSystem`, a fully local ProgramData runtime, separated
+runtime and configuration updates, explicit boot-menu opt-in, idempotent
+operations and a deployment exit-code contract. Implementation is the next
+step; the documented deployment entry point does not exist yet.
+
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
 Completed v1.4.0 results:
@@ -55,6 +62,7 @@ Completed v1.6.0 results:
 * ADR-0009 defines machine-wide, AD-compatible and version-resilient control rules: no named user or SID in machine configuration, per-user state only where Windows requires it, and logical target IDs resolved through narrow allow-listed patterns.
 * `scripts/Install-BootProfileRuntime.ps1` installs active runtime code under `%ProgramData%\BootProfileSwitcher\runtime`; the Startup and User-Application Control demo registers hooks against that machine-wide location.
 * `docs/modules/startup-user-application-control.md` defines the initial v1.6.0 module design, baseline model and validation plan.
+* `docs/deployment/mdt-deployment.md` defines the v1.7.0 MDT-compatible deployment model and validation plan.
 * `docs/discovery/startup-user-application-control-findings.md` records the elevated read-only v1.6.0 discovery refresh for Teams, OneDrive, ownCloud and Microsoft Office; the current-machine extension also identified AnyDesk as a service and Microsoft 365 Copilot as `M365Copilot`.
 * `scripts/Test-BootProfileConfiguration.ps1` validates the first `startup-user-application-control` configuration shape and allow-listed application IDs.
 * `modules/startup-user-application-control/Invoke-StartupUserApplicationControlModule.ps1` provides dry-run planning plus elevated real apply/restore for allow-listed startup registry values and scheduled tasks.

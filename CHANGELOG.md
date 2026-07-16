@@ -6,6 +6,10 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+### Added
+
+- Define the planned v1.7.0 MDT-compatible machine deployment model, including local runtime ownership, unattended parameters, explicit boot-menu opt-in, exit codes and validation criteria.
+
 ## [v1.6.0] - 2026-07-12
 
 ### Added
