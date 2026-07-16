@@ -35,9 +35,7 @@ $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $configSource = Join-Path $repoRoot 'config\demos\config-driven-boot-menu.json'
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-config-driven-boot-menu-demo.json'
-$installConfigurationScript = Join-Path $repoRoot 'scripts\Install-BootProfileConfiguration.ps1'
-$installBootMenuScript = Join-Path $repoRoot 'scripts\Install-BootProfileMenu.ps1'
-$installStartupHookScript = Join-Path $repoRoot 'scripts\Install-StartupHook.ps1'
+$deploymentScript = Join-Path $repoRoot 'scripts\Install-BootProfileSwitcherDeployment.ps1'
 
 if (-not (Test-Path $configSource)) {
     throw "Config-driven boot menu demo configuration not found: $configSource"
@@ -52,25 +50,26 @@ if ((Test-Path $configDestination) -and -not (Test-Path $configBackup)) {
     }
 }
 
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installConfigurationScript -SourcePath $configSource -DestinationPath $configDestination -Force
-
-$bootMenuArguments = @(
+$deploymentArguments = @(
     '-NoProfile',
     '-ExecutionPolicy', 'Bypass',
-    '-File', $installBootMenuScript,
-    '-ConfigPath', $configDestination
+    '-File', $deploymentScript,
+    '-SourceRoot', $repoRoot,
+    '-ConfigurationPath', $configSource,
+    '-InstallStartupHook',
+    '-InstallBootMenu',
+    '-Force',
+    '-AsJson'
 )
 
 if ($CleanupExisting) {
-    $bootMenuArguments += '-CleanupExisting'
+    $deploymentArguments += '-CleanupExistingBootMenu'
 }
 
-if ($Force) {
-    $bootMenuArguments += '-Force'
+$deploymentResult = & powershell.exe @deploymentArguments
+if ($LASTEXITCODE -ne 0) {
+    throw "Config-driven boot menu demo deployment failed with exit code ${LASTEXITCODE}: $($deploymentResult | Out-String)"
 }
-
-& powershell.exe @bootMenuArguments
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installStartupHookScript
 
 Write-Host 'Config-driven boot menu demo installed.'
 Write-Host "Config: $configDestination"
