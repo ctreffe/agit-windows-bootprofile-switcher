@@ -24,6 +24,8 @@ param(
 
     [switch]$RestoreMachineBaselines,
 
+    [switch]$ScheduleUserBaselineRestore,
+
     [switch]$AsJson
 )
 
@@ -96,6 +98,7 @@ function Write-UninstallResult {
         userLogonHookRequested = [bool]$RemoveUserLogonHook
         bootMenuRequested = [bool]$RemoveBootMenu
         machineBaselineRestoreRequested = [bool]$RestoreMachineBaselines
+        userBaselineRestoreScheduled = [bool]$ScheduleUserBaselineRestore
         bootMenuAction = $BootMenuAction
         actions = @($actions)
         error = $ErrorMessage
@@ -112,7 +115,7 @@ function Write-UninstallResult {
 $bootMenuAction = 'not-requested'
 
 try {
-    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines)) {
+    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore)) {
         Set-Failure -ExitCode 1 -Message 'Specify at least one removal option.'
     }
 
@@ -120,6 +123,7 @@ try {
     $userLogonHookUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-UserLogonHook.ps1'
     $bootMenuUninstaller = Join-Path $runtimeRoot 'scripts\Uninstall-BootProfileMenu.ps1'
     $machineRestoreScript = Join-Path $runtimeRoot 'scripts\Restore-BootProfileSwitcherMachineBaselines.ps1'
+    $userRestoreStarter = Join-Path $runtimeRoot 'scripts\Start-BootProfileSwitcherUserBaselineRestore.ps1'
 
     foreach ($scriptPath in @($startupHookUninstaller, $userLogonHookUninstaller, $bootMenuUninstaller)) {
         if (-not (Test-Path -LiteralPath $scriptPath)) {
@@ -129,6 +133,14 @@ try {
 
     if ($RestoreMachineBaselines -and -not (Test-Path -LiteralPath $machineRestoreScript)) {
         Set-Failure -ExitCode 1 -Message "Installed machine baseline restore script not found: $machineRestoreScript"
+    }
+
+    if ($ScheduleUserBaselineRestore -and -not (Test-Path -LiteralPath $userRestoreStarter)) {
+        Set-Failure -ExitCode 1 -Message "Installed user baseline restore starter not found: $userRestoreStarter"
+    }
+
+    if ($ScheduleUserBaselineRestore -and $RemoveUserLogonHook) {
+        Set-Failure -ExitCode 1 -Message 'Do not remove the user-logon hook while scheduling per-user baseline restoration.'
     }
 
     if ($RestoreMachineBaselines -and $RemoveUserLogonHook) {
@@ -153,6 +165,9 @@ try {
     if ($WhatIfPreference) {
         if ($RestoreMachineBaselines) {
             $actions.Add('would-restore-machine-baselines')
+        }
+        if ($ScheduleUserBaselineRestore) {
+            $actions.Add('would-schedule-user-baseline-restore')
         }
         if ($RemoveStartupHook) {
             $actions.Add('would-remove-startup-hook')
@@ -190,6 +205,13 @@ try {
             if ($LASTEXITCODE -ne 0) {
                 throw "Machine baseline restore failed with exit code ${LASTEXITCODE}: $($restoreOutput | Out-String)"
             }
+        }
+    }
+
+    if ($ScheduleUserBaselineRestore) {
+        Invoke-UninstallStep -Name 'user-baseline-restore-scheduled' -ExitCode 5 -Action {
+            $scheduleOutput = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $userRestoreStarter -AsJson
+            if ($LASTEXITCODE -ne 0) { throw "User baseline restore scheduling failed with exit code ${LASTEXITCODE}: $($scheduleOutput | Out-String)" }
         }
     }
 

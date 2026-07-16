@@ -23,16 +23,14 @@ $ErrorActionPreference = 'Stop'
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $profileEngineScript = Join-Path $repoRoot 'scripts\Invoke-ProfileEngine.ps1'
+$userBaselineRestoreScript = Join-Path $repoRoot 'scripts\Restore-BootProfileSwitcherUserBaseline.ps1'
+$pendingUserBaselineRestorePath = Join-Path $env:ProgramData 'BootProfileSwitcher\state\pending-user-baseline-restore.json'
 $resolverStatePath = Join-Path $repoRoot 'state\current-boot-profile.json'
 $logDir = Join-Path $repoRoot 'logs'
 $logFile = Join-Path $logDir 'user-logon-profile.log'
 
 if (-not (Test-Path $profileEngineScript)) {
     throw "Profile engine script not found at $profileEngineScript"
-}
-
-if (-not (Test-Path $resolverStatePath)) {
-    throw "Startup resolver state not found at $resolverStatePath"
 }
 
 New-Item -ItemType Directory -Path $logDir -Force | Out-Null
@@ -43,6 +41,28 @@ $userName = [Security.Principal.WindowsIdentity]::GetCurrent().Name
 try {
     if ($DelaySeconds -gt 0) {
         Start-Sleep -Seconds $DelaySeconds
+    }
+
+    if (Test-Path -LiteralPath $pendingUserBaselineRestorePath) {
+        if (-not (Test-Path -LiteralPath $userBaselineRestoreScript)) {
+            throw "User baseline restore script not found at $userBaselineRestoreScript"
+        }
+
+        $restoreJson = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $userBaselineRestoreScript -AsJson
+        if ($LASTEXITCODE -ne 0) {
+            throw "Pending user baseline restore helper failed with exit code $LASTEXITCODE."
+        }
+        $restoreResult = $restoreJson | ConvertFrom-Json
+        if (-not [bool]$restoreResult.succeeded) {
+            throw "Pending user baseline restore failed: $($restoreResult.error)"
+        }
+
+        Add-Content -Path $logFile -Value "$timestamp | user=$userName | pendingUserBaselineRestore=True | restoreId=$($restoreResult.restoreId) | completed=True" -Encoding UTF8
+        return
+    }
+
+    if (-not (Test-Path $resolverStatePath)) {
+        throw "Startup resolver state not found at $resolverStatePath"
     }
 
     $result = Get-Content -Path $resolverStatePath -Raw | ConvertFrom-Json

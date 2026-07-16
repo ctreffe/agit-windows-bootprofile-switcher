@@ -139,6 +139,7 @@ Its parameter surface is:
 -RemoveUserLogonHook               Remove the named built-in-Users logon task
 -RemoveBootMenu                    Remove entries recorded in managed state
 -RestoreMachineBaselines           Restore machine baselines before removal
+-ScheduleUserBaselineRestore       Keep the user hook and restore HKCU baselines at next logon
 -WhatIf                            Report planned changes without changing the machine
 -AsJson                            Emit the removal result as JSON
 ```
@@ -154,6 +155,13 @@ Do not combine `-RestoreMachineBaselines` with `-RemoveUserLogonHook` while
 state is stored per user and must be restored by the existing user-logon hook
 in each affected user's session. The machine restore result exposes this as
 `userLogonRestoreRequired`.
+
+When per-user restoration is required, use `-ScheduleUserBaselineRestore` and
+retain the user-logon hook. It creates a machine marker under ProgramData; at
+each subsequent user logon the hook restores that user's local baseline once
+and records completion under `%LocalAppData%\BootProfileSwitcher\state`.
+After the relevant users have logged on and the user-logon log has been
+reviewed, remove the user-logon hook in a separate explicit final-cleanup run.
 
 The complete planned removal model removes only infrastructure owned by
 BootProfile Switcher:
