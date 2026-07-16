@@ -14,6 +14,7 @@ This project follows Semantic Versioning.
 - Add the first non-interactive deployment removal entry point for selected hooks and managed boot-menu entries.
 - Add machine lifecycle baseline restoration before deployment removal and preserve per-user HKCU restoration for the user-logon context.
 - Add pending per-user baseline restore scheduling and one-time user-logon completion markers for deployment cleanup.
+- Validate the machine baseline restore and real per-user pending restore path on the development device.
 
 ## [v1.6.0] - 2026-07-12
 

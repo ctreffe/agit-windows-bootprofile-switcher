@@ -225,6 +225,18 @@ target or equivalent `LocalSystem` deployment context:
 6. Explicit uninstall and module baseline restore, confirming that managed
    infrastructure is removed and unrelated system state remains intact.
 
+### Validation Status
+
+On 2026-07-16, the machine restore and pending per-user restore path were
+validated on the development device using the existing Startup and
+User-Application Control configuration. The machine restore completed with
+Service Control and Startup/User-Application Control lifecycle execution. A
+real subsequent user logon completed the pending per-user restore: the
+User-Logon Scheduled Task returned code `0`, wrote its local completion marker
+under `%LocalAppData%`, and recorded `pendingUserBaselineRestore=True` in the
+machine runtime log. The user-logon hook and pending marker were intentionally
+retained for the later final-cleanup step.
+
 ## Relationship to Existing Components
 
 `Install-BootProfileRuntime.ps1` already provides the initial local runtime

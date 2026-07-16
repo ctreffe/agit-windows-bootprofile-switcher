@@ -45,6 +45,13 @@ machine marker; the user-logon hook restores each affected user's baseline once
 and records its local completion. The user hook is removed only in a later,
 explicit final-cleanup run after relevant user logons have been validated.
 
+Validation update: on 2026-07-16, the development device successfully ran the
+machine baseline restore and then completed the pending per-user restore after
+a real user logon. The User-Logon Scheduled Task returned code 0, the local
+completion marker was written and the runtime log recorded the completed
+pending restore. The current user-logon hook and pending marker remain in place
+until final cleanup is designed and validated.
+
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
 Completed v1.4.0 results:
