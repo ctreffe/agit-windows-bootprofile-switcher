@@ -204,7 +204,7 @@ function Get-BootProfileEntriesFromBcd {
 
         $entries += [pscustomobject]@{
             ProfileId = if ($null -ne $managedEntry) { [string]$managedEntry.profileId } else { $null }
-            Mode = if ($null -ne $managedEntry) { [string]$managedEntry.mode } else { $null }
+            Mode = if ($null -ne $managedEntry -and $managedEntry.PSObject.Properties['mode']) { [string]$managedEntry.mode } else { $null }
             Name = $description
             Identifier = $identifier
         }

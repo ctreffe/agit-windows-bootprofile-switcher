@@ -19,6 +19,13 @@ This project follows Semantic Versioning.
 - Add external worker-based final runtime removal after all managed deployment artifacts are gone.
 - Validate complete restore-aware removal on the development device, including the
   external runtime-removal worker and its success record.
+- Validate the unattended v1.7.0 deployment, boot-menu and cleanup paths in a
+  representative local `LocalSystem` context.
+
+### Fixed
+
+- Allow managed boot-menu replacement when the current schema-v2 state entry
+  does not contain the legacy optional `mode` property.
 
 ## [v1.6.0] - 2026-07-12
 

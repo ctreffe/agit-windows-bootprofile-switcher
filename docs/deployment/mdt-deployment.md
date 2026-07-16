@@ -253,7 +253,17 @@ external worker reported `succeeded: true` and the installed runtime directory
 was absent. Validate managed scheduled-task preconditions in the same elevated
 context as the uninstaller; a non-elevated query did not reliably show the
 existing startup hook on this device. An MDT Task Sequence / `LocalSystem`
-validation remains outstanding.
+validation was then completed on the development device. Fresh deployment,
+repeat deployment and runtime-only update all returned code `0` through a
+temporary `SYSTEM` scheduled task. The runtime-only update preserved both the
+installed configuration hash and a lifecycle-state sentinel. Explicit managed
+boot-menu installation succeeded; the deliberate retry without cleanup
+returned code `4`, and a cleanup replacement succeeded after fixing a
+schema-v2 compatibility error for the absent optional legacy `mode` property.
+The System-context central uninstall and external runtime worker each returned
+code `0`; the worker recorded `succeeded: true` and the runtime directory was
+absent. The temporary SYSTEM test task was removed. Validation of a different
+local or AD user's later logon remains outstanding.
 
 ## Relationship to Existing Components
 

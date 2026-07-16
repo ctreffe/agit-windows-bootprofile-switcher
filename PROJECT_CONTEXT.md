@@ -64,6 +64,19 @@ removing the installed runtime. Scheduled-task preconditions must be checked
 in the same elevated context as the uninstaller; a non-elevated task query did
 not reliably show the existing startup hook on this device.
 
+LocalSystem validation update: the same development device then ran the
+unattended deployment entry points through a temporary `SYSTEM` scheduled task.
+Fresh deployment, repeated deployment and a runtime-only update each returned
+code 0. The runtime-only update preserved the installed configuration hash and
+a lifecycle-state sentinel. Explicit managed boot-menu installation succeeded;
+the deliberate no-cleanup retry returned code 4, and the cleanup replacement
+initially exposed a schema-v2 compatibility defect for an absent optional
+`mode` property. After the fix, replacement succeeded. The System-context
+uninstall and the external runtime worker both returned code 0, with the worker
+recording `succeeded: true`. The temporary test task was removed; separate
+ProgramData validation records remain. A different local or AD user logon
+remains the only outstanding v1.7.0 validation case.
+
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 
 Completed v1.4.0 results:
