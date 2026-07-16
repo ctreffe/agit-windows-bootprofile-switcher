@@ -26,6 +26,12 @@ param(
 
     [switch]$ScheduleUserBaselineRestore,
 
+    [switch]$RemoveConfiguration,
+
+    [switch]$RemoveMachineState,
+
+    [switch]$Force,
+
     [switch]$AsJson
 )
 
@@ -36,6 +42,9 @@ $runtimeRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $machineRoot = Split-Path -Parent $runtimeRoot
 $deploymentLogPath = Join-Path $machineRoot 'logs\deployment-uninstall.log'
 $bootMenuStatePath = Join-Path $runtimeRoot 'state\boot-menu.json'
+$configurationRoot = Join-Path $machineRoot 'config'
+$machineStateRoot = Join-Path $machineRoot 'state'
+$pendingUserRestorePath = Join-Path $machineStateRoot 'pending-user-baseline-restore.json'
 $script:failureExitCode = 1
 $actions = [System.Collections.Generic.List[string]]::new()
 
@@ -99,6 +108,8 @@ function Write-UninstallResult {
         bootMenuRequested = [bool]$RemoveBootMenu
         machineBaselineRestoreRequested = [bool]$RestoreMachineBaselines
         userBaselineRestoreScheduled = [bool]$ScheduleUserBaselineRestore
+        configurationRemovalRequested = [bool]$RemoveConfiguration
+        machineStateRemovalRequested = [bool]$RemoveMachineState
         bootMenuAction = $BootMenuAction
         actions = @($actions)
         error = $ErrorMessage
@@ -115,7 +126,7 @@ function Write-UninstallResult {
 $bootMenuAction = 'not-requested'
 
 try {
-    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore)) {
+    if (-not ($RemoveStartupHook -or $RemoveUserLogonHook -or $RemoveBootMenu -or $RestoreMachineBaselines -or $ScheduleUserBaselineRestore -or $RemoveConfiguration -or $RemoveMachineState)) {
         Set-Failure -ExitCode 1 -Message 'Specify at least one removal option.'
     }
 
@@ -141,6 +152,14 @@ try {
 
     if ($ScheduleUserBaselineRestore -and $RemoveUserLogonHook) {
         Set-Failure -ExitCode 1 -Message 'Do not remove the user-logon hook while scheduling per-user baseline restoration.'
+    }
+
+    if (($RemoveConfiguration -or $RemoveMachineState) -and -not $Force) {
+        Set-Failure -ExitCode 1 -Message 'Removing configuration or machine state requires -Force after restore validation.'
+    }
+
+    if ($RemoveUserLogonHook -and (Test-Path -LiteralPath $pendingUserRestorePath) -and -not $Force) {
+        Set-Failure -ExitCode 1 -Message 'A pending per-user restore marker exists. Review completion evidence and use -Force before removing the user-logon hook.'
     }
 
     if ($RestoreMachineBaselines -and $RemoveUserLogonHook) {
@@ -181,6 +200,8 @@ try {
         if ($RemoveBootMenu -and $bootMenuAction -eq 'not-installed') {
             $actions.Add('boot-menu-not-installed')
         }
+        if ($RemoveConfiguration) { $actions.Add('would-remove-configuration') }
+        if ($RemoveMachineState) { $actions.Add('would-remove-machine-state') }
 
         Write-UninstallResult -Succeeded $true -ExitCode 0 -ErrorMessage $null -BootMenuAction $bootMenuAction
         exit 0
@@ -234,6 +255,18 @@ try {
     }
     elseif ($RemoveBootMenu) {
         $actions.Add('boot-menu-not-installed')
+    }
+
+    if ($RemoveConfiguration -and (Test-Path -LiteralPath $configurationRoot)) {
+        Invoke-UninstallStep -Name 'configuration-removed' -ExitCode 5 -Action {
+            Remove-Item -LiteralPath $configurationRoot -Recurse -Force
+        }
+    }
+
+    if ($RemoveMachineState -and (Test-Path -LiteralPath $machineStateRoot)) {
+        Invoke-UninstallStep -Name 'machine-state-removed' -ExitCode 5 -Action {
+            Remove-Item -LiteralPath $machineStateRoot -Recurse -Force
+        }
     }
 
     Write-DeploymentLog -Message "uninstall-success actions=$(@($actions) -join ',') bootMenuAction=$bootMenuAction"

@@ -45,6 +45,12 @@ machine marker; the user-logon hook restores each affected user's baseline once
 and records its local completion. The user hook is removed only in a later,
 explicit final-cleanup run after relevant user logons have been validated.
 
+The central uninstaller now exposes `-RemoveConfiguration` and
+`-RemoveMachineState` as explicit `-Force`-protected cleanup options. Runtime
+removal remains the final v1.7.0 implementation task because it needs an
+external cleanup bootstrap rather than deleting the directory containing the
+running uninstaller.
+
 Validation update: on 2026-07-16, the development device successfully ran the
 machine baseline restore and then completed the pending per-user restore after
 a real user logon. The User-Logon Scheduled Task returned code 0, the local

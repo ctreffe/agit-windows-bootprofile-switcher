@@ -140,6 +140,9 @@ Its parameter surface is:
 -RemoveBootMenu                    Remove entries recorded in managed state
 -RestoreMachineBaselines           Restore machine baselines before removal
 -ScheduleUserBaselineRestore       Keep the user hook and restore HKCU baselines at next logon
+-RemoveConfiguration               Remove ProgramData configuration after validation (requires -Force)
+-RemoveMachineState                Remove ProgramData lifecycle state after validation (requires -Force)
+-Force                             Confirm destructive final-cleanup options
 -WhatIf                            Report planned changes without changing the machine
 -AsJson                            Emit the removal result as JSON
 ```
@@ -174,9 +177,10 @@ BootProfile Switcher:
 
 It must not delete arbitrary BCD entries, user startup values, scheduled tasks
 or application state merely because their names resemble supported targets.
-Removal of configuration or the complete machine root will be separate
-explicit options, not the default effect of a runtime update. Baseline restore
-must finish before either is introduced.
+Configuration and machine-state removal are explicit `-Force` options, not a
+default effect of an update. They are available only after restore evidence has
+been reviewed. Runtime removal remains a separate final step because the
+uninstaller must first move execution outside the runtime directory it removes.
 
 ## MDT Result Contract
 
