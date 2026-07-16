@@ -113,8 +113,8 @@ $stateFile = Join-Path $stateDir 'boot-menu.json'
 $configSource = Join-Path $repoRoot 'config\demos\network-isolation.json'
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-network-isolation-demo.json'
-$startupHookScript = Join-Path $repoRoot 'scripts\Install-StartupHook.ps1'
 $validatorScript = Join-Path $repoRoot 'scripts\Test-BootProfileConfiguration.ps1'
+$deploymentScript = Join-Path $repoRoot 'scripts\Install-BootProfileSwitcherDeployment.ps1'
 
 if (-not (Test-Path $configSource)) {
     throw "Network Isolation demo configuration not found: $configSource"
@@ -163,43 +163,10 @@ if ((Test-Path $configDestination) -and -not (Test-Path $configBackup)) {
     Write-Host "Backed up existing profile configuration: $configBackup"
 }
 
-Copy-Item -Path $configSource -Destination $configDestination -Force
-Write-Host "Installed Network Isolation demo configuration: $configDestination"
-
-$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$backupFile = Join-Path $backupDir "bcd-before-network-isolation-demo-$timestamp.bak"
-& bcdedit /export $backupFile | Out-Null
-
-$entryOutput = & bcdedit /copy '{default}' /d 'Network Isolation'
-$entryId = Get-GuidFromBcdeditOutput -Output $entryOutput
-
-& bcdedit /displayorder $entryId /addlast | Out-Null
-& bcdedit /timeout $TimeoutSeconds | Out-Null
-
-$state = [ordered]@{
-    createdAt = (Get-Date).ToString('o')
-    demo = 'network-isolation'
-    sourceEntry = '{default}'
-    entries = @(
-        [ordered]@{
-            mode = 'network-isolation'
-            name = 'Network Isolation'
-            identifier = $entryId
-        }
-    )
-    timeoutSeconds = $TimeoutSeconds
-    backupFile = $backupFile
-    configSource = $configSource
-    configDestination = $configDestination
-    configBackup = if (Test-Path $configBackup) { $configBackup } else { $null }
+$deploymentResult = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $deploymentScript -SourceRoot $repoRoot -ConfigurationPath $configSource -InstallStartupHook -InstallBootMenu -Force -AsJson
+if ($LASTEXITCODE -ne 0) {
+    throw "Network Isolation demo deployment failed with exit code ${LASTEXITCODE}: $($deploymentResult | Out-String)"
 }
 
-$state | ConvertTo-Json -Depth 5 | Set-Content -Path $stateFile -Encoding UTF8
-
-& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startupHookScript
-
 Write-Host 'Network Isolation demo installed.'
-Write-Host "Boot entry: $entryId"
-Write-Host "State:      $stateFile"
 Write-Host "Config:     $configDestination"
-Write-Host "Backup:     $backupFile"

@@ -108,10 +108,6 @@ if (-not (Test-Administrator)) {
 
 $sourceRoot = Split-Path -Parent (Split-Path -Parent $PSCommandPath)
 $runtimeRoot = Join-Path $env:ProgramData 'BootProfileSwitcher\runtime'
-$runtimeInstallerScript = Join-Path $sourceRoot 'scripts\Install-BootProfileRuntime.ps1'
-
-& $runtimeInstallerScript -SourceRoot $sourceRoot -RuntimeRoot $runtimeRoot
-
 $stateDir = Join-Path $runtimeRoot 'state'
 $backupDir = Join-Path $runtimeRoot 'backups'
 $stateFile = Join-Path $stateDir 'boot-menu.json'
@@ -119,9 +115,8 @@ $legacyStateFile = Join-Path $sourceRoot 'state\boot-menu.json'
 $configSource = Join-Path $sourceRoot 'config\demos\startup-user-application-control.json'
 $configDestination = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.json'
 $configBackup = Join-Path $env:ProgramData 'BootProfileSwitcher\config\profiles.before-startup-user-application-control-demo.json'
-$startupHookScript = Join-Path $runtimeRoot 'scripts\Install-StartupHook.ps1'
-$userLogonHookScript = Join-Path $runtimeRoot 'scripts\Install-UserLogonHook.ps1'
-$validatorScript = Join-Path $runtimeRoot 'scripts\Test-BootProfileConfiguration.ps1'
+$validatorScript = Join-Path $sourceRoot 'scripts\Test-BootProfileConfiguration.ps1'
+$deploymentScript = Join-Path $sourceRoot 'scripts\Install-BootProfileSwitcherDeployment.ps1'
 
 if (-not (Test-Path $configSource)) {
     throw "Startup and User-Application Control demo configuration not found: $configSource"
@@ -172,46 +167,10 @@ if ((Test-Path $configDestination) -and -not (Test-Path $configBackup)) {
     Write-Host "Backed up existing profile configuration: $configBackup"
 }
 
-Copy-Item -Path $configSource -Destination $configDestination -Force
-Write-Host "Installed Startup and User-Application Control demo configuration: $configDestination"
-
-$timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$backupFile = Join-Path $backupDir "bcd-before-startup-user-application-control-demo-$timestamp.bak"
-& bcdedit /export $backupFile | Out-Null
-
-$entryOutput = & bcdedit /copy '{default}' /d 'App Startup Control'
-$entryId = Get-GuidFromBcdeditOutput -Output $entryOutput
-
-& bcdedit /displayorder $entryId /addlast | Out-Null
-& bcdedit /timeout $TimeoutSeconds | Out-Null
-
-$state = [ordered]@{
-    createdAt = (Get-Date).ToString('o')
-    demo = 'startup-user-application-control'
-    sourceEntry = '{default}'
-    entries = @(
-        [ordered]@{
-            mode = 'app-startup-control'
-            name = 'App Startup Control'
-            identifier = $entryId
-        }
-    )
-    timeoutSeconds = $TimeoutSeconds
-    backupFile = $backupFile
-    configSource = $configSource
-    configDestination = $configDestination
-    configBackup = if (Test-Path $configBackup) { $configBackup } else { $null }
+$deploymentResult = & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $deploymentScript -SourceRoot $sourceRoot -ConfigurationPath $configSource -InstallStartupHook -InstallUserLogonHook -InstallBootMenu -Force -AsJson
+if ($LASTEXITCODE -ne 0) {
+    throw "Startup and User-Application Control demo deployment failed with exit code ${LASTEXITCODE}: $($deploymentResult | Out-String)"
 }
 
-$state | ConvertTo-Json -Depth 5 | Set-Content -Path $stateFile -Encoding UTF8
-
-# Keep the hook installation in this elevated process. Starting a second shell
-# here can lose the elevated token and used to hide hook-registration failures.
-& $startupHookScript
-& $userLogonHookScript
-
 Write-Host 'Startup and User-Application Control demo installed.'
-Write-Host "Boot entry: $entryId"
-Write-Host "State:      $stateFile"
 Write-Host "Config:     $configDestination"
-Write-Host "Backup:     $backupFile"
