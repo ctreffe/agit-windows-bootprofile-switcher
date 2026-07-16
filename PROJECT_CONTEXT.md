@@ -74,8 +74,11 @@ initially exposed a schema-v2 compatibility defect for an absent optional
 `mode` property. After the fix, replacement succeeded. The System-context
 uninstall and the external runtime worker both returned code 0, with the worker
 recording `succeeded: true`. The temporary test task was removed; separate
-ProgramData validation records remain. A different local or AD user logon
-remains the only outstanding v1.7.0 validation case.
+ProgramData validation records remain. The final v1.7.0 validation case also
+completed: a later logon by `GWDG\0ctreffe` wrote its own completion marker for
+the pending restore, the User-Logon task returned code 0 and its action used
+the local ProgramData runtime. The original user subsequently completed the
+same restore ID; final cleanup and external runtime removal then succeeded.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 

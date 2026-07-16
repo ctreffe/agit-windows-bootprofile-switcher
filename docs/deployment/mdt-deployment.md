@@ -263,7 +263,12 @@ schema-v2 compatibility error for the absent optional legacy `mode` property.
 The System-context central uninstall and external runtime worker each returned
 code `0`; the worker recorded `succeeded: true` and the runtime directory was
 absent. The temporary SYSTEM test task was removed. Validation of a different
-local or AD user's later logon remains outstanding.
+local or AD user's later logon then completed with `GWDG\0ctreffe`: its own
+`%LocalAppData%` completion marker recorded the pending restore ID, the
+User-Logon task returned code `0`, and its registered action used the local
+ProgramData runtime. The original user subsequently completed the same restore
+ID. The user hook, configuration and machine state were then removed, followed
+by successful external runtime removal.
 
 ## Relationship to Existing Components
 

@@ -21,6 +21,8 @@ This project follows Semantic Versioning.
   external runtime-removal worker and its success record.
 - Validate the unattended v1.7.0 deployment, boot-menu and cleanup paths in a
   representative local `LocalSystem` context.
+- Validate a later logon by a second user, including the user-scoped completion
+  marker, local runtime hook action and final multi-user cleanup.
 
 ### Fixed
 
