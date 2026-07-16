@@ -17,6 +17,8 @@ This project follows Semantic Versioning.
 - Validate the machine baseline restore and real per-user pending restore path on the development device.
 - Add explicit Force-protected removal of installed configuration and machine lifecycle state after restore validation.
 - Add external worker-based final runtime removal after all managed deployment artifacts are gone.
+- Validate complete restore-aware removal on the development device, including the
+  external runtime-removal worker and its success record.
 
 ## [v1.6.0] - 2026-07-12
 

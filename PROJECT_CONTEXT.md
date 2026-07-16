@@ -57,8 +57,12 @@ Validation update: on 2026-07-16, the development device successfully ran the
 machine baseline restore and then completed the pending per-user restore after
 a real user logon. The User-Logon Scheduled Task returned code 0, the local
 completion marker was written and the runtime log recorded the completed
-pending restore. The current user-logon hook and pending marker remain in place
-until final cleanup is designed and validated.
+pending restore. Full final cleanup was then validated for the only affected
+user: the remaining hooks, managed boot menu, configuration and machine state
+were removed, and the external runtime worker reported `succeeded: true` after
+removing the installed runtime. Scheduled-task preconditions must be checked
+in the same elevated context as the uninstaller; a non-elevated task query did
+not reliably show the existing startup hook on this device.
 
 v1.4.0 identified the real local control surfaces for Windows Update, Bitdefender, Teams, OneDrive, ownCloud, Outlook and Windows Search indexing before implementing control logic.
 

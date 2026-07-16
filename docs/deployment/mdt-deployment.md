@@ -4,9 +4,9 @@
 
 In progress for v1.7.0 - Machine-Wide Runtime and Deployment.
 
-The current implementation provides the non-interactive runtime,
-configuration, scheduled-hook and explicit boot-menu deployment path. The
-dedicated unattended uninstaller remains a planned follow-up step.
+The current implementation provides non-interactive runtime, configuration,
+scheduled-hook and explicit boot-menu deployment, plus restore-aware,
+unattended removal and final external-runtime cleanup.
 
 ## Purpose
 
@@ -244,8 +244,16 @@ Service Control and Startup/User-Application Control lifecycle execution. A
 real subsequent user logon completed the pending per-user restore: the
 User-Logon Scheduled Task returned code `0`, wrote its local completion marker
 under `%LocalAppData%`, and recorded `pendingUserBaselineRestore=True` in the
-machine runtime log. The user-logon hook and pending marker were intentionally
-retained for the later final-cleanup step.
+machine runtime log.
+
+The same development device then completed the full final-cleanup path for its
+only affected user: the remaining hooks, managed boot-menu state, configuration
+and machine state were removed, followed by `-RemoveRuntime -Force`. The
+external worker reported `succeeded: true` and the installed runtime directory
+was absent. Validate managed scheduled-task preconditions in the same elevated
+context as the uninstaller; a non-elevated query did not reliably show the
+existing startup hook on this device. An MDT Task Sequence / `LocalSystem`
+validation remains outstanding.
 
 ## Relationship to Existing Components
 
