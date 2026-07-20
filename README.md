@@ -268,6 +268,9 @@ Current PowerShell entry points:
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validates the included known-good and known-bad configuration fixtures.
 - `scripts/Inspect-ServiceStartupControlTargets.ps1` performs read-only service, startup and user-application control discovery for the v1.4.0 milestone.
+- `scripts/Inspect-PolicyVendorControlTargets.ps1` performs the read-only
+  Windows Update policy and Bitdefender control-surface inventory for v1.8.0;
+  detailed output remains local until separately reviewed.
 
 The default machine-wide configuration path is:
 
@@ -439,6 +442,7 @@ Core project documents:
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Service and Startup Control discovery scope and inventory workflow
 - [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Service and Startup Control discovery findings and first module recommendation
 - [docs/discovery/startup-user-application-control-findings.md](docs/discovery/startup-user-application-control-findings.md) – Startup and User-Application Control discovery findings
+- [docs/discovery/policy-vendor-control.md](docs/discovery/policy-vendor-control.md) – v1.8.0 Policy and Vendor Control discovery scope and sensitive-output workflow
 - [docs/modules/service-control.md](docs/modules/service-control.md) – Service Control module design
 - [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md) – Startup and User-Application Control module design
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – Network Isolation module documentation

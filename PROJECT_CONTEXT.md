@@ -96,7 +96,7 @@ entries, runtime, configuration or machine state on the development device.
 
 ## Current Focus
 
-Prepare **v1.8.0 - Policy and Vendor Control Foundation**.
+Develop **v1.8.0 - Policy and Vendor Control Foundation**.
 
 This is a broader capability milestone, not a discovery-only release. It covers
 Windows Update and Bitdefender discovery, a durable control-surface decision,
@@ -107,6 +107,10 @@ real deployment and restore validation.
 Bitdefender remains outcome-dependent: a supported enterprise interface may
 lead to an integration path; otherwise the milestone must record a validated
 negative result and safe operator guidance.
+
+The first working step now provides a documented read-only discovery boundary
+and `scripts/Inspect-PolicyVendorControlTargets.ps1`. No real inventory has yet
+been collected or approved for Git.
 
 The detailed roadmap is maintained in [docs/roadmap.md](docs/roadmap.md).
 
@@ -140,6 +144,12 @@ Validated through v1.7.0:
 - multi-user pending baseline restoration;
 - complete restore-aware removal and external runtime cleanup.
 
+Prepared for v1.8.0 but not yet executed against the local system:
+
+- Policy and Vendor Control discovery scope;
+- PowerShell parser and static read-only command review for
+  `scripts/Inspect-PolicyVendorControlTargets.ps1`.
+
 Relevant references:
 
 - [MDT deployment model](docs/deployment/mdt-deployment.md)
@@ -150,10 +160,11 @@ Relevant references:
 
 ## Immediate Next Step
 
-Start v1.8.0 with a read-only capability inventory and support matrix for
-Windows Update and Bitdefender. Before implementation, decide which findings
-belong to Windows policy control, vendor integration, diagnostics or explicit
-non-support, and record the durable decision.
+Review and run the count-only Policy and Vendor Control inventory locally. Keep
+detailed JSON output outside Git, decide whether assistant inspection is
+permitted and create a sanitized capability and risk matrix. Then verify
+candidate control surfaces against official Microsoft and Bitdefender material
+before deciding the module boundary or implementing policy changes.
 
 ## Open Decisions
 
@@ -171,6 +182,8 @@ non-support, and record the durable decision.
 - `README.md` and `README.de.md` - user-facing entry points
 - `docs/roadmap.md` - active and future roadmap
 - `docs/architecture.md` - system architecture
+- `docs/discovery/policy-vendor-control.md` - v1.8.0 discovery scope and
+  sensitive-output workflow
 - `docs/decisions/` - durable architecture decisions
 - `CHANGELOG.md` - completed version history and unreleased changes
 - `ChatGPT.md` - AGIT Collaboration Model

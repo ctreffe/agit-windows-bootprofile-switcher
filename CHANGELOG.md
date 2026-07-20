@@ -15,6 +15,9 @@ This project follows Semantic Versioning.
   retrospective prompts.
 - Add ongoing documentation and repository standards plus a Decision Record
   index and ADR, PDR and DDR templates.
+- Add the v1.8.0 Policy and Vendor Control discovery scope and a read-only
+  Windows Update policy and Bitdefender metadata inventory script with explicit
+  disclosure controls.
 
 ### Changed
 

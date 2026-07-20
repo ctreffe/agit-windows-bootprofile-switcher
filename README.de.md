@@ -285,6 +285,9 @@ Aktuelle PowerShell-Einstiegspunkte:
 - `scripts/Test-BootProfileConfiguration.ps1` validiert eine Profil-Konfigurationsdatei, ohne Änderungen anzuwenden.
 - `scripts/Test-BootProfileConfigurationFixtures.ps1` validiert die enthaltenen bekannten gültigen und ungültigen Konfigurations-Fixtures.
 - `scripts/Inspect-ServiceStartupControlTargets.ps1` fuehrt eine rein lesende Discovery fuer Service-, Autostart- und User-Application-Control im v1.4.0-Meilenstein aus.
+- `scripts/Inspect-PolicyVendorControlTargets.ps1` führt die rein lesende
+  Inventarisierung von Windows-Update-Policy- und Bitdefender-Steuerflächen für
+  v1.8.0 aus; Detailausgaben bleiben bis zu einer separaten Prüfung lokal.
 
 Der standardmäßige maschinenweite Konfigurationspfad ist:
 
@@ -462,6 +465,7 @@ Zentrale Projektdokumente:
 - [docs/discovery/service-startup-control.md](docs/discovery/service-startup-control.md) – Discovery-Scope und Inventarisierungsworkflow fuer Service and Startup Control
 - [docs/discovery/service-startup-control-findings.md](docs/discovery/service-startup-control-findings.md) – Discovery-Ergebnisse und erste Modulempfehlung fuer Service and Startup Control
 - [docs/discovery/startup-user-application-control-findings.md](docs/discovery/startup-user-application-control-findings.md) – Discovery-Ergebnisse fuer Startup and User-Application Control
+- [docs/discovery/policy-vendor-control.md](docs/discovery/policy-vendor-control.md) – v1.8.0-Discovery-Scope für Policy and Vendor Control und Umgang mit sensiblen Ausgaben
 - [docs/modules/service-control.md](docs/modules/service-control.md) – Design des Service-Control-Moduls
 - [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md) – Design fuer Startup and User-Application Control
 - [docs/modules/network-isolation.md](docs/modules/network-isolation.md) – englische Dokumentation des Network-Isolation-Moduls
