@@ -45,14 +45,17 @@ The repository maintainer controls Git state through GitHub Desktop unless a pro
 
 Codex may prepare working tree changes, explain diffs, run checks and propose commit metadata.
 
-The maintainer decides what to stage, commit, tag, push or discard.
+Staging and unstaging are index operations and do not require a control word.
+Codex may perform them only when the maintainer specifically requests the index
+action or authorizes the corresponding commit. Codex must preserve existing
+staged selections and unrelated changes.
 
-Codex has no default permission to perform Git history actions. Approval to
-edit files or prepare a commit-ready change does not authorize staging,
-committing, tagging, pushing or another history action. Each such action
-requires a maintainer instruction for that specific action using a recognized
-control word: `explicit` or `explicitly` in English, or the German word family
-`explizit`.
+Codex has no default permission to perform protected Git actions. File-edit,
+tool or staging approval does not authorize committing, tagging, pushing or
+another protected Git action. Each such action requires a maintainer instruction
+for that specific action that uses a recognized control word: `explicit` or
+`explicitly` in English, or the German word family `explizit`, including
+`explizite`, `expliziten`, `expliziter` and `explizites`.
 
 ---
 
@@ -77,10 +80,11 @@ Codex should report important command results that affect the conclusion of the 
 
 ---
 
-# Read-Only Git Usage
+# Git Inspection and Index Usage
 
-Codex may use Git only for read-only inspection unless the maintainer instructs
-Codex to perform a specific Git history action using a recognized control word.
+Codex may use Git for read-only inspection by default. It may also perform a
+specifically requested staging or unstaging action under the index rules above.
+Protected Git actions require a recognized control word.
 
 Allowed read-only Git commands include:
 
@@ -99,12 +103,19 @@ git describe --tags
 git rev-parse
 ```
 
-Codex must not use Git to modify repository history, staging state, branches, tags or working tree contents.
-
-Forbidden Git actions include:
+Index commands allowed only under the specifically requested index rule are:
 
 ```text
-git add
+git add -- <paths>
+git restore --staged -- <paths>
+```
+
+Codex must not use Git to modify repository history, branches, tags or working
+tree contents without the required protected-action authorization.
+
+Protected Git actions requiring a control word include:
+
+```text
 git commit
 git push
 git pull
@@ -126,7 +137,8 @@ Codex must not edit `.git/` directly.
 
 If a Git command can change repository state, Codex should treat it as forbidden even if the command is convenient.
 
-This remains separate from permission to edit normal project files.
+This rule remains in force even when Codex is otherwise allowed to edit project
+files. Changing repository history is a separate maintainer-controlled action.
 
 ---
 
@@ -162,10 +174,10 @@ Default rules:
 - Treat package installation as network activity that may disclose package names, versions and environment metadata to package sources.
 - Keep generated ZIP files, reports and artifacts local unless the maintainer explicitly requests external sharing.
 
-Assistant access, Git versioning and publication or external sharing are
+Assistant access, Git versioning and publication or external sharing require
 separate maintainer decisions. Approval for one does not authorize another.
-Automated privacy, secret or content checks are warning systems and do not
-establish that an artifact is safe.
+Automated privacy, secret or content checks are warning systems and do not by
+themselves establish that an artifact is sanitized or safe.
 
 If data disclosure is possible, Codex should state that before using the external tool.
 
@@ -173,11 +185,13 @@ If data disclosure is possible, Codex should state that before using the externa
 
 # Forbidden by Default
 
-Codex must not perform the following actions unless the maintainer overrides
-the policy for a specific task using a recognized control word:
+The following actions remain forbidden by default. Protected Git actions
+require a recognized control word; index actions require the specific request
+described above:
 
-- Git history actions
-- staging, committing, tagging, branching, pushing or pulling
+- protected Git actions without the required control-word instruction
+- staging or unstaging without a specific request or corresponding commit
+  authorization
 - destructive filesystem actions outside a clearly requested change
 - hidden system changes
 - global package or tool installation
@@ -241,8 +255,8 @@ The maintainer performs staging, commits, tags and pushes in GitHub Desktop unle
 Regular working commits use an appropriate Conventional Commit prefix and
 represent one logical validated step. Milestone commits use a human-readable
 summary containing the completed version and close work already recorded in
-regular commits. Suggested metadata is advisory and does not authorize Codex to
-create the commit.
+regular commits. Suggested metadata is advisory. It does not authorize Codex
+to create the commit.
 
 ---
 
@@ -276,6 +290,7 @@ Use the project documents as follows:
 
 These documents should remain aligned when the collaboration process changes.
 
-`PROJECT_SETUP.md`, `REPOSITORY.md` and `DOCUMENTATION.md` remain template
-references and are not maintained as separate files in this mature derived
-repository. Applicable rules are incorporated into the project documents above.
+The removed initialization guide `PROJECT_SETUP.md` is not reconstructed as
+historical provenance. Adapted ongoing repository and documentation rules are
+maintained in `REPOSITORY.md` and `DOCUMENTATION.md`; the operational prompts
+support continuation, harmonization and retrospective review.

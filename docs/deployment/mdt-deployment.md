@@ -11,7 +11,7 @@ unattended removal and final external-runtime cleanup.
 ## Purpose
 
 This document defines the intended unattended deployment model for BootProfile
-Switcher when it is installed by Microsoft Deployment Toolkit (MDT). It is an
+Switcher when it is installed by Microsoft Deployment Toolkit (MDT). It is a
 technical reference for the v1.7.0 deployment entry points. For practical
 administrator workflows, see the [English guide](mdt-administrator-guide.md)
 or the [German guide](mdt-administrator-guide.de.md).
@@ -54,7 +54,7 @@ v1.7.0 provides a machine deployment script named
 `Install-BootProfileSwitcherDeployment.ps1` for MDT and other unattended
 software-deployment tools.
 
-Its planned parameter surface is:
+Its implemented parameter surface is:
 
 ```text
 -SourceRoot <path>                 Required deployment-package source
@@ -99,10 +99,10 @@ optionally installs a supplied configuration and hooks. `-InstallBootMenu` is
 deliberately opt-in: changing BCD is a material system change and is not a
 side effect of deploying files or scheduled tasks.
 
-The script must reject ambiguous or unsafe combinations, for example
+The script rejects ambiguous or unsafe combinations, for example
 `-CleanupExistingBootMenu` without `-InstallBootMenu`, or a configuration
 replacement without `-Force` when a different managed configuration exists.
-There must be no `Read-Host`, confirmation prompt or other interactive branch
+There is no `Read-Host`, confirmation prompt or other interactive branch
 when the deployment entry point is used.
 
 ## Scheduled Hook Requirements
@@ -169,7 +169,7 @@ and records completion under `%LocalAppData%\BootProfileSwitcher\state`.
 After the relevant users have logged on and the user-logon log has been
 reviewed, remove the user-logon hook in a separate explicit final-cleanup run.
 
-The complete planned removal model removes only infrastructure owned by
+The complete removal model removes only infrastructure owned by
 BootProfile Switcher:
 
 - the named startup and user-logon tasks;
@@ -192,8 +192,8 @@ state remain.
 
 ## MDT Result Contract
 
-The deployment script must write a timestamped local deployment log under
-`%ProgramData%\BootProfileSwitcher\logs`. It must also emit a concise result
+The deployment script writes a timestamped local deployment log under
+`%ProgramData%\BootProfileSwitcher\logs`. It also emits a concise result
 object suitable for Task Sequence logs, including runtime path, configuration
 path, installed hooks, boot-menu action and errors.
 
@@ -208,7 +208,7 @@ The following exit-code contract is reserved for v1.7.0:
 | 4 | Requested BCD operation failed. |
 | 5 | Requested restore or removal operation failed. |
 
-The script must stop on failure and return a non-zero code. MDT therefore has
+The script stops on failure and returns a non-zero code. MDT therefore has
 one reliable success criterion: exit code `0`.
 
 ## Security and Connectivity Boundaries
@@ -221,8 +221,8 @@ task definitions.
 
 ## Validation Plan
 
-Before v1.7.0 is complete, validate the following on a representative MDT
-target or equivalent `LocalSystem` deployment context:
+The v1.7.0 validation covered the following on the development device in an
+equivalent `LocalSystem` deployment context:
 
 1. Fresh non-interactive runtime, configuration and hook installation.
 2. Repeated deployment with the same payload, confirming idempotent success.
@@ -287,11 +287,10 @@ or machine state remained.
 
 ## Relationship to Existing Components
 
-`Install-BootProfileRuntime.ps1` already provides the initial local runtime
-copy operation. The current demo setup uses that runtime successfully. v1.7.0
-will make the deployment entry point the owner of the ordered runtime,
-configuration and hook workflow, then adapt the granular installers and
-uninstallers so their active paths follow this machine-wide model.
+`Install-BootProfileRuntime.ps1` provides the local runtime copy operation.
+The central deployment entry point owns the ordered runtime, configuration and
+hook workflow, and active demo installers and uninstallers route through this
+machine-wide model.
 
 The design follows the machine-wide and version-resilient rules in
 [ADR-0009](../decisions/ADR-0009-machine-wide-and-version-resilient-controls.md).

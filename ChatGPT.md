@@ -1,6 +1,6 @@
 # ChatGPT.md
 
-# Collaboration Model v1.18
+# Collaboration Model v1.19
 
 **Status:** Stable  
 **Applies to:** AGIT software projects  
@@ -102,6 +102,10 @@ The document should describe the current state, not the full history. History be
 
 At the start of a new AI-assisted session, the assistant should read or reconstruct `PROJECT_CONTEXT.md` before proposing implementation work.
 
+Begin a new context window or assistant session with
+`CONTINUATION_PROMPT.md`. It defines the ordered re-entry review, read-only Git
+baseline check and numbered handoff that should precede substantive work.
+
 ---
 
 # Context Handoff Discipline
@@ -159,17 +163,20 @@ A feature commit should represent a validated logical step. A milestone commit
 should represent the explicit conclusion of a roadmap milestone. The maintainer
 controls when these commits are actually created unless the maintainer gives an
 instruction with a recognized control word for the assistant to perform a
-specific Git history action.
+specific protected Git action.
 
 ---
 
-# Git History Authority
+# Git Index and Protected Git Action Authority
 
-The assistant has no default permission to perform Git history actions.
+Staging and unstaging are Git index operations, not history actions. They do
+not require a control word. The assistant may change the index only when the
+maintainer specifically requests staging or unstaging, or authorizes the
+corresponding commit. Existing staged selections and unrelated changes must be
+preserved.
 
-Git history actions include, but are not limited to:
+Protected Git actions include, but are not limited to:
 
-- staging files
 - creating commits
 - amending commits
 - rebasing
@@ -185,7 +192,7 @@ The assistant may inspect Git status, diffs and logs when useful. The assistant
 may prepare file changes, propose commit boundaries and suggest commit summaries
 and descriptions.
 
-The assistant must not perform Git history actions unless the maintainer
+The assistant must not perform protected Git actions unless the maintainer
 instructs the assistant to perform that specific action and uses a recognized
 control word.
 
@@ -194,10 +201,10 @@ instructions, and the German word family `explizit`, including inflected forms
 such as `explizite`, `expliziten`, `expliziter` and `explizites`, in
 German-language instructions.
 
-Maintainer approval for file edits does not imply approval for Git history
+Maintainer approval for file edits does not imply approval for protected Git
 actions. A request to create, implement, build, organize, document or prepare a
-commit does not imply permission to run Git history commands. Approval for one
-class of Git history action does not imply approval for another; local commits,
+commit does not imply permission to run protected Git commands. Approval for one
+class of protected Git action does not imply approval for another; local commits,
 tags and pushes each require their own maintainer instruction with a recognized
 control word.
 
@@ -407,7 +414,12 @@ Its responsibilities include:
 
 The assistant should actively improve both the software and the engineering process.
 
-Whenever recurring patterns or successful collaboration practices emerge during a project, the assistant should propose them for a retrospective. Accepted improvements should be incorporated into the AGIT Dev Template or, when they are not development-specific, into the generic AGIT Project Template.
+Whenever recurring patterns or successful collaboration practices emerge
+during a project, the assistant should propose them for a retrospective.
+Accepted findings may become candidates for the project's recorded source
+template. Any later propagation to another template repository is a separate
+maintainer decision. A candidate is implemented only after the specific
+template change receives the required control-word authorization.
 
 ---
 
@@ -431,7 +443,7 @@ Create the commit.
 ```
 
 only authorizes an actual Git commit when the maintainer asks the assistant to
-perform that Git history action and uses a recognized control word. Otherwise,
+perform that protected Git action and uses a recognized control word. Otherwise,
 commit-related wording means:
 
 - modify the required files
@@ -597,9 +609,9 @@ GitHub Desktop is the preferred Git client for the repository maintainer.
 
 The assistant should therefore avoid assuming command-line Git usage whenever practical and should provide guidance that works naturally with GitHub Desktop.
 
-The maintainer controls staging, commits, tags, pushes and other Git history
-actions by default. The assistant may inspect Git state and prepare
-repository-ready changes, but must not perform Git history actions unless the
+Staging and unstaging follow the index rules above. The assistant may inspect
+Git state and prepare repository-ready changes, but must not perform protected
+Git actions unless the
 maintainer instructs the assistant to perform that specific action with a
 recognized control word.
 
@@ -764,11 +776,30 @@ However, documents should be fully harmonized when a retrospective changes core 
 
 # Retrospectives and Template Evolution
 
-The AGIT Dev Template evolves through retrospectives based on practical project experience.
+Use `HARMONIZATION_PROMPT.md` for project-content alignment. Harmonization
+compares this project with its recorded source template, reconciles code,
+tests, documentation and repository state, and reviews roadmap fit. The
+concrete project and its Decision Records remain authoritative. Harmonization
+does not evaluate collaboration or derive template improvements.
 
-Retrospectives normally occur at the end of a project. They may also occur during a project when enough practical experience has accumulated.
+The AGIT Dev Template evolves through collaboration retrospectives based on
+practical project experience.
+
+The maintainer decides when to invoke a retrospective and which period it
+should cover. It evaluates Maintainer-Agent collaboration, including rules,
+feedback, decisions, handoffs and work rhythm.
+
+Use `RETROSPECTIVE_PROMPT.md` for the structured collaboration review.
 
 Template changes should be made only as part of a retrospective, not casually during normal project work.
+
+A retrospective result is only a template candidate. The assistant must not
+modify the source-template repository unless the maintainer authorizes that
+specific template change with `explicit`, `explicitly` or the German word
+family `explizit`. Template-edit permission does not authorize Git history;
+staging or unstaging requires a specific request but no control word. Each
+commit, amend, tag, push, pull, merge, rebase, reset, branch or stash action
+requires its own specific control-word instruction.
 
 Retrospective updates should:
 
@@ -864,5 +895,9 @@ Version 1.18 formalizes human code readership, English documentation standards
 for assistant-authored code, and the expectation that roadmap milestones
 advance through regular validated commits before a separate milestone closure
 commit.
+
+Version 1.19 distinguishes specifically requested staging and unstaging from
+protected Git actions. Index operations do not require a control word, but must
+preserve existing staged selections and unrelated changes.
 
 Future AGIT projects should adopt the latest version from this repository.

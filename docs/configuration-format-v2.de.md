@@ -18,7 +18,7 @@ Konfigurationsformat v2 soll Folgendes unterstuetzen:
 - konfigurationsgetriebene Bootmenue-Erzeugung
 - eingeschraenkte Behandlung des Windows-Default-Boot-Eintrags
 - profilnahe Moduleinstellungen
-- spaetere Produktionsmodule wie Service Control
+- aktuelle Produktionsmodule und spaetere explizit freigegebene Modulfamilien
 
 ## Speicherort der Konfiguration
 
@@ -182,7 +182,10 @@ Aktuell bekannte Module im Repository:
 - `network-isolation` kann konfigurierte Netzwerkadapter-Kategorien deaktivieren und wiederherstellen.
 - `service-control` kann allowlist-basierte Windows-Search-/`WSearch`- und
   AnyDesk-Support-Service-Control ausfuehren.
-- `startup-user-application-control` validiert und dry-runnt geplante Startup- und User-Application-Control-Einstellungen fuer Teams, OneDrive, ownCloud, Microsoft Office, Microsoft 365 Copilot und AnyDesk.
+- `startup-user-application-control` validiert, wendet freigegebene Startup-
+  und User-Application-Control-Einstellungen fuer Teams, OneDrive, ownCloud,
+  Microsoft Office, Microsoft 365 Copilot und AnyDesk an oder stellt sie wieder
+  her; Dry-Run steht zur Pruefung vor echten Aenderungen zur Verfuegung.
 - `demo-system-marker` ist ein temporaeres Foundation-Demomodul.
 
 ### Network-Isolation-Einstellungen

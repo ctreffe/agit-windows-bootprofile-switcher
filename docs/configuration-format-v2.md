@@ -17,7 +17,7 @@ Configuration Format v2 is intended to support:
 - configuration-driven boot menu creation
 - constrained handling of the Windows default boot entry
 - profile-local module settings
-- future production modules such as Service Control
+- current production modules and future allow-listed module families
 
 ## Where The Configuration Lives
 
@@ -179,9 +179,10 @@ Known modules in the current repository:
 - `network-isolation` can disable and restore configured network adapter categories.
 - `service-control` can control allow-listed Windows Search / `WSearch` and
   the discovered AnyDesk support service.
-- `startup-user-application-control` validates and dry-runs planned
-  startup/user-application control settings for Teams, OneDrive, ownCloud,
-  Microsoft Office, Microsoft 365 Copilot and AnyDesk.
+- `startup-user-application-control` validates and applies or restores
+  allow-listed startup/user-application control settings for Teams, OneDrive,
+  ownCloud, Microsoft Office, Microsoft 365 Copilot and AnyDesk, with dry-run
+  available for review before real changes.
 - `demo-system-marker` is a temporary foundation demo module.
 
 ### Network Isolation Settings

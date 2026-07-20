@@ -9,6 +9,27 @@ environments.
 
 Repository: `agit-windows-bootprofile-switcher`
 
+## Template Lineage and Intentional Deviations
+
+- Historical repository seed: AGIT Project Template v1.0.2, visible in the
+  initial repository history from 2026-06-27.
+- Initialization status: completed on 2026-06-27. The exact source-template
+  commit was not recorded and is not reconstructed from later history.
+- Ongoing development source template: AGIT Dev Template.
+- Last successful template harmonization: AGIT Dev Template v1.2.0 with
+  post-release `main` commit
+  `750e91b1d477a09324d792d4f40aeccc6229ec7e`, verified 2026-07-20.
+- The completed initialization removed `PROJECT_SETUP.md`, `DOCUMENTATION.md`
+  and `REPOSITORY.md` under the template rules that applied at the time.
+- This harmonization restores adapted ongoing `DOCUMENTATION.md` and
+  `REPOSITORY.md` rules plus the continuation, harmonization and retrospective
+  prompts.
+- `PROJECT_SETUP.md` and `INITIAL_PROMPT.md` remain absent intentionally. Newer
+  template text is not reconstructed as if it were the project's original
+  initialization provenance.
+- Project-specific architecture, documentation layout, Windows safety rules and
+  Decision Records override generic template examples.
+
 ## Maintainer Intent and Desired End State
 
 The project should make one Windows installation usable in multiple controlled
@@ -33,6 +54,24 @@ Important boundaries:
 - no bypass of security-product tamper protection or Windows self-healing;
 - no unsupported service stopping when policy or vendor management is the
   appropriate control surface.
+
+## Human Code Readership
+
+The primary code readers are the repository maintainer and future Windows
+administrators or contributors who can review PowerShell, JSON configuration,
+Windows services, Scheduled Tasks, registry policy and BCD concepts. They must
+not need private AI conversation history or undocumented knowledge of the
+development machine. English is the standard for code, comments and
+comment-based help; German is maintained for selected user-facing guidance.
+
+## Sensitive Development Inputs
+
+Local `logs/`, `backups/` and `state/` content, discovery inventories,
+screenshots and vendor diagnostics may contain user, machine, product or
+environment information and remain outside Git by default. Inspect such content
+only after a metadata-level inventory and explicit task need. Prefer sanitized
+fixtures in `config/test/`. Assistant access, Git versioning and publication are
+separate maintainer decisions.
 
 ## Current Status
 
@@ -137,12 +176,20 @@ non-support, and record the durable decision.
 - `ChatGPT.md` - AGIT Collaboration Model
 - `CODEX.md` - local Codex operating policy
 - `PHILOSOPHY.md` - project engineering principles
+- `DOCUMENTATION.md` - project documentation standards
+- `REPOSITORY.md` - repository and Git standards
+- `CONTINUATION_PROMPT.md` - repeatable project re-entry workflow
+- `HARMONIZATION_PROMPT.md` - project/template content alignment workflow
+- `RETROSPECTIVE_PROMPT.md` - Maintainer-Agent collaboration review workflow
 
 ## AGIT Baseline
 
-- AGIT Dev Template reference: **v1.1.2**, including current post-release
-  harmonization guidance reviewed on 2026-07-16
-- Collaboration Model: **v1.18**
+- AGIT Dev Template release: **v1.2.0**, commit
+  `4657dece53ea5ebad75345854ab4c278fa74c664`
+- Latest verified template baseline: post-release `main` commit
+  `750e91b1d477a09324d792d4f40aeccc6229ec7e`
+- Harmonization date: **2026-07-20**
+- Collaboration Model: **v1.19**
 
 The project retains its project-specific documentation structure. Template-only
 setup documents are not copied into this mature derived repository unless they

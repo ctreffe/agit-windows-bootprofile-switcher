@@ -259,7 +259,10 @@ Current PowerShell entry points:
 - `scripts/Uninstall-StartupUserApplicationControlDemo.ps1` performs the two-stage Startup and User-Application Control demo removal; `-FinalizeUserRestore` removes the retained user-logon hook after completion evidence has been reviewed.
 - `scripts/Install-BootProfileConfiguration.ps1` validates and installs a profile configuration file to the default machine-wide configuration path.
 - `scripts/Install-BootProfileSwitcherDeployment.ps1` is the non-interactive MDT-compatible deployment entry point for local runtime, configuration, hooks and explicit managed boot-menu installation.
-- `scripts/Uninstall-BootProfileSwitcherDeployment.ps1` is the non-interactive MDT-compatible removal entry point for explicitly selected hooks and managed boot-menu entries; it preserves runtime, configuration and module lifecycle state.
+- `scripts/Uninstall-BootProfileSwitcherDeployment.ps1` is the non-interactive
+  MDT-compatible removal entry point for selected hooks, managed boot-menu
+  entries, baseline restoration and explicit final cleanup. Destructive
+  configuration, state and runtime removal remains `-Force` protected.
 - `scripts/Restore-BootProfileSwitcherMachineBaselines.ps1` restores machine lifecycle baselines before removal; per-user HKCU baselines remain a user-logon responsibility.
 - `scripts/Start-BootProfileSwitcherUserBaselineRestore.ps1` schedules one-time per-user baseline restoration through the retained user-logon hook.
 - `scripts/Test-BootProfileConfiguration.ps1` validates a profile configuration file without applying changes.
@@ -303,7 +306,7 @@ Service Control is documented in
 implementation supports dry-run and controlled apply/restore behavior for
 `WSearch` and the logical `anydesk` target.
 
-Startup and User-Application Control planning is documented in
+Startup and User-Application Control is documented in
 [docs/modules/startup-user-application-control.md](docs/modules/startup-user-application-control.md).
 The v1.6.0 design addresses Teams, OneDrive, ownCloud, Microsoft Office,
 Microsoft 365 Copilot and AnyDesk through a shared control-surface model with
@@ -420,9 +423,15 @@ Core project documents:
 - [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
 - [CODEX.md](CODEX.md) – local Codex operating policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
+- [DOCUMENTATION.md](DOCUMENTATION.md) – documentation standards
+- [REPOSITORY.md](REPOSITORY.md) – repository and Git standards
+- [CONTINUATION_PROMPT.md](CONTINUATION_PROMPT.md) – repeatable project re-entry workflow
+- [HARMONIZATION_PROMPT.md](HARMONIZATION_PROMPT.md) – project/template content alignment workflow
+- [RETROSPECTIVE_PROMPT.md](RETROSPECTIVE_PROMPT.md) – Maintainer-Agent collaboration review workflow
 - [docs/roadmap.md](docs/roadmap.md) – active milestone objectives, validation expectations and future roadmap
 - [docs/architecture.md](docs/architecture.md) – conceptual system architecture
 - [docs/decisions/PDR-0001-roadmap-after-v1.7.md](docs/decisions/PDR-0001-roadmap-after-v1.7.md) – roadmap scope decision after v1.7.0
+- [docs/decisions/README.md](docs/decisions/README.md) – Decision Record types and templates
 - [docs/deployment/mdt-deployment.md](docs/deployment/mdt-deployment.md) – MDT-compatible deployment model and technical reference
 - [docs/deployment/mdt-administrator-guide.md](docs/deployment/mdt-administrator-guide.md) – practical administrator guide for MDT deployment, updates and removal
 - [docs/configuration-format-v2.md](docs/configuration-format-v2.md) – Configuration Format v2 documentation

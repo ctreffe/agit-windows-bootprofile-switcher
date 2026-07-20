@@ -56,7 +56,10 @@ The engine must not hardcode the meaning of specific profile names. It should re
 
 Boot profile selection is the mechanism by which the system determines which profile should be applied during startup.
 
-The exact detection mechanism is intentionally not specified in this document. It will be evaluated and documented in a dedicated ADR once the implementation strategy is selected.
+The resolver reads the real identifier of the current BCD entry and maps it to
+managed identifiers recorded by the boot-menu installer. Description matching
+remains a fallback and diagnostic aid. The decision and boundary are documented
+in ADR-0002 and ADR-0003.
 
 ### Boot Profile Resolver
 
@@ -89,13 +92,12 @@ Profiles should describe desired state. They should not contain procedural imple
 
 Modules apply specific parts of the desired system state.
 
-Examples of future modules include:
+Current module families include:
 
-- firewall configuration
-- services
-- Bluetooth
-- USB storage
-- power settings
+- `network-isolation`
+- `service-control`
+- `startup-user-application-control`
+- `validation-log` and the temporary `demo-system-marker`
 
 Each module should have a clearly defined responsibility.
 
@@ -146,7 +148,10 @@ Removal must cleanly remove managed infrastructure. The preferred update strateg
 
 ## Deployment Model
 
-Group Policy based deployment is a primary design consideration.
+Unattended managed deployment is implemented through the local ProgramData
+runtime and the central deployment entry points. MDT is the currently
+documented deployment workflow; Group Policy remains a compatible deployment
+environment rather than a separately validated packaging path.
 
 This means that installation, removal and future updates should be possible without interactive user action.
 
@@ -179,6 +184,7 @@ The documentation model follows these responsibilities:
 - `README.md` describes what the project is.
 - `docs/architecture.md` describes how the system is conceptually structured.
 - `docs/modules/` contains user-facing documentation for modules that need more space than the README should provide.
-- ADRs document why significant architectural decisions were made.
+- `docs/deployment/` documents unattended deployment and removal.
+- `docs/decisions/` contains ADRs, PDRs and reusable Decision Record templates.
 
-ADRs document decisions, not general project state.
+Decision Records document durable reasoning, not general project state.

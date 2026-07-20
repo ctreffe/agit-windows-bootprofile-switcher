@@ -11,6 +11,10 @@ This project follows Semantic Versioning.
 - Add a dedicated roadmap with broader capability milestones after v1.7.0.
 - Add PDR-0001 to record the decision to expand v1.8.0 into a Policy and
   Vendor Control Foundation milestone.
+- Add project-adapted continuation, harmonization and collaboration
+  retrospective prompts.
+- Add ongoing documentation and repository standards plus a Decision Record
+  index and ADR, PDR and DDR templates.
 
 ### Changed
 
@@ -23,6 +27,13 @@ This project follows Semantic Versioning.
   sensitive artifacts and explicit Git-history authority.
 - Reduce `PROJECT_CONTEXT.md` to current project state and move detailed
   milestone planning into `docs/roadmap.md`.
+- Harmonize with AGIT Dev Template v1.2.0 and its verified post-release
+  baseline, including Collaboration Model v1.19 and the distinction between
+  specifically requested Git index operations and protected Git actions.
+- Record template lineage, intentional initialization-provenance deviations,
+  human code readership and sensitive development-input boundaries.
+- Align architecture, MDT deployment, configuration and README documentation
+  with the behavior implemented and validated through v1.7.0.
 
 ## [v1.7.0] - 2026-07-16
 
