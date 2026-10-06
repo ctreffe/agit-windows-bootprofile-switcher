@@ -1,5 +1,22 @@
 # BootProfile Switcher - Project Context
 
+## Selected template synchronization: 2026-10-06
+
+- Verified local source commit: `6a2cc69831c99dd68d00fba9063bd404ab0b9df7`.
+- Separate bilingual guide adoption: [DDR-0001](docs/decisions/DDR-0001-project-introductions-and-template-guides.md).
+- Selected ongoing methods and intentional deviations: [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
+- Previous full/historical source baselines remain unchanged; this selection
+  does not claim whole-template adoption or repeat initialization.
+
+## Current source-template reference
+
+- Source for selected synchronization: [AI Dev Template](https://github.com/ctreffe/ai-template-dev).
+- Portable identity and former-name mapping: [TEMPLATE_SOURCE.md](TEMPLATE_SOURCE.md).
+- Local clone resolution: ignored RETROSPECTIVE_PATHS.local.md, based on
+  [RETROSPECTIVE_PATHS.example.md](RETROSPECTIVE_PATHS.example.md).
+- Renaming preserves recorded versions, commit baselines and project adaptations;
+  it is not a template update or a newly completed harmonization.
+
 ## Project
 
 BootProfile Switcher is a configurable Windows boot profile engine that applies
@@ -11,12 +28,12 @@ Repository: `agit-windows-bootprofile-switcher`
 
 ## Template Lineage and Intentional Deviations
 
-- Historical repository seed: AGIT Project Template v1.0.2, visible in the
+- Historical repository seed: AI Project Template v1.0.2, visible in the
   initial repository history from 2026-06-27.
 - Initialization status: completed on 2026-06-27. The exact source-template
   commit was not recorded and is not reconstructed from later history.
-- Ongoing development source template: AGIT Dev Template.
-- Last successful template harmonization: AGIT Dev Template v1.2.0 with
+- Ongoing development source template: AI Dev Template.
+- Last successful template harmonization: AI Dev Template v1.2.0 with
   post-release `main` commit
   `750e91b1d477a09324d792d4f40aeccc6229ec7e`, verified 2026-07-20.
 - The completed initialization removed `PROJECT_SETUP.md`, `DOCUMENTATION.md`
@@ -197,7 +214,7 @@ before deciding the module boundary or implementing policy changes.
 
 ## AGIT Baseline
 
-- AGIT Dev Template release: **v1.2.0**, commit
+- AI Dev Template release: **v1.2.0**, commit
   `4657dece53ea5ebad75345854ab4c278fa74c664`
 - Latest verified template baseline: post-release `main` commit
   `750e91b1d477a09324d792d4f40aeccc6229ec7e`

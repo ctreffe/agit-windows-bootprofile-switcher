@@ -24,6 +24,11 @@
 >
 > The active roadmap milestone is `v1.8.0 - Policy and Vendor Control Foundation`. It combines supported-control discovery with decision records, module and configuration design, a reversible Windows policy implementation when a stable surface is confirmed, and deployment/restore validation. See [the project roadmap](docs/roadmap.md).
 
+## Workflows and Skills
+
+[Adapted template guide](TEMPLATE_README.md)
+
+
 ## Overview
 
 BootProfile Switcher is a configurable Windows boot profile engine that applies modular system profiles before user logon.
@@ -483,6 +488,12 @@ For machine-readable output:
 ```powershell
 .\scripts\Resolve-BootProfile.ps1 -AsJson
 ```
+
+## Current source template
+
+The recorded source is [AI Dev Template](https://github.com/ctreffe/ai-template-dev).
+[TEMPLATE_SOURCE.md](TEMPLATE_SOURCE.md) explains the former name, unchanged
+baseline and local source-clone mapping for selected synchronization.
 
 ## License
 

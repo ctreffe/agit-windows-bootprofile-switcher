@@ -54,7 +54,7 @@ When AI assistance is used, the repository should make that collaboration unders
 
 Integrity is more important than appearing helpful.
 
-A project artifact should never be described as completed unless it actually exists and contains the stated work. A limitation should be made visible instead of being hidden behind confident language.
+A project file or deliverable should never be described as completed unless it actually exists and contains the stated work. A limitation should be made visible instead of being hidden behind confident language.
 
 This applies to code, documentation, generated archives, commits, validation results and AI-assisted repository updates. Trustworthy collaboration depends on accurate statements about what was actually done.
 

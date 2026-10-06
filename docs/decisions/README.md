@@ -14,3 +14,5 @@ records from the matching `*-0000-template.md` file, replace all placeholders
 and record status and date. Decision records explain context, decision,
 rationale, consequences, alternatives and follow-up; they are not required for
 minor implementation choices.
+
+- [DDR-0001: Project Introductions and Template Guides](DDR-0001-project-introductions-and-template-guides.md)

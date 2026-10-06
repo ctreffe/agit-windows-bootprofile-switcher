@@ -1,0 +1,2 @@
+# Repository-local dependency for the installed Skill Creator validator.
+PyYAML==6.0.3

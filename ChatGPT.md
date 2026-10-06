@@ -782,7 +782,7 @@ tests, documentation and repository state, and reviews roadmap fit. The
 concrete project and its Decision Records remain authoritative. Harmonization
 does not evaluate collaboration or derive template improvements.
 
-The AGIT Dev Template evolves through collaboration retrospectives based on
+The AI Dev Template evolves through collaboration retrospectives based on
 practical project experience.
 
 The maintainer decides when to invoke a retrospective and which period it

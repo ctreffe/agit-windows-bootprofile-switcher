@@ -1,7 +1,7 @@
 # Harmonization Prompt
 
 Use this prompt for deliberate project-content harmonization with the recorded
-AGIT Dev Template source and for an internal consistency review.
+AI Dev Template source and for an internal consistency review.
 
 Invoke it with `Read and execute HARMONIZATION_PROMPT.md.`
 

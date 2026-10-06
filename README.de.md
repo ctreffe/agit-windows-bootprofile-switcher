@@ -24,6 +24,11 @@
 >
 > Der aktive Roadmap-Meilenstein ist `v1.8.0 - Policy and Vendor Control Foundation`. Er verbindet die Ermittlung unterstützter Steuerflächen mit Entscheidungsdokumentation, Modul- und Konfigurationsdesign, einer reversiblen Windows-Policy-Implementierung bei bestätigter stabiler Schnittstelle sowie Deployment-/Restore-Validierung. Siehe [Projekt-Roadmap](docs/roadmap.md).
 
+## Workflows und Skills
+
+[Angepasste Template-Anleitung](TEMPLATE_README.de.md)
+
+
 ## Überblick
 
 BootProfile Switcher ist eine konfigurierbare Windows-Bootprofil-Engine, die modulare Systemprofile vor der Benutzeranmeldung anwendet.
@@ -506,6 +511,13 @@ Für maschinenlesbare Ausgabe:
 ```powershell
 .\scripts\Resolve-BootProfile.ps1 -AsJson
 ```
+
+## Aktuelles Quell-Template
+
+Das aufgezeichnete Quell-Template ist [AI Dev Template](https://github.com/ctreffe/ai-template-dev).
+[TEMPLATE_SOURCE.md](TEMPLATE_SOURCE.md) erklaert den frueheren Namen, die
+unveraenderte Baseline und die lokale Quellklon-Zuordnung fuer eine ausgewaehlte
+Synchronisation.
 
 ## Lizenz
 
