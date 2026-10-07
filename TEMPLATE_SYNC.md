@@ -175,3 +175,23 @@ No actual commit, tag, branch/tag push, signing operation, render/visual check,
 installation, protected input access, host/deployment test or family/release gate
 was performed. Unchanged skill/domain evidence from the full pass remains valid
 only within its recorded limits; no new project release is asserted.
+
+## Current skill inventory follow-up: 2026-10-07
+
+The maintainer requested current inherited skill definitions without old-name
+compatibility aliases. This supersedes earlier retention classifications for
+skill redirects and completed initialization skills; prior validation remains
+historical evidence. Non-skill legacy paths and accepted domain rules remain.
+
+- Verified source: `ai-template-dev` at `fa63ed0` plus the selected TVDR-0054
+  working-tree skill-retirement contract; no new committed baseline is claimed.
+- Removed: no obsolete definitions found.
+- Current inventory: 12 ongoing skills; source definitions/support match
+  after normalizing line endings, with the recorded document-catalog and visual
+  QA adaptations retained where applicable.
+- Adopted the inventory/retirement check in `sync-template`; setup documents
+  retain provenance without an executable initialization skill or old-name alias.
+- Validation: the changed skill passed the local pinned wrapper; complete
+  inventory/source/adaptation, caller, selected-link and language-pair checks
+  passed. Required local static/whitespace checks passed where applicable.
+  Domain execution, rendering, host operations and releases remain separate.

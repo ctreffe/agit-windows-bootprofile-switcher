@@ -10,6 +10,16 @@ repositories before inspection. Read the closer rules in both repositories,
 preserve dirty state and classify upstream differences as applicable unchanged,
 adapted, already present, conflicting or not applicable.
 
+Inventory every local skill directory and its metadata against the selected
+current source, including inherited skills absent upstream. Remove retired
+inherited definitions and their metadata within the approved sync scope; do not
+retain compatibility aliases or redirects under retired skill names. Update
+active routes and bilingual catalogs. Keep historical evidence outside skill
+discovery and preserve documented current project-specific skills/adaptations.
+For a completed project, remove inherited start-project and creation skills;
+retain setup documents as provenance. Check callers and present any functional
+conflict before removal; never expand protected-project access or Git authority.
+
 For an initialized project using the four-file README contract, compare the
 verified previous and current source README content with its adapted guide:
 

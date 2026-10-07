@@ -26,7 +26,7 @@ for durable continuation. Read only relevant domain guidance and reuse current
 evidence while its inputs are unchanged. Review, consistency, synchronization,
 retrospective and milestone closure are separately selected workflows.
 grill-me/grilling require explicit opt-in. Initialization is complete; retained
-setup text and compatibility paths do not reopen it. Domain safeguards and
+setup documents preserve provenance; retired skill aliases are absent. Domain safeguards and
 separate access, transmission, Git and publication decisions remain binding.
 
 ## Core Principle

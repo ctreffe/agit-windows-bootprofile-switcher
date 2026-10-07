@@ -27,8 +27,8 @@ handoff-task für die dauerhafte Fortsetzung. Lies nur relevante Fachregeln und
 nutze vorhandene Prüfnachweise weiter, solange ihre Grundlagen unverändert sind.
 Review, Konsistenzprüfung, Synchronisierung, Retrospektive und Meilensteinabschluss
 sind getrennt gewählte Workflows. grill-me/grilling benötigen eine ausdrückliche
-Auswahl. Die Initialisierung ist abgeschlossen; erhaltene Setup-Texte und
-Kompatibilitätspfade eröffnen sie nicht erneut. Fachliche Schutzregeln sowie
+Auswahl. Die Initialisierung ist abgeschlossen; erhaltene Setup-Dokumente
+bewahren die Provenienz; abgelöste Skill-Aliase fehlen. Fachliche Schutzregeln sowie
 getrennte Entscheidungen zu Zugriff, Übertragung, Git und Publikation bleiben.
 
 ## Kernprinzip

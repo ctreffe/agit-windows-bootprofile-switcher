@@ -69,8 +69,8 @@ required by a stated material risk. Report limits and deferred checks truthfully
 
 ## Initialized project workflows
 
-Initialization is complete. Retained setup/start-project files are provenance,
-not ongoing work. Never recreate removed creation skills, template-only backlogs
+Initialization is complete. Retained setup documents are provenance; creation
+and initialization skill definitions are absent from the active skill inventory. Never recreate removed creation skills, template-only backlogs
 or absent setup files. Use start-task/handoff-task for bounded work; explicitly
 select review-project, sync-template, check-consistency and perform-retrospective.
 grill-me and grilling remain explicit-only. A retrospective never grants access
