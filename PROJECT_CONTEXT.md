@@ -242,3 +242,10 @@ become useful as maintained project documents.
 This file describes the current state and should remain concise. Historical
 detail belongs in `CHANGELOG.md`, decision records, component documentation and
 Git history.
+
+## Commit workflow authority
+
+[PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md) adopts the selected source commit skills and bounded normal
+push after explicit commit authorization. Other protected actions and project
+access, publication and domain rules retain separate authority. See
+[TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) for the correction scope and evidence.

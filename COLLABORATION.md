@@ -28,11 +28,15 @@ Use milestones as reviewed integration points rather than substitutes for
 incremental validation. Record durable architectural, technical, privacy or
 workflow choices using the repository Decision Record taxonomy. Keep ordinary
 commit preparation separate from milestone closure and preserve protected Git
-authority; each action remains independently authorized.
+authority, including the bounded commit-and-push workflow below.
 
-Every protected Git action, including commit and push, needs its own
-repository-specific explicit maintainer instruction. Skill invocation grants
-no Git authority.
+Within `commit-changes` or `commit-milestone`, repository-specific explicit
+commit authorization includes the commit and its normal push to the verified
+existing upstream unless the maintainer excludes push. Skill invocation alone
+grants no Git authority. Force-push, other refs, remote changes, tags and release
+publication remain outside this bundle; other protected actions still need
+separate authority. This changes neither content-access nor publication rules.
+See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
 
 When an applicable repository rule requires a control word, accompany the
 request with one minimal copy-ready suggested instruction naming the exact

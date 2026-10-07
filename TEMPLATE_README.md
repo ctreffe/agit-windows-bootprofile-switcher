@@ -147,17 +147,21 @@ Governance coordination does not create hidden engineering requirements. Every c
 
 ## Git authority
 
-Git state may be inspected read-only. Staging requires a specific instruction.
-Every protected Git action, including commit and push, needs its own explicit
-repository-specific authorization. The upstream rule bundling commit and push
-authority was not adopted. Skill invocation or a local clone mapping supplies
-no additional authority.
+Git state may be inspected read-only. Staging requires a specific instruction
+or authorization of the corresponding commit. In `commit-changes` and
+`commit-milestone`, explicit commit authorization for this repository includes
+the normal push to its verified existing upstream unless excluded (for example,
+"commit only" or "no push"). Other Git actions, tags and release publication
+still need their own authorization. Skill invocation or a local clone mapping
+supplies no additional authority. The local decision is [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
 
 ## Retained workflows and project files
 
 | Skill | Invocation |
 | --- | --- |
 | [check-consistency](.agents/skills/check-consistency/SKILL.md) | Explicit |
+| [commit-changes](.agents/skills/commit-changes/SKILL.md) | Agent or explicit |
+| [commit-milestone](.agents/skills/commit-milestone/SKILL.md) | Explicit |
 | [grill-me](.agents/skills/grill-me/SKILL.md) | Explicit |
 | [grilling](.agents/skills/grilling/SKILL.md) | Explicit |
 | [handoff-task](.agents/skills/handoff-task/SKILL.md) | Agent or explicit |

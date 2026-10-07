@@ -57,6 +57,14 @@ for that specific action that uses a recognized control word: `explicit` or
 `explicitly` in English, or the German word family `explizit`, including
 `explizite`, `expliziten`, `expliziter` and `explizites`.
 
+Within `commit-changes` or `commit-milestone`, repository-specific explicit
+commit authorization includes the commit and its normal push to the verified
+existing upstream unless the maintainer excludes push. Skill invocation alone
+grants no Git authority. Force-push, other refs, remote changes, tags and release
+publication remain outside this bundle; other protected actions still need
+separate authority. This changes neither content-access nor publication rules.
+See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+
 ---
 
 # Allowed by Default

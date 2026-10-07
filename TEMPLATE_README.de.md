@@ -159,16 +159,21 @@ Die Governance-Koordination erzeugt keine verborgenen Engineering-Anforderungen.
 ## Git-Befugnisse
 
 Git-Zustände dürfen lesend geprüft werden. Staging erfordert eine konkrete
-Anweisung. Jede geschützte Git-Aktion, einschließlich Commit und Push, benötigt
-eine eigene explizite, repositorybezogene Freigabe. Die Template-Regel, dass
-eine Commit-Freigabe zugleich einen Push umfasst, wurde hier nicht übernommen.
-Eine Skill-Ausführung oder lokale Pfadzuordnung erteilt keine weitere Befugnis.
+Anweisung oder die Freigabe des zugehörigen Commits. In `commit-changes` und
+`commit-milestone` umfasst eine explizite Commit-Freigabe für dieses Repository
+den normalen Push zu seinem verifizierten bestehenden Upstream, sofern du den
+Push nicht ausschließt (etwa mit „nur Commit“ oder „kein Push“). Andere Git-Aktionen,
+Tags und Release-Publikation brauchen weiterhin eine eigene Freigabe. Eine
+Skill-Ausführung oder lokale Pfadzuordnung erteilt keine weitere Befugnis.
+Die lokale Entscheidung steht in [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
 
 ## Vorhandene Workflows und Projektdateien
 
 | Skill | Aufruf |
 | --- | --- |
 | [check-consistency](.agents/skills/check-consistency/SKILL.md) | Explizit |
+| [commit-changes](.agents/skills/commit-changes/SKILL.md) | Agent oder explizit |
+| [commit-milestone](.agents/skills/commit-milestone/SKILL.md) | Explizit |
 | [grill-me](.agents/skills/grill-me/SKILL.md) | Explizit |
 | [grilling](.agents/skills/grilling/SKILL.md) | Explizit |
 | [handoff-task](.agents/skills/handoff-task/SKILL.md) | Agent oder explizit |

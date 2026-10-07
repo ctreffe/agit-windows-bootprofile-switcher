@@ -16,3 +16,5 @@ rationale, consequences, alternatives and follow-up; they are not required for
 minor implementation choices.
 
 - [DDR-0001: Project Introductions and Template Guides](DDR-0001-project-introductions-and-template-guides.md)
+
+- [PDR-0002: Bounded Commit and Push Authority](PDR-0002-bounded-commit-and-push-authority.md)

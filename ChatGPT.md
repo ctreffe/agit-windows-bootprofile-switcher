@@ -203,10 +203,17 @@ German-language instructions.
 
 Maintainer approval for file edits does not imply approval for protected Git
 actions. A request to create, implement, build, organize, document or prepare a
-commit does not imply permission to run protected Git commands. Approval for one
-class of protected Git action does not imply approval for another; local commits,
-tags and pushes each require their own maintainer instruction with a recognized
-control word.
+commit does not imply permission to run protected Git commands. Other independent
+protected actions require their own maintainer instruction with a recognized
+control word, with the bounded commit-and-push workflow below as the exception.
+
+Within `commit-changes` or `commit-milestone`, repository-specific explicit
+commit authorization includes the commit and its normal push to the verified
+existing upstream unless the maintainer excludes push. Skill invocation alone
+grants no Git authority. Force-push, other refs, remote changes, tags and release
+publication remain outside this bundle; other protected actions still need
+separate authority. This changes neither content-access nor publication rules.
+See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
 
 Repository history is maintainer-controlled project memory.
 

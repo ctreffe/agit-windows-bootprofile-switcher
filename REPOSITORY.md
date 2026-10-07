@@ -22,6 +22,14 @@ instruction for that specific action containing `explicit`, `explicitly` or
 the German word family `explizit`. Permission to edit files or stage a change
 does not authorize a protected Git action.
 
+Within `commit-changes` or `commit-milestone`, repository-specific explicit
+commit authorization includes the commit and its normal push to the verified
+existing upstream unless the maintainer excludes push. Skill invocation alone
+grants no Git authority. Force-push, other refs, remote changes, tags and release
+publication remain outside this bundle; other protected actions still need
+separate authority. This changes neither content-access nor publication rules.
+See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+
 ## Commit Boundaries
 
 Each regular working commit should represent one logical, validated step and

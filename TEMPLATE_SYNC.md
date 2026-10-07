@@ -17,7 +17,9 @@ documentation spans adapted to project rules.
 ## Intentional deviations
 
 - Existing project intent, domain safety, decisions, data storage and local work remain authoritative.
-- Commit and push still require separate project-specific explicit instructions; upstream bundling is not adopted.
+- The maintainer selected current commit skills and bounded normal-push authority
+  during correction on 2026-10-07; see [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md). Other protected actions
+  remain separately controlled.
 - Creation and completed initialization are not rerun or restored as ongoing work.
 - Existing README introductions are retained; separate bilingual guides were selected and adapted.
 - Versions, source roadmap/context/backlog and source task history are not copied.
@@ -36,9 +38,9 @@ commit for these methods and the historical baseline for excluded scope.
 | --- | --- | --- |
 | `.agents/skills/check-consistency/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
 | `.agents/skills/check-consistency/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/commit-changes/SKILL.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/commit-milestone/SKILL.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/commit-milestone/agents/openai.yaml` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
+| `.agents/skills/commit-changes/SKILL.md` | applicable unchanged | Maintainer-selected current ordinary commit and bounded normal-push workflow |
+| `.agents/skills/commit-milestone/SKILL.md` | applicable unchanged | Maintainer-selected current milestone commit and bounded normal-push workflow |
+| `.agents/skills/commit-milestone/agents/openai.yaml` | applicable unchanged | Selected explicit milestone workflow metadata |
 | `.agents/skills/create-local-project/SKILL.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
 | `.agents/skills/create-local-project/agents/openai.yaml` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
 | `.agents/skills/grill-me/LICENSE` | adapted | Selected ongoing contract; preserve project adaptations |
@@ -84,7 +86,7 @@ commit for these methods and the historical baseline for excluded scope.
 | `TASK_HANDOFF.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
 | `TROUBLESHOOTING.md` | adapted empty project-local record | Selected ongoing contract; preserve project adaptations |
 | `TROUBLESHOOTING_DETAILS.md` | not applicable | Project-local experience; no incident transfer |
-| `VALIDATION.md` | applicable unchanged | Selected ongoing contract; preserve project adaptations |
+| `VALIDATION.md` | adapted | Retain existing managed-interpreter and pinned PyYAML note; no installation authority |
 | `VERSION` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
 | `decisions/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
 | `input/CATALOG.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
@@ -119,3 +121,46 @@ commit for these methods and the historical baseline for excluded scope.
   storage, template source repository or protected Git action changed.
 - Domain render, workbook pipeline, boot, hardware and host-changing tests
   were not run for these workflow and documentation changes.
+
+## Selected-sync correction: 2026-10-07
+
+The original pass excluded commit-and-push authority. The maintainer now selected
+both current commit skills and this bounded rule. The source commit remains the
+same; uncommitted source-template changes are outside the correction.
+
+Impact: adopt the two skills and milestone metadata; adapt active local authority
+contracts and both workflow guides; record a local PDR and update project context,
+changelog and this task checkpoint. Retained validation notes and documentation
+skill adaptations are reclassified, not overwritten. Historical decisions,
+project README content, code, inputs, outputs, licenses and versions are preserved.
+Other derived projects and source templates receive no authority from this record.
+
+Correction verification is recorded separately from the original-pass evidence
+above.
+
+### Correction verification
+
+- Both adopted commit skills passed this project's `scripts/Test-CodexSkill.ps1`
+  with the existing exact managed interpreter and pinned PyYAML 6.0.3. No
+  environment or dependency was installed.
+- All 4 files classified as applicable unchanged now match the selected
+  committed source after newline normalization. Existing validation notes and
+  the retained documentation skill adaptations remain unchanged.
+- Reviewed the active local rule diffs and English/German policy meaning.
+  Both guide structures and their 12 retained skill entries align;
+  88 local links and Markdown anchors in changed documents passed,
+  including 62 guide links.
+- A whitespace gate was deferred under the local bounded-change contract;
+  focused source and contract review supplied the applicable evidence.
+- Project README content, version, license and existing validation notes match
+  the prior committed state. Earlier handoff content is preserved verbatim.
+  Only the documented correction files changed; HEAD and main branch are
+  unchanged, and staging is empty at final inspection.
+- No staging, commit, push, pull, branch, remote, source-template or external
+  storage operation was performed. Later versioning requires live state and
+  separate repository-specific authorization.
+- Broad milestone gates, rendering and visual QA, private workbook pipelines,
+  physical USB/boot/deployment tests and host-changing helpers are deferred or
+  not applicable to this workflow correction. No changed engineering behavior
+  or publication readiness is claimed. No required correction work remains.
+
