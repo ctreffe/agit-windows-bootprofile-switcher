@@ -13,7 +13,7 @@
 >
 > The collaboration model documents engineering practices, AI-assisted development workflows and repository conventions used in this project.
 >
-> The model used by this project is documented in [ChatGPT.md](ChatGPT.md).
+> The model used by this project is documented in [COLLABORATION.md](COLLABORATION.md).
 
 > [!NOTE]
 > **Project Status**
@@ -357,7 +357,7 @@ BootProfile Switcher is not intended to provide:
 
 ## Engineering Approach
 
-This project follows the AGIT Collaboration Model documented in [ChatGPT.md](ChatGPT.md).
+This project follows the AGIT Collaboration Model documented in [COLLABORATION.md](COLLABORATION.md).
 
 The project is developed with the following principles:
 
@@ -428,7 +428,7 @@ Core project documents:
 - [README.md](README.md) – primary English project documentation
 - [README.de.md](README.de.md) – German project documentation
 - [CHANGELOG.md](CHANGELOG.md) – version history
-- [ChatGPT.md](ChatGPT.md) – AGIT Collaboration Model
+- [COLLABORATION.md](COLLABORATION.md) – AGIT Collaboration Model
 - [CODEX.md](CODEX.md) – local Codex operating policy
 - [PHILOSOPHY.md](PHILOSOPHY.md) – project philosophy
 - [DOCUMENTATION.md](DOCUMENTATION.md) – documentation standards

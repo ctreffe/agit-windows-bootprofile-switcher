@@ -249,3 +249,21 @@ Git history.
 push after explicit commit authorization. Other protected actions and project
 access, publication and domain rules retain separate authority. See
 [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) for the correction scope and evidence.
+
+## Detailed source workflow synchronization: 2026-10-07
+
+Current selected workflow baseline: AI Dev Template 1.6.0,
+`d782a842cc5733d34c60a6bce39ddca5a65a9b64`. See [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) for the complete
+skill/support and operating-contract selection, intentional domain adaptations
+and independent evidence. Historical initialization/full-domain baselines remain
+provenance; this selection updates ongoing methods without a project release.
+Existing domain, portable-file and publication follow-up remains applicable.
+
+## Selected milestone-tag workflow update: 2026-10-07
+
+[PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md) adopts the commit-milestone tag bundle from
+`ai-template-dev` at `fa63ed044c980c5d4972978cd869612a7cdf459b`. Explicit milestone commit
+authority includes the matching annotated project-version tag and exact branch/
+tag pushes unless excluded; ordinary commits retain their narrower bundle.
+The earlier full workflow baseline, project versions, domain acceptance and
+historical evidence remain unchanged. See [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).

@@ -1,5 +1,13 @@
 # CODEX.md
 
+> Current task routing and generic collaboration are defined by AGENTS.md and
+> COLLABORATION.md under [PDR-0003](docs/decisions/PDR-0003-current-template-workflow-authority.md). This retained document
+> supplies supplemental local/domain safeguards. Historical task examples and
+> former prompt procedures do not override current skills or create additional
+> workflow/confirmation gates. Access, private transmission, protected Git,
+> installation and Windows host-operation safeguards remain binding.
+
+
 # Codex Operating Policy
 
 This document defines how Codex may operate locally when assisting with AGIT repositories.

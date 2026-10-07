@@ -1,62 +1,74 @@
 ---
 name: commit-milestone
-description: Close an already reviewed version or milestone with synchronized metadata, comprehensive applicable checks, a milestone commit and normal upstream push unless excluded.
+description: Close a reviewed version or milestone with synchronized metadata, comprehensive checks, a commit, an annotated version tag and exact upstream pushes unless excluded.
 ---
 
 # Commit Milestone
 
 Use only when the maintainer explicitly invokes `$commit-milestone` for an
-identified milestone or version closure. This is not a substitute for
-developing or reviewing the milestone.
+identified milestone or version closure, or requests missing tags for identified
+completed milestones. This does not replace development or review.
 
-When this workflow is requested, repository-specific explicit commit
-authorization includes the commit and its normal push to the verified existing
-upstream, unless the maintainer says commit only, no push or an equivalent
-restriction. Invoking a skill alone supplies no Git authority. Confirm the
-repository, reviewed selection and intended upstream before committing; ask
-only if the target is missing, ambiguous or outside that scope. This is not
-standing authority for later commits, another repository or another Git action.
+Repository-specific explicit milestone commit authorization includes the commit,
+its annotated version tag, normal branch push and exact tag push to the verified
+existing upstream unless excluded. Invoking a skill alone supplies no Git
+authority. Confirm the repository, reviewed selection, version, tag and upstream;
+ask only for a missing or ambiguous target or authority. This is not standing
+authority for later commits, another repository or other Git actions.
 
-1. Establish the exact repository, completed version or milestone, Git state
-   and staged file list.
-2. Inspect staged versions of relevant version, changelog, README, objective or
-   roadmap and handoff files. Read a full staged patch or unrelated working-tree
-   file only when an inconsistency requires it.
-3. Classify the semantic scope and run the repository's comprehensive
-   applicable validation after milestone inputs are stable. Add release,
-   rendering, visual, security, privacy, statistical or other domain checks
-   required by the declared milestone. Reuse current evidence only where the
-   milestone contract permits it and governed inputs are unchanged. Bound
-   success output, retain failure diagnostics and rerun affected checks after a
-   relevant correction.
-4. Check tags, upstream state and release rules with bounded commands. Load
-   additional authority only for a real conflict or gap.
-5. Keep unstaged and untracked work outside the milestone and report it without
-   inventorying unrelated contents.
-6. Resolve only authorized closure gaps, rerun required validation and propose
-   a human-readable versioned summary plus concise evidence-based body.
-   The default `workspace-write` sandbox keeps `.git` read-only. Once exact
-   milestone staging is requested or the milestone commit is authorized,
-   request each `git add`, `git commit` and included `git push` command through the platform's
-   narrow sandbox escalation on its first attempt; do not probe the expected
-   `.git/index.lock` denial first. Keep read-only Git inspection sandboxed.
-   Escalation changes only the execution boundary, grants no additional Git or
-   path-selection authority and creates no persistent allow rule.
-7. Create the commit with the required explicit authorization and verify it.
-   When its control word is missing, propose one minimal copy-ready instruction
-   naming the exact commit-and-push action, repository, existing upstream and
-   material consequence; the proposal is not authorization.
-8. Perform the included normal push unless excluded. Use one explicit branch
-   refspec to the verified existing upstream and disable following tags. Never
-   force-push, push other refs or create or change a remote. If a normal push is
-   rejected, retain the completed commit and diagnose the push; do not pull,
-   merge, rebase or force-push without separate authority. Verify local HEAD and
-   the intended upstream revision after success. A required platform escalation
-   supplies execution permission, not a need to ask again about an authorized
-   push.
+Honor exclusions literally: "commit only" means only the commit; "no push"
+retains the commit and local tag; "no tag" excludes tag creation and tag push;
+"no tag push" retains the local tag and allows the included branch push.
+Release publication remains separately authorized.
 
-Tag creation, tag push and release publication remain separate protected
-actions requiring their own authorization and post-action verification. When a
-control word is missing, propose separate copy-ready wording for each of these
-independent actions. A commit-only restriction is honored without a new push
-question.
+1. Establish the exact repository, completed version or milestone, branch,
+   worktree and staged file list. Preserve unrelated changes and selections.
+2. Inspect staged version, changelog, README, objective/roadmap and handoff
+   metadata. Resolve inconsistencies before creating a version tag.
+3. Classify semantic scope and run comprehensive applicable validation after
+   milestone inputs are stable. Include required release, rendering, visual,
+   security, privacy, statistical and other domain checks. Reuse evidence only
+   where the contract permits and governed inputs are unchanged; rerun affected
+   checks after a relevant correction. Retain diagnostics and report limits.
+4. Select the repository's established version-tag name (`vX.Y.Z` in these source
+   templates). Its target is the new reviewed milestone commit, or an exact
+   existing commit for backfill. Inspect that name locally and on the
+   verified upstream, including an annotated tag's peeled commit. Reuse an
+   existing tag only when it resolves to the intended commit; reconcile differing
+   local/remote tag objects before push. Never move, replace or delete a tag to
+   make the check pass. Ask for a name when the milestone has no version/tag rule.
+5. Resolve authorized closure gaps and propose a human-readable versioned commit
+   summary, concise evidence-based body and tag annotation. Keep unstaged,
+   untracked, generated and local work outside the reviewed selection.
+6. With the required explicit authority, request each `git add`, `git commit`,
+   `git tag` and included `git push` through narrow platform escalation on its
+   first attempt; do not probe `.git/index.lock` denial. Keep read-only inspection
+   sandboxed. Escalation grants no additional action, path or standing authority.
+   If a control word is missing, propose one minimal copy-ready instruction naming
+   the exact commit/tag/push action, repository, upstream and material consequence;
+   the proposal is not authorization.
+7. Create and verify the reviewed commit, then create its missing annotated tag
+   at that exact full commit ID, with a meaningful annotation. Reuse an existing
+   matching tag instead of creating it again. Verify the tag's
+   object type and peeled commit. Respect repository signing requirements without
+   changing identity, signing configuration or installing tools.
+8. Push only the intended branch and exact version tag to the existing upstream.
+   Prefer one atomic push with one explicit branch refspec and one explicit tag
+   refspec; disable following tags. Never use `--tags`, force-push, include other
+   refs or create/change a remote. When atomic push is unsupported, push the exact
+   branch then exact tag separately under the same authority and report partial
+   outcomes. A rejected push permits no pull, merge, rebase, forced tag replacement
+   or force-push; retain completed local artifacts and diagnose the actual gap.
+9. Verify local commit/tag and live upstream branch/tag revisions, including the
+   peeled tag commit. Report the actual result, exclusions and validation limits;
+   a successful branch push alone does not complete an included tag push.
+
+For missing tags on already completed milestones, review each named repository,
+version and exact historical target against its committed metadata and retained
+acceptance. Reuse unchanged evidence with its recorded limits. Create and push
+only the exact missing tag with explicit backfill authority; do not create a new
+content commit or tag current HEAD merely because it is newer. Complete any
+necessary version correction in a separately reviewed and authorized commit
+before selecting the final target. Do not reinterpret earlier commit authority
+retroactively or retag an existing release. Excluded tags and standalone tag
+operations outside this workflow retain their own authorization boundaries.

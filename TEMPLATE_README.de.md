@@ -10,7 +10,7 @@
 
 ## Herkunft und Geltung
 
-Aus AI Dev Template, geprüft gegen Commit `6a2cc69831c99dd68d00fba9063bd404ab0b9df7`. Die Einführung
+Aus AI Dev Template, geprüft gegen Commit `d782a842cc5733d34c60a6bce39ddca5a65a9b64`. Die Einführung
 der Anleitung wurde für dieses bestehende Projekt separat ausgewählt.
 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) und [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md)
 halten die verifizierte Herkunft, Auswahl und Abweichungen fest.
@@ -18,6 +18,18 @@ Diese Anleitung ist keine zweite Regelquelle: AGENTS.md, lokale Fachregeln
 und akzeptierte Decision Records bestimmen das tatsächliche Vorgehen.
 Initialisierung ist abgeschlossen; entfernte Erstellungs-Skills, Template-
 Backlogs und Initialisierungsanweisungen werden nicht wieder eingeführt.
+
+## Aktueller Arbeitsvertrag
+
+AGENTS.md ist der residente Einstieg; COLLABORATION.md beschreibt das aktuelle
+Modell für die Zusammenarbeit. Nutze start-task für einen abgegrenzten Task und
+handoff-task für die dauerhafte Fortsetzung. Lies nur relevante Fachregeln und
+nutze vorhandene Prüfnachweise weiter, solange ihre Grundlagen unverändert sind.
+Review, Konsistenzprüfung, Synchronisierung, Retrospektive und Meilensteinabschluss
+sind getrennt gewählte Workflows. grill-me/grilling benötigen eine ausdrückliche
+Auswahl. Die Initialisierung ist abgeschlossen; erhaltene Setup-Texte und
+Kompatibilitätspfade eröffnen sie nicht erneut. Fachliche Schutzregeln sowie
+getrennte Entscheidungen zu Zugriff, Übertragung, Git und Publikation bleiben.
 
 ## Kernprinzip
 
@@ -159,13 +171,17 @@ Die Governance-Koordination erzeugt keine verborgenen Engineering-Anforderungen.
 ## Git-Befugnisse
 
 Git-Zustände dürfen lesend geprüft werden. Staging erfordert eine konkrete
-Anweisung oder die Freigabe des zugehörigen Commits. In `commit-changes` und
-`commit-milestone` umfasst eine explizite Commit-Freigabe für dieses Repository
-den normalen Push zu seinem verifizierten bestehenden Upstream, sofern du den
-Push nicht ausschließt (etwa mit „nur Commit“ oder „kein Push“). Andere Git-Aktionen,
-Tags und Release-Publikation brauchen weiterhin eine eigene Freigabe. Eine
+Anweisung oder die Freigabe des zugehörigen Commits.
+
+In `commit-changes` umfasst eine explizite Commit-Freigabe den normalen Push zum
+verifizierten bestehenden Upstream dieses Repositorys. In `commit-milestone`
+umfasst eine explizite Meilenstein-Commit-Freigabe zusätzlich einen passenden
+annotierten Versionstag und dessen gezielten Upstream-Push. „Nur Commit“ schließt
+Tags und Pushes aus; „kein Push“ behält Commit/Tag lokal; „kein Tag“ schließt Tags
+aus; „kein Tag-Push“ behält den Tag lokal. Andere Git-Aktionen, Tag-Verschiebung/
+Ersetzung und Release-Publikation brauchen weiterhin eine eigene Freigabe. Eine
 Skill-Ausführung oder lokale Pfadzuordnung erteilt keine weitere Befugnis.
-Die lokale Entscheidung steht in [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+Die lokale Entscheidung steht in [PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md).
 
 ## Vorhandene Workflows und Projektdateien
 
@@ -193,6 +209,7 @@ Die lokale Entscheidung steht in [PDR-0002](docs/decisions/PDR-0002-bounded-comm
 - [PHILOSOPHY.md](PHILOSOPHY.md)
 - [DOCUMENTATION.md](DOCUMENTATION.md)
 - [REPOSITORY.md](REPOSITORY.md)
+- [SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md)
 - [VALIDATION.md](VALIDATION.md)
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 

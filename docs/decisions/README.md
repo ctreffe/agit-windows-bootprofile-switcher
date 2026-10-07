@@ -18,3 +18,7 @@ minor implementation choices.
 - [DDR-0001: Project Introductions and Template Guides](DDR-0001-project-introductions-and-template-guides.md)
 
 - [PDR-0002: Bounded Commit and Push Authority](PDR-0002-bounded-commit-and-push-authority.md)
+
+- [PDR-0003: Current Template Workflow Authority](PDR-0003-current-template-workflow-authority.md)
+
+- [PDR-0004: Milestone Version Tag Bundle](PDR-0004-milestone-version-tag-bundle.md) — partially supersedes PDR-0002 for milestone tags.

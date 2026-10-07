@@ -1,166 +1,177 @@
-# Selected Template Synchronization
+# Detailed Template Synchronization
 
-Date: 2026-10-06
+Date: 2026-10-07
 Status: completed selected synchronization; independently validated
 
 Source: https://github.com/ctreffe/ai-template-dev
-Selected source commit: 6a2cc69831c99dd68d00fba9063bd404ab0b9df7
-Previous recorded baseline: 750e91b1d477a09324d792d4f40aeccc6229ec7e
+Selected source commit: d782a842cc5733d34c60a6bce39ddca5a65a9b64
+Selected source version: 1.6.0
+Previous recorded baseline: 6a2cc69831c99dd68d00fba9063bd404ab0b9df7
 
-## Applied selection
+## Scope and evidence boundary
 
-Ongoing task, handoff, review, consistency, retrospective, synchronization,
-repository-local troubleshooting and optional explicit planning methods.
-Pinned skill-validation metadata and wrapper; applicable exact ongoing
-documentation spans adapted to project rules.
+The maintainer requested a detailed synchronization of all nine registered
+derived projects before separate domain work. This project was clean on main
+at `b7de04feab684c0b7bc3893dff0ff76d07b81579`. The previous source commit exists; the current
+source clone was clean at task entry and its HEAD equaled live GitHub origin/main. No Git action
+is included in this content pass. Source templates and Governance stay unchanged.
 
-## Intentional deviations
+The comparison covers every inherited ongoing skill and support file, resident
+rules, collaboration, repository/documentation conventions, validation metadata,
+retrospective mapping, storage boundaries and both adapted workflow guides.
+Source README.md maps to TEMPLATE_README.md; the German files map likewise.
+Only project-specific entry-point corrections may affect project introductions.
+No initialization, source milestone metadata or domain code/data is imported.
 
-- Existing project intent, domain safety, decisions, data storage and local work remain authoritative.
-- The maintainer selected current commit skills and bounded normal-push authority
-  during correction on 2026-10-07; see [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md). Other protected actions
-  remain separately controlled.
-- Creation and completed initialization are not rerun or restored as ongoing work.
-- Existing README introductions are retained; separate bilingual guides were selected and adapted.
-- Versions, source roadmap/context/backlog and source task history are not copied.
-- Troubleshooting incidents are never transferred; existing local records remain local.
-- Older project prompts and safety contracts remain; current methods are in the skills.
-- Documentation catalogs and visual milestone gates retain their project-specific authority.
+## Intentional adaptations
 
-This is a selected content synchronization, not a claim that every source file
-was copied. The previous historical full baseline remains recorded in
-[PROJECT_CONTEXT.md](PROJECT_CONTEXT.md). Future passes compare this selected
-commit for these methods and the historical baseline for excluded scope.
+- Preserve accepted project intent, architecture, roadmap, versions and rights.
+- Preserve private-source, boot/deployment/host, hardware and disclosure gates.
+- Keep initialization historical, including absent setup/creation skills.
+- Keep catalogs and working paths authoritative; retain existing portable-file
+  scripts/manifests and ignored mappings without data or provider changes.
+- Retain compatibility redirects only where they use the current local workflow.
+- Keep project-local troubleshooting; never transfer template/project incidents.
+- Retain required local validation without treating source alignment as domain
+  execution, publication approval or a milestone/release closure.
 
-## Source difference classification
+## Complete source-contract classification
 
 | Source path | Classification | Reason |
 | --- | --- | --- |
-| `.agents/skills/check-consistency/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/check-consistency/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/commit-changes/SKILL.md` | applicable unchanged | Maintainer-selected current ordinary commit and bounded normal-push workflow |
-| `.agents/skills/commit-milestone/SKILL.md` | applicable unchanged | Maintainer-selected current milestone commit and bounded normal-push workflow |
-| `.agents/skills/commit-milestone/agents/openai.yaml` | applicable unchanged | Selected explicit milestone workflow metadata |
-| `.agents/skills/create-local-project/SKILL.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/create-local-project/agents/openai.yaml` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/grill-me/LICENSE` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grill-me/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grill-me/UPSTREAM.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grill-me/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grilling/LICENSE` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grilling/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grilling/UPSTREAM.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/grilling/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/handoff-task/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/perform-retrospective/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/perform-retrospective/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/record-decision/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/reuse-fixes/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/review-project/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/review-project/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/start-project/SKILL.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/start-project/agents/openai.yaml` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `.agents/skills/start-task/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/sync-template/SKILL.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.agents/skills/sync-template/agents/openai.yaml` | adapted | Selected ongoing contract; preserve project adaptations |
-| `.gitignore` | adapted | Selected ongoing contract; preserve project adaptations |
-| `AGENTS.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `CHANGELOG.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `CODEX.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `COLLABORATION.md` | adapted | Selected ongoing contract; preserve project adaptations |
-| `CONTINUATION_PROMPT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `ChatGPT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `DOCUMENTATION.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `HARMONIZATION_PROMPT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `IDEAS.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `INITIAL_PROMPT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `PHILOSOPHY.md` | adapted exact baseline spans | Selected ongoing contract; preserve project adaptations |
-| `PROJECT_CONTEXT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `PROJECT_SETUP.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `README.de.md` | adapted | Source README mapped to separately selected project guide |
-| `README.md` | adapted | Source README mapped to separately selected project guide |
-| `REPOSITORY.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `RETROSPECTIVE_PATHS.example.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `RETROSPECTIVE_PROMPT.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `SYNCHRONIZED_STORAGE.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `TASK_HANDOFF.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `TROUBLESHOOTING.md` | adapted empty project-local record | Selected ongoing contract; preserve project adaptations |
-| `TROUBLESHOOTING_DETAILS.md` | not applicable | Project-local experience; no incident transfer |
-| `VALIDATION.md` | adapted | Retain existing managed-interpreter and pinned PyYAML note; no installation authority |
-| `VERSION` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `decisions/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/CATALOG.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/PATHS.local.example.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/intake/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/local/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/restricted/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `input/versioned/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `materials/CATALOG.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `materials/PATHS.local.example.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `materials/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `materials/local/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `materials/versioned/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `requirements-tools.txt` | applicable unchanged | Selected ongoing contract; preserve project adaptations |
-| `scripts/Test-CodexSkill.ps1` | adapted | Explicit UTF-8 for Windows Unicode skills; no install |
-| `temp/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
-| `temp/restricted/README.md` | not applicable to selected scope | Retain project-owned state, authority, initialization or domain adaptation |
+| `.agents/skills/check-consistency/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/check-consistency/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/commit-changes/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/commit-milestone/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/commit-milestone/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/create-local-project/SKILL.md` | not applicable | Creation/initialization is complete; retain existing provenance only, never restore absent initialization skills. |
+| `.agents/skills/create-local-project/agents/openai.yaml` | not applicable | Creation/initialization is complete; retain existing provenance only, never restore absent initialization skills. |
+| `.agents/skills/grill-me/LICENSE` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grill-me/SKILL.md` | applicable unchanged | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grill-me/UPSTREAM.md` | applicable unchanged | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grill-me/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grilling/LICENSE` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grilling/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grilling/UPSTREAM.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/grilling/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/handoff-task/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/perform-retrospective/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/perform-retrospective/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/record-decision/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/reuse-fixes/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/review-project/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/review-project/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/start-project/SKILL.md` | not applicable | Creation/initialization is complete; retain existing provenance only, never restore absent initialization skills. |
+| `.agents/skills/start-project/agents/openai.yaml` | not applicable | Creation/initialization is complete; retain existing provenance only, never restore absent initialization skills. |
+| `.agents/skills/start-task/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/sync-template/SKILL.md` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `.agents/skills/sync-template/agents/openai.yaml` | already present | Current committed source, including adjacent metadata, license and provenance. |
+| `input/README.md` | not applicable | This optional directory is absent; no operational data or directory is introduced. |
+| `materials/README.md` | not applicable | This optional directory is absent; no operational data or directory is introduced. |
+| `temp/README.md` | not applicable | This optional directory is absent; no operational data or directory is introduced. |
+| `AGENTS.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `COLLABORATION.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `DOCUMENTATION.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `PHILOSOPHY.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `REPOSITORY.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `SYNCHRONIZED_STORAGE.md` | adapted | Retain the verified portable-file contract or source-neutral optional model; no data transfer or provider setting change. |
+| `VALIDATION.md` | adapted | Preserve reviewed domain/default/validation choices; align current task methods through AGENTS.md and COLLABORATION.md. |
+| `PROJECT_SETUP.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `IDEAS.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `PROJECT_CONTEXT.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `TASK_HANDOFF.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `CHANGELOG.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `VERSION` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `LICENSE` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `TROUBLESHOOTING.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `TROUBLESHOOTING_DETAILS.md` | not applicable to copying | Project-owned intent, provenance, history, version, rights and incident knowledge are never replaced by template state. |
+| `requirements-tools.txt` | already present | Retain pinned PyYAML and exact managed-interpreter/UTF-8 wrapper; canonical source mapping schema has an Unset derived-project source role. |
+| `scripts/Test-CodexSkill.ps1` | adapted | Retain pinned PyYAML and exact managed-interpreter/UTF-8 wrapper; canonical source mapping schema has an Unset derived-project source role. |
+| `RETROSPECTIVE_PATHS.example.md` | adapted | Retain pinned PyYAML and exact managed-interpreter/UTF-8 wrapper; canonical source mapping schema has an Unset derived-project source role. |
 
-## Verification obtained on 2026-10-07
+## Independent verification
 
-- 10 changed skills passed this project's Test-CodexSkill.ps1 wrapper
-  using the exact existing Governance-managed interpreter and PyYAML 6.0.3.
-- Guide language structures, retained skill inventories, reciprocal navigation
-  and local targets reviewed; project introduction content retained.
-- Focused source/meaning review and required diff checks passed; previous Git
-  HEAD, branch and empty index preserved.
-- Wrapper uses explicit UTF-8 for Unicode skill input on Windows. Newly
-  imported planning skills retain explicit-only policy and document the
-  installed validator's frontmatter compatibility adaptation in UPSTREAM.md.
-- No new environment or package installed; no project code, data, external
-  storage, template source repository or protected Git action changed.
-- Domain render, workbook pipeline, boot, hardware and host-changing tests
-  were not run for these workflow and documentation changes.
+- All 12 locally retained skills passed this project's own
+  Test-CodexSkill.ps1 wrapper using the exact existing managed interpreter and
+  pinned PyYAML 6.0.3. This includes non-executed setup provenance and any local
+  compatibility redirect. No package or environment was installed.
+- All 12 ongoing skills and 23
+  adjacent skill/support files were compared with immutable source Git objects:
+  23 exact after newline normalization and
+  0 explicitly checked project adaptations.
+- Resident authority, conditional context/task entry, handoff, review/sync/
+  consistency/retrospective separation, explicit-only planning, bounded normal
+  push and proportional validation were reviewed. Ordinary edits grant no Git,
+  source-access or transmission authority; a rejected push grants no rebase.
+- Additional-document scenarios preserve lean default, explicit opt-in,
+  return-to-lean, settled project defaults, ID/path collision refusal and
+  confirmation before edits. In applicable documentation projects the source
+  route is adopted; no actual interview or new document was executed.
+- Routine render validation is distinct from explicit agent visual inspection.
+  Existing required guide-milestone visual/disclosure evidence is preserved;
+  it may be supplied by the maintainer. No render or visual QA was performed.
+- 219 selected local links/anchors passed; both README
+  language pairs, guide inventories, reciprocal role/language navigation,
+  source identity and absent inherited guide badges passed.
+- Prior HEAD, branch, worktree membership and empty staging are preserved.
+  Only the recorded prepared content scope differs from HEAD; project versions,
+  licenses, code, configuration, cataloged source bytes, portable-file scripts/
+  manifests, ignored mappings and project-local incident knowledge are retained.
+- Whitespace/full repository gates were deferred under the local bounded-stage contract.
 
-## Selected-sync correction: 2026-10-07
+Parallel source-template work appeared during final validation, including
+uncommitted milestone/tag-authority changes. It is explicitly excluded: the
+selected committed milestone still matched live origin/main at verification.
+Comparisons use the immutable commit above, not the moving source worktree.
+No source-template file was edited by this pass. Other source/Governance work
+remains outside its scope and is not treated as this pass's validation.
 
-The original pass excluded commit-and-push authority. The maintainer now selected
-both current commit skills and this bounded rule. The source commit remains the
-same; uncommitted source-template changes are outside the correction.
+Live model/UI invocation, actual interviews, domain pipelines, Quarto rendering,
+visual QA, real hardware/host effects and comprehensive family/milestone gates
+are deferred/not applicable to this workflow-content synchronization. Source
+and scenario review does not guarantee future model behavior or qualify
+publication, deployment, cloud upload or other-device availability.
 
-Impact: adopt the two skills and milestone metadata; adapt active local authority
-contracts and both workflow guides; record a local PDR and update project context,
-changelog and this task checkpoint. Retained validation notes and documentation
-skill adaptations are reclassified, not overwritten. Historical decisions,
-project README content, code, inputs, outputs, licenses and versions are preserved.
-Other derived projects and source templates receive no authority from this record.
+## Previous synchronization evidence
 
-Correction verification is recorded separately from the original-pass evidence
-above.
+The previous selected pass and its checks remain in [the verified project history](https://github.com/ctreffe/agit-windows-bootprofile-switcher/blob/b7de04feab684c0b7bc3893dff0ff76d07b81579/TEMPLATE_SYNC.md).
+Historical checks do not constitute current authority or domain readiness.
 
-### Correction verification
+## Selected commit-milestone follow-up: 2026-10-07
 
-- Both adopted commit skills passed this project's `scripts/Test-CodexSkill.ps1`
-  with the existing exact managed interpreter and pinned PyYAML 6.0.3. No
-  environment or dependency was installed.
-- All 4 files classified as applicable unchanged now match the selected
-  committed source after newline normalization. Existing validation notes and
-  the retained documentation skill adaptations remain unchanged.
-- Reviewed the active local rule diffs and English/German policy meaning.
-  Both guide structures and their 12 retained skill entries align;
-  88 local links and Markdown anchors in changed documents passed,
-  including 62 guide links.
-- A whitespace gate was deferred under the local bounded-change contract;
-  focused source and contract review supplied the applicable evidence.
-- Project README content, version, license and existing validation notes match
-  the prior committed state. Earlier handoff content is preserved verbatim.
-  Only the documented correction files changed; HEAD and main branch are
-  unchanged, and staging is empty at final inspection.
-- No staging, commit, push, pull, branch, remote, source-template or external
-  storage operation was performed. Later versioning requires live state and
-  separate repository-specific authorization.
-- Broad milestone gates, rendering and visual QA, private workbook pipelines,
-  physical USB/boot/deployment tests and host-changing helpers are deferred or
-  not applicable to this workflow correction. No changed engineering behavior
-  or publication readiness is claimed. No required correction work remains.
+Source: `ai-template-dev` at `fa63ed044c980c5d4972978cd869612a7cdf459b`;
+live origin/main matched this immutable commit at selection. The earlier full
+baseline remains `d782a842cc5733d34c60a6bce39ddca5a65a9b64`; this is a focused workflow follow-up.
 
+| Path | Classification | Selection |
+| --- | --- | --- |
+| `.agents/skills/commit-milestone/SKILL.md` | adopted unchanged | Full current milestone/tag, exclusion, collision, backfill and exact-push contract. |
+| `.agents/skills/commit-milestone/agents/openai.yaml` | already present | Retain explicit-only invocation; source metadata is unchanged. |
+| `AGENTS.md`, `COLLABORATION.md`, `REPOSITORY.md` | adapted | Align the authority bundle; retain all project/domain safeguards. |
+| `TEMPLATE_README.md`, `TEMPLATE_README.de.md` | adapted | Select only tag-bundle/catalog/authority hunks; retain project introductions and guide baseline. |
+| `docs/decisions/PDR-0004-milestone-version-tag-bundle.md`, `docs/decisions/README.md` | project-owned decision | PDR-0004 partially supersedes PDR-0002's milestone-tag exclusion only. |
+| `PROJECT_CONTEXT.md`, `CHANGELOG.md`, `TASK_HANDOFF.md` | adapted | Record this selection without releasing or versioning the project. |
+
+No source changelog/history or unrelated source work is copied. No Git write,
+tag/backfill, release, host operation, installation or sensitive access follows
+from this sync. Commit-changes, signing and comprehensive milestone/domain checks
+remain unchanged. [Decision and rationale](docs/decisions/PDR-0004-milestone-version-tag-bundle.md).
+
+### Follow-up verification
+
+The changed skill is checked through this project's validator with the existing
+pinned interpreter. Source/hash, authority/exclusion/scenario, guide-language,
+local-link and prior-change-preservation checks are required for closure. Their
+actual results are recorded at completion below; no real Git closure is exercised.
+
+Follow-up completed: the exact adopted milestone skill passed this repository's
+validator using the existing managed interpreter with PyYAML 6.0.3. Explicit-only
+metadata, exact committed source content, authority/exclusion/collision/backfill/
+partial-push instruction scenarios, both adapted guide languages and their
+inventories, selected local links and preservation of the previous sync passed.
+HEAD, branch, worktree and existing staging selections were preserved.
+Whitespace/full-suite checks were deferred under the bounded-change contract.
+No actual commit, tag, branch/tag push, signing operation, render/visual check,
+installation, protected input access, host/deployment test or family/release gate
+was performed. Unchanged skill/domain evidence from the full pass remains valid
+only within its recorded limits; no new project release is asserted.

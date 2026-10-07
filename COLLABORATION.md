@@ -30,13 +30,16 @@ workflow choices using the repository Decision Record taxonomy. Keep ordinary
 commit preparation separate from milestone closure and preserve protected Git
 authority, including the bounded commit-and-push workflow below.
 
-Within `commit-changes` or `commit-milestone`, repository-specific explicit
-commit authorization includes the commit and its normal push to the verified
-existing upstream unless the maintainer excludes push. Skill invocation alone
-grants no Git authority. Force-push, other refs, remote changes, tags and release
-publication remain outside this bundle; other protected actions still need
-separate authority. This changes neither content-access nor publication rules.
-See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+Within `commit-changes`, repository-specific explicit commit authorization
+includes the normal push to the verified existing upstream unless excluded.
+Within `commit-milestone`, explicit milestone commit authorization also includes
+one matching annotated version tag and its exact upstream push (TVDR-0053).
+"Commit only" excludes tags and pushes; "no push" retains a local commit/tag;
+"no tag" excludes tag creation/push; "no tag push" retains the local tag.
+Skill invocation alone grants no Git authority. Force-push, other refs, remote
+changes, tag movement/replacement and release publication remain separately
+controlled. This changes neither content-access nor publication rules.
+See [PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md) for the milestone-tag amendment to PDR-0002.
 
 When an applicable repository rule requires a control word, accompany the
 request with one minimal copy-ready suggested instruction naming the exact

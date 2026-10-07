@@ -16,10 +16,11 @@ implemented and validated behavior rather than an earlier plan.
 - `docs/decisions/` contains durable ADRs, PDRs and DDRs.
 - `docs/modules/`, `docs/deployment/`, `docs/discovery/`, `docs/poc/` and
   `docs/release/` contain focused technical and user guidance.
-- `ChatGPT.md`, `CODEX.md` and `PHILOSOPHY.md` define collaboration, local
-  execution and engineering principles.
+- `COLLABORATION.md` defines the current collaboration model. `ChatGPT.md` and
+  `CODEX.md` retain supplemental local/domain safeguards; `PHILOSOPHY.md`
+  defines engineering principles.
 - `CONTINUATION_PROMPT.md`, `HARMONIZATION_PROMPT.md` and
-  `RETROSPECTIVE_PROMPT.md` provide repeatable review workflows.
+  `RETROSPECTIVE_PROMPT.md` are compatibility pointers to current skills.
 
 The removed initialization files `PROJECT_SETUP.md` and `INITIAL_PROMPT.md` are
 not reconstructed from newer template text. Their historical absence and the
@@ -69,3 +70,13 @@ maintainer decisions, and automated checks are warnings rather than approval.
 When a behavior or governance rule changes, update every affected authoritative
 document coherently. Verify local links, examples, parameters, translations and
 the distinction between completed work and roadmap intent.
+
+## Current source operating conventions
+
+AGENTS.md and COLLABORATION.md define lifecycle-aware task entry, focused
+context loading, small reviewable steps, authority and completion. Keep exact
+direct Conventional Commit prefixes and meaningful real-newline bodies;
+milestone closure is separate from implementation. Maintain both required
+README language pairs and refresh guides when their workflows change.
+Private/host inputs and local validation/real-system gates retain their
+accepted domain rules. Compatibility prompt paths are not parallel methods.

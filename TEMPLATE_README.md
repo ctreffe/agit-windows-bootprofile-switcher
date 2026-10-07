@@ -10,13 +10,24 @@
 
 ## Origin and scope
 
-Adapted from AI Dev Template, reviewed at commit `6a2cc69831c99dd68d00fba9063bd404ab0b9df7`. Guide adoption
+Adapted from AI Dev Template, reviewed at commit `d782a842cc5733d34c60a6bce39ddca5a65a9b64`. Guide adoption
 was separately selected for this existing project.
 [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) and [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md)
 record verified provenance, selection and deviations. This guide is not a
 competing policy source: AGENTS.md, local domain rules and accepted Decision
 Records govern actual work. Initialization is complete; removed creation
 skills, template backlogs and executable setup instructions are not restored.
+
+## Current operating contract
+
+AGENTS.md is the resident entry point; COLLABORATION.md defines the current
+maintainer/assistant model. Use start-task for a bounded task and handoff-task
+for durable continuation. Read only relevant domain guidance and reuse current
+evidence while its inputs are unchanged. Review, consistency, synchronization,
+retrospective and milestone closure are separately selected workflows.
+grill-me/grilling require explicit opt-in. Initialization is complete; retained
+setup text and compatibility paths do not reopen it. Domain safeguards and
+separate access, transmission, Git and publication decisions remain binding.
 
 ## Core Principle
 
@@ -148,12 +159,17 @@ Governance coordination does not create hidden engineering requirements. Every c
 ## Git authority
 
 Git state may be inspected read-only. Staging requires a specific instruction
-or authorization of the corresponding commit. In `commit-changes` and
-`commit-milestone`, explicit commit authorization for this repository includes
-the normal push to its verified existing upstream unless excluded (for example,
-"commit only" or "no push"). Other Git actions, tags and release publication
-still need their own authorization. Skill invocation or a local clone mapping
-supplies no additional authority. The local decision is [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+or authorization of the corresponding commit.
+
+In `commit-changes`, explicit commit authorization includes normal push to this
+repository's verified existing upstream. In `commit-milestone`, explicit milestone
+commit authorization also includes one matching annotated version tag and its
+exact upstream push. "Commit only" excludes tags and pushes; "no push" retains
+the local commit/tag; "no tag" excludes tags; "no tag push" keeps the tag local.
+Other Git actions, tag movement/replacement and release publication stay separate.
+
+Skill invocation or a local clone mapping
+supplies no additional authority. The local decision is [PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md).
 
 ## Retained workflows and project files
 
@@ -181,6 +197,7 @@ supplies no additional authority. The local decision is [PDR-0002](docs/decision
 - [PHILOSOPHY.md](PHILOSOPHY.md)
 - [DOCUMENTATION.md](DOCUMENTATION.md)
 - [REPOSITORY.md](REPOSITORY.md)
+- [SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md)
 - [VALIDATION.md](VALIDATION.md)
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 

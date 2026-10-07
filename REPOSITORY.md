@@ -22,13 +22,16 @@ instruction for that specific action containing `explicit`, `explicitly` or
 the German word family `explizit`. Permission to edit files or stage a change
 does not authorize a protected Git action.
 
-Within `commit-changes` or `commit-milestone`, repository-specific explicit
-commit authorization includes the commit and its normal push to the verified
-existing upstream unless the maintainer excludes push. Skill invocation alone
-grants no Git authority. Force-push, other refs, remote changes, tags and release
-publication remain outside this bundle; other protected actions still need
-separate authority. This changes neither content-access nor publication rules.
-See [PDR-0002](docs/decisions/PDR-0002-bounded-commit-and-push-authority.md).
+Within `commit-changes`, repository-specific explicit commit authorization
+includes the normal push to the verified existing upstream unless excluded.
+Within `commit-milestone`, explicit milestone commit authorization also includes
+one matching annotated version tag and its exact upstream push (TVDR-0053).
+"Commit only" excludes tags and pushes; "no push" retains a local commit/tag;
+"no tag" excludes tag creation/push; "no tag push" retains the local tag.
+Skill invocation alone grants no Git authority. Force-push, other refs, remote
+changes, tag movement/replacement and release publication remain separately
+controlled. This changes neither content-access nor publication rules.
+See [PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md) for the milestone-tag amendment to PDR-0002.
 
 ## Commit Boundaries
 
@@ -72,3 +75,13 @@ A repository-ready change includes the actual working-tree changes, aligned
 documentation, proportionate validation, known limitations and matching commit
 guidance. Do not claim an artifact, validation result or Git state that does not
 exist.
+
+## Current source operating conventions
+
+AGENTS.md and COLLABORATION.md define lifecycle-aware task entry, focused
+context loading, small reviewable steps, authority and completion. Keep exact
+direct Conventional Commit prefixes and meaningful real-newline bodies;
+milestone closure is separate from implementation. Maintain both required
+README language pairs and refresh guides when their workflows change.
+Private/host inputs and local validation/real-system gates retain their
+accepted domain rules. Compatibility prompt paths are not parallel methods.
