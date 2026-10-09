@@ -195,3 +195,45 @@ historical evidence. Non-skill legacy paths and accepted domain rules remain.
   inventory/source/adaptation, caller, selected-link and language-pair checks
   passed. Required local static/whitespace checks passed where applicable.
   Domain execution, rendering, host operations and releases remain separate.
+
+## Selected external-storage synchronization: 2026-10-09
+
+Status: completed selected adoption; no whole-template baseline advance.
+Source: `ai-template-dev` at `39c01b4a16b6f86dd9980fa2ad6b559c65cdce04` (Unreleased follow-up).
+The previous full comparison baseline remains `d782a842cc5733d34c60a6bce39ddca5a65a9b64`;
+earlier initialization, tag and inventory selections retain their provenance.
+
+The maintainer explicitly selected sync-template for all nine registered
+derived projects. This pass adds only optional external-storage management,
+with 13 current ongoing skills and project-specific domain boundaries.
+
+| Path | Classification | Selection |
+| --- | --- | --- |
+| `.agents/skills/manage-external-storage/SKILL.md` | adapted | Adopt current source workflow and append this project's boundary. |
+| `.agents/skills/manage-external-storage/agents/openai.yaml` | applicable unchanged | Implicit invocation disabled. |
+| `scripts/Test-ExternalStorage.ps1`, `scripts/Test-ExternalStorageHelper.ps1` | applicable unchanged | Exact committed source objects; read-only helper and invented-only development check. |
+| `SYNCHRONIZED_STORAGE.md`, `VALIDATION.md` | adapted | Append optional guidance; preserve existing storage/restoration and tool contracts. |
+| `TEMPLATE_README.md`, `TEMPLATE_README.de.md` | adapted | Add one explicit catalog row per language; retain guide identity/navigation/rights. |
+| `PROJECT_CONTEXT.md`, `CHANGELOG.md`, `TASK_HANDOFF.md` | project-owned evidence | Record this selection and preserve substantive domain continuation. |
+| All existing skills and metadata | already present / retained adaptations | Complete inventory reviewed; no retired aliases, executable completed setup or required additions beyond this skill. |
+| `AGENTS.md`, routine skill contracts, `README.md`, `README.de.md` | reviewed, unchanged | Existing routing, introductions and project authority remain. |
+| Source history, versions, data, runtime, provider/mappings | not applicable | No source changelog import, initialization, transfer or host migration. |
+
+### Independent evidence and limits
+
+The changed skill passed this project's Test-CodexSkill.ps1 wrapper with
+the existing Governance-managed interpreter and pinned PyYAML 6.0.3. The
+local helper passed 27 synthetic assertions on PowerShell 7 and another 27
+on Windows PowerShell 5.1. Source-object comparison, explicit-only metadata,
+complete skill inventory, selected local links and both README language pairs
+passed. All pre-existing skill/support files, project introductions and
+AGENTS/start-task/handoff-task contracts remain byte-identical.
+
+No actual cloud root, marker, host mapping, private input/material content,
+credential or runtime state was inspected. Existing restoration commands,
+manifest/catalog selections and approved working paths are retained. Provider
+upload/convergence, receiving-device availability, backup, domain/host behavior,
+render/visual QA, comprehensive milestone gates and releases were not tested.
+The content-adoption pass performed no installation, source-template edit
+or implicit storage workflow. The selected implementation is complete; subsequent tasks and
+versioning use live state and their own authority.

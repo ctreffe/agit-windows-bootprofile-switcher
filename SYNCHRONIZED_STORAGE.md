@@ -84,3 +84,43 @@ cataloged material role.
 This optional model excludes device-bound logs, backups and runtime state.
 No source transfer or synchronization setting is selected. Existing Windows
 host-operation and rollback gates remain independently applicable.
+
+## Optional explicit workflow
+
+Use `$manage-external-storage` only when explicitly selected to set up storage,
+connect a host or check exact project files. Ordinary task entry, initialization
+and handoff do not invoke it or require synchronization metadata.
+
+Resolve the project's permitted Markdown mappings first, then pass the exact
+external project directory, expected ID and approved relative files to
+[scripts/Test-ExternalStorage.ps1](scripts/Test-ExternalStorage.ps1):
+
+```powershell
+./scripts/Test-ExternalStorage.ps1 -ProjectPath '<absolute-project-directory>' `
+    -ProjectId 'project-a' -RelativeFile 'input/local/source.pdf', 'materials/image.png'
+```
+
+For this helper, put the safe project ID on the marker's first line and any
+optional format version on a separate line. IDs use 1-64 letters, digits,
+underscores or hyphens. Review incompatible existing markers manually; do not
+automatically migrate or overwrite them. The helper checks a marker at most
+256 bytes long and ordinary local file metadata, without directory discovery.
+
+An optional `-ExpectedSha256` hashtable maps exact selected relative files to
+approved expected hashes. Hashing reads content and requires its access scope.
+By default only the safe marker and file metadata are read. The helper refuses
+intake/restricted/temp selections, traversal, UNC/device paths and reparse
+points, including some cloud-backed paths. Offline/recall flags return
+`placeholder`; unsupported paths need an operator check, not automatic hydration.
+It prints fixed statuses and selection indices, never paths or hashes.
+
+`local_file` is metadata evidence, not a provider-independent hydration guarantee.
+`SyncStatus` remains `not_checked`; report checked sync only with separately
+reviewed provider evidence. Local availability or a hash alone proves no remote
+convergence, backup or conflict freedom. Avoid concurrent path replacement or
+binary edits; this helper is not filesystem isolation or a cloud adapter.
+
+Folder creation and file moves inside a sync root need their own outside-write
+and transmission authority. Record durable storage decisions in existing
+project context or local Decision Records only when needed and authorized.
+Include storage details in a handoff only for a concrete continuation dependency.

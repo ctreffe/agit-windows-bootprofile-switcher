@@ -198,6 +198,7 @@ Die lokale Entscheidung steht in [PDR-0004](docs/decisions/PDR-0004-milestone-ve
 | [reuse-fixes](.agents/skills/reuse-fixes/SKILL.md) | Agent oder explizit |
 | [review-project](.agents/skills/review-project/SKILL.md) | Explizit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent oder explizit |
+| [manage-external-storage](.agents/skills/manage-external-storage/SKILL.md) | Explizit |
 | [sync-template](.agents/skills/sync-template/SKILL.md) | Explizit |
 
 - [AGENTS.md](AGENTS.md)

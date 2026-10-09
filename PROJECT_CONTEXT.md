@@ -1,5 +1,13 @@
 # BootProfile Switcher - Project Context
 
+## Selected external-storage follow-up: 2026-10-09
+
+- Selected source: `ai-template-dev` at `39c01b4a16b6f86dd9980fa2ad6b559c65cdce04`.
+- Completed optional explicit-only workflow adoption; 13 ongoing skills.
+- Scope, intentional adaptations and independent evidence: [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
+- Previous full/historical baselines and project/domain state remain authoritative;
+  this selection performs no storage setup, migration or whole-template adoption.
+
 ## Selected template synchronization: 2026-10-06
 
 - Verified local source commit: `6a2cc69831c99dd68d00fba9063bd404ab0b9df7`.

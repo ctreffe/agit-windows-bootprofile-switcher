@@ -186,6 +186,7 @@ supplies no additional authority. The local decision is [PDR-0004](docs/decision
 | [reuse-fixes](.agents/skills/reuse-fixes/SKILL.md) | Agent or explicit |
 | [review-project](.agents/skills/review-project/SKILL.md) | Explicit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent or explicit |
+| [manage-external-storage](.agents/skills/manage-external-storage/SKILL.md) | Explicit |
 | [sync-template](.agents/skills/sync-template/SKILL.md) | Explicit |
 
 - [AGENTS.md](AGENTS.md)
