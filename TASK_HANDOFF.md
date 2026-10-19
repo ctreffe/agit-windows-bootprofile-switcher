@@ -1,18 +1,18 @@
 # Task Handoff
 
-- Date/status: 2026-10-09; completed selected external-storage template adoption.
-- Scope/authority: maintainer invoked sync-template for all registered derived
-  projects; exact source selection and adaptations in [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
-- Outcome: explicit-only manage-external-storage, optional read-only/synthetic
-  helpers and bilingual guide catalogs; 13 current ongoing skills.
-- Evidence: local pinned skill wrapper, 54 synthetic helper assertions across
-  PowerShell 7/5.1, source/inventory/policy, selected links, both language pairs
-  and preserved pre-existing skill/routine contracts passed.
-- Preservation: local project/domain decisions, existing restoration mechanisms,
-  introductions and substantive continuation remain. No actual
-  cloud, private input, host-mapping or runtime-state operation was performed.
+- Date/status: 2026-10-19; completed selected template synchronization.
+- Scope/authority: explicit maintainer origin alignment and sync-template request
+  for the registered projects; selected outcomes and validation in
+  [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
+- Outcome: explicit-only question research and report scaffold, current selective
+  sync accounting, simplified new storage guidance and preserved local boundaries.
+- Evidence: 4 changed skills, 56 synthetic storage assertions, selected links,
+  bilingual guidance and applicable local gates passed; see the ledger for limits.
+- Preserved: existing project identity/version, source paths, canonical mappings,
+  domain rules, inputs and ongoing content/device work. No private source,
+  real cloud, installation, production or publication operation.
 - Existing open evidence: Elevated real-system boot/account/service/registry/rollback evidence remains separately controlled. No host-changing script or runtime log/backup/state was used.
-- Deferred: actual provider/receiving-host/backup evidence, domain execution,
-  rendering/visual/hardware checks and full milestone/release qualification.
-- Continuation: no implementation remains for this selected adoption. Later
-  work uses start-task and project rules; versioning uses live state and authority.
+- [Previous domain checkpoint and its actual evidence](https://github.com/ctreffe/agit-windows-bootprofile-switcher/blob/52bfb1080a6871ef8ca55a8a52eb4568532a3dfd/TASK_HANDOFF.md).
+- Continuation: no implementation remains for this selected adoption. Resume the
+  project/document task through start-task and current local authority; reconstruct
+  Git state at any later versioning boundary. This is not a project milestone.

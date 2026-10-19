@@ -187,6 +187,7 @@ supplies no additional authority. The local decision is [PDR-0004](docs/decision
 | [review-project](.agents/skills/review-project/SKILL.md) | Explicit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent or explicit |
 | [manage-external-storage](.agents/skills/manage-external-storage/SKILL.md) | Explicit |
+| [`investigate-question`](.agents/skills/investigate-question/SKILL.md) | Explicit | Investigate concrete, preferably related questions and save a report with traceable assessments of each source. |
 | [sync-template](.agents/skills/sync-template/SKILL.md) | Explicit |
 
 - [AGENTS.md](AGENTS.md)
@@ -208,3 +209,16 @@ This guide derives from the MIT-licensed AI Dev Template.
 The project license is in [LICENSE](LICENSE); existing attribution and
 licenses of inherited skills remain intact. Synchronization changes no
 license and grants no publication permission.
+
+## Question research, storage and template comparison
+
+`investigate-question` runs only when deliberately requested by name. It scopes
+one question or a preferably related set, evaluates every used source separately
+and always saves a [research report](templates/RESEARCH_REPORT.md); optional data
+retain separate provenance. Reports and generated data stay unversioned by default.
+[materials/README.md](materials/README.md#research-storage-and-reuse) governs reuse
+of approved cloud locations and the local fallback.
+[SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md) defines the simple new layout;
+existing mappings and restoration rules remain authoritative.
+[TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) distinguishes compared, selected adopted and
+fully resolved baselines, including deferred and deliberately rejected items.

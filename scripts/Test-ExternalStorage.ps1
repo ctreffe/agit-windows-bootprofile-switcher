@@ -31,8 +31,9 @@ foreach ($relative in $RelativeFile) {
         @($segments | Where-Object {
             $_ -in @('', '.', '..') -or $_ -match '[. ]\z'
         }).Count -gt 0 -or
-        $normalized -notmatch '\A(input/local/|materials/|output/).+\z') {
-        throw 'Select exact files below input/local, materials or deliberate output; traversal and other zones are refused.'
+        $normalized -match '\Ainput/(intake|restricted)(/|$)' -or
+        $normalized -notmatch '\A(input/|materials/|output/).+\z') {
+        throw 'Select exact files below approved input, materials or deliberate output; traversal and other zones are refused.'
     }
     $selected += $normalized
 }

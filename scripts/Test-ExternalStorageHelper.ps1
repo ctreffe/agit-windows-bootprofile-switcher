@@ -31,6 +31,10 @@ try {
     [IO.File]::WriteAllText($source, 'Invented source content')
     [IO.File]::WriteAllText($material, 'Invented working material')
     $before = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash
+    $flatSource = Join-Path $fixtureRoot 'input/flat-source.txt'
+    [IO.File]::WriteAllText($flatSource, 'Invented approved original')
+    $flat = & $helper -ProjectPath $fixtureRoot -ProjectId 'project-a' -RelativeFile 'input/flat-source.txt'
+    Assert-Result ($flat.Files[0].Availability -eq 'local_file') 'Simplified external input failed.'
 
     $result = & $helper -ProjectPath $fixtureRoot -ProjectId 'project-a'
     Assert-Result ($result.Project -eq 'verified' -and @($result.Files).Count -eq 0) 'Marker-only check failed.'

@@ -55,6 +55,10 @@ Resident contract for BootProfile Switcher.
   automatically. Invoke initialization, review, template sync, consistency,
   retrospective and `commit-milestone` explicitly.
 
+- Invoke `investigate-question` deliberately by name for concrete project
+  questions and a saved report with individual source assessments. Ordinary
+  entry, drafting and handoff do not trigger research or broaden access.
+
 ## Validation
 
 Codex skill edits use `scripts/Test-CodexSkill.ps1`; on first use follow

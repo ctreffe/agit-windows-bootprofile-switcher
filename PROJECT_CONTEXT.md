@@ -1,6 +1,14 @@
 # BootProfile Switcher - Project Context
 
-## Selected external-storage follow-up: 2026-10-09
+## Template synchronization and context ownership
+
+[TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) owns the current comparison, adoption,
+rejections and validation state. Earlier synchronization sections below are
+historical evidence only. This file owns durable project intent, constraints,
+roadmap and project-wide open decisions; TASK_HANDOFF.md owns the current task
+checkpoint. Update either only when its authoritative facts change.
+
+## Historical: Selected external-storage follow-up: 2026-10-09
 
 - Selected source: `ai-template-dev` at `39c01b4a16b6f86dd9980fa2ad6b559c65cdce04`.
 - Completed optional explicit-only workflow adoption; 13 ongoing skills.
@@ -8,7 +16,7 @@
 - Previous full/historical baselines and project/domain state remain authoritative;
   this selection performs no storage setup, migration or whole-template adoption.
 
-## Selected template synchronization: 2026-10-06
+## Historical: Selected template synchronization: 2026-10-06
 
 - Verified local source commit: `6a2cc69831c99dd68d00fba9063bd404ab0b9df7`.
 - Separate bilingual guide adoption: [DDR-0001](docs/decisions/DDR-0001-project-introductions-and-template-guides.md).
@@ -258,7 +266,7 @@ push after explicit commit authorization. Other protected actions and project
 access, publication and domain rules retain separate authority. See
 [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) for the correction scope and evidence.
 
-## Detailed source workflow synchronization: 2026-10-07
+## Historical: Detailed source workflow synchronization: 2026-10-07
 
 Current selected workflow baseline: AI Dev Template 1.6.0,
 `d782a842cc5733d34c60a6bce39ddca5a65a9b64`. See [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) for the complete
@@ -267,7 +275,7 @@ and independent evidence. Historical initialization/full-domain baselines remain
 provenance; this selection updates ongoing methods without a project release.
 Existing domain, portable-file and publication follow-up remains applicable.
 
-## Selected milestone-tag workflow update: 2026-10-07
+## Historical: Selected milestone-tag workflow update: 2026-10-07
 
 [PDR-0004](docs/decisions/PDR-0004-milestone-version-tag-bundle.md) adopts the commit-milestone tag bundle from
 `ai-template-dev` at `fa63ed044c980c5d4972978cd869612a7cdf459b`. Explicit milestone commit

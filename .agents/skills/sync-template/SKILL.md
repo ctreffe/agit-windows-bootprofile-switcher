@@ -40,6 +40,18 @@ If older projects lack guides, propose their adoption separately, preserve
 existing README content and resolve collisions; do not rerun initialization,
 auto-migrate them or claim an unavailable comparison baseline.
 
+
+Before comparison, read [TEMPLATE_SYNC.md](../../../TEMPLATE_SYNC.md), creating
+its record from verified project lineage only if this selected sync needs it.
+Compare new changes since the last compared upstream commit AND revisit every
+deferred/conflicting item from its original baseline. Keep per-change outcomes,
+local adaptations, evidence and review conditions. A compared commit is not an
+adopted baseline: advance the selected adoption checkpoint only for validated
+selected changes, and the fully resolved baseline only when earlier items are
+adopted, adapted or deliberately rejected. Link this ledger from project context;
+do not maintain a competing synchronization status there. Preserve rejected
+decisions until their reconsideration condition applies.
+
 Present the impact and proposed adoption scope before consequential edits.
 Apply only selected updates, adapt them to project decisions and validate the
 project independently. Never treat the repositories as a monorepo or assume

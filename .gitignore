@@ -51,3 +51,11 @@ backups/
 /.codex-output/
 
 /TROUBLESHOOTING.local.md
+/materials/local/
+/materials/PATHS.local.md
+/materials/CATALOG.local.md
+/input/PATHS.local.md
+/input/CATALOG.local.md
+/input/intake/
+/input/restricted/
+/input/local/

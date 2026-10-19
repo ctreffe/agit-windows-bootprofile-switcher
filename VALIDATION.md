@@ -26,6 +26,21 @@ packages, alter global Python or change engineering, test, release or Git
 authority. PyYAML is pinned in `requirements-tools.txt`; upgrades are deliberate
 dependency changes.
 
+## Optional external-storage helper development
+
+When this helper changes, use its invented-only behavior check as needed:
+
+```powershell
+./scripts/Test-ExternalStorageHelper.ps1
+# Windows PowerShell 5.1, with a process-only option when needed:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/Test-ExternalStorageHelper.ps1
+```
+
+It creates only a unique temporary fixture with checked cleanup, including
+Windows offline and junction cases. If the platform blocks junction creation,
+request narrow execution escalation for this exact synthetic check; do not
+change host policy or silently omit the case. This development check is not
+part of ordinary tasks, initialization or handoff and accesses no cloud files.
 ## Exact interpreter used for this synchronization
 
 The eight-project synchronization used the already approved, existing

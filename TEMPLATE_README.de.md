@@ -199,6 +199,7 @@ Die lokale Entscheidung steht in [PDR-0004](docs/decisions/PDR-0004-milestone-ve
 | [review-project](.agents/skills/review-project/SKILL.md) | Explizit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent oder explizit |
 | [manage-external-storage](.agents/skills/manage-external-storage/SKILL.md) | Explizit |
+| [`investigate-question`](.agents/skills/investigate-question/SKILL.md) | Explizit | Konkrete, vorzugsweise zusammenhängende Fragen recherchieren und einen Bericht mit nachvollziehbarer Bewertung jeder Quelle speichern. |
 | [sync-template](.agents/skills/sync-template/SKILL.md) | Explizit |
 
 - [AGENTS.md](AGENTS.md)
@@ -220,3 +221,17 @@ Die Anleitung beruht auf dem MIT-lizenzierten AI Dev Template.
 Die Projektlizenz steht in [LICENSE](LICENSE); vorhandene Zuschreibungen und
 Lizenzen der übernommenen Skills bleiben erhalten. Die Synchronisation ändert
 keine Lizenz und erteilt keine Veröffentlichungsfreigabe.
+
+## Fragenrecherche, Speicher und Template-Abgleich
+
+`investigate-question` wird ausschließlich bewusst unter diesem Namen aufgerufen.
+Der Skill grenzt eine Frage oder mehrere vorzugsweise zusammenhängende Fragen ein,
+bewertet jede verwendete Quelle einzeln und speichert stets einen
+[Recherchebericht](templates/RESEARCH_REPORT.md); optionale Daten erhalten eigene
+Herkunftsnachweise. Berichte und erzeugte Daten bleiben standardmäßig unversioniert.
+[materials/README.md](materials/README.md#research-storage-and-reuse) regelt die
+Nutzung bereits freigegebener Cloud-Pfade und den lokalen Rückfallpfad.
+[SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md) beschreibt das einfache neue
+Layout; vorhandene Zuordnungen und Wiederherstellungsregeln bleiben bestehen.
+[TEMPLATE_SYNC.md](TEMPLATE_SYNC.md) unterscheidet verglichene, ausgewählt
+übernommene und vollständig aufgelöste Stände samt offenen oder verworfenen Punkten.
