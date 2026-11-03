@@ -29,6 +29,12 @@ Existing `input/local/` mappings remain supported for exact approved files;
 legacy intake/restricted areas remain closed. No automatic move or migration.
 Optional subject/document folders may organize content without changing its role.
 
+For an optional separate restricted area and its approved readable metadata,
+select `manage-restricted-storage` and [RESTRICTED_STORAGE.md](RESTRICTED_STORAGE.md).
+Keep inaccessible contents outside this ordinary area. Its availability/hash
+helper must not inspect denied paths. Setup/catalog results and invented-only
+protection checks have independent outcomes and grant no source access.
+
 Put a stable non-sensitive ID of 1–64 letters, digits, underscores or hyphens
 on the first line of `PROJECT_ID.txt`; an optional format version follows.
 Preserve existing markers. An identity mismatch requires resolution before use.

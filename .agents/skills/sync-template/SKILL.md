@@ -31,8 +31,11 @@ Do not copy upstream READMEs over project `README.md` or `README.de.md`.
 Preserve guide adaptations, local rules and project decisions; adopt selected
 workflow changes while retaining the actual file/skill inventory, guide
 identity, absent inherited badges, license notices and correct navigation.
-Do not restore removed `create-local-project`, template-only `IDEAS.md` or
-completed initialization instructions as locally executable ongoing work.
+Do not restore removed `create-local-project` or completed initialization
+instructions as locally executable ongoing work. Adopt `record-idea` and a
+missing project-owned `IDEAS.md` only when selected for this sync. Use the empty
+project scaffold, never upstream idea entries; preserve existing project ideas,
+IDs and local adaptations. Do not rerun initialization to add an idea backlog.
 Update project introductions only for selected project-specific behavior or
 entry-point changes. Review both affected language pairs, their cross-links
 and remaining local file/skill targets before recording an applied baseline.

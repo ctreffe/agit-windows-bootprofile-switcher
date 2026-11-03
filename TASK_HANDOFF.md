@@ -16,3 +16,13 @@
 - Continuation: no implementation remains for this selected adoption. Resume the
   project/document task through start-task and current local authority; reconstruct
   Git state at any later versioning boundary. This is not a project milestone.
+
+## Template synchronization checkpoint — 2026-11-03
+
+The selected current-source workflow adoption is completed with independent
+focused evidence recorded in [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
+This checkpoint concerns template adoption only. The preceding project outcome,
+pending work, authority limits and any paused continuation remain unchanged.
+No source release/task history, template idea entries, operational execution or
+protected Git action is imported. Local source provenance includes a working-tree
+overlay rather than an invented commit. See the ledger for per-change outcomes.

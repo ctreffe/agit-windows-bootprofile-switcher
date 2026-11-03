@@ -6,6 +6,11 @@ This project follows Semantic Versioning.
 
 ## [Unreleased]
 
+- Synchronize current ai-template-dev workflow guidance on 2026-11-03,
+  including project-owned idea capture/reflection and compatible optional
+  methods. Preserve local authority, existing ideas and domain/runtime gates;
+  TEMPLATE_SYNC.md records exact source snapshot, outcomes and evidence.
+
 - Adopt explicit-only manage-external-storage and optional read-only/synthetic
   helpers from the verified source template; preserve project-specific storage,
   access and routine workflow contracts.

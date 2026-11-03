@@ -107,3 +107,25 @@ because code was generated, a build passed or a plausible explanation exists.
 CODEX.md, the project-specific rules in ChatGPT.md and accepted records in
 docs/decisions/ retain their safety and domain authority. This contract
 provides current task methods without weakening those safeguards.
+
+## Ideas and Reflection
+
+Use `IDEAS.md` for possibilities without roadmap priority or timing commitments;
+the roadmap owns selected planned work and Decision Records own durable choices.
+`record-idea` may route implicitly when the maintainer clearly asks to retain or
+update an idea; discussion alone does not authorize capture. Keep one owning
+entry and stable local IDs. Capture does not approve implementation or policy;
+an idea may be selected immediately or revisited later.
+
+Explicit `perform-retrospective`, where available, jointly develops improvements
+from an agreed project period; it may conclude with no action. Governance's
+explicit `synthesize-ideas` compares selected authorized cross-project evidence.
+Use `record-idea` for selected capture. Cross-repository writes still need exact
+destination/action control-word authority and reviewed transferable evidence;
+otherwise return a Pending Idea Transfer. Preserve local privacy, source,
+security, recipient and publication boundaries.
+
+Use `review-code` for selected interactive code review, `test-code` for an agreed
+operational run with one retained report and `setup-test-environment` for a
+portable definition and requested reconstruction. Readiness is not behavior
+coverage; invocation grants no installation, real-data or external-effect authority.

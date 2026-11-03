@@ -193,8 +193,13 @@ Die lokale Entscheidung steht in [PDR-0004](docs/decisions/PDR-0004-milestone-ve
 | [grill-me](.agents/skills/grill-me/SKILL.md) | Explizit |
 | [grilling](.agents/skills/grilling/SKILL.md) | Explizit |
 | [handoff-task](.agents/skills/handoff-task/SKILL.md) | Agent oder explizit |
-| [perform-retrospective](.agents/skills/perform-retrospective/SKILL.md) | Explizit |
+| [`perform-retrospective`](.agents/skills/perform-retrospective/SKILL.md) | Explizit | Entwickelt gemeinsam aus einem vereinbarten Projektverlauf Verbesserungsideen; record-idea übernimmt die ausgewählte Erfassung. |
 | [record-decision](.agents/skills/record-decision/SKILL.md) | Agent oder explizit |
+| [`setup-test-environment`](.agents/skills/setup-test-environment/SKILL.md) | Agent oder explizit | Definiert oder rekonstruiert eine angefragte Testumgebung; trennt Betriebsbereitschaft von operativen Tests. |
+| [`test-code`](.agents/skills/test-code/SKILL.md) | Explizit | Stimmt einen abgegrenzten Testplan ab und erhält Versuche sowie Fehler in einem ignorierten lokalen Bericht. |
+| [`review-code`](.agents/skills/review-code/SKILL.md) | Explizit | Erklärt bestehenden Code oder Änderungen in nummerierten Runden, gewöhnlich vier Blöcken, und wartet auf Rückmeldung. |
+| [`manage-restricted-storage`](.agents/skills/manage-restricted-storage/SKILL.md) | Explizit | Verwaltet einen gesperrten Bereich und freigegebene Metadaten unter Wahrung der Fixture-, Laufzeit- und Effektgrenzen. |
+| [`record-idea`](.agents/skills/record-idea/SKILL.md) | Agent oder explizit | Hält auf klaren Erfassungswunsch vorhandene Ideen im zuständigen Backlog fest; Transferrechte bleiben separat. |
 | [reuse-fixes](.agents/skills/reuse-fixes/SKILL.md) | Agent oder explizit |
 | [review-project](.agents/skills/review-project/SKILL.md) | Explizit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent oder explizit |
@@ -214,6 +219,25 @@ Die lokale Entscheidung steht in [PDR-0004](docs/decisions/PDR-0004-milestone-ve
 - [SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md)
 - [VALIDATION.md](VALIDATION.md)
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+## Ideen und laufende Methoden
+
+`record-idea` hält auf klaren Wunsch vorhandene Ideen in [IDEAS.md](IDEAS.md)
+fest, ohne Termin, Priorität oder Umsetzung zuzusagen. `perform-retrospective`
+entwickelt gemeinsam Verbesserungen aus einem vereinbarten Projektverlauf.
+Projektideen bleiben erhalten; Template-Ideen und abgeschlossene Initialisierung
+werden nicht übernommen. Repository-übergreifende Erfassung braucht weiterhin
+die genaue zielbezogene Freigabe mit Kontrollwort. Lokale Datenschutz-, Quellen-,
+Sicherheits- und Veröffentlichungsregeln gelten unverändert.
+
+`review-code` erläutert Code in Dialogrunden; `test-code` führt einen vereinbarten
+Testplan mit einem fortgeschriebenen Bericht aus. `setup-test-environment` dient
+der angefragten Definition oder Rekonstruktion. Bestehende lokale Methoden
+haben Vorrang; Übernahme startet weder Dienste noch Tests oder Installationen.
+
+`manage-restricted-storage` ist ein ausdrücklicher Ablauf für begrenzte Einrichtung,
+freigegebene Metadaten und rein erfundene Schutztests. Bestehende Kataloge und
+Zugriffsgrenzen gelten; Layout, Katalog, Konfiguration und Schutz sind getrennte Ergebnisse.
 
 ## Lizenz und Zuschreibung
 

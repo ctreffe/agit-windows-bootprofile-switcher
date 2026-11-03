@@ -519,6 +519,13 @@ Das aufgezeichnete Quell-Template ist [AI Dev Template](https://github.com/ctref
 unveraenderte Baseline und die lokale Quellklon-Zuordnung fuer eine ausgewaehlte
 Synchronisation.
 
+## Ideen festhalten
+
+Halte auf Wunsch vorhandene Ideen über `record-idea` in [IDEAS.md](IDEAS.md)
+fest; `perform-retrospective` entwickelt Verbesserungen gemeinsam aus dem Verlauf.
+Für die aktuellen Methoden und lokalen Grenzen siehe
+[TEMPLATE_README.de.md](TEMPLATE_README.de.md).
+
 ## Lizenz
 
 Dieses Projekt steht unter der MIT-Lizenz.

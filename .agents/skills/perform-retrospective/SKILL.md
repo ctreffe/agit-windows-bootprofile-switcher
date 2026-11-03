@@ -1,51 +1,45 @@
 ---
 name: perform-retrospective
-description: Distill collaboration evidence from one derived project into project, source-template or Templateverse improvement candidates.
+description: Jointly reflect with the maintainer on an agreed project period, explain collaboration successes and difficulties, and develop evidence-based improvement ideas. Use explicitly; use record-idea for already formulated ideas.
 ---
 
 # Perform Retrospective
 
-Establish whether the current repository is a derived project or a source-
-template maintenance checkout, then define the reviewed period, permitted
-evidence and project boundary. Prefer durable repository evidence and do not
-assume access to private chat or sensitive material.
+Preserve CODEX.md and boot/account/service/registry/rollback safeguards.
+Do not execute host-changing helpers or inspect device-bound logs/state for ideas.
 
-Classify every result as project-specific, source-template candidate, family-
-wide candidate or no action. Route project-specific findings to the current
-project's roadmap or Decision Record process, template candidates to the
-verified source template's `IDEAS.md` and family-wide candidates to governance
-`IDEAS.md`.
+Preserve engineering evidence, architecture, test and release authority;
+keep secrets, private logs and source dumps out of entries.
 
-Only when a result needs another repository, read
-`RETROSPECTIVE_PATHS.local.md`. Canonicalize the selected path, verify the
-tracked repository identity and, for a derived project's source template,
-confirm that the recorded source baseline exists in that clone. Treat a
-missing file, `Unset`, identity mismatch or absent baseline as an unresolved or
-stale mapping: report the exact role and offer to create or refresh the current
-repository's ignored file. Do not scan drives, guess from directory names or
-include a concrete path in transferable evidence or a handoff. A valid mapping
-still grants no access, destination write, Git, versioning, transmission or
-publication authority.
+Establish whether this is a derived project or source-template maintenance,
+then agree the reviewed period, project boundary and permitted evidence.
+Prefer durable authorized repository evidence and maintainer recollection;
+do not assume access to private chats or sensitive sources. Reuse supplied
+scope instead of imposing a new questionnaire.
 
-For each transferable candidate record an approved non-sensitive source label,
-reviewed period, sanitized evidence, opportunity, recurrence, reusable
-elements, benefit, risk, boundaries and next maintainer decision. Sanitize
-before anything crosses the project boundary.
+Reflect together on what worked, what caused friction, what changed and what
+could improve. Distinguish observed events, maintainer interpretation and
+agent hypotheses; do not manufacture recurrence or a root cause. Invite the
+maintainer to correct or add context before settling on improvement candidates.
+If input is still needed, present focused observations and questions and
+continue the dialogue; do not label an unanswered hypothesis a joint conclusion.
 
-In a source-template maintenance checkout, capture in that repository's own
-`IDEAS.md` under normal authorized in-scope edit rules. Write to another
-repository only when the maintainer authorizes that exact cross-repository
-destination and action using `explicit`, `explicitly` or German `explizit`.
-Without that cross-repository authorization, return a `Pending Idea Transfer`
-containing the fields above,
-the exact intended destination and `Destination-write authorization: Not
-granted`. Reference it in `TASK_HANDOFF.md` only when that handoff is already
-being updated within the same task; do not open a handoff merely to store it.
+Develop alternatives and their benefit, cost, risk and transferability with the
+maintainer. A retrospective may produce no action. For an already formulated
+idea and a simple capture request, use `record-idea` directly instead of
+reconstructing a retrospective around it.
 
-When the destination write is the next requested step, also propose one minimal
-copy-ready instruction naming the exact action, destination repository and
-material consequence; the proposal is not authorization.
+Classify agreed outcomes as project-specific, source-template candidate,
+family-wide candidate or no action. Use
+[`record-idea`](../record-idea/SKILL.md) for ideas the maintainer selects for
+capture. Keep the reviewed period, sanitized supporting evidence and any
+observed recurrence/limits with retrospective-derived candidates. The intake
+skill owns destination verification, local capture, cross-repository control-word
+authorization and the `Pending Idea Transfer` fallback. A request to conduct a
+retrospective alone does not authorize a destination write or promote ideas.
 
-Capture is not promotion or implementation approval. Do not edit another
-repository automatically, create a derived-project `IDEAS.md`, or add, remove
-or rewrite one in an existing derived project.
+Keep unselected project ideas separate from roadmap commitments. Route selected
+planned work to the roadmap and durable accepted choices to `record-decision`
+only within their actual authorization. Record a concise retrospective result
+and relevant context checkpoint when in scope; do not use `TASK_HANDOFF.md`
+as a competing idea backlog or invent completed reflection while awaiting input.

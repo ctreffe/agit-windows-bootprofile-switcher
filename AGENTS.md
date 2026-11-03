@@ -74,7 +74,7 @@ required by a stated material risk. Report limits and deferred checks truthfully
 ## Initialized project workflows
 
 Initialization is complete. Retained setup documents are provenance; creation
-and initialization skill definitions are absent from the active skill inventory. Never recreate removed creation skills, template-only backlogs
+and initialization skill definitions are absent from the active skill inventory. Never recreate removed creation skills, source-template idea entries
 or absent setup files. Use start-task/handoff-task for bounded work; explicitly
 select review-project, sync-template, check-consistency and perform-retrospective.
 grill-me and grilling remain explicit-only. A retrospective never grants access
@@ -95,3 +95,18 @@ rules apply; those safeguards remain binding. ChatGPT.md retains domain notes,
 not a parallel generic task method. Current task routing is defined here and
 in COLLABORATION.md; the legacy prompt paths redirect to current skills.
 See [PDR-0003](docs/decisions/PDR-0003-current-template-workflow-authority.md).
+
+## Adopted ongoing template methods
+
+- Use `record-idea` for a clear request to retain/update an idea in the owning
+  backlog. Discussion alone does not authorize capture. `IDEAS.md` is separate
+  from roadmap commitments; preserve its local IDs and project-owned content.
+- `perform-retrospective` remains explicit and jointly develops improvements;
+  selected capture delegates to `record-idea`. Cross-repository destination writes
+  retain their exact control-word authority; source access is not transfer approval.
+- Invoke `manage-restricted-storage` deliberately for bounded setup, approved
+  metadata or invented-only protection checks. Local privacy/execution gates and
+  existing catalog ownership prevail; no source access or host activation follows.
+- Invoke `review-code` and `test-code` deliberately for their interactive review
+  and agreed operational testing. `setup-test-environment` prepares requested
+  project-owned definitions/readiness; ordinary checks trigger none of these.

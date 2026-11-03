@@ -495,6 +495,12 @@ The recorded source is [AI Dev Template](https://github.com/ctreffe/ai-template-
 [TEMPLATE_SOURCE.md](TEMPLATE_SOURCE.md) explains the former name, unchanged
 baseline and local source-clone mapping for selected synchronization.
 
+## Capturing ideas
+
+Use `record-idea` to retain requested existing ideas in [IDEAS.md](IDEAS.md);
+`perform-retrospective` jointly develops improvements from project experience.
+See [TEMPLATE_README.md](TEMPLATE_README.md) for current methods and local boundaries.
+
 ## License
 
 This project is licensed under the MIT License.

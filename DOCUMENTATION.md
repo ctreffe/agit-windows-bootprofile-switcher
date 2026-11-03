@@ -80,3 +80,13 @@ milestone closure is separate from implementation. Maintain both required
 README language pairs and refresh guides when their workflows change.
 Private/host inputs and local validation/real-system gates retain their
 accepted domain rules. Compatibility prompt paths are not parallel methods.
+
+## Restricted-source metadata workflow
+
+Use explicit `manage-restricted-storage` and [RESTRICTED_STORAGE.md](RESTRICTED_STORAGE.md)
+for selected empty-area setup, device connection, approved metadata maintenance
+or invented-only protection checks. Existing access rules, inventories and
+provider/recipient choices prevail. Record layout, catalog, configuration and
+effective protection separately; failures/stale evidence remain visible.
+Metadata never authorizes source discovery, reading, processing or transmission.
+No live area, setting, policy, service or test is activated by template adoption.

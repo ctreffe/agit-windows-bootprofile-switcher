@@ -181,8 +181,13 @@ supplies no additional authority. The local decision is [PDR-0004](docs/decision
 | [grill-me](.agents/skills/grill-me/SKILL.md) | Explicit |
 | [grilling](.agents/skills/grilling/SKILL.md) | Explicit |
 | [handoff-task](.agents/skills/handoff-task/SKILL.md) | Agent or explicit |
-| [perform-retrospective](.agents/skills/perform-retrospective/SKILL.md) | Explicit |
+| [`perform-retrospective`](.agents/skills/perform-retrospective/SKILL.md) | Explicit | Jointly develop improvement ideas from an agreed project period; record-idea handles selected capture. |
 | [record-decision](.agents/skills/record-decision/SKILL.md) | Agent or explicit |
+| [`setup-test-environment`](.agents/skills/setup-test-environment/SKILL.md) | Agent or explicit | Define or reconstruct a requested test environment; distinguish readiness from operational tests. |
+| [`test-code`](.agents/skills/test-code/SKILL.md) | Explicit | Agree a bounded test plan and retain attempts and failures in one ignored local report. |
+| [`review-code`](.agents/skills/review-code/SKILL.md) | Explicit | Explain existing code or changes in numbered rounds, normally four blocks, and pause for feedback. |
+| [`manage-restricted-storage`](.agents/skills/manage-restricted-storage/SKILL.md) | Explicit | Manage a restricted area and approved metadata while preserving fixture, runtime and effect boundaries. |
+| [`record-idea`](.agents/skills/record-idea/SKILL.md) | Agent or explicit | Capture existing ideas on a clear retention request in the owning backlog; transfer authority remains separate. |
 | [reuse-fixes](.agents/skills/reuse-fixes/SKILL.md) | Agent or explicit |
 | [review-project](.agents/skills/review-project/SKILL.md) | Explicit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent or explicit |
@@ -202,6 +207,24 @@ supplies no additional authority. The local decision is [PDR-0004](docs/decision
 - [SYNCHRONIZED_STORAGE.md](SYNCHRONIZED_STORAGE.md)
 - [VALIDATION.md](VALIDATION.md)
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+## Ideas and ongoing methods
+
+Use `record-idea` to retain existing ideas on a clear request in [IDEAS.md](IDEAS.md),
+without promising timing, priority or implementation. `perform-retrospective`
+jointly develops improvements from an agreed project period. Preserve local ideas;
+never import template-owned entries or restore completed initialization.
+Cross-repository capture still needs exact destination/action control-word
+authority. Local privacy, source, security and publication rules remain binding.
+
+Use `review-code` for interactive code rounds, `test-code` for an agreed plan
+with one retained report, and `setup-test-environment` for requested definition
+or reconstruction. Existing local methods prevail; adoption starts no service,
+operational test or installation.
+
+`manage-restricted-storage` is deliberate-only for bounded setup, approved
+metadata and invented-only protection checks. Existing inventories and access
+boundaries prevail; layout, catalog, configuration and protection are separate results.
 
 ## License and attribution
 

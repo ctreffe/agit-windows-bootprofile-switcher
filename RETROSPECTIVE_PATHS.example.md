@@ -1,8 +1,8 @@
-# Local Retrospective Repository Paths
+# Local Idea Intake and Retrospective Repository Paths
 
 Copy this file to `RETROSPECTIVE_PATHS.local.md` on each computer. The local
 file is ignored by Git and may contain machine-specific paths. Do not commit it
-or copy its concrete values into handoffs, changelogs or retrospective evidence.
+or copy its concrete values into handoffs, changelogs or idea/retrospective evidence.
 
 Use paths relative to the current repository when practical. Absolute paths are
 allowed only in the ignored local file. `Unset` is valid until a retrospective
