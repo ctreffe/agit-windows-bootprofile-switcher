@@ -108,6 +108,73 @@ CODEX.md, the project-specific rules in ChatGPT.md and accepted records in
 docs/decisions/ retain their safety and domain authority. This contract
 provides current task methods without weakening those safeguards.
 
+## Mission Alignment
+
+Use PHILOSOPHY.md's template mission for source maintenance. In a derived
+project, use the concrete mission and intent in PROJECT_CONTEXT.md, together
+with the inherited template purpose and applicable local family principles.
+The shared foundation is reliable human-AI collaboration, reusable workflows,
+quality and data protection, with maintainer domain control and transparent
+README disclosure. No private Governance checkout is required to apply it.
+
+During a deliberately invoked review or retrospective, assess how the relevant
+contents, workflows, skills and artifacts serve that mission. Connect the
+intended outcome to inspected evidence; distinguish demonstrated contribution,
+possible drift/conflict and unavailable evidence. Include domain control and
+truthful human-AI disclosure. Do not equate different methods with misalignment
+or completed checklists with a useful outcome. Reference project-specific
+success evidence rather than inventing numerical targets.
+
+Report uncertain or conflicting intent for a maintainer decision. Do not rewrite
+missions, start fixes, invoke another review, inspect other repositories or
+broaden source access automatically. Source-template project placeholders are
+not missing template goals; an unclear derived-project mission is an evidence
+gap. A hybrid can combine deliberately selected specialist workflows; a clear
+specialization should prompt a source-adoption decision, not automatic migration.
+
+## Project Anchor and Temporary Worktrees
+
+Keep the active chat/task anchored to its agreed project directory, instructions
+and skill context. Only a maintainer-directed change may replace that anchor.
+Explicit target paths and command-local working directories are allowed within
+authorized scope; apply the target repository's local rules as well.
+
+Before a worktree action, inspect the whole tool's documented effects, including
+chat reassignment, directory changes and instruction/skill discovery. If anchor
+retention is uncertain, do not invoke that route; use a verified command-local
+route when authorized or ask for direction. Check repository identity, branch
+conventions, existing worktrees and staging. Creating, moving or removing a
+worktree changes Git metadata and requires repository/action-specific authority
+containing explicit, explicitly or explizit. That grant does not permit a chat
+anchor switch or additional branch/history changes.
+
+Place temporary worktrees under the owning project's ignored local temp/,
+preferably `temp/worktrees/<name>/`, never global app-managed storage. Before
+creation, verify canonical containment under the owning checkout and ignore
+coverage (for example with git check-ignore); check existing path components
+for links/junctions or storage mappings that escape that root. Do not nest a new
+worktree inside another temporary worktree. Verify target identity and unchanged
+chat anchor, instructions and skill availability after the action.
+
+Worktrees are not disposable intermediates. Exclude them from generic temp
+cleanup. Before separately authorized removal, inspect permitted Git state and
+preserve uncommitted/untracked work and commits not safely retained elsewhere;
+unknown access or retention blocks removal. The parent checkout ignores the
+nested tree; source commits within it follow normal repository rules. Never
+stage it in the parent or move it to materials/ as ordinary scratch. Placement
+grants no access to otherwise restricted files or inherited profile readiness.
+
+If context drifts unexpectedly, stop consequential actions, report the mismatch
+without sensitive details, and re-establish and verify the intended directory,
+applicable rules and available skills before resuming. Ask for maintainer help
+if safe restoration is unavailable. Do not copy scaffolding or skills into
+another repository to disguise the context loss. Existing worktrees and global
+app storage are not automatically migrated, inspected or cleaned.
+
+Use REPOSITORY.md for the current branch convention before proposing a name.
+Keep engineering source, fixtures, environments and test/release authority local;
+a worktree grants no dependency installation or operational test permission.
+
 ## Ideas and Reflection
 
 Use `IDEAS.md` for possibilities without roadmap priority or timing commitments;

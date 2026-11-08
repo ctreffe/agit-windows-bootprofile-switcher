@@ -17,6 +17,12 @@ Prefer durable authorized repository evidence and maintainer recollection;
 do not assume access to private chats or sensitive sources. Reuse supplied
 scope instead of imposing a new questionnaire.
 
+Use [mission alignment](../../../COLLABORATION.md#mission-alignment) to discuss
+whether the period's work, workflows and artifacts served the maintainer's
+mission and applicable family principles, including domain control and truthful
+collaboration disclosure. Keep evidence, interpretation and unresolved intent
+separate; do not silently redefine the mission to fit the observed work.
+
 Reflect together on what worked, what caused friction, what changed and what
 could improve. Distinguish observed events, maintainer interpretation and
 agent hypotheses; do not manufacture recurrence or a root cause. Invite the

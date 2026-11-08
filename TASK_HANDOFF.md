@@ -1,28 +1,51 @@
 # Task Handoff
 
-- Date/status: 2026-10-19; completed selected template synchronization.
-- Scope/authority: explicit maintainer origin alignment and sync-template request
-  for the registered projects; selected outcomes and validation in
-  [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
-- Outcome: explicit-only question research and report scaffold, current selective
-  sync accounting, simplified new storage guidance and preserved local boundaries.
-- Evidence: 4 changed skills, 56 synthetic storage assertions, selected links,
-  bilingual guidance and applicable local gates passed; see the ledger for limits.
-- Preserved: existing project identity/version, source paths, canonical mappings,
-  domain rules, inputs and ongoing content/device work. No private source,
-  real cloud, installation, production or publication operation.
-- Existing open evidence: Elevated real-system boot/account/service/registry/rollback evidence remains separately controlled. No host-changing script or runtime log/backup/state was used.
-- [Previous domain checkpoint and its actual evidence](https://github.com/ctreffe/agit-windows-bootprofile-switcher/blob/52bfb1080a6871ef8ca55a8a52eb4568532a3dfd/TASK_HANDOFF.md).
-- Continuation: no implementation remains for this selected adoption. Resume the
-  project/document task through start-task and current local authority; reconstruct
-  Git state at any later versioning boundary. This is not a project milestone.
+Status: completed for the selected Dev Template 1.8.0 ongoing workflows.
+Date: 2026-11-08
 
-## Template synchronization checkpoint — 2026-11-03
+## Outcome
 
-The selected current-source workflow adoption is completed with independent
-focused evidence recorded in [TEMPLATE_SYNC.md](TEMPLATE_SYNC.md).
-This checkpoint concerns template adoption only. The preceding project outcome,
-pending work, authority limits and any paused continuation remain unchanged.
-No source release/task history, template idea entries, operational execution or
-protected Git action is imported. Local source provenance includes a working-tree
-overlay rather than an invented commit. See the ledger for per-change outcomes.
+[TEMPLATE_SYNC.md](TEMPLATE_SYNC.md#selected-synchronization--2026-11-08) owns
+per-change outcomes, source/overlay evidence and validation. Durable sync state
+stays solely in that Markdown ledger; no JSON manifest or template-sync/ folder.
+
+The package updates 28 workflow/guide/resource files plus this handoff and ledger.
+New manage-codex-config brings the inventory to 20 skills. Config ownership,
+Git/commit packages, mission/writing, worktree and folder methods preserve local
+CODEX safeguards and boot/account/service/registry/rollback controls. Project
+remains the historical seed and Dev the selected ongoing source. Missing setup
+files remain absent. Project introductions, context, roadmap, ideas, version,
+actual config and retained CODEX.md/ChatGPT.md policy are unchanged.
+
+## Evidence and limits
+
+Nine skill validations, full metadata inventory, both language pairs, 264 scoped
+links before finalization, 28-file readback, 14 preservation checks, temp ignore
+coverage and source/diff review passed. Six references remain outside generic
+link scope; final checkpoint files receive focused readback/link verification.
+No runtime code, host operation, elevation, actual configuration or device-bound
+log/backup/state/inventory inspection occurred. Runtime tests, whitespace and full
+engineering/family/milestone checks were not required or run. No Git mutation
+or publication occurred.
+
+## Domain continuation
+
+No implementation remains for the selected template adoption. The next domain
+focus remains v1.8.0 Policy and Vendor Control Foundation after completed v1.7.0
+Machine-Wide Runtime and Deployment. The read-only policy/vendor discovery script
+is prepared; no real inventory has been collected by this task. Windows Update
+and Bitdefender control surfaces, supported policy implementation and real
+deployment/restore evidence need their own selected scope and operational gates.
+Preserve supported interfaces, baseline/restore controls and the prohibition on
+tamper-protection bypass. See PROJECT_CONTEXT.md and the
+[previous domain checkpoint](https://github.com/ctreffe/agit-windows-bootprofile-switcher/blob/52bfb1080a6871ef8ca55a8a52eb4568532a3dfd/TASK_HANDOFF.md).
+Resume concrete domain work through start-task with exact access/operation
+authority. Later versioning reconstructs live Git state under existing explicit
+rules; this workflow update closes no project milestone.
+
+Suggested ordinary commit summary: `chore: Adopt current template workflows`
+
+Suggested description: Update workflow guidance and config ownership while
+preserving BootProfile host-operation, device-state and rollback safeguards.
+Retain source and overlay evidence exclusively in TEMPLATE_SYNC.md. Real-system
+validation remains separate pending work. This suggestion grants no Git authority.

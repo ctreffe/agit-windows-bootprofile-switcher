@@ -1,13 +1,23 @@
 ---
 name: commit-changes
-description: Finalize an ordinary reviewed change as a scoped commit and normal upstream push unless excluded. Do not use for version or milestone closure.
+description: Finalize ordinary reviewed changes as coherent commit packages and a normal upstream push unless excluded. Do not use for version or milestone closure.
 ---
 
 # Commit Changes
 
+Before Git execution, consult [GIT_TRANSPORT.md](../../../GIT_TRANSPORT.md)
+for this repository's qualified launcher and transport. Reuse applicable
+operation-specific evidence and the exact reviewed invocation, preserving
+the action authority and narrow execution approval required below.
+
 Confirm repository scope, working-tree state, staged selection and changed
 hunks. Preserve unrelated and pre-existing changes. Reuse current evidence
 while governed inputs have not changed.
+
+Before staging, assess and briefly explain coherent packages using
+[COMMIT_PACKAGES.md](../../../COMMIT_PACKAGES.md). Apply the checks and message
+rules below to each package in dependency order. Keep one commit when that is
+the coherent choice; preserve existing staging and exact authority throughout.
 
 When this workflow is requested, repository-specific explicit commit
 authorization includes the commit and its normal push to the verified existing
@@ -26,7 +36,8 @@ diagnosed and rerun after an in-scope fix. Keep success output concise and
 retain focused failure diagnostics. Member repositories do not run the family
 validator; possible shared consequences become a Governance follow-up.
 
-Then present and check the complete proposed message. An ordinary summary uses
+For each package, present and check the complete proposed message. An ordinary
+summary uses
 one exact direct prefix from `feat:`, `fix:`, `docs:`, `chore:`, `refactor:`,
 `test:`, `ci:` or `build:` followed by a concise imperative summary. Scoped
 forms such as `feat(scope):` do not satisfy this repository-family convention.
@@ -54,7 +65,8 @@ material consequence; the proposal is not authorization. Respect a commit-only
 restriction without asking again about push.
 
 Verify the resulting commit, including its complete message and remaining
-working tree. Then perform the included normal push unless excluded. Use one
+working tree. After the selected sequence, perform the included normal push
+unless excluded; several packages may share this push. Use one
 explicit branch refspec to the verified existing upstream and disable following
 tags. Never force-push, push other refs, create or change a remote, or publish a
 release under this authorization. If a normal push is rejected, retain the

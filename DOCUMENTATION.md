@@ -26,6 +26,16 @@ The removed initialization files `PROJECT_SETUP.md` and `INITIAL_PROMPT.md` are
 not reconstructed from newer template text. Their historical absence and the
 reason are recorded in `PROJECT_CONTEXT.md`.
 
+## Concision and Understanding
+
+Write as long as necessary and as short as possible for the purpose and audience.
+Understanding takes priority over brevity. Keep necessary reasoning, evidence
+and examples; remove repetition, digressions and irrelevant implementation detail.
+Concision is not a word-count target or telegraphic phrasing. When revising,
+preserve prerequisites, interface behavior, side effects, failure handling and
+verification needed to use or maintain the software. Explain non-obvious
+tradeoffs where they affect the reader's decision.
+
 ## User Documentation
 
 Document prerequisites, elevation requirements, configuration, commands,
@@ -85,7 +95,7 @@ accepted domain rules. Compatibility prompt paths are not parallel methods.
 
 Use explicit `manage-restricted-storage` and [RESTRICTED_STORAGE.md](RESTRICTED_STORAGE.md)
 for selected empty-area setup, device connection, approved metadata maintenance
-or invented-only protection checks. Existing access rules, inventories and
+or selected project profile work. Existing access rules, inventories and
 provider/recipient choices prevail. Record layout, catalog, configuration and
 effective protection separately; failures/stale evidence remain visible.
 Metadata never authorizes source discovery, reading, processing or transmission.

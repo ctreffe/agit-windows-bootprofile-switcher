@@ -10,6 +10,13 @@ intent, objective, roadmap, decisions, structure, validation, Git state and
 relevant domain context; report existing, active and open state plus evidence
 gaps.
 
+Assess mission alignment through
+[COLLABORATION.md](../../../COLLABORATION.md#mission-alignment), using the
+appropriate source-template or project mission. Include how relevant contents,
+workflows, skills and artifacts serve it, with evidence, possible drift/conflict
+and open maintainer decisions. Report this bounded assessment without turning
+it into a defect audit, automatic mission change or implementation task.
+
 Scale depth: read all relevant files in a compact repository; in a larger one,
 start with inventory, routing and durable summaries, then read the evidence
 needed. Comprehensive means state coverage, not an implementation audit.

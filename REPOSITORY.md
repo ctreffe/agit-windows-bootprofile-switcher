@@ -2,6 +2,39 @@
 
 This document defines ongoing repository practices for BootProfile Switcher.
 
+## Temporary Worktree Exception
+
+Ordinary disposable/never-versioned temp rules exclude Git worktrees.
+Their container stays ignored by the parent checkout; source versioning inside
+follows normal repository authority. Do not clean them as scratch or promote
+them to materials/. Follow [Project Anchor and Temporary Worktrees](COLLABORATION.md#project-anchor-and-temporary-worktrees)
+for placement, access, preflight, recovery and separately authorized removal.
+
+## Document and subproject folders
+
+Preserve the established module, installed-runtime, configuration and
+config/test/ fixture paths. Device-bound logs/, backups/ and state/ remain
+unversioned and inaccessible without their own approved scope. These general
+preferences authorize no runtime migration, baseline inspection or host operation.
+
+Within each applicable role and access root, prefer shallow folders named for
+the document, subject or subproject. Keep companion formats together, for
+example output/handbook/handbook.pdf and output/handbook/handbook.docx.
+A single deliverable may live directly in output/. Add subfolders only for
+meaningful source roles, access boundaries, workflow, volume or tool requirements.
+Work-item and catalog IDs remain metadata, not mandatory directory names.
+Use descriptive filenames and language or revision suffixes when needed to
+avoid collisions; do not add version-folder chains by default.
+
+Apply this within input/ classifications, materials/ storage states and approved
+output locations; never merge access zones or alter original input content.
+Keep catalog IDs, provenance and relative references stable. Technical build,
+website and dependency trees may need their own structure. Rendering must
+preserve companion formats and unrelated files; cleanup needs its own authority.
+Existing projects and files are not moved or reorganized automatically.
+
+Keep source, tests, fixtures, packages and build/release trees in their tool-required locations.
+
 ## Repository Baseline
 
 The local working tree is the active baseline when it is available and selected
@@ -90,7 +123,7 @@ accepted domain rules. Compatibility prompt paths are not parallel methods.
 
 Use explicit `manage-restricted-storage` and [RESTRICTED_STORAGE.md](RESTRICTED_STORAGE.md)
 for selected empty-area setup, device connection, approved metadata maintenance
-or invented-only protection checks. Existing access rules, inventories and
+or selected project profile work. Existing access rules, inventories and
 provider/recipient choices prevail. Record layout, catalog, configuration and
 effective protection separately; failures/stale evidence remain visible.
 Metadata never authorizes source discovery, reading, processing or transmission.

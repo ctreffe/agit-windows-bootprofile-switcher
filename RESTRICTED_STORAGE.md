@@ -1,7 +1,7 @@
 # Restricted storage workflow
 
 Select `$manage-restricted-storage` deliberately for area setup, a new device,
-metadata maintenance or invented-only protection checks. Follow
+metadata maintenance or Codex profile work. Follow
 [AGENTS.md](AGENTS.md), [REPOSITORY.md](REPOSITORY.md) and any applicable local
 privacy/security rules. This implements the generic source contract selected
 under Governance TVDR-0065, extending TVDR-0064.
@@ -59,36 +59,18 @@ Readable metadata and technically possible access never authorize protected work
 
 ## Configuration and protection evidence
 
-For a selected Codex operation, load the skill's
-[conditional procedure](.agents/skills/manage-restricted-storage/references/codex-permissions.md).
-Review the approved baseline and selection mechanism before changing settings.
-No known-good app repair or universally qualified adapter is bundled here.
+For approved project-local Codex profile work, use the
+[profile procedure](.agents/skills/manage-restricted-storage/references/codex-permissions.md).
+The standard deny list covers this project's `input/intake/`,
+`input/restricted/` and `temp/restricted/`. Retain the recoverable starting
+configuration and Desktop mode. After writing or restoring the configuration,
+the maintainer fully restarts Desktop before a short check of the profile and
+effective permission scope. Keep the result and any gaps in ignored local state.
 
-Agree exact invented targets/control, operations, routes, limits and cleanup
-before probing. Respect closed-zone rules; never test real or source-derived
-content or enumerate confidential parents. Preserve failures and fixed status
-evidence, avoiding uncontrolled diagnostics. Record runtime/session/date,
-expected outcome, actual outcome and whether evidence is direct or reported.
-
-| State | Interpretation |
-| --- | --- |
-| Unverified/inconclusive | No valid check; unrelated errors or an invalid control are not a deny pass. |
-| Configured | Settings saved; selection and enforcement are not established. |
-| Verified for named scope | Expected denial observed with a valid baseline for that route/operation. |
-| Failed | Required denial did not occur. |
-| Stale | A relevant change invalidated evidence for current use. |
-
-Report layout, catalog, configuration and protection independently. Approved
-metadata/setup work may complete with explicit failed or unverified protection.
-Do not call the area technically protected until all required checks have
-current passing evidence. A denied create does not qualify reads/listing;
-a CLI pass does not qualify the app or other tool routes. No passing check
-grants source access.
-
-A new device or changed path/profile/runtime/session requires updated mappings
-and reassessment of affected evidence, without scanning the source area. Do not
-use the ordinary storage availability/hash helper on denied paths. Handoffs keep
-safe result pointers and gaps; private roots/descriptions remain local.
+Report layout, catalog, configuration and active scope separately. The short
+check confirms the declared runtime scope. Bring specific questions about
+behavior to Governance for invented-only testing. Folder classification and
+source access rules apply throughout.
 
 ## Engineering boundaries
 
@@ -103,3 +85,11 @@ environments or invoke `test-code`. Use the project's existing environment
 definition and separately approved setup/test scope when needed. Review the
 input/output, diagnostic and external-effect paths before any authorized
 execution of prepared code with protected access.
+
+## Profile usability completion
+
+Profile setup also qualifies the project's required workflows through the
+[usability procedure](.agents/skills/manage-restricted-storage/references/profile-usability.md).
+Retain separate protection and capability results, including exclusions and
+missing authority. Reuse matching current evidence. A configured profile alone
+does not complete this gate; ordinary task entry adds no recurring checks.

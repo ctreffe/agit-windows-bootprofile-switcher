@@ -10,14 +10,13 @@ not create a record merely because an ordinary implementation choice was made.
 
 First identify the repository role. In governance, use the governance record
 taxonomy. In a derived project, create concrete numbered records when the
-decision threshold is met. In a regular source template, do not create a new
-concrete numbered record: keep only the `0000` record templates and route a
-durable family or template decision to the governance repository. Under
-TVDR-0050 the AI Guarded Agent source template uses that normal route.
-Its concrete historical records remain provenance; newly derived projects own
-their local PDR/ADR decisions. This grants no protected-project access.
-Existing concrete records in any other source template are historical state,
-not a precedent for adding another one.
+decision threshold is met. In a source template, keep only reusable `0000`
+record templates and route durable template-development decisions to the
+governance repository. TVDR-0050/0080 apply this same rule to Guarded Agent;
+there is no historical-record exception. Derived projects own their local
+records. Preserve project-owned decisions and unknown inherited records;
+removal or migration needs its own maintainer-selected scope. This routing
+grants no protected-project access.
 
 1. Read the local Decision Record guidance, index and applicable accepted
    records before choosing the record type.

@@ -10,6 +10,17 @@ repositories before inspection. Read the closer rules in both repositories,
 preserve dirty state and classify upstream differences as applicable unchanged,
 adapted, already present, conflicting or not applicable.
 
+For permitted Git inspection, resolve each repository's own
+[Git execution route](../../../GIT_TRANSPORT.md); no fetch/pull authority
+is added. When adopting this guide, preserve project-owned helpers,
+invocations and evidence. Never overwrite a qualified project route with
+the generic source contract or copy source-device local settings.
+
+Adopt the config-management skill/guide only within the selected source
+update. Preserve the project's actual `.codex/config.toml`, custom profiles
+and recovery state; do not copy a source-device config or apply new defaults.
+A later requested config change uses manage-codex-config.
+
 Inventory every local skill directory and its metadata against the selected
 current source, including inherited skills absent upstream. Remove retired
 inherited definitions and their metadata within the approved sync scope; do not
@@ -52,7 +63,9 @@ local adaptations, evidence and review conditions. A compared commit is not an
 adopted baseline: advance the selected adoption checkpoint only for validated
 selected changes, and the fully resolved baseline only when earlier items are
 adopted, adapted or deliberately rejected. Link this ledger from project context;
-do not maintain a competing synchronization status there. Preserve rejected
+do not maintain a competing synchronization status there. Retain required source
+revision/overlay evidence in TEMPLATE_SYNC.md itself; do not create a separate
+template-sync/ directory or JSON manifest in this project. Preserve rejected
 decisions until their reconsideration condition applies.
 
 Present the impact and proposed adoption scope before consequential edits.

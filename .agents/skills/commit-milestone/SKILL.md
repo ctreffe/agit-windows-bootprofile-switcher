@@ -5,6 +5,11 @@ description: Close a reviewed version or milestone with synchronized metadata, c
 
 # Commit Milestone
 
+Before Git execution, consult [GIT_TRANSPORT.md](../../../GIT_TRANSPORT.md)
+for this repository's qualified launcher and transport. Reuse applicable
+operation-specific evidence and the exact reviewed invocation, preserving
+the action authority and narrow execution approval required below.
+
 Use only when the maintainer explicitly invokes `$commit-milestone` for an
 identified milestone or version closure, or requests missing tags for identified
 completed milestones. This does not replace development or review.
@@ -23,13 +28,19 @@ Release publication remains separately authorized.
 
 1. Establish the exact repository, completed version or milestone, branch,
    worktree and staged file list. Preserve unrelated changes and selections.
-2. Inspect staged version, changelog, README, objective/roadmap and handoff
+   Before staging, assess and explain implementation packages and final closure
+   using [COMMIT_PACKAGES.md](../../../COMMIT_PACKAGES.md). Check authority for
+   the whole sequence; preserve explicit commit counts and exclusions.
+2. Inspect selected version, changelog, README, objective/roadmap and handoff
    metadata. Resolve inconsistencies before creating a version tag.
 3. Classify semantic scope and run comprehensive applicable validation after
    milestone inputs are stable. Include required release, rendering, visual,
    security, privacy, statistical and other domain checks. Reuse evidence only
    where the contract permits and governed inputs are unchanged; rerun affected
    checks after a relevant correction. Retain diagnostics and report limits.
+   Evidence must cover the exact final candidate tree including closure metadata,
+   not unrelated or omitted working-tree changes; assess intermediate packages
+   with targeted evidence and recheck affected inputs if preparation changes them.
 4. Select the repository's established version-tag name (`vX.Y.Z` in these source
    templates). Its target is the new reviewed milestone commit, or an exact
    existing commit for backfill. Inspect that name locally and on the
@@ -47,8 +58,13 @@ Release publication remains separately authorized.
    If a control word is missing, propose one minimal copy-ready instruction naming
    the exact commit/tag/push action, repository, upstream and material consequence;
    the proposal is not authorization.
-7. Create and verify the reviewed commit, then create its missing annotated tag
-   at that exact full commit ID, with a meaningful annotation. Reuse an existing
+7. Create and verify authorized implementation packages in dependency order,
+   using the ordinary message rules in [commit-changes](../commit-changes/SKILL.md).
+   Then create and verify the final closure commit with coherent version,
+   changelog and completion metadata. A single coherent package can be that
+   closure; do not manufacture an empty extra commit. Create its missing
+   annotated tag only at that exact final full commit ID, with a meaningful
+   annotation. Reuse an existing
    matching tag instead of creating it again. Verify the tag's
    object type and peeled commit. Respect repository signing requirements without
    changing identity, signing configuration or installing tools.

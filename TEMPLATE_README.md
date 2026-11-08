@@ -156,6 +156,33 @@ The maintainer coordinates cross-template evolution in a private governance repo
 Governance coordination does not create hidden engineering requirements. Every change that affects this template must be represented here through maintained guidance, Decision Records where appropriate, the changelog and release history. Reusable improvements must keep code, tests, configuration and user-facing documentation aligned and must not overfit one implementation experience.
 
 
+## Current template methods
+
+The inherited [Dev template mission](PHILOSOPHY.md#template-mission) describes
+shared engineering purpose; PROJECT_CONTEXT.md owns BootProfile Switcher's intent.
+Project remains the historical seed and Dev the selected ongoing source. Explicit
+reviews/retrospectives assess alignment without changing that lineage, mission
+or maintainer domain control. Hybrid methods/source changes need deliberate selection.
+
+[manage-codex-config](.agents/skills/manage-codex-config/SKILL.md) is the single
+writer for requested project settings and selected protection deltas under
+[CODEX_CONFIGURATION.md](CODEX_CONFIGURATION.md). Storage work owns protection,
+activation and required usability; preserve existing config/recovery and local
+host/access boundaries. No profile or adapter is activated here. Initialization
+stays complete; absent historical setup files stay absent. Git workflows consult
+[GIT_TRANSPORT.md](GIT_TRANSPORT.md) and assess [COMMIT_PACKAGES.md](COMMIT_PACKAGES.md)
+within the existing staging and protected-action authority.
+
+Keep the agreed chat/project anchor. Separately authorized temporary worktrees
+belong under ignored temp/worktrees/, outside generic cleanup, with normal Git
+rules inside. See [worktree rules](COLLABORATION.md#project-anchor-and-temporary-worktrees).
+Prefer shallow document folders with companion formats within approved roots;
+retain module, runtime, configuration and config/test/ paths. No file is moved.
+CODEX.md safeguards, boot/account/service/registry and rollback gates remain.
+Device-bound logs, backups, state and discovery inventories are not validation
+inputs. Real deployment/restore evidence stays separate. TEMPLATE_SYNC.md alone
+owns durable sync state and required source/overlay evidence.
+
 ## Git authority
 
 Git state may be inspected read-only. Staging requires a specific instruction
@@ -188,6 +215,7 @@ supplies no additional authority. The local decision is [PDR-0004](docs/decision
 | [`review-code`](.agents/skills/review-code/SKILL.md) | Explicit | Explain existing code or changes in numbered rounds, normally four blocks, and pause for feedback. |
 | [`manage-restricted-storage`](.agents/skills/manage-restricted-storage/SKILL.md) | Explicit | Manage a restricted area and approved metadata while preserving fixture, runtime and effect boundaries. |
 | [`record-idea`](.agents/skills/record-idea/SKILL.md) | Agent or explicit | Capture existing ideas on a clear retention request in the owning backlog; transfer authority remains separate. |
+| [manage-codex-config](.agents/skills/manage-codex-config/SKILL.md) | Agent or explicit |
 | [reuse-fixes](.agents/skills/reuse-fixes/SKILL.md) | Agent or explicit |
 | [review-project](.agents/skills/review-project/SKILL.md) | Explicit |
 | [start-task](.agents/skills/start-task/SKILL.md) | Agent or explicit |
@@ -223,7 +251,7 @@ or reconstruction. Existing local methods prevail; adoption starts no service,
 operational test or installation.
 
 `manage-restricted-storage` is deliberate-only for bounded setup, approved
-metadata and invented-only protection checks. Existing inventories and access
+metadata and selected project profile work. Existing inventories and access
 boundaries prevail; layout, catalog, configuration and protection are separate results.
 
 ## License and attribution

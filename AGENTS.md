@@ -7,6 +7,16 @@ Resident contract for BootProfile Switcher.
 - Inspect repository, branch, worktree and staging; preserve changes and
   selections.
 - Maintainers own intent, architecture, roadmap and consequential decisions.
+- Preserve the agreed chat/task project directory, rules and skill context;
+  never switch them autonomously, including through tool side effects. Before
+  worktree operations or recovery from context drift, read COLLABORATION.md.
+  Temporary worktrees stay under the owning project's ignored temp/ (prefer
+  temp/worktrees/), outside generic cleanup; their source follows normal Git rules.
+- Carry the agreed task independently to a verified result within existing
+  authority. Ask only for missing authority, consequential direction choices or
+  real blockers; continue independent authorized work while waiting. Reuse prior
+  grants within their scope. Preserve access boundaries and explicitly invoked
+  workflows; autonomy grants no additional authority.
 - Authorized reads and edits are allowed. Commits, tags, pushes, pulls, merges,
   rebases, resets, reverts, branches, stashes, destructive restores and direct
   `.git/` changes each require an instruction containing `explicit`,
@@ -59,6 +69,16 @@ Resident contract for BootProfile Switcher.
   questions and a saved report with individual source assessments. Ordinary
   entry, drafting and handoff do not trigger research or broaden access.
 
+- Use `manage-codex-config` for requested project-local configuration and
+  setup/storage deltas; one owner preserves existing settings and recovery.
+  Ordinary task entry does not configure the client.
+
+## Writing
+
+Write as long as needed and as short as possible for the purpose and audience.
+Understanding comes first; retain essential reasoning, evidence and instructions.
+See [DOCUMENTATION.md](DOCUMENTATION.md) for details and domain limits.
+
 ## Validation
 
 Codex skill edits use `scripts/Test-CodexSkill.ps1`; on first use follow
@@ -105,7 +125,7 @@ See [PDR-0003](docs/decisions/PDR-0003-current-template-workflow-authority.md).
   selected capture delegates to `record-idea`. Cross-repository destination writes
   retain their exact control-word authority; source access is not transfer approval.
 - Invoke `manage-restricted-storage` deliberately for bounded setup, approved
-  metadata or invented-only protection checks. Local privacy/execution gates and
+  metadata or selected project profile work. Local privacy/execution gates and
   existing catalog ownership prevail; no source access or host activation follows.
 - Invoke `review-code` and `test-code` deliberately for their interactive review
   and agreed operational testing. `setup-test-environment` prepares requested
